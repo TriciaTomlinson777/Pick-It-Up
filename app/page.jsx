@@ -24,7 +24,7 @@ export default function Home() {
 
           <div className="container-custom relative">
             <div className="mx-auto max-w-4xl text-center">
-              <p className="inline-flex items-center rounded-full border border-[#0f2b45]/15 bg-[#0f2b45] px-4 py-2 text-sm font-semibold uppercase tracking-[0.25em] text-white shadow-[0_10px_24px_rgba(15,43,69,0.2)]">
+              <p className="flex w-fit mx-auto items-center rounded-full border border-[#0f2b45]/15 bg-[#0f2b45] px-4 py-2 text-sm font-semibold uppercase tracking-[0.25em] text-white shadow-[0_10px_24px_rgba(15,43,69,0.2)]">
                 Seattle • Community • Care
               </p>
               <div className="mt-6 flex justify-center overflow-visible">
