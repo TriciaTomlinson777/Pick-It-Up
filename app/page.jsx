@@ -19,7 +19,7 @@ export default function Home() {
       <Header />
 
       <main className="bg-[#fdf8eb] text-[#0f2b45]">
-        <section className="relative overflow-hidden border-b border-[#0f2b45]/10 bg-[linear-gradient(135deg,_#fffdf7_0%,_#f4fbff_35%,_#eefbf3_70%,_#fff3c4_100%)] py-20 sm:py-28">
+        <section className="relative overflow-visible border-b border-[#0f2b45]/10 bg-[linear-gradient(135deg,_#fffdf7_0%,_#f4fbff_35%,_#eefbf3_70%,_#fff3c4_100%)] py-20 sm:py-28">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(248,201,72,0.42),_transparent_24%),radial-gradient(circle_at_bottom_right,_rgba(109,182,217,0.32),_transparent_30%),radial-gradient(circle_at_center_right,_rgba(98,178,117,0.28),_transparent_26%)]" />
 
           <div className="container-custom relative">
@@ -27,8 +27,8 @@ export default function Home() {
               <p className="inline-flex items-center rounded-full border border-[#0f2b45]/15 bg-[#0f2b45] px-4 py-2 text-sm font-semibold uppercase tracking-[0.25em] text-white shadow-[0_10px_24px_rgba(15,43,69,0.2)]">
                 Seattle • Community • Care
               </p>
-              <div className="mt-6 flex justify-center">
-                <Logo href="/" showText imgClassName="w-64 sm:w-72" />
+              <div className="mt-6 flex justify-center overflow-visible">
+                <Logo href="/" showText className="w-[120vw] sm:w-[110rem] max-w-none justify-center" imgClassName="w-full" />
               </div>
               <p className="mt-4 text-2xl font-semibold text-[#1f5f7a] sm:text-3xl">
                 One Person. One Piece. One Cleaner City.
