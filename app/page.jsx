@@ -28,10 +28,10 @@ export default function Home() {
                 Seattle • Community • Care
               </p>
               <div className="mt-6 flex justify-center">
-                <Logo href="/" showText className="rounded-[1.5rem] bg-white/80 px-5 py-4 shadow-[0_18px_45px_rgba(15,43,69,0.15)] sm:px-7 sm:py-6" />
+                <Logo href="/" showText imgClassName="w-64 sm:w-72" />
               </div>
               <p className="mt-4 text-2xl font-semibold text-[#1f5f7a] sm:text-3xl">
-                One Person. One Piece. One Better Seattle.
+                One Person. One Piece. One Cleaner City.
               </p>
               <p className="mx-auto mt-5 max-w-3xl text-lg text-[#35506b] sm:text-xl">
                 This is a community movement that makes it easy and fun to leave Seattle better than we found it.
