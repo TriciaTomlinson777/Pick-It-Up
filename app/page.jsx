@@ -361,9 +361,9 @@ export default function Home() {
                   Choose whichever option is easiest. Only one location method is required.
                 </p>
 
-                <div className="rounded-2xl border border-[#0f2b45]/10 bg-white p-4 sm:p-5">
+                <div className="rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-3">
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <p className="text-sm font-semibold text-[#0f2b45]">1. Use My Location (GPS)</p>
+                    <p className="text-sm font-medium text-[#0f2b45]">Use My Location (GPS)</p>
                     <button type="button" onClick={handleUseGps} className="btn-secondary min-h-11 px-5 py-2 text-sm">
                       Use My Location
                     </button>
@@ -382,7 +382,7 @@ export default function Home() {
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <label className="block">
-                    <span className="mb-2 block text-sm font-medium text-[#0f2b45]">2. Neighborhood (optional)</span>
+                    <span className="mb-2 block text-sm font-medium text-[#0f2b45]">Neighborhood (optional)</span>
                     <input
                       type="text"
                       name="neighborhood"
@@ -394,7 +394,7 @@ export default function Home() {
                   </label>
 
                   <label className="block">
-                    <span className="mb-2 block text-sm font-medium text-[#0f2b45]">3. City (optional)</span>
+                    <span className="mb-2 block text-sm font-medium text-[#0f2b45]">City (optional)</span>
                     <input
                       type="text"
                       name="city"
@@ -407,7 +407,7 @@ export default function Home() {
                 </div>
 
                 <label className="block">
-                  <span className="mb-2 block text-sm font-medium text-[#0f2b45]">4. Nearby Cross Streets (optional)</span>
+                  <span className="mb-2 block text-sm font-medium text-[#0f2b45]">Nearby Cross Streets (optional)</span>
                   <input
                     type="text"
                     name="crossStreets"
@@ -419,7 +419,7 @@ export default function Home() {
                 </label>
 
                 <label className="block">
-                  <span className="mb-2 block text-sm font-medium text-[#0f2b45]">5. Short Location Description (optional)</span>
+                  <span className="mb-2 block text-sm font-medium text-[#0f2b45]">Short Location Description (optional)</span>
                   <textarea
                     name="locationDescription"
                     value={trackForm.locationDescription}
@@ -431,7 +431,7 @@ export default function Home() {
                 </label>
 
                 <label className="block">
-                  <span className="mb-2 block text-sm font-medium text-[#0f2b45]">6. Upload a Map Screenshot or Photo (optional)</span>
+                  <span className="mb-2 block text-sm font-medium text-[#0f2b45]">Upload a Map Screenshot or Photo (optional)</span>
                   <input
                     type="file"
                     accept="image/*"
