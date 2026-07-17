@@ -10,6 +10,7 @@ const TRACK_SUBMISSIONS_KEY = 'pick-it-up-track-submissions';
 
 const EMPTY_TRACK_FORM = {
   neighborhood: '',
+  city: '',
   crossStreets: '',
   locationDescription: '',
   litterNotes: '',
@@ -21,6 +22,7 @@ export default function Home() {
   const [trackForm, setTrackForm] = useState(EMPTY_TRACK_FORM);
   const [gpsLocation, setGpsLocation] = useState(null);
   const [gpsStatus, setGpsStatus] = useState('');
+  const [isGpsDetailsOpen, setIsGpsDetailsOpen] = useState(false);
   const [locationError, setLocationError] = useState('');
   const [submitMessage, setSubmitMessage] = useState('');
 
@@ -52,7 +54,7 @@ export default function Home() {
 
   const handleUseGps = () => {
     if (!navigator.geolocation) {
-      setGpsStatus('GPS is not available in this browser.');
+      setGpsStatus('No problem. You can enter your neighborhood, city, nearby cross streets, or a short location description instead.');
       return;
     }
 
@@ -63,12 +65,13 @@ export default function Home() {
         setGpsLocation({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
+          accuracy: position.coords.accuracy,
         });
-        setGpsStatus('GPS location added.');
+        setGpsStatus('📍 Your location has been captured successfully.');
         setLocationError('');
       },
       () => {
-        setGpsStatus('We could not access your GPS location.');
+        setGpsStatus('No problem. You can enter your neighborhood, city, nearby cross streets, or a short location description instead.');
       },
       {
         enableHighAccuracy: true,
@@ -81,13 +84,16 @@ export default function Home() {
     return Boolean(
       gpsLocation ||
         trackForm.neighborhood.trim() ||
+        trackForm.city.trim() ||
         trackForm.crossStreets.trim() ||
-        trackForm.locationDescription.trim()
+        trackForm.locationDescription.trim() ||
+        trackForm.mapImageName
     );
   };
 
   const closeTrackModal = () => {
     setIsTrackModalOpen(false);
+    setIsGpsDetailsOpen(false);
     setLocationError('');
     setSubmitMessage('');
   };
@@ -96,7 +102,7 @@ export default function Home() {
     event.preventDefault();
 
     if (!hasLocationInput()) {
-      setLocationError('Add at least one location option before submitting.');
+      setLocationError('Please add at least one location method before submitting.');
       return;
     }
 
@@ -335,10 +341,10 @@ export default function Home() {
 
         {isTrackModalOpen && (
           <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#0f2b45]/60 p-3 sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-labelledby="track-it-title">
-            <div className="paint-card w-full max-w-2xl overflow-hidden rounded-[1.8rem] border border-[#0f2b45]/15 bg-[#fffdf7] shadow-[0_24px_70px_rgba(15,43,69,0.3)]">
+            <div className="paint-card relative w-full max-w-2xl overflow-hidden rounded-[1.8rem] border border-[#0f2b45]/15 bg-[#fffdf7] shadow-[0_24px_70px_rgba(15,43,69,0.3)]">
               <div className="flex items-center justify-between border-b border-[#0f2b45]/10 px-5 py-4 sm:px-7 sm:py-5">
                 <h3 id="track-it-title" className="text-xl font-semibold text-[#0f2b45] sm:text-2xl">
-                  Track Your Cleanup
+                  Where did you clean up?
                 </h3>
                 <button
                   type="button"
@@ -352,64 +358,80 @@ export default function Home() {
 
               <form onSubmit={handleTrackSubmit} className="max-h-[80vh] space-y-5 overflow-y-auto px-5 py-5 sm:px-7 sm:py-6">
                 <p className="text-sm leading-6 text-slate-600 sm:text-base">
-                  Add at least one location option: use GPS, enter a neighborhood, cross streets, or a short location description.
+                  Choose whichever option is easiest. Only one location method is required.
                 </p>
 
                 <div className="rounded-2xl border border-[#0f2b45]/10 bg-white p-4 sm:p-5">
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#1f5f7a]">GPS Location</p>
+                    <p className="text-sm font-semibold text-[#0f2b45]">1. Use My Location (GPS)</p>
                     <button type="button" onClick={handleUseGps} className="btn-secondary min-h-11 px-5 py-2 text-sm">
                       Use My Location
                     </button>
                   </div>
                   {gpsStatus && <p className="mt-3 text-sm text-[#1f5f7a]">{gpsStatus}</p>}
                   {gpsLocation && (
-                    <p className="mt-2 text-sm text-slate-600">
-                      Lat {gpsLocation.latitude.toFixed(5)}, Lng {gpsLocation.longitude.toFixed(5)}
-                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setIsGpsDetailsOpen(true)}
+                      className="mt-3 text-sm font-semibold text-[#1f5f7a] underline underline-offset-2"
+                    >
+                      View GPS Details
+                    </button>
                   )}
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <label className="block">
-                    <span className="mb-2 block text-sm font-medium text-[#0f2b45]">Neighborhood</span>
+                    <span className="mb-2 block text-sm font-medium text-[#0f2b45]">2. Neighborhood (optional)</span>
                     <input
                       type="text"
                       name="neighborhood"
                       value={trackForm.neighborhood}
                       onChange={handleTrackFieldChange}
-                      placeholder="Ex: Ballard"
+                      placeholder="Enter neighborhood"
                       className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-3 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
                     />
                   </label>
 
                   <label className="block">
-                    <span className="mb-2 block text-sm font-medium text-[#0f2b45]">Cross Streets</span>
+                    <span className="mb-2 block text-sm font-medium text-[#0f2b45]">3. City (optional)</span>
                     <input
                       type="text"
-                      name="crossStreets"
-                      value={trackForm.crossStreets}
+                      name="city"
+                      value={trackForm.city}
                       onChange={handleTrackFieldChange}
-                      placeholder="Ex: 15th Ave NW & NW Market St"
+                      placeholder="Enter city"
                       className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-3 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
                     />
                   </label>
                 </div>
 
                 <label className="block">
-                  <span className="mb-2 block text-sm font-medium text-[#0f2b45]">Short Location Description</span>
-                  <textarea
-                    name="locationDescription"
-                    value={trackForm.locationDescription}
+                  <span className="mb-2 block text-sm font-medium text-[#0f2b45]">4. Nearby Cross Streets (optional)</span>
+                  <input
+                    type="text"
+                    name="crossStreets"
+                    value={trackForm.crossStreets}
                     onChange={handleTrackFieldChange}
-                    rows="3"
-                    placeholder="Ex: Along the sidewalk by the north side of the park entrance"
+                    placeholder="Enter nearby cross streets"
                     className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-3 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
                   />
                 </label>
 
                 <label className="block">
-                  <span className="mb-2 block text-sm font-medium text-[#0f2b45]">Upload Map Screenshot or Photo (Optional)</span>
+                  <span className="mb-2 block text-sm font-medium text-[#0f2b45]">5. Short Location Description (optional)</span>
+                  <textarea
+                    name="locationDescription"
+                    value={trackForm.locationDescription}
+                    onChange={handleTrackFieldChange}
+                    rows="3"
+                    placeholder="Describe where you cleaned up"
+                    className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-3 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
+                  />
+                </label>
+
+                <label className="block">
+                  <span className="mb-2 block text-sm font-medium text-[#0f2b45]">6. Upload a Map Screenshot or Photo (optional)</span>
                   <input
                     type="file"
                     accept="image/*"
@@ -426,7 +448,7 @@ export default function Home() {
                     value={trackForm.litterNotes}
                     onChange={handleTrackFieldChange}
                     rows="3"
-                    placeholder="Ex: 1 bag of mixed litter, mostly bottles and wrappers"
+                    placeholder="Add any notes about what you cleaned up"
                     className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-3 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
                   />
                 </label>
@@ -452,6 +474,28 @@ export default function Home() {
                   </button>
                 </div>
               </form>
+
+              {isGpsDetailsOpen && gpsLocation && (
+                <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#0f2b45]/35 p-4">
+                  <div className="w-full max-w-sm rounded-2xl border border-[#1f5f7a]/20 bg-[#eef7fb] p-4 shadow-[0_18px_40px_rgba(15,43,69,0.2)]">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="text-sm font-semibold text-[#0f2b45]">GPS Details</p>
+                        <p className="mt-2 text-sm text-slate-600">Latitude: {gpsLocation.latitude.toFixed(6)}</p>
+                        <p className="text-sm text-slate-600">Longitude: {gpsLocation.longitude.toFixed(6)}</p>
+                        <p className="text-sm text-slate-600">Accuracy: {Math.round(gpsLocation.accuracy)} meters</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setIsGpsDetailsOpen(false)}
+                        className="text-sm font-semibold text-[#1f5f7a] underline underline-offset-2"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
