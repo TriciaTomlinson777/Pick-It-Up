@@ -27,6 +27,7 @@ export default function Home() {
   const [isGpsDetailsOpen, setIsGpsDetailsOpen] = useState(false);
   const [locationError, setLocationError] = useState('');
   const [submitMessage, setSubmitMessage] = useState('');
+  const [isSubmissionSuccess, setIsSubmissionSuccess] = useState(false);
 
   const quickLinks = [
     { label: 'Our Community', href: '/volunteer' },
@@ -168,6 +169,7 @@ export default function Home() {
     setIsGpsDetailsOpen(false);
     setLocationError('');
     setSubmitMessage('');
+    setIsSubmissionSuccess(false);
   };
 
   const handleTrackSubmit = (event) => {
@@ -189,7 +191,8 @@ export default function Home() {
       const currentEntries = JSON.parse(localStorage.getItem(TRACK_SUBMISSIONS_KEY) || '[]');
       currentEntries.push(entry);
       localStorage.setItem(TRACK_SUBMISSIONS_KEY, JSON.stringify(currentEntries));
-      setSubmitMessage('Cleanup submitted. Thanks for tracking your impact!');
+      setSubmitMessage('Cleanup Recorded!');
+      setIsSubmissionSuccess(true);
       setTrackForm(EMPTY_TRACK_FORM);
       setGpsLocation(null);
       setGpsStatus('');
@@ -198,6 +201,7 @@ export default function Home() {
       setLocationError('');
     } catch {
       setSubmitMessage('Submission saved for this session, but persistent storage is unavailable.');
+      setIsSubmissionSuccess(false);
     }
   };
 
@@ -213,6 +217,20 @@ export default function Home() {
       document.body.style.overflow = originalOverflow;
     };
   }, [isTrackModalOpen]);
+
+  useEffect(() => {
+    if (!isTrackModalOpen || !isSubmissionSuccess || !submitMessage) {
+      return;
+    }
+
+    const closeTimer = window.setTimeout(() => {
+      closeTrackModal();
+    }, 2500);
+
+    return () => {
+      window.clearTimeout(closeTimer);
+    };
+  }, [isTrackModalOpen, isSubmissionSuccess, submitMessage]);
 
   return (
     <>
@@ -545,9 +563,21 @@ export default function Home() {
                 )}
 
                 {submitMessage && (
-                  <p className="rounded-xl border border-[#1f5f7a]/20 bg-[#eef7fb] px-4 py-3 text-sm font-medium text-[#1f5f7a]">
-                    {submitMessage}
-                  </p>
+                  isSubmissionSuccess ? (
+                    <div className="rounded-xl border border-[#1f5f7a]/20 bg-[#eef7fb] px-4 py-3 text-center">
+                      <p className="text-lg font-bold text-[#1f5f7a] sm:text-xl">{submitMessage}</p>
+                      <p className="mt-1 text-sm font-semibold text-[#62b275] sm:text-base">
+                        <span className="mr-2" role="img" aria-label="green heart">
+                          💚
+                        </span>
+                        Thanks for making your city better!
+                      </p>
+                    </div>
+                  ) : (
+                    <p className="rounded-xl border border-[#1f5f7a]/20 bg-[#eef7fb] px-4 py-3 text-sm font-medium text-[#1f5f7a]">
+                      {submitMessage}
+                    </p>
+                  )
                 )}
 
                 <div className="flex flex-col-reverse gap-3 border-t border-[#0f2b45]/10 pt-4 sm:flex-row sm:justify-end">
