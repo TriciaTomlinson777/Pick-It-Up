@@ -1,9 +1,29 @@
+"use client";
+
+import { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import Logo from '@/components/Logo';
 
+const TRACK_SUBMISSIONS_KEY = 'pick-it-up-track-submissions';
+
+const EMPTY_TRACK_FORM = {
+  neighborhood: '',
+  crossStreets: '',
+  locationDescription: '',
+  litterNotes: '',
+  mapImageName: '',
+};
+
 export default function Home() {
+  const [isTrackModalOpen, setIsTrackModalOpen] = useState(false);
+  const [trackForm, setTrackForm] = useState(EMPTY_TRACK_FORM);
+  const [gpsLocation, setGpsLocation] = useState(null);
+  const [gpsStatus, setGpsStatus] = useState('');
+  const [locationError, setLocationError] = useState('');
+  const [submitMessage, setSubmitMessage] = useState('');
+
   const quickLinks = [
     { label: 'Our Community', href: '/volunteer' },
     { label: 'Community Resources', href: '/community-resources' },
@@ -13,6 +33,106 @@ export default function Home() {
     { label: 'Join Us', href: '/volunteer' },
     { label: 'Contact Us', href: '/contact' },
   ];
+
+  const handleTrackFieldChange = (event) => {
+    const { name, value } = event.target;
+    setTrackForm((current) => ({ ...current, [name]: value }));
+    setLocationError('');
+    setSubmitMessage('');
+  };
+
+  const handleMapImageChange = (event) => {
+    const file = event.target.files?.[0];
+    setTrackForm((current) => ({
+      ...current,
+      mapImageName: file ? file.name : '',
+    }));
+    setSubmitMessage('');
+  };
+
+  const handleUseGps = () => {
+    if (!navigator.geolocation) {
+      setGpsStatus('GPS is not available in this browser.');
+      return;
+    }
+
+    setGpsStatus('Getting your location...');
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setGpsLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+        setGpsStatus('GPS location added.');
+        setLocationError('');
+      },
+      () => {
+        setGpsStatus('We could not access your GPS location.');
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+      }
+    );
+  };
+
+  const hasLocationInput = () => {
+    return Boolean(
+      gpsLocation ||
+        trackForm.neighborhood.trim() ||
+        trackForm.crossStreets.trim() ||
+        trackForm.locationDescription.trim()
+    );
+  };
+
+  const closeTrackModal = () => {
+    setIsTrackModalOpen(false);
+    setLocationError('');
+    setSubmitMessage('');
+  };
+
+  const handleTrackSubmit = (event) => {
+    event.preventDefault();
+
+    if (!hasLocationInput()) {
+      setLocationError('Add at least one location option before submitting.');
+      return;
+    }
+
+    const entry = {
+      id: Date.now(),
+      submittedAt: new Date().toISOString(),
+      ...trackForm,
+      gpsLocation,
+    };
+
+    try {
+      const currentEntries = JSON.parse(localStorage.getItem(TRACK_SUBMISSIONS_KEY) || '[]');
+      currentEntries.push(entry);
+      localStorage.setItem(TRACK_SUBMISSIONS_KEY, JSON.stringify(currentEntries));
+      setSubmitMessage('Cleanup submitted. Thanks for tracking your impact!');
+      setTrackForm(EMPTY_TRACK_FORM);
+      setGpsLocation(null);
+      setGpsStatus('');
+      setLocationError('');
+    } catch {
+      setSubmitMessage('Submission saved for this session, but persistent storage is unavailable.');
+    }
+  };
+
+  useEffect(() => {
+    if (!isTrackModalOpen) {
+      return;
+    }
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isTrackModalOpen]);
 
   return (
     <>
@@ -128,9 +248,10 @@ export default function Home() {
                 </p>
               </div>
 
-              <Link
-                href="/track"
-                className="paint-card block p-7 text-center transition duration-200 hover:-translate-y-1 hover:shadow-[0_22px_48px_rgba(15,43,69,0.14)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#1f5f7a]/20 lg:p-8"
+              <button
+                type="button"
+                onClick={() => setIsTrackModalOpen(true)}
+                className="paint-card block w-full p-7 text-center transition duration-200 hover:-translate-y-1 hover:shadow-[0_22px_48px_rgba(15,43,69,0.14)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#1f5f7a]/20 lg:p-8"
               >
                 <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#1f5f7a]/10 text-3xl text-[#1f5f7a]">
                   📍
@@ -144,7 +265,7 @@ export default function Home() {
                 <span className="mt-5 inline-flex min-h-11 items-center justify-center rounded-full bg-[#1f5f7a] px-5 py-3 text-sm font-semibold text-white">
                   Open Tracker
                 </span>
-              </Link>
+              </button>
 
               <div className="paint-card p-7 text-center lg:p-8">
                 <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#6db6d9]/10 text-3xl text-[#6db6d9]">
@@ -211,6 +332,129 @@ export default function Home() {
         </section>
 
         <Footer />
+
+        {isTrackModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#0f2b45]/60 p-3 sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-labelledby="track-it-title">
+            <div className="paint-card w-full max-w-2xl overflow-hidden rounded-[1.8rem] border border-[#0f2b45]/15 bg-[#fffdf7] shadow-[0_24px_70px_rgba(15,43,69,0.3)]">
+              <div className="flex items-center justify-between border-b border-[#0f2b45]/10 px-5 py-4 sm:px-7 sm:py-5">
+                <h3 id="track-it-title" className="text-xl font-semibold text-[#0f2b45] sm:text-2xl">
+                  Track Your Cleanup
+                </h3>
+                <button
+                  type="button"
+                  onClick={closeTrackModal}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#0f2b45]/20 text-xl text-[#0f2b45] transition hover:bg-[#eef7fb]"
+                  aria-label="Close tracker"
+                >
+                  ×
+                </button>
+              </div>
+
+              <form onSubmit={handleTrackSubmit} className="max-h-[80vh] space-y-5 overflow-y-auto px-5 py-5 sm:px-7 sm:py-6">
+                <p className="text-sm leading-6 text-slate-600 sm:text-base">
+                  Add at least one location option: use GPS, enter a neighborhood, cross streets, or a short location description.
+                </p>
+
+                <div className="rounded-2xl border border-[#0f2b45]/10 bg-white p-4 sm:p-5">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#1f5f7a]">GPS Location</p>
+                    <button type="button" onClick={handleUseGps} className="btn-secondary min-h-11 px-5 py-2 text-sm">
+                      Use My Location
+                    </button>
+                  </div>
+                  {gpsStatus && <p className="mt-3 text-sm text-[#1f5f7a]">{gpsStatus}</p>}
+                  {gpsLocation && (
+                    <p className="mt-2 text-sm text-slate-600">
+                      Lat {gpsLocation.latitude.toFixed(5)}, Lng {gpsLocation.longitude.toFixed(5)}
+                    </p>
+                  )}
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <label className="block">
+                    <span className="mb-2 block text-sm font-medium text-[#0f2b45]">Neighborhood</span>
+                    <input
+                      type="text"
+                      name="neighborhood"
+                      value={trackForm.neighborhood}
+                      onChange={handleTrackFieldChange}
+                      placeholder="Ex: Ballard"
+                      className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-3 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
+                    />
+                  </label>
+
+                  <label className="block">
+                    <span className="mb-2 block text-sm font-medium text-[#0f2b45]">Cross Streets</span>
+                    <input
+                      type="text"
+                      name="crossStreets"
+                      value={trackForm.crossStreets}
+                      onChange={handleTrackFieldChange}
+                      placeholder="Ex: 15th Ave NW & NW Market St"
+                      className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-3 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
+                    />
+                  </label>
+                </div>
+
+                <label className="block">
+                  <span className="mb-2 block text-sm font-medium text-[#0f2b45]">Short Location Description</span>
+                  <textarea
+                    name="locationDescription"
+                    value={trackForm.locationDescription}
+                    onChange={handleTrackFieldChange}
+                    rows="3"
+                    placeholder="Ex: Along the sidewalk by the north side of the park entrance"
+                    className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-3 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
+                  />
+                </label>
+
+                <label className="block">
+                  <span className="mb-2 block text-sm font-medium text-[#0f2b45]">Upload Map Screenshot or Photo (Optional)</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleMapImageChange}
+                    className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-3 text-sm text-[#0f2b45] file:mr-4 file:rounded-full file:border-0 file:bg-[#f8c948] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[#0f2b45] hover:file:bg-[#f2be2b]"
+                  />
+                  {trackForm.mapImageName && <p className="mt-2 text-sm text-slate-600">Selected: {trackForm.mapImageName}</p>}
+                </label>
+
+                <label className="block">
+                  <span className="mb-2 block text-sm font-medium text-[#0f2b45]">Litter Notes (Optional)</span>
+                  <textarea
+                    name="litterNotes"
+                    value={trackForm.litterNotes}
+                    onChange={handleTrackFieldChange}
+                    rows="3"
+                    placeholder="Ex: 1 bag of mixed litter, mostly bottles and wrappers"
+                    className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-3 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
+                  />
+                </label>
+
+                {locationError && (
+                  <p className="rounded-xl border border-[#bc3d2f]/25 bg-[#fff3f0] px-4 py-3 text-sm font-medium text-[#8f2f24]">
+                    {locationError}
+                  </p>
+                )}
+
+                {submitMessage && (
+                  <p className="rounded-xl border border-[#1f5f7a]/20 bg-[#eef7fb] px-4 py-3 text-sm font-medium text-[#1f5f7a]">
+                    {submitMessage}
+                  </p>
+                )}
+
+                <div className="flex flex-col-reverse gap-3 border-t border-[#0f2b45]/10 pt-4 sm:flex-row sm:justify-end">
+                  <button type="button" onClick={closeTrackModal} className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#0f2b45]/20 px-5 py-2 text-sm font-semibold text-[#0f2b45] transition hover:bg-[#f2f7fa]">
+                    Cancel
+                  </button>
+                  <button type="submit" className="btn-primary min-h-11 px-6 py-2 text-sm">
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </main>
     </>
   );
