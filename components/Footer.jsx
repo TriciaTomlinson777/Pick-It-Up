@@ -5,19 +5,19 @@ export default function Footer() {
 
   return (
     <footer className="bg-[#0f2b45] text-white mt-0">
-      <div className="container-custom py-0">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <div className="container-custom py-10 sm:py-12 lg:py-14">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-10 xl:gap-12 mb-10 lg:mb-12">
           {/* Brand */}
           <div>
-            <h3 className="text-xl font-bold mb-4">Pick It Up Seattle</h3>
-            <p className="text-white">
+            <h3 className="text-xl font-bold mb-4 lg:text-2xl">Pick It Up Seattle</h3>
+            <p className="text-white lg:text-lg">
               Making it easy to leave Seattle better than you found it.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-semibold mb-4">Quick Links</h4>
+            <h4 className="font-semibold mb-4 lg:text-lg">Quick Links</h4>
             <ul className="space-y-2 text-white">
               <li>
                 <Link href="/events" className="hover:text-white transition">
@@ -44,7 +44,7 @@ export default function Footer() {
 
           {/* Resources */}
           <div>
-            <h4 className="font-semibold mb-4">Resources</h4>
+            <h4 className="font-semibold mb-4 lg:text-lg">Resources</h4>
             <ul className="space-y-2 text-white">
               <li>
                 <Link href="/community-resources" className="hover:text-white transition">
@@ -71,7 +71,7 @@ export default function Footer() {
 
           {/* Contact & Social */}
           <div>
-            <h4 className="font-semibold mb-4">Follow Us</h4>
+            <h4 className="font-semibold mb-4 lg:text-lg">Follow Us</h4>
             <div className="flex space-x-4">
               <a
                 href="https://twitter.com/pickitupseattle"
@@ -112,10 +112,10 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-green-700 pt-4">
-          <div className="flex flex-col md:flex-row justify-between items-center text-white text-sm">
+        <div className="border-t border-green-700 pt-6 lg:pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center text-white text-sm lg:text-base">
             <p>&copy; {currentYear} Pick It Up Seattle. All rights reserved.</p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
+            <div className="flex space-x-6 mt-4 md:mt-0 lg:space-x-8">
               <Link href="/privacy" className="hover:text-white transition">
                 Privacy Policy
               </Link>

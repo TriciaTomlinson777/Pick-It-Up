@@ -13,7 +13,7 @@ export default function Header() {
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
-      <nav className="container-custom py-4">
+      <nav className="container-custom py-4 lg:py-5">
         <div className="flex items-center justify-between">
           <Logo href="/" className="hidden sm:inline-flex" />
 
@@ -48,26 +48,26 @@ export default function Header() {
           </button>
 
           {/* Desktop menu */}
-          <div className="hidden md:flex items-center justify-end gap-2 lg:gap-3 xl:gap-4 flex-nowrap">
-            <Link href="/events" className="hover:text-seattle-green transition text-xs lg:text-sm whitespace-nowrap px-1">
+          <div className="hidden md:flex items-center justify-end gap-2 lg:gap-4 xl:gap-5 flex-nowrap">
+            <Link href="/events" className="hover:text-seattle-green transition text-xs lg:text-sm xl:text-base whitespace-nowrap px-1">
               Events
             </Link>
-            <Link href="/how-to-participate" className="hover:text-seattle-green transition text-xs lg:text-sm whitespace-nowrap px-1">
+            <Link href="/how-to-participate" className="hover:text-seattle-green transition text-xs lg:text-sm xl:text-base whitespace-nowrap px-1">
               How to Participate
             </Link>
-            <Link href="/about" className="hover:text-seattle-green transition text-xs lg:text-sm whitespace-nowrap px-1">
+            <Link href="/about" className="hover:text-seattle-green transition text-xs lg:text-sm xl:text-base whitespace-nowrap px-1">
               About
             </Link>
-            <Link href="/blog" className="hover:text-seattle-green transition text-xs lg:text-sm whitespace-nowrap px-1">
+            <Link href="/blog" className="hover:text-seattle-green transition text-xs lg:text-sm xl:text-base whitespace-nowrap px-1">
               Blog
             </Link>
-            <Link href="/shop" className="hover:text-seattle-green transition text-xs lg:text-sm whitespace-nowrap px-1">
+            <Link href="/shop" className="hover:text-seattle-green transition text-xs lg:text-sm xl:text-base whitespace-nowrap px-1">
               Shop
             </Link>
-            <Link href="/contact" className="hover:text-seattle-green transition text-xs lg:text-sm whitespace-nowrap px-1">
+            <Link href="/contact" className="hover:text-seattle-green transition text-xs lg:text-sm xl:text-base whitespace-nowrap px-1">
               Contact
             </Link>
-            <Link href="/volunteer" className="btn-primary whitespace-nowrap text-xs lg:text-sm">
+            <Link href="/volunteer" className="btn-primary whitespace-nowrap text-xs lg:text-sm xl:text-base">
               Join Us
             </Link>
           </div>
