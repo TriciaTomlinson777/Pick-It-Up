@@ -22,6 +22,8 @@ export default function Home() {
   const [trackForm, setTrackForm] = useState(EMPTY_TRACK_FORM);
   const [gpsLocation, setGpsLocation] = useState(null);
   const [gpsStatus, setGpsStatus] = useState('');
+  const [gpsFriendlyLocation, setGpsFriendlyLocation] = useState('');
+  const [isGpsLoading, setIsGpsLoading] = useState(false);
   const [isGpsDetailsOpen, setIsGpsDetailsOpen] = useState(false);
   const [locationError, setLocationError] = useState('');
   const [submitMessage, setSubmitMessage] = useState('');
@@ -52,32 +54,102 @@ export default function Home() {
     setSubmitMessage('');
   };
 
-  const handleUseGps = () => {
+  const buildFriendlyLocation = (address = {}) => {
+    const neighborhood = address.neighbourhood || address.suburb || address.city_district || address.quarter;
+    const city = address.city || address.town || address.village || address.county;
+    const road = address.road || address.pedestrian || address.footway;
+    const crossStreet = address.crossing;
+
+    if (neighborhood && city) {
+      return `${neighborhood}, ${city}`;
+    }
+
+    if (road && crossStreet) {
+      return `${road} & ${crossStreet}`;
+    }
+
+    if (road) {
+      return road;
+    }
+
+    if (neighborhood) {
+      return neighborhood;
+    }
+
+    if (city) {
+      return city;
+    }
+
+    return '';
+  };
+
+  const formatLatLong = (latitude, longitude) => {
+    const latDirection = latitude >= 0 ? 'N' : 'S';
+    const lonDirection = longitude >= 0 ? 'E' : 'W';
+    return `${Math.abs(latitude).toFixed(5)}° ${latDirection}, ${Math.abs(longitude).toFixed(5)}° ${lonDirection}`;
+  };
+
+  const handleUseGps = async () => {
     if (!navigator.geolocation) {
-      setGpsStatus('No problem. You can enter your neighborhood, city, nearby cross streets, or a short location description instead.');
+      setGpsStatus("We couldn't determine your exact location. No-problem - you can enter your neighborhood, nearby cross streets, or a short description instead.");
+      setGpsFriendlyLocation('');
       return;
     }
 
+    setIsGpsLoading(true);
     setGpsStatus('Getting your location...');
+    setGpsFriendlyLocation('');
+    setLocationError('');
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setGpsLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          accuracy: position.coords.accuracy,
+    try {
+      const position = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0,
         });
-        setGpsStatus('📍 Your location has been captured successfully.');
-        setLocationError('');
-      },
-      () => {
-        setGpsStatus('No problem. You can enter your neighborhood, city, nearby cross streets, or a short location description instead.');
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
+      });
+
+      const locationData = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        accuracy: position.coords.accuracy,
+      };
+
+      setGpsLocation(locationData);
+
+      let friendlyLocation = '';
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${locationData.latitude}&lon=${locationData.longitude}&addressdetails=1&zoom=18`,
+          {
+            headers: {
+              Accept: 'application/json',
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          friendlyLocation = buildFriendlyLocation(data.address);
+        }
+      } catch {
+        // Keep fallback formatting if reverse geocoding fails.
       }
-    );
+
+      if (!friendlyLocation) {
+        friendlyLocation = formatLatLong(locationData.latitude, locationData.longitude);
+      }
+
+      setGpsFriendlyLocation(friendlyLocation);
+      setGpsStatus('Location captured!');
+    } catch {
+      setGpsLocation(null);
+      setGpsStatus("We couldn't determine your exact location. No-problem - you can enter your neighborhood, nearby cross streets, or a short description instead.");
+      setGpsFriendlyLocation('');
+    } finally {
+      setIsGpsLoading(false);
+    }
   };
 
   const hasLocationInput = () => {
@@ -121,6 +193,8 @@ export default function Home() {
       setTrackForm(EMPTY_TRACK_FORM);
       setGpsLocation(null);
       setGpsStatus('');
+      setGpsFriendlyLocation('');
+      setIsGpsLoading(false);
       setLocationError('');
     } catch {
       setSubmitMessage('Submission saved for this session, but persistent storage is unavailable.');
@@ -364,11 +438,22 @@ export default function Home() {
                 <div className="rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-3">
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <p className="text-sm font-medium text-[#0f2b45]">Use My Location (GPS)</p>
-                    <button type="button" onClick={handleUseGps} className="btn-secondary min-h-11 px-5 py-2 text-sm">
+                    <button type="button" onClick={handleUseGps} disabled={isGpsLoading} className="btn-secondary min-h-11 px-5 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-70">
                       Use My Location
                     </button>
                   </div>
-                  {gpsStatus && <p className="mt-3 text-sm text-[#1f5f7a]">{gpsStatus}</p>}
+                  {gpsStatus && (
+                    <div className="mt-3 space-y-1">
+                      <p className={`text-sm ${gpsLocation ? 'font-semibold text-[#2c7a3f]' : 'text-[#1f5f7a]'}`}>
+                        {isGpsLoading && (
+                          <span className="mr-2 inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#1f5f7a]/30 border-t-[#1f5f7a] align-[-2px]" aria-hidden="true" />
+                        )}
+                        {gpsLocation && !isGpsLoading ? '✓ ' : ''}
+                        {gpsStatus}
+                      </p>
+                      {gpsFriendlyLocation && !isGpsLoading && <p className="text-sm text-slate-600">{gpsFriendlyLocation}</p>}
+                    </div>
+                  )}
                   {gpsLocation && (
                     <button
                       type="button"
