@@ -480,7 +480,7 @@ export default function Home() {
 
         {isTrackModalOpen && (
           <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#0f2b45]/60 p-3 sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-labelledby="track-it-title">
-            <div className="paint-card relative w-full max-w-2xl overflow-hidden rounded-[1.8rem] border border-[#0f2b45]/15 bg-[#fffdf7] shadow-[0_24px_70px_rgba(15,43,69,0.3)]">
+            <div className="paint-card relative w-full max-w-3xl overflow-hidden rounded-[1.8rem] border border-[#0f2b45]/15 bg-[#fffdf7] shadow-[0_24px_70px_rgba(15,43,69,0.3)]">
               <div className="flex items-center justify-between border-b border-[#0f2b45]/10 px-4 py-3 sm:px-6 sm:py-4">
                 <h3 id="track-it-title" className="text-xl font-semibold text-[#0f2b45] sm:text-2xl">
                   Where did you clean up?
@@ -495,7 +495,7 @@ export default function Home() {
                 </button>
               </div>
 
-              <form onSubmit={handleTrackSubmit} className="max-h-[82vh] space-y-3 overflow-y-auto px-4 py-4 sm:px-6 sm:py-5">
+              <form onSubmit={handleTrackSubmit} className="max-h-[84vh] space-y-2.5 overflow-y-auto px-4 py-4 sm:px-6 sm:py-5">
                 <p className="text-sm leading-5 text-slate-600 sm:text-base">
                   Choose whichever option is easiest. Only one location method is required.
                 </p>
@@ -539,7 +539,7 @@ export default function Home() {
                       value={trackForm.neighborhood}
                       onChange={handleTrackFieldChange}
                       placeholder="Enter neighborhood"
-                      className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-2.5 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
+                      className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-2.5 text-base text-[#0f2b45] placeholder:text-base focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
                     />
                   </label>
 
@@ -551,57 +551,61 @@ export default function Home() {
                       value={trackForm.city}
                       onChange={handleTrackFieldChange}
                       placeholder="Enter city"
-                      className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-2.5 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
+                      className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-2.5 text-base text-[#0f2b45] placeholder:text-base focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
                     />
                   </label>
                 </div>
 
-                <label className="block">
-                  <span className="mb-1 block text-sm font-medium text-[#0f2b45]">Nearby Cross Streets (optional)</span>
-                  <input
-                    type="text"
-                    name="crossStreets"
-                    value={trackForm.crossStreets}
-                    onChange={handleTrackFieldChange}
-                    placeholder="Enter nearby cross streets"
-                    className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-2.5 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
-                  />
-                </label>
+                <div className="grid gap-3 lg:grid-cols-2">
+                  <label className="block">
+                    <span className="mb-1 block text-sm font-medium text-[#0f2b45]">Nearby Cross Streets (optional)</span>
+                    <input
+                      type="text"
+                      name="crossStreets"
+                      value={trackForm.crossStreets}
+                      onChange={handleTrackFieldChange}
+                      placeholder="Enter nearby cross streets"
+                      className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-2.5 text-base text-[#0f2b45] placeholder:text-base focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
+                    />
+                  </label>
 
-                <label className="block">
-                  <span className="mb-1 block text-sm font-medium text-[#0f2b45]">Short Location Description (optional)</span>
-                  <textarea
-                    name="locationDescription"
-                    value={trackForm.locationDescription}
-                    onChange={handleTrackFieldChange}
-                    rows="3"
-                    placeholder="Describe where you cleaned up"
-                    className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-2.5 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
-                  />
-                </label>
+                  <label className="block">
+                    <span className="mb-1 block text-sm font-medium text-[#0f2b45]">Short Location Description (optional)</span>
+                    <textarea
+                      name="locationDescription"
+                      value={trackForm.locationDescription}
+                      onChange={handleTrackFieldChange}
+                      rows="3"
+                      placeholder="Describe where you cleaned up"
+                      className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-2.5 text-base text-[#0f2b45] placeholder:text-base focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
+                    />
+                  </label>
+                </div>
 
-                <label className="block">
-                  <span className="mb-1 block text-sm font-medium text-[#0f2b45]">Upload a Map Screenshot or Photo (optional)</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleMapImageChange}
-                    className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-2.5 text-sm text-[#0f2b45] file:mr-4 file:rounded-full file:border-0 file:bg-[#f8c948] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[#0f2b45] hover:file:bg-[#f2be2b]"
-                  />
-                  {trackForm.mapImageName && <p className="mt-1 text-sm text-slate-600">Selected: {trackForm.mapImageName}</p>}
-                </label>
+                <div className="grid gap-3 lg:grid-cols-2">
+                  <label className="block">
+                    <span className="mb-1 block text-sm font-medium text-[#0f2b45]">Upload a Map Screenshot or Photo (optional)</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleMapImageChange}
+                      className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-2.5 text-base text-[#0f2b45] file:mr-4 file:rounded-full file:border-0 file:bg-[#f8c948] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[#0f2b45] hover:file:bg-[#f2be2b]"
+                    />
+                    {trackForm.mapImageName && <p className="mt-1 text-sm text-slate-600">Selected: {trackForm.mapImageName}</p>}
+                  </label>
 
-                <label className="block">
-                  <span className="mb-1 block text-sm font-medium text-[#0f2b45]">Litter Notes (Optional)</span>
-                  <textarea
-                    name="litterNotes"
-                    value={trackForm.litterNotes}
-                    onChange={handleTrackFieldChange}
-                    rows="3"
-                    placeholder="Add any notes about what you cleaned up"
-                    className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-2.5 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
-                  />
-                </label>
+                  <label className="block">
+                    <span className="mb-1 block text-sm font-medium text-[#0f2b45]">Litter Notes (Optional)</span>
+                    <textarea
+                      name="litterNotes"
+                      value={trackForm.litterNotes}
+                      onChange={handleTrackFieldChange}
+                      rows="3"
+                      placeholder="Add any notes about what you cleaned up"
+                      className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-2.5 text-base text-[#0f2b45] placeholder:text-base focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
+                    />
+                  </label>
+                </div>
 
                 {locationError && (
                   <p className="rounded-xl border border-[#bc3d2f]/25 bg-[#fff3f0] px-4 py-2.5 text-sm font-medium text-[#8f2f24]">
