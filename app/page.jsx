@@ -5,6 +5,11 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import Logo from '@/components/Logo';
+import dynamic from 'next/dynamic';
+
+const CommunityFootprintsMap = dynamic(() => import('@/components/CommunityFootprintsMap'), {
+  ssr: false,
+});
 
 const TRACK_SUBMISSIONS_KEY = 'pick-it-up-track-submissions';
 
@@ -31,9 +36,11 @@ export default function Home() {
   const [shouldScrollToFootprints, setShouldScrollToFootprints] = useState(false);
   const [shouldAnimateNewFootprint, setShouldAnimateNewFootprint] = useState(false);
   const [hasNewFootprintMarker, setHasNewFootprintMarker] = useState(false);
-  const [isNewFootprintAnimating, setIsNewFootprintAnimating] = useState(false);
-  const [isMapFocusAnimating, setIsMapFocusAnimating] = useState(false);
-  const [newFootprintPoint, setNewFootprintPoint] = useState({ x: 214, y: 118 });
+  const [isMarkerDropping, setIsMarkerDropping] = useState(false);
+  const [isRippleActive, setIsRippleActive] = useState(false);
+  const [isMapCardAnimating, setIsMapCardAnimating] = useState(false);
+  const [mapZoomPhase, setMapZoomPhase] = useState('idle');
+  const [newFootprintLatLng, setNewFootprintLatLng] = useState([47.6062, -122.3321]);
 
   const quickLinks = [
     { label: 'Our Community', href: '/volunteer' },
@@ -109,37 +116,19 @@ export default function Home() {
     return Math.abs(hash);
   };
 
-  const getFootprintPoint = (entry) => {
-    const mapBounds = {
-      minX: 30,
-      maxX: 290,
-      minY: 28,
-      maxY: 196,
+  const getFootprintLatLng = (entry) => {
+    const seattleBounds = {
+      minLat: 47.49,
+      maxLat: 47.74,
+      minLon: -122.44,
+      maxLon: -122.22,
     };
 
     if (entry?.gpsLocation) {
-      const seattleBounds = {
-        minLat: 47.49,
-        maxLat: 47.74,
-        minLon: -122.44,
-        maxLon: -122.22,
-      };
-
-      const normalizedLon = clamp(
-        (entry.gpsLocation.longitude - seattleBounds.minLon) / (seattleBounds.maxLon - seattleBounds.minLon),
-        0,
-        1
-      );
-      const normalizedLat = clamp(
-        (entry.gpsLocation.latitude - seattleBounds.minLat) / (seattleBounds.maxLat - seattleBounds.minLat),
-        0,
-        1
-      );
-
-      return {
-        x: mapBounds.minX + normalizedLon * (mapBounds.maxX - mapBounds.minX),
-        y: mapBounds.maxY - normalizedLat * (mapBounds.maxY - mapBounds.minY),
-      };
+      return [
+        clamp(entry.gpsLocation.latitude, seattleBounds.minLat, seattleBounds.maxLat),
+        clamp(entry.gpsLocation.longitude, seattleBounds.minLon, seattleBounds.maxLon),
+      ];
     }
 
     const fallbackText = [
@@ -152,13 +141,13 @@ export default function Home() {
       .trim();
 
     const seed = fallbackText ? hashString(fallbackText) : Date.now();
-    const xRatio = ((seed % 1000) + 1) / 1001;
-    const yRatio = (((Math.floor(seed / 1000) % 1000) + 1) / 1001);
+    const latRatio = ((seed % 1000) + 1) / 1001;
+    const lonRatio = ((Math.floor(seed / 1000) % 1000) + 1) / 1001;
 
-    return {
-      x: mapBounds.minX + xRatio * (mapBounds.maxX - mapBounds.minX),
-      y: mapBounds.minY + yRatio * (mapBounds.maxY - mapBounds.minY),
-    };
+    return [
+      seattleBounds.minLat + latRatio * (seattleBounds.maxLat - seattleBounds.minLat),
+      seattleBounds.minLon + lonRatio * (seattleBounds.maxLon - seattleBounds.minLon),
+    ];
   };
 
   const handleUseGps = async () => {
@@ -262,7 +251,7 @@ export default function Home() {
       const currentEntries = JSON.parse(localStorage.getItem(TRACK_SUBMISSIONS_KEY) || '[]');
       currentEntries.push(entry);
       localStorage.setItem(TRACK_SUBMISSIONS_KEY, JSON.stringify(currentEntries));
-      setNewFootprintPoint(getFootprintPoint(entry));
+      setNewFootprintLatLng(getFootprintLatLng(entry));
       setSubmitMessage('Cleanup Recorded!');
       setIsSubmissionSuccess(true);
       setShouldScrollToFootprints(true);
@@ -311,8 +300,12 @@ export default function Home() {
       return;
     }
 
-    let startAnimateTimer;
-    let endAnimateTimer;
+    let focusTimer;
+    let dropTimer;
+    let rippleTimer;
+    let dropEndTimer;
+    let returnTimer;
+    let finishTimer;
     const scrollTimer = window.setTimeout(() => {
       const footprintsSection = document.getElementById('community-footprints');
 
@@ -321,17 +314,34 @@ export default function Home() {
       }
 
       if (shouldAnimateNewFootprint) {
-        startAnimateTimer = window.setTimeout(() => {
+        focusTimer = window.setTimeout(() => {
           setHasNewFootprintMarker(true);
-          setIsMapFocusAnimating(true);
-          setIsNewFootprintAnimating(true);
-        }, 700);
+          setIsMapCardAnimating(true);
+          setMapZoomPhase('focus');
+        }, 1200);
 
-        endAnimateTimer = window.setTimeout(() => {
-          setIsNewFootprintAnimating(false);
-          setIsMapFocusAnimating(false);
+        dropTimer = window.setTimeout(() => {
+          setIsMarkerDropping(true);
+        }, 2500);
+
+        rippleTimer = window.setTimeout(() => {
+          setIsRippleActive(true);
+        }, 2800);
+
+        dropEndTimer = window.setTimeout(() => {
+          setIsMarkerDropping(false);
+        }, 3900);
+
+        returnTimer = window.setTimeout(() => {
+          setMapZoomPhase('return');
+        }, 4600);
+
+        finishTimer = window.setTimeout(() => {
+          setIsRippleActive(false);
+          setIsMapCardAnimating(false);
+          setMapZoomPhase('idle');
           setShouldAnimateNewFootprint(false);
-        }, 2200);
+        }, 6200);
       }
 
       setShouldScrollToFootprints(false);
@@ -339,11 +349,23 @@ export default function Home() {
 
     return () => {
       window.clearTimeout(scrollTimer);
-      if (startAnimateTimer) {
-        window.clearTimeout(startAnimateTimer);
+      if (focusTimer) {
+        window.clearTimeout(focusTimer);
       }
-      if (endAnimateTimer) {
-        window.clearTimeout(endAnimateTimer);
+      if (dropTimer) {
+        window.clearTimeout(dropTimer);
+      }
+      if (rippleTimer) {
+        window.clearTimeout(rippleTimer);
+      }
+      if (dropEndTimer) {
+        window.clearTimeout(dropEndTimer);
+      }
+      if (returnTimer) {
+        window.clearTimeout(returnTimer);
+      }
+      if (finishTimer) {
+        window.clearTimeout(finishTimer);
       }
     };
   }, [isTrackModalOpen, shouldScrollToFootprints, shouldAnimateNewFootprint]);
@@ -531,121 +553,18 @@ export default function Home() {
                 <p className="mt-3 text-sm font-semibold text-[#1f5f7a] lg:text-base">
                   Every footprint represents someone who chose to leave our city better than they found it.
                 </p>
-                <div className={`map-stage mt-6 overflow-hidden rounded-[1.5rem] border border-[#0f2b45]/10 bg-[#e9f1f6] p-4 ${isMapFocusAnimating ? 'is-zooming' : ''}`}>
-                  <svg viewBox="0 0 320 220" className="h-44 w-full" role="img" aria-labelledby="seattle-map-title seattle-map-desc">
-                    <title id="seattle-map-title">Seattle map placeholder</title>
-                    <desc id="seattle-map-desc">A stylized Seattle map placeholder designed for future cleanup footprint markers.</desc>
-                    <rect x="0" y="0" width="320" height="220" rx="24" fill="#f2efe7" />
-                    <path d="M0 0 L0 220 L84 220 C70 182, 72 146, 90 114 C104 88, 108 58, 100 0 Z" fill="#bddaf0" />
-                    <path d="M16 0 C10 22, 18 40, 28 58 C42 82, 50 106, 43 140 C39 162, 40 186, 52 220" fill="none" stroke="#89bde3" strokeWidth="5" strokeLinecap="round" />
-                    <path d="M38 8 C33 26, 40 45, 52 66 C64 88, 70 111, 64 137 C58 162, 59 186, 71 210" fill="none" stroke="#9bc9ea" strokeWidth="4" strokeLinecap="round" />
-                    <rect x="210" y="26" width="84" height="52" rx="8" fill="#d7e9cc" stroke="#bdd7b2" strokeWidth="2" />
-                    <rect x="214" y="124" width="70" height="46" rx="8" fill="#d7e9cc" stroke="#bdd7b2" strokeWidth="2" />
-                    <rect x="116" y="152" width="44" height="34" rx="7" fill="#d7e9cc" stroke="#bdd7b2" strokeWidth="2" />
-                    <path d="M96 40 H306" stroke="#d6d0c4" strokeWidth="8" strokeLinecap="round" />
-                    <path d="M96 70 H306" stroke="#d6d0c4" strokeWidth="8" strokeLinecap="round" />
-                    <path d="M96 100 H306" stroke="#d6d0c4" strokeWidth="8" strokeLinecap="round" />
-                    <path d="M96 130 H306" stroke="#d6d0c4" strokeWidth="8" strokeLinecap="round" />
-                    <path d="M96 160 H306" stroke="#d6d0c4" strokeWidth="8" strokeLinecap="round" />
-                    <path d="M115 24 V202" stroke="#d6d0c4" strokeWidth="8" strokeLinecap="round" />
-                    <path d="M150 24 V202" stroke="#d6d0c4" strokeWidth="8" strokeLinecap="round" />
-                    <path d="M186 24 V202" stroke="#d6d0c4" strokeWidth="8" strokeLinecap="round" />
-                    <path d="M222 24 V202" stroke="#d6d0c4" strokeWidth="8" strokeLinecap="round" />
-                    <path d="M258 24 V202" stroke="#d6d0c4" strokeWidth="8" strokeLinecap="round" />
-                    <path d="M294 24 V202" stroke="#d6d0c4" strokeWidth="8" strokeLinecap="round" />
-                    <path d="M92 116 C126 92, 170 86, 204 104 C236 120, 270 118, 306 98" fill="none" stroke="#f7c55e" strokeWidth="10" strokeLinecap="round" />
-                    <path d="M92 116 C126 92, 170 86, 204 104 C236 120, 270 118, 306 98" fill="none" stroke="#f0a826" strokeWidth="2" strokeLinecap="round" />
-                    <path d="M130 200 C170 172, 220 172, 306 184" fill="none" stroke="#f7c55e" strokeWidth="9" strokeLinecap="round" />
-                    <path d="M130 200 C170 172, 220 172, 306 184" fill="none" stroke="#f0a826" strokeWidth="2" strokeLinecap="round" />
-                    {hasNewFootprintMarker && (
-                      <g transform={`translate(${newFootprintPoint.x} ${newFootprintPoint.y})`} className={isNewFootprintAnimating ? 'footprint-drop' : ''}>
-                        {isNewFootprintAnimating && (
-                          <circle cx="0" cy="0" r="7" className="footprint-ripple" />
-                        )}
-                        <path d="M0 -21 C-11 -21, -19 -12, -19 -1 C-19 11, 0 25, 0 25 C0 25, 19 11, 19 -1 C19 -12, 11 -21, 0 -21 Z" fill="#1f5f7a" opacity="0.96" />
-                        <ellipse cx="0" cy="-3" rx="4.5" ry="6.5" fill="#fffdf7" />
-                        <circle cx="-5.5" cy="-11.5" r="1.5" fill="#fffdf7" />
-                        <circle cx="-2" cy="-13.5" r="1.35" fill="#fffdf7" />
-                        <circle cx="1.6" cy="-13.7" r="1.25" fill="#fffdf7" />
-                        <circle cx="4.9" cy="-12" r="1.2" fill="#fffdf7" />
-                      </g>
-                    )}
-                  </svg>
-                </div>
+                <CommunityFootprintsMap
+                  footprintLatLng={newFootprintLatLng}
+                  hasNewFootprintMarker={hasNewFootprintMarker}
+                  isMarkerDropping={isMarkerDropping}
+                  isRippleActive={isRippleActive}
+                  isMapCardAnimating={isMapCardAnimating}
+                  mapZoomPhase={mapZoomPhase}
+                />
               </div>
             </div>
           </div>
         </section>
-
-        <style jsx>{`
-          .map-stage {
-            transform-origin: center;
-          }
-
-          .map-stage.is-zooming {
-            animation: mapFocusPulse 1.45s ease-in-out 1;
-          }
-
-          .footprint-drop {
-            transform-box: fill-box;
-            transform-origin: center;
-            animation: markerDropIn 700ms cubic-bezier(0.2, 0.8, 0.24, 1) 1;
-          }
-
-          .footprint-ripple {
-            fill: rgba(98, 178, 117, 0.35);
-            transform-box: fill-box;
-            transform-origin: center;
-            animation: markerRipple 1000ms ease-out 1;
-          }
-
-          @keyframes mapFocusPulse {
-            0% {
-              transform: scale(1);
-            }
-
-            30% {
-              transform: scale(1.055);
-            }
-
-            70% {
-              transform: scale(1.055);
-            }
-
-            100% {
-              transform: scale(1);
-            }
-          }
-
-          @keyframes markerDropIn {
-            0% {
-              transform: translateY(-26px) scale(1.45);
-              opacity: 0;
-            }
-
-            60% {
-              transform: translateY(2px) scale(1);
-              opacity: 1;
-            }
-
-            100% {
-              transform: translateY(0) scale(1);
-              opacity: 1;
-            }
-          }
-
-          @keyframes markerRipple {
-            0% {
-              transform: scale(0.9);
-              opacity: 0.45;
-            }
-
-            100% {
-              transform: scale(3);
-              opacity: 0;
-            }
-          }
-        `}</style>
 
         <section className="py-12 sm:py-16 bg-[#fdf8eb]">
           <div className="container-custom">
