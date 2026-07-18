@@ -394,7 +394,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="mt-12 grid w-full grid-cols-1 gap-6 sm:grid-cols-3 lg:gap-8">
+            <div className="mt-12 grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
               <div className="w-full rounded-[2rem] border border-[#0f2b45]/10 bg-white p-8 text-center shadow-[0_15px_35px_rgba(15,43,69,0.08)] lg:p-10">
                 <p className="text-5xl font-black text-[#0f2b45] lg:text-6xl">0</p>
                 <p className="mt-4 text-lg font-semibold text-[#1f5f7a] lg:text-2xl">Bags of Trash</p>
@@ -408,6 +408,31 @@ export default function Home() {
               <div className="w-full rounded-[2rem] border border-[#0f2b45]/10 bg-white p-8 text-center shadow-[0_15px_35px_rgba(15,43,69,0.08)] lg:p-10">
                 <p className="text-5xl font-black text-[#0f2b45] lg:text-6xl">0</p>
                 <p className="mt-4 text-lg font-semibold text-[#1f5f7a] lg:text-2xl">Neighborhoods</p>
+              </div>
+
+              <div className="w-full rounded-[2rem] border border-[#0f2b45]/10 bg-white p-8 text-center shadow-[0_15px_35px_rgba(15,43,69,0.08)] lg:p-10">
+                <p className="text-2xl font-black text-[#0f2b45] lg:text-3xl">Our Communitie's Footprints</p>
+                <p className="mt-3 text-sm font-semibold text-[#1f5f7a] lg:text-base">
+                  Every footprint represents someone who chose to leave our city better than they found it.
+                </p>
+                <div className="mt-6 overflow-hidden rounded-[1.5rem] border border-[#0f2b45]/10 bg-[linear-gradient(180deg,_#eef7fb_0%,_#dff1f7_100%)] p-4">
+                  <svg viewBox="0 0 320 220" className="h-44 w-full" role="img" aria-labelledby="seattle-map-title seattle-map-desc">
+                    <title id="seattle-map-title">Seattle map placeholder</title>
+                    <desc id="seattle-map-desc">A stylized Seattle map placeholder designed for future cleanup footprint markers.</desc>
+                    <rect x="0" y="0" width="320" height="220" rx="24" fill="#eaf6fb" />
+                    <path d="M25 160 C70 130, 105 120, 150 108 C192 98, 230 82, 295 60" fill="none" stroke="#b7dceb" strokeWidth="10" strokeLinecap="round" />
+                    <path d="M40 55 C78 70, 110 88, 145 112 C176 133, 214 154, 275 170" fill="none" stroke="#cfe8f2" strokeWidth="8" strokeLinecap="round" />
+                    <path d="M72 28 L118 192" fill="none" stroke="#d8eef5" strokeWidth="6" strokeLinecap="round" />
+                    <path d="M164 18 L144 204" fill="none" stroke="#d8eef5" strokeWidth="6" strokeLinecap="round" />
+                    <path d="M250 28 L220 196" fill="none" stroke="#d8eef5" strokeWidth="6" strokeLinecap="round" />
+                    <path d="M46 176 C78 150, 117 145, 155 146 C201 147, 242 156, 284 183" fill="none" stroke="#9dc6d5" strokeWidth="5" strokeLinecap="round" />
+                    <circle cx="128" cy="93" r="16" fill="#62b275" opacity="0.18" />
+                    <circle cx="128" cy="93" r="8" fill="#62b275" />
+                    <path d="M128 69 C116 69, 106 79, 106 91 C106 108, 128 126, 128 126 C128 126, 150 108, 150 91 C150 79, 140 69, 128 69 Z" fill="#1f5f7a" opacity="0.95" />
+                    <circle cx="128" cy="91" r="6" fill="#fffdf7" />
+                    <path d="M202 126 C194 114, 192 100, 198 88 C205 73, 221 65, 239 66" fill="none" stroke="#62b275" strokeWidth="4" strokeLinecap="round" strokeDasharray="6 8" />
+                  </svg>
+                </div>
               </div>
             </div>
           </div>
