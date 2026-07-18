@@ -481,7 +481,7 @@ export default function Home() {
         {isTrackModalOpen && (
           <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#0f2b45]/60 p-3 sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-labelledby="track-it-title">
             <div className="paint-card relative w-full max-w-2xl overflow-hidden rounded-[1.8rem] border border-[#0f2b45]/15 bg-[#fffdf7] shadow-[0_24px_70px_rgba(15,43,69,0.3)]">
-              <div className="flex items-center justify-between border-b border-[#0f2b45]/10 px-5 py-4 sm:px-7 sm:py-5">
+              <div className="flex items-center justify-between border-b border-[#0f2b45]/10 px-4 py-3 sm:px-6 sm:py-4">
                 <h3 id="track-it-title" className="text-xl font-semibold text-[#0f2b45] sm:text-2xl">
                   Where did you clean up?
                 </h3>
@@ -495,20 +495,20 @@ export default function Home() {
                 </button>
               </div>
 
-              <form onSubmit={handleTrackSubmit} className="max-h-[80vh] space-y-5 overflow-y-auto px-5 py-5 sm:px-7 sm:py-6">
-                <p className="text-sm leading-6 text-slate-600 sm:text-base">
+              <form onSubmit={handleTrackSubmit} className="max-h-[82vh] space-y-3 overflow-y-auto px-4 py-4 sm:px-6 sm:py-5">
+                <p className="text-sm leading-5 text-slate-600 sm:text-base">
                   Choose whichever option is easiest. Only one location method is required.
                 </p>
 
-                <div className="rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-3">
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="rounded-xl border border-[#0f2b45]/15 bg-white px-3 py-2.5">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                     <p className="text-sm font-medium text-[#0f2b45]">Use My Location (GPS)</p>
                     <button type="button" onClick={handleUseGps} disabled={isGpsLoading} className="btn-secondary min-h-11 px-5 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-70">
                       Use My Location
                     </button>
                   </div>
                   {gpsStatus && (
-                    <div className="mt-3 space-y-1">
+                    <div className="mt-2 space-y-1">
                       <p className={`text-sm ${gpsLocation ? 'font-semibold text-[#2c7a3f]' : 'text-[#1f5f7a]'}`}>
                         {isGpsLoading && (
                           <span className="mr-2 inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#1f5f7a]/30 border-t-[#1f5f7a] align-[-2px]" aria-hidden="true" />
@@ -523,95 +523,95 @@ export default function Home() {
                     <button
                       type="button"
                       onClick={() => setIsGpsDetailsOpen(true)}
-                      className="mt-3 text-sm font-semibold text-[#1f5f7a] underline underline-offset-2"
+                      className="mt-2 text-sm font-semibold text-[#1f5f7a] underline underline-offset-2"
                     >
                       View GPS Details
                     </button>
                   )}
                 </div>
 
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-3 sm:grid-cols-2">
                   <label className="block">
-                    <span className="mb-2 block text-sm font-medium text-[#0f2b45]">Neighborhood (optional)</span>
+                    <span className="mb-1 block text-sm font-medium text-[#0f2b45]">Neighborhood (optional)</span>
                     <input
                       type="text"
                       name="neighborhood"
                       value={trackForm.neighborhood}
                       onChange={handleTrackFieldChange}
                       placeholder="Enter neighborhood"
-                      className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-3 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
+                      className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-2.5 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
                     />
                   </label>
 
                   <label className="block">
-                    <span className="mb-2 block text-sm font-medium text-[#0f2b45]">City (optional)</span>
+                    <span className="mb-1 block text-sm font-medium text-[#0f2b45]">City (optional)</span>
                     <input
                       type="text"
                       name="city"
                       value={trackForm.city}
                       onChange={handleTrackFieldChange}
                       placeholder="Enter city"
-                      className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-3 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
+                      className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-2.5 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
                     />
                   </label>
                 </div>
 
                 <label className="block">
-                  <span className="mb-2 block text-sm font-medium text-[#0f2b45]">Nearby Cross Streets (optional)</span>
+                  <span className="mb-1 block text-sm font-medium text-[#0f2b45]">Nearby Cross Streets (optional)</span>
                   <input
                     type="text"
                     name="crossStreets"
                     value={trackForm.crossStreets}
                     onChange={handleTrackFieldChange}
                     placeholder="Enter nearby cross streets"
-                    className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-3 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
+                    className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-2.5 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
                   />
                 </label>
 
                 <label className="block">
-                  <span className="mb-2 block text-sm font-medium text-[#0f2b45]">Short Location Description (optional)</span>
+                  <span className="mb-1 block text-sm font-medium text-[#0f2b45]">Short Location Description (optional)</span>
                   <textarea
                     name="locationDescription"
                     value={trackForm.locationDescription}
                     onChange={handleTrackFieldChange}
                     rows="3"
                     placeholder="Describe where you cleaned up"
-                    className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-3 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
+                    className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-2.5 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
                   />
                 </label>
 
                 <label className="block">
-                  <span className="mb-2 block text-sm font-medium text-[#0f2b45]">Upload a Map Screenshot or Photo (optional)</span>
+                  <span className="mb-1 block text-sm font-medium text-[#0f2b45]">Upload a Map Screenshot or Photo (optional)</span>
                   <input
                     type="file"
                     accept="image/*"
                     onChange={handleMapImageChange}
-                    className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-3 text-sm text-[#0f2b45] file:mr-4 file:rounded-full file:border-0 file:bg-[#f8c948] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[#0f2b45] hover:file:bg-[#f2be2b]"
+                    className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-2.5 text-sm text-[#0f2b45] file:mr-4 file:rounded-full file:border-0 file:bg-[#f8c948] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[#0f2b45] hover:file:bg-[#f2be2b]"
                   />
-                  {trackForm.mapImageName && <p className="mt-2 text-sm text-slate-600">Selected: {trackForm.mapImageName}</p>}
+                  {trackForm.mapImageName && <p className="mt-1 text-sm text-slate-600">Selected: {trackForm.mapImageName}</p>}
                 </label>
 
                 <label className="block">
-                  <span className="mb-2 block text-sm font-medium text-[#0f2b45]">Litter Notes (Optional)</span>
+                  <span className="mb-1 block text-sm font-medium text-[#0f2b45]">Litter Notes (Optional)</span>
                   <textarea
                     name="litterNotes"
                     value={trackForm.litterNotes}
                     onChange={handleTrackFieldChange}
                     rows="3"
                     placeholder="Add any notes about what you cleaned up"
-                    className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-3 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
+                    className="w-full rounded-xl border border-[#0f2b45]/15 bg-white px-4 py-2.5 text-sm text-[#0f2b45] focus:outline-none focus:ring-2 focus:ring-[#1f5f7a]/35"
                   />
                 </label>
 
                 {locationError && (
-                  <p className="rounded-xl border border-[#bc3d2f]/25 bg-[#fff3f0] px-4 py-3 text-sm font-medium text-[#8f2f24]">
+                  <p className="rounded-xl border border-[#bc3d2f]/25 bg-[#fff3f0] px-4 py-2.5 text-sm font-medium text-[#8f2f24]">
                     {locationError}
                   </p>
                 )}
 
                 {submitMessage && (
                   isSubmissionSuccess ? (
-                    <div className="rounded-xl border border-[#1f5f7a]/20 bg-[#eef7fb] px-4 py-3 text-center">
+                    <div className="rounded-xl border border-[#1f5f7a]/20 bg-[#eef7fb] px-4 py-2.5 text-center">
                       <p className="text-lg font-bold text-[#1f5f7a] sm:text-xl">{submitMessage}</p>
                       <p className="mt-1 text-sm font-semibold text-[#62b275] sm:text-base">
                         <span className="mr-2" role="img" aria-label="green heart">
@@ -621,13 +621,13 @@ export default function Home() {
                       </p>
                     </div>
                   ) : (
-                    <p className="rounded-xl border border-[#1f5f7a]/20 bg-[#eef7fb] px-4 py-3 text-sm font-medium text-[#1f5f7a]">
+                    <p className="rounded-xl border border-[#1f5f7a]/20 bg-[#eef7fb] px-4 py-2.5 text-sm font-medium text-[#1f5f7a]">
                       {submitMessage}
                     </p>
                   )
                 )}
 
-                <div className="flex flex-col-reverse gap-3 border-t border-[#0f2b45]/10 pt-4 sm:flex-row sm:justify-end">
+                <div className="flex flex-col-reverse gap-2 border-t border-[#0f2b45]/10 pt-3 sm:flex-row sm:justify-end">
                   <button type="button" onClick={closeTrackModal} className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#0f2b45]/20 px-5 py-2 text-sm font-semibold text-[#0f2b45] transition hover:bg-[#f2f7fa]">
                     Cancel
                   </button>
