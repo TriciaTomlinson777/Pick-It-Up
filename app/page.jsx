@@ -41,6 +41,7 @@ export default function Home() {
   const [isMapCardAnimating, setIsMapCardAnimating] = useState(false);
   const [mapZoomPhase, setMapZoomPhase] = useState('idle');
   const [newFootprintLatLng, setNewFootprintLatLng] = useState([47.6062, -122.3321]);
+  const [runFootprintSequence, setRunFootprintSequence] = useState(false);
 
   const quickLinks = [
     { label: 'Our Community', href: '/volunteer' },
@@ -300,12 +301,6 @@ export default function Home() {
       return;
     }
 
-    let focusTimer;
-    let dropTimer;
-    let rippleTimer;
-    let dropEndTimer;
-    let returnTimer;
-    let finishTimer;
     const scrollTimer = window.setTimeout(() => {
       const footprintsSection = document.getElementById('community-footprints');
 
@@ -314,34 +309,7 @@ export default function Home() {
       }
 
       if (shouldAnimateNewFootprint) {
-        focusTimer = window.setTimeout(() => {
-          setHasNewFootprintMarker(true);
-          setIsMapCardAnimating(true);
-          setMapZoomPhase('focus');
-        }, 1200);
-
-        dropTimer = window.setTimeout(() => {
-          setIsMarkerDropping(true);
-        }, 2500);
-
-        rippleTimer = window.setTimeout(() => {
-          setIsRippleActive(true);
-        }, 2800);
-
-        dropEndTimer = window.setTimeout(() => {
-          setIsMarkerDropping(false);
-        }, 3900);
-
-        returnTimer = window.setTimeout(() => {
-          setMapZoomPhase('return');
-        }, 4600);
-
-        finishTimer = window.setTimeout(() => {
-          setIsRippleActive(false);
-          setIsMapCardAnimating(false);
-          setMapZoomPhase('idle');
-          setShouldAnimateNewFootprint(false);
-        }, 6200);
+        setRunFootprintSequence(true);
       }
 
       setShouldScrollToFootprints(false);
@@ -349,6 +317,52 @@ export default function Home() {
 
     return () => {
       window.clearTimeout(scrollTimer);
+    };
+  }, [isTrackModalOpen, shouldScrollToFootprints, shouldAnimateNewFootprint]);
+
+  useEffect(() => {
+    if (!runFootprintSequence || isTrackModalOpen) {
+      return;
+    }
+
+    let focusTimer;
+    let dropTimer;
+    let rippleTimer;
+    let dropEndTimer;
+    let returnTimer;
+    let finishTimer;
+
+    focusTimer = window.setTimeout(() => {
+      setHasNewFootprintMarker(true);
+      setIsMapCardAnimating(true);
+      setMapZoomPhase('focus');
+    }, 900);
+
+    dropTimer = window.setTimeout(() => {
+      setIsMarkerDropping(true);
+    }, 2300);
+
+    rippleTimer = window.setTimeout(() => {
+      setIsRippleActive(true);
+    }, 2700);
+
+    dropEndTimer = window.setTimeout(() => {
+      setIsMarkerDropping(false);
+    }, 3800);
+
+    returnTimer = window.setTimeout(() => {
+      setMapZoomPhase('return');
+    }, 4700);
+
+    finishTimer = window.setTimeout(() => {
+      setIsRippleActive(false);
+      setIsMapCardAnimating(false);
+      setMapZoomPhase('idle');
+      setShouldAnimateNewFootprint(false);
+      setRunFootprintSequence(false);
+    }, 6400);
+
+    return () => {
       if (focusTimer) {
         window.clearTimeout(focusTimer);
       }
@@ -368,7 +382,7 @@ export default function Home() {
         window.clearTimeout(finishTimer);
       }
     };
-  }, [isTrackModalOpen, shouldScrollToFootprints, shouldAnimateNewFootprint]);
+  }, [runFootprintSequence, isTrackModalOpen]);
 
   return (
     <>
