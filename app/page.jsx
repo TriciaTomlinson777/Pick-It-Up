@@ -227,7 +227,7 @@ export default function Home() {
 
     const closeTimer = window.setTimeout(() => {
       closeTrackModal();
-    }, 2500);
+    }, 3000);
 
     return () => {
       window.clearTimeout(closeTimer);
