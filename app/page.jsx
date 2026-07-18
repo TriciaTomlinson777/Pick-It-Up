@@ -29,6 +29,9 @@ export default function Home() {
   const [submitMessage, setSubmitMessage] = useState('');
   const [isSubmissionSuccess, setIsSubmissionSuccess] = useState(false);
   const [shouldScrollToFootprints, setShouldScrollToFootprints] = useState(false);
+  const [shouldAnimateNewFootprint, setShouldAnimateNewFootprint] = useState(false);
+  const [hasNewFootprintMarker, setHasNewFootprintMarker] = useState(false);
+  const [isNewFootprintAnimating, setIsNewFootprintAnimating] = useState(false);
 
   const quickLinks = [
     { label: 'Our Community', href: '/volunteer' },
@@ -195,6 +198,7 @@ export default function Home() {
       setSubmitMessage('Cleanup Recorded!');
       setIsSubmissionSuccess(true);
       setShouldScrollToFootprints(true);
+      setShouldAnimateNewFootprint(true);
       setTrackForm(EMPTY_TRACK_FORM);
       setGpsLocation(null);
       setGpsStatus('');
@@ -239,6 +243,7 @@ export default function Home() {
       return;
     }
 
+    let animateTimer;
     const scrollTimer = window.setTimeout(() => {
       const footprintsSection = document.getElementById('community-footprints');
 
@@ -246,13 +251,38 @@ export default function Home() {
         footprintsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
 
+      if (shouldAnimateNewFootprint) {
+        animateTimer = window.setTimeout(() => {
+          setHasNewFootprintMarker(true);
+          setIsNewFootprintAnimating(true);
+        }, 600);
+      }
+
       setShouldScrollToFootprints(false);
     }, 0);
 
     return () => {
       window.clearTimeout(scrollTimer);
+      if (animateTimer) {
+        window.clearTimeout(animateTimer);
+      }
     };
-  }, [isTrackModalOpen, shouldScrollToFootprints]);
+  }, [isTrackModalOpen, shouldScrollToFootprints, shouldAnimateNewFootprint]);
+
+  useEffect(() => {
+    if (!isNewFootprintAnimating) {
+      return;
+    }
+
+    const animationTimer = window.setTimeout(() => {
+      setIsNewFootprintAnimating(false);
+      setShouldAnimateNewFootprint(false);
+    }, 1200);
+
+    return () => {
+      window.clearTimeout(animationTimer);
+    };
+  }, [isNewFootprintAnimating]);
 
   return (
     <>
@@ -453,6 +483,31 @@ export default function Home() {
                     <path d="M128 69 C116 69, 106 79, 106 91 C106 108, 128 126, 128 126 C128 126, 150 108, 150 91 C150 79, 140 69, 128 69 Z" fill="#1f5f7a" opacity="0.95" />
                     <circle cx="128" cy="91" r="6" fill="#fffdf7" />
                     <path d="M202 126 C194 114, 192 100, 198 88 C205 73, 221 65, 239 66" fill="none" stroke="#62b275" strokeWidth="4" strokeLinecap="round" strokeDasharray="6 8" />
+                    {hasNewFootprintMarker && (
+                      <g transform="translate(214 118)">
+                        {isNewFootprintAnimating && (
+                          <circle cx="0" cy="0" r="6" fill="#62b275" opacity="0.35">
+                            <animate attributeName="r" from="6" to="18" dur="850ms" repeatCount="1" />
+                            <animate attributeName="opacity" from="0.35" to="0" dur="850ms" repeatCount="1" />
+                          </circle>
+                        )}
+                        <g>
+                          {isNewFootprintAnimating && (
+                            <animateTransform
+                              attributeName="transform"
+                              type="scale"
+                              from="1.8"
+                              to="1"
+                              dur="420ms"
+                              additive="sum"
+                              fill="freeze"
+                            />
+                          )}
+                          <path d="M0 -20 C-10 -20, -18 -12, -18 -2 C-18 10, 0 24, 0 24 C0 24, 18 10, 18 -2 C18 -12, 10 -20, 0 -20 Z" fill="#1f5f7a" opacity="0.95" />
+                          <circle cx="0" cy="-2" r="5" fill="#fffdf7" />
+                        </g>
+                      </g>
+                    )}
                   </svg>
                 </div>
               </div>
