@@ -28,6 +28,7 @@ export default function Home() {
   const [locationError, setLocationError] = useState('');
   const [submitMessage, setSubmitMessage] = useState('');
   const [isSubmissionSuccess, setIsSubmissionSuccess] = useState(false);
+  const [shouldScrollToFootprints, setShouldScrollToFootprints] = useState(false);
 
   const quickLinks = [
     { label: 'Our Community', href: '/volunteer' },
@@ -193,6 +194,7 @@ export default function Home() {
       localStorage.setItem(TRACK_SUBMISSIONS_KEY, JSON.stringify(currentEntries));
       setSubmitMessage('Cleanup Recorded!');
       setIsSubmissionSuccess(true);
+      setShouldScrollToFootprints(true);
       setTrackForm(EMPTY_TRACK_FORM);
       setGpsLocation(null);
       setGpsStatus('');
@@ -231,6 +233,26 @@ export default function Home() {
       window.clearTimeout(closeTimer);
     };
   }, [isTrackModalOpen, isSubmissionSuccess, submitMessage]);
+
+  useEffect(() => {
+    if (isTrackModalOpen || !shouldScrollToFootprints) {
+      return;
+    }
+
+    const scrollTimer = window.setTimeout(() => {
+      const footprintsSection = document.getElementById('community-footprints');
+
+      if (footprintsSection) {
+        footprintsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      setShouldScrollToFootprints(false);
+    }, 0);
+
+    return () => {
+      window.clearTimeout(scrollTimer);
+    };
+  }, [isTrackModalOpen, shouldScrollToFootprints]);
 
   return (
     <>
@@ -410,7 +432,7 @@ export default function Home() {
                 <p className="mt-4 text-lg font-semibold text-[#1f5f7a] lg:text-2xl">Neighborhoods</p>
               </div>
 
-              <div className="w-full rounded-[2rem] border border-[#0f2b45]/10 bg-white p-8 text-center shadow-[0_15px_35px_rgba(15,43,69,0.08)] lg:p-10">
+              <div id="community-footprints" className="w-full rounded-[2rem] border border-[#0f2b45]/10 bg-white p-8 text-center shadow-[0_15px_35px_rgba(15,43,69,0.08)] lg:p-10">
                 <p className="text-2xl font-black text-[#0f2b45] lg:text-3xl">Our Communitie's Footprints</p>
                 <p className="mt-3 text-sm font-semibold text-[#1f5f7a] lg:text-base">
                   Every footprint represents someone who chose to leave our city better than they found it.
