@@ -32,6 +32,8 @@ export default function Home() {
   const [shouldAnimateNewFootprint, setShouldAnimateNewFootprint] = useState(false);
   const [hasNewFootprintMarker, setHasNewFootprintMarker] = useState(false);
   const [isNewFootprintAnimating, setIsNewFootprintAnimating] = useState(false);
+  const [isMapFocusAnimating, setIsMapFocusAnimating] = useState(false);
+  const [newFootprintPoint, setNewFootprintPoint] = useState({ x: 214, y: 118 });
 
   const quickLinks = [
     { label: 'Our Community', href: '/volunteer' },
@@ -92,6 +94,71 @@ export default function Home() {
     const latDirection = latitude >= 0 ? 'N' : 'S';
     const lonDirection = longitude >= 0 ? 'E' : 'W';
     return `${Math.abs(latitude).toFixed(5)}° ${latDirection}, ${Math.abs(longitude).toFixed(5)}° ${lonDirection}`;
+  };
+
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+  const hashString = (value) => {
+    let hash = 0;
+
+    for (let index = 0; index < value.length; index += 1) {
+      hash = (hash << 5) - hash + value.charCodeAt(index);
+      hash |= 0;
+    }
+
+    return Math.abs(hash);
+  };
+
+  const getFootprintPoint = (entry) => {
+    const mapBounds = {
+      minX: 30,
+      maxX: 290,
+      minY: 28,
+      maxY: 196,
+    };
+
+    if (entry?.gpsLocation) {
+      const seattleBounds = {
+        minLat: 47.49,
+        maxLat: 47.74,
+        minLon: -122.44,
+        maxLon: -122.22,
+      };
+
+      const normalizedLon = clamp(
+        (entry.gpsLocation.longitude - seattleBounds.minLon) / (seattleBounds.maxLon - seattleBounds.minLon),
+        0,
+        1
+      );
+      const normalizedLat = clamp(
+        (entry.gpsLocation.latitude - seattleBounds.minLat) / (seattleBounds.maxLat - seattleBounds.minLat),
+        0,
+        1
+      );
+
+      return {
+        x: mapBounds.minX + normalizedLon * (mapBounds.maxX - mapBounds.minX),
+        y: mapBounds.maxY - normalizedLat * (mapBounds.maxY - mapBounds.minY),
+      };
+    }
+
+    const fallbackText = [
+      entry?.neighborhood || '',
+      entry?.city || '',
+      entry?.crossStreets || '',
+      entry?.locationDescription || '',
+    ]
+      .join('|')
+      .trim();
+
+    const seed = fallbackText ? hashString(fallbackText) : Date.now();
+    const xRatio = ((seed % 1000) + 1) / 1001;
+    const yRatio = (((Math.floor(seed / 1000) % 1000) + 1) / 1001);
+
+    return {
+      x: mapBounds.minX + xRatio * (mapBounds.maxX - mapBounds.minX),
+      y: mapBounds.minY + yRatio * (mapBounds.maxY - mapBounds.minY),
+    };
   };
 
   const handleUseGps = async () => {
@@ -195,6 +262,7 @@ export default function Home() {
       const currentEntries = JSON.parse(localStorage.getItem(TRACK_SUBMISSIONS_KEY) || '[]');
       currentEntries.push(entry);
       localStorage.setItem(TRACK_SUBMISSIONS_KEY, JSON.stringify(currentEntries));
+      setNewFootprintPoint(getFootprintPoint(entry));
       setSubmitMessage('Cleanup Recorded!');
       setIsSubmissionSuccess(true);
       setShouldScrollToFootprints(true);
@@ -243,7 +311,8 @@ export default function Home() {
       return;
     }
 
-    let animateTimer;
+    let startAnimateTimer;
+    let endAnimateTimer;
     const scrollTimer = window.setTimeout(() => {
       const footprintsSection = document.getElementById('community-footprints');
 
@@ -252,10 +321,17 @@ export default function Home() {
       }
 
       if (shouldAnimateNewFootprint) {
-        animateTimer = window.setTimeout(() => {
+        startAnimateTimer = window.setTimeout(() => {
           setHasNewFootprintMarker(true);
+          setIsMapFocusAnimating(true);
           setIsNewFootprintAnimating(true);
-        }, 600);
+        }, 700);
+
+        endAnimateTimer = window.setTimeout(() => {
+          setIsNewFootprintAnimating(false);
+          setIsMapFocusAnimating(false);
+          setShouldAnimateNewFootprint(false);
+        }, 2200);
       }
 
       setShouldScrollToFootprints(false);
@@ -263,26 +339,14 @@ export default function Home() {
 
     return () => {
       window.clearTimeout(scrollTimer);
-      if (animateTimer) {
-        window.clearTimeout(animateTimer);
+      if (startAnimateTimer) {
+        window.clearTimeout(startAnimateTimer);
+      }
+      if (endAnimateTimer) {
+        window.clearTimeout(endAnimateTimer);
       }
     };
   }, [isTrackModalOpen, shouldScrollToFootprints, shouldAnimateNewFootprint]);
-
-  useEffect(() => {
-    if (!isNewFootprintAnimating) {
-      return;
-    }
-
-    const animationTimer = window.setTimeout(() => {
-      setIsNewFootprintAnimating(false);
-      setShouldAnimateNewFootprint(false);
-    }, 1200);
-
-    return () => {
-      window.clearTimeout(animationTimer);
-    };
-  }, [isNewFootprintAnimating]);
 
   return (
     <>
@@ -467,45 +531,43 @@ export default function Home() {
                 <p className="mt-3 text-sm font-semibold text-[#1f5f7a] lg:text-base">
                   Every footprint represents someone who chose to leave our city better than they found it.
                 </p>
-                <div className="mt-6 overflow-hidden rounded-[1.5rem] border border-[#0f2b45]/10 bg-[linear-gradient(180deg,_#eef7fb_0%,_#dff1f7_100%)] p-4">
+                <div className={`map-stage mt-6 overflow-hidden rounded-[1.5rem] border border-[#0f2b45]/10 bg-[#e9f1f6] p-4 ${isMapFocusAnimating ? 'is-zooming' : ''}`}>
                   <svg viewBox="0 0 320 220" className="h-44 w-full" role="img" aria-labelledby="seattle-map-title seattle-map-desc">
                     <title id="seattle-map-title">Seattle map placeholder</title>
                     <desc id="seattle-map-desc">A stylized Seattle map placeholder designed for future cleanup footprint markers.</desc>
-                    <rect x="0" y="0" width="320" height="220" rx="24" fill="#eaf6fb" />
-                    <path d="M25 160 C70 130, 105 120, 150 108 C192 98, 230 82, 295 60" fill="none" stroke="#b7dceb" strokeWidth="10" strokeLinecap="round" />
-                    <path d="M40 55 C78 70, 110 88, 145 112 C176 133, 214 154, 275 170" fill="none" stroke="#cfe8f2" strokeWidth="8" strokeLinecap="round" />
-                    <path d="M72 28 L118 192" fill="none" stroke="#d8eef5" strokeWidth="6" strokeLinecap="round" />
-                    <path d="M164 18 L144 204" fill="none" stroke="#d8eef5" strokeWidth="6" strokeLinecap="round" />
-                    <path d="M250 28 L220 196" fill="none" stroke="#d8eef5" strokeWidth="6" strokeLinecap="round" />
-                    <path d="M46 176 C78 150, 117 145, 155 146 C201 147, 242 156, 284 183" fill="none" stroke="#9dc6d5" strokeWidth="5" strokeLinecap="round" />
-                    <circle cx="128" cy="93" r="16" fill="#62b275" opacity="0.18" />
-                    <circle cx="128" cy="93" r="8" fill="#62b275" />
-                    <path d="M128 69 C116 69, 106 79, 106 91 C106 108, 128 126, 128 126 C128 126, 150 108, 150 91 C150 79, 140 69, 128 69 Z" fill="#1f5f7a" opacity="0.95" />
-                    <circle cx="128" cy="91" r="6" fill="#fffdf7" />
-                    <path d="M202 126 C194 114, 192 100, 198 88 C205 73, 221 65, 239 66" fill="none" stroke="#62b275" strokeWidth="4" strokeLinecap="round" strokeDasharray="6 8" />
+                    <rect x="0" y="0" width="320" height="220" rx="24" fill="#f2efe7" />
+                    <path d="M0 0 L0 220 L84 220 C70 182, 72 146, 90 114 C104 88, 108 58, 100 0 Z" fill="#bddaf0" />
+                    <path d="M16 0 C10 22, 18 40, 28 58 C42 82, 50 106, 43 140 C39 162, 40 186, 52 220" fill="none" stroke="#89bde3" strokeWidth="5" strokeLinecap="round" />
+                    <path d="M38 8 C33 26, 40 45, 52 66 C64 88, 70 111, 64 137 C58 162, 59 186, 71 210" fill="none" stroke="#9bc9ea" strokeWidth="4" strokeLinecap="round" />
+                    <rect x="210" y="26" width="84" height="52" rx="8" fill="#d7e9cc" stroke="#bdd7b2" strokeWidth="2" />
+                    <rect x="214" y="124" width="70" height="46" rx="8" fill="#d7e9cc" stroke="#bdd7b2" strokeWidth="2" />
+                    <rect x="116" y="152" width="44" height="34" rx="7" fill="#d7e9cc" stroke="#bdd7b2" strokeWidth="2" />
+                    <path d="M96 40 H306" stroke="#d6d0c4" strokeWidth="8" strokeLinecap="round" />
+                    <path d="M96 70 H306" stroke="#d6d0c4" strokeWidth="8" strokeLinecap="round" />
+                    <path d="M96 100 H306" stroke="#d6d0c4" strokeWidth="8" strokeLinecap="round" />
+                    <path d="M96 130 H306" stroke="#d6d0c4" strokeWidth="8" strokeLinecap="round" />
+                    <path d="M96 160 H306" stroke="#d6d0c4" strokeWidth="8" strokeLinecap="round" />
+                    <path d="M115 24 V202" stroke="#d6d0c4" strokeWidth="8" strokeLinecap="round" />
+                    <path d="M150 24 V202" stroke="#d6d0c4" strokeWidth="8" strokeLinecap="round" />
+                    <path d="M186 24 V202" stroke="#d6d0c4" strokeWidth="8" strokeLinecap="round" />
+                    <path d="M222 24 V202" stroke="#d6d0c4" strokeWidth="8" strokeLinecap="round" />
+                    <path d="M258 24 V202" stroke="#d6d0c4" strokeWidth="8" strokeLinecap="round" />
+                    <path d="M294 24 V202" stroke="#d6d0c4" strokeWidth="8" strokeLinecap="round" />
+                    <path d="M92 116 C126 92, 170 86, 204 104 C236 120, 270 118, 306 98" fill="none" stroke="#f7c55e" strokeWidth="10" strokeLinecap="round" />
+                    <path d="M92 116 C126 92, 170 86, 204 104 C236 120, 270 118, 306 98" fill="none" stroke="#f0a826" strokeWidth="2" strokeLinecap="round" />
+                    <path d="M130 200 C170 172, 220 172, 306 184" fill="none" stroke="#f7c55e" strokeWidth="9" strokeLinecap="round" />
+                    <path d="M130 200 C170 172, 220 172, 306 184" fill="none" stroke="#f0a826" strokeWidth="2" strokeLinecap="round" />
                     {hasNewFootprintMarker && (
-                      <g transform="translate(214 118)">
+                      <g transform={`translate(${newFootprintPoint.x} ${newFootprintPoint.y})`} className={isNewFootprintAnimating ? 'footprint-drop' : ''}>
                         {isNewFootprintAnimating && (
-                          <circle cx="0" cy="0" r="6" fill="#62b275" opacity="0.35">
-                            <animate attributeName="r" from="6" to="18" dur="850ms" repeatCount="1" />
-                            <animate attributeName="opacity" from="0.35" to="0" dur="850ms" repeatCount="1" />
-                          </circle>
+                          <circle cx="0" cy="0" r="7" className="footprint-ripple" />
                         )}
-                        <g>
-                          {isNewFootprintAnimating && (
-                            <animateTransform
-                              attributeName="transform"
-                              type="scale"
-                              from="1.8"
-                              to="1"
-                              dur="420ms"
-                              additive="sum"
-                              fill="freeze"
-                            />
-                          )}
-                          <path d="M0 -20 C-10 -20, -18 -12, -18 -2 C-18 10, 0 24, 0 24 C0 24, 18 10, 18 -2 C18 -12, 10 -20, 0 -20 Z" fill="#1f5f7a" opacity="0.95" />
-                          <circle cx="0" cy="-2" r="5" fill="#fffdf7" />
-                        </g>
+                        <path d="M0 -21 C-11 -21, -19 -12, -19 -1 C-19 11, 0 25, 0 25 C0 25, 19 11, 19 -1 C19 -12, 11 -21, 0 -21 Z" fill="#1f5f7a" opacity="0.96" />
+                        <ellipse cx="0" cy="-3" rx="4.5" ry="6.5" fill="#fffdf7" />
+                        <circle cx="-5.5" cy="-11.5" r="1.5" fill="#fffdf7" />
+                        <circle cx="-2" cy="-13.5" r="1.35" fill="#fffdf7" />
+                        <circle cx="1.6" cy="-13.7" r="1.25" fill="#fffdf7" />
+                        <circle cx="4.9" cy="-12" r="1.2" fill="#fffdf7" />
                       </g>
                     )}
                   </svg>
@@ -514,6 +576,76 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <style jsx>{`
+          .map-stage {
+            transform-origin: center;
+          }
+
+          .map-stage.is-zooming {
+            animation: mapFocusPulse 1.45s ease-in-out 1;
+          }
+
+          .footprint-drop {
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: markerDropIn 700ms cubic-bezier(0.2, 0.8, 0.24, 1) 1;
+          }
+
+          .footprint-ripple {
+            fill: rgba(98, 178, 117, 0.35);
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: markerRipple 1000ms ease-out 1;
+          }
+
+          @keyframes mapFocusPulse {
+            0% {
+              transform: scale(1);
+            }
+
+            30% {
+              transform: scale(1.055);
+            }
+
+            70% {
+              transform: scale(1.055);
+            }
+
+            100% {
+              transform: scale(1);
+            }
+          }
+
+          @keyframes markerDropIn {
+            0% {
+              transform: translateY(-26px) scale(1.45);
+              opacity: 0;
+            }
+
+            60% {
+              transform: translateY(2px) scale(1);
+              opacity: 1;
+            }
+
+            100% {
+              transform: translateY(0) scale(1);
+              opacity: 1;
+            }
+          }
+
+          @keyframes markerRipple {
+            0% {
+              transform: scale(0.9);
+              opacity: 0.45;
+            }
+
+            100% {
+              transform: scale(3);
+              opacity: 0;
+            }
+          }
+        `}</style>
 
         <section className="py-12 sm:py-16 bg-[#fdf8eb]">
           <div className="container-custom">
