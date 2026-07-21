@@ -176,18 +176,18 @@ export default function About() {
       </section>
 
       {/* CTA */}
-      <section className="bg-seattle-blue text-white py-16 sm:py-24">
+      <section className="border-y border-[#0f9aa1]/40 bg-[linear-gradient(125deg,_#9ddfeb_0%,_#82d9e8_40%,_#c7eecf_72%,_#ffd89f_100%)] py-16 text-[#002B49] sm:py-24">
         <div className="container-custom text-center">
           <h2 className="text-4xl font-bold mb-6">Join Our Movement</h2>
-          <p className="text-xl mb-8 text-blue-100 max-w-2xl mx-auto">
+          <p className="text-xl mb-8 text-[#114b66] max-w-2xl mx-auto">
             Help us make Seattle cleaner, one event at a time. Whether you volunteer, donate, or
             spread the word, you\' re part of the solution.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/volunteer" className="btn-primary bg-white text-seattle-blue hover:bg-gray-100">
+            <Link href="/volunteer" className="inline-flex items-center justify-center rounded-full bg-[#69BE28] px-6 py-3 font-semibold text-[#002B49] shadow-[0_10px_24px_rgba(105,190,40,0.34)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#7fd33e]">
               Volunteer Now
             </Link>
-            <Link href="/donate" className="btn-outline border-white text-white hover:bg-white hover:text-seattle-blue">
+            <Link href="/donate" className="inline-flex items-center justify-center rounded-full border-2 border-[#0f9aa1]/75 bg-[#fff3cf] px-6 py-3 font-semibold text-[#006f8f] shadow-[0_10px_24px_rgba(0,111,143,0.2)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-white">
               Support Us
             </Link>
           </div>

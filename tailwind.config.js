@@ -7,9 +7,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'seattle-green': '#2d5016',
-        'seattle-blue': '#0066cc',
-        'seattle-accent': '#00a651',
+        'seattle-green': '#69BE28',
+        'seattle-blue': '#002B49',
+        'seattle-accent': '#2EC4C7',
       },
     },
   },

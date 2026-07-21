@@ -1,0 +1,50 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sky" x1="960" y1="0" x2="960" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9ED8E0"/>
+      <stop offset="0.46" stop-color="#6FBCC8"/>
+      <stop offset="0.78" stop-color="#4F9FB0"/>
+      <stop offset="1" stop-color="#2E6E87"/>
+    </linearGradient>
+    <linearGradient id="water" x1="960" y1="700" x2="960" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4B879D"/>
+      <stop offset="1" stop-color="#285C75"/>
+    </linearGradient>
+    <linearGradient id="buildings" x1="960" y1="420" x2="960" y2="860" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#27536C"/>
+      <stop offset="1" stop-color="#183A50"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#sky)"/>
+  <rect y="704" width="1920" height="376" fill="url(#water)"/>
+
+  <g fill="url(#buildings)">
+    <rect x="54" y="548" width="88" height="178"/>
+    <rect x="146" y="506" width="52" height="220"/>
+    <rect x="203" y="560" width="74" height="166"/>
+    <rect x="281" y="522" width="68" height="204"/>
+    <rect x="355" y="468" width="96" height="258"/>
+    <rect x="456" y="540" width="70" height="186"/>
+    <rect x="530" y="492" width="86" height="234"/>
+    <rect x="620" y="444" width="112" height="282"/>
+    <rect x="738" y="388" width="126" height="338"/>
+    <rect x="872" y="526" width="72" height="200"/>
+    <rect x="949" y="446" width="96" height="280"/>
+    <rect x="1049" y="360" width="132" height="366"/>
+    <rect x="1188" y="506" width="76" height="220"/>
+    <rect x="1268" y="456" width="112" height="270"/>
+    <rect x="1386" y="536" width="70" height="190"/>
+    <rect x="1460" y="492" width="106" height="234"/>
+    <rect x="1572" y="560" width="74" height="166"/>
+    <rect x="1652" y="514" width="90" height="212"/>
+    <rect x="1747" y="548" width="72" height="178"/>
+  </g>
+
+  <g fill="#1A3F56">
+    <rect x="1099" y="245" width="34" height="155"/>
+    <ellipse cx="1116" cy="222" rx="38" ry="26"/>
+  </g>
+
+  <path d="M0 708C210 690 430 688 640 699C850 710 1070 733 1280 730C1490 727 1710 698 1920 686V1080H0V708Z" fill="#3E7892" fill-opacity="0.36"/>
+</svg>

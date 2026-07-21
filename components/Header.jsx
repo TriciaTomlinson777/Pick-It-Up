@@ -7,19 +7,22 @@ import Logo from './Logo';
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
+  const navLinkClassName =
+    'rounded-full px-2 py-2 text-base font-bold tracking-[0.01em] text-[#002244] transition hover:bg-[#e7f7f8] hover:text-[#0f9aa1] lg:px-3 lg:py-2.5 lg:text-[1.22rem] xl:text-[1.32rem] whitespace-nowrap';
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
-      <nav className="container-custom py-4 lg:py-5">
+    <header className="sticky top-0 z-50 border-b border-[#0f9aa1]/20 bg-[#fffaf0]/95 shadow-[0_10px_24px_rgba(0,34,68,0.1)] backdrop-blur-sm">
+      <nav className="container-custom py-3.5 lg:py-4.5">
         <div className="flex items-center justify-between">
-          <Logo href="/" className="hidden sm:inline-flex" />
+          <Logo href="/" className="inline-flex" imgClassName="w-64 sm:w-72 lg:w-[23rem] xl:w-[25.5rem]" />
 
           {/* Mobile menu button */}
           <button
-            className="md:hidden p-2"
+            className="rounded-full border border-[#0f9aa1]/25 bg-white/90 p-2 text-[#002244] shadow-[0_8px_20px_rgba(0,34,68,0.08)] md:hidden"
             onClick={toggleMenu}
             aria-label="Toggle menu"
           >
@@ -48,26 +51,26 @@ export default function Header() {
           </button>
 
           {/* Desktop menu */}
-          <div className="hidden md:flex items-center justify-end gap-2 lg:gap-4 xl:gap-5 flex-nowrap">
-            <Link href="/events" className="hover:text-seattle-green transition text-xs lg:text-sm xl:text-base whitespace-nowrap px-1">
+          <div className="hidden md:flex items-center justify-end gap-1 lg:gap-1.5 xl:gap-2 flex-nowrap text-[#002244]">
+            <Link href="/events" className={navLinkClassName}>
               Events
             </Link>
-            <Link href="/how-to-participate" className="hover:text-seattle-green transition text-xs lg:text-sm xl:text-base whitespace-nowrap px-1">
+            <Link href="/how-to-participate" className={`${navLinkClassName} hover:bg-[#e8f4e1] hover:text-[#4e9a1c]`}>
               How to Participate
             </Link>
-            <Link href="/about" className="hover:text-seattle-green transition text-xs lg:text-sm xl:text-base whitespace-nowrap px-1">
+            <Link href="/about" className={`${navLinkClassName} hover:bg-[#fff2da] hover:text-[#c67816]`}>
               About
             </Link>
-            <Link href="/blog" className="hover:text-seattle-green transition text-xs lg:text-sm xl:text-base whitespace-nowrap px-1">
+            <Link href="/blog" className={`${navLinkClassName} hover:bg-[#e3f2fb] hover:text-[#1380b3]`}>
               Blog
             </Link>
-            <Link href="/shop" className="hover:text-seattle-green transition text-xs lg:text-sm xl:text-base whitespace-nowrap px-1">
+            <Link href="/shop" className={`${navLinkClassName} hover:bg-[#e8f4e1] hover:text-[#4e9a1c]`}>
               Shop
             </Link>
-            <Link href="/contact" className="hover:text-seattle-green transition text-xs lg:text-sm xl:text-base whitespace-nowrap px-1">
+            <Link href="/contact" className={navLinkClassName}>
               Contact
             </Link>
-            <Link href="/volunteer" className="btn-primary whitespace-nowrap text-xs lg:text-sm xl:text-base">
+            <Link href="/volunteer" className="btn-green min-h-11 whitespace-nowrap px-4 text-base font-bold lg:px-5 lg:text-[1.2rem] xl:text-[1.32rem]">
               Join Us
             </Link>
           </div>
@@ -75,52 +78,52 @@ export default function Header() {
 
         {/* Mobile menu */}
         {isOpen && (
-          <div className="md:hidden mt-4 pb-4 space-y-3 border-t pt-4">
+          <div className="mt-4 space-y-3 rounded-2xl border border-[#0f9aa1]/20 bg-white/85 p-4 shadow-[0_12px_28px_rgba(0,34,68,0.08)] md:hidden">
             <Link
               href="/events"
-              className="block hover:text-seattle-green transition"
+              className="block rounded-xl px-3 py-2.5 text-[1.08rem] font-bold text-[#002244] transition hover:bg-[#e7f7f8] hover:text-[#0f9aa1]"
               onClick={() => setIsOpen(false)}
             >
               Events
             </Link>
             <Link
               href="/how-to-participate"
-              className="block hover:text-seattle-green transition"
+              className="block rounded-xl px-3 py-2.5 text-[1.08rem] font-bold text-[#002244] transition hover:bg-[#e8f4e1] hover:text-[#4e9a1c]"
               onClick={() => setIsOpen(false)}
             >
               How to Participate
             </Link>
             <Link
               href="/about"
-              className="block hover:text-seattle-green transition"
+              className="block rounded-xl px-3 py-2.5 text-[1.08rem] font-bold text-[#002244] transition hover:bg-[#fff2da] hover:text-[#c67816]"
               onClick={() => setIsOpen(false)}
             >
               About
             </Link>
             <Link
               href="/blog"
-              className="block hover:text-seattle-green transition"
+              className="block rounded-xl px-3 py-2.5 text-[1.08rem] font-bold text-[#002244] transition hover:bg-[#e3f2fb] hover:text-[#1380b3]"
               onClick={() => setIsOpen(false)}
             >
               Blog
             </Link>
             <Link
               href="/shop"
-              className="block hover:text-seattle-green transition"
+              className="block rounded-xl px-3 py-2.5 text-[1.08rem] font-bold text-[#002244] transition hover:bg-[#e8f4e1] hover:text-[#4e9a1c]"
               onClick={() => setIsOpen(false)}
             >
               Shop
             </Link>
             <Link
               href="/contact"
-              className="block hover:text-seattle-green transition"
+              className="block rounded-xl px-3 py-2.5 text-[1.08rem] font-bold text-[#002244] transition hover:bg-[#e7f7f8] hover:text-[#0f9aa1]"
               onClick={() => setIsOpen(false)}
             >
               Contact
             </Link>
             <Link
               href="/volunteer"
-              className="btn-primary block text-center w-full"
+              className="btn-green block w-full text-center"
               onClick={() => setIsOpen(false)}
             >
               Join Us
