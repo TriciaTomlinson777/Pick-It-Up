@@ -5,6 +5,7 @@ import "leaflet/dist/leaflet.css";
 
 const SEATTLE_CENTER = [47.6062, -122.3321];
 const BASE_ZOOM = 11;
+const FOCUS_ZOOM = 16;
 
 export default function CommunityFootprintsMap({
   footprintLatLng,
@@ -22,6 +23,7 @@ export default function CommunityFootprintsMap({
   // "Map container is being reused by another instance" error.
   useEffect(() => {
     let cancelled = false;
+    let resizeObserver = null;
 
     (async () => {
       // Imported inside the effect so Leaflet never loads during server rendering.
@@ -52,16 +54,23 @@ export default function CommunityFootprintsMap({
       markerLayerRef.current = L.layerGroup().addTo(map);
       mapRef.current = map;
 
-      // Leaflet sometimes measures the container before CSS settles.
-      setTimeout(() => map.invalidateSize(), 0);
+      // If the map lives inside a form or panel that starts collapsed, Leaflet
+      // measures it at zero height and draws nothing. This re-measures whenever
+      // the container's size changes, so the map fills in when the form opens.
+      resizeObserver = new ResizeObserver(() => {
+        if (mapRef.current) mapRef.current.invalidateSize();
+      });
+      resizeObserver.observe(containerRef.current);
 
+      setTimeout(() => map.invalidateSize(), 0);
       setReady(true);
     })();
 
     return () => {
       cancelled = true;
+      if (resizeObserver) resizeObserver.disconnect();
       if (mapRef.current) {
-        mapRef.current.remove(); // <-- the critical line
+        mapRef.current.remove(); // <-- releases the container for the next mount
         mapRef.current = null;
         markerLayerRef.current = null;
       }
@@ -69,7 +78,8 @@ export default function CommunityFootprintsMap({
     };
   }, []);
 
-  // Redraw markers whenever the props change. The map itself is never rebuilt.
+  // Redraw markers when props change. The map itself is never rebuilt, so this
+  // same instance serves both the "locate" step and the "place marker" step.
   useEffect(() => {
     if (!ready || !markerLayerRef.current || !iconRef.current) return;
 
@@ -97,6 +107,12 @@ export default function CommunityFootprintsMap({
     JSON.stringify(existingFootprintLatLngs || []),
     JSON.stringify(footprintLatLng || null),
   ]);
+
+  // Pan to the located spot once it's known.
+  useEffect(() => {
+    if (!ready || !mapRef.current || !footprintLatLng) return;
+    mapRef.current.setView(footprintLatLng, FOCUS_ZOOM, { animate: true });
+  }, [ready, JSON.stringify(footprintLatLng || null)]);
 
   return (
     <>
