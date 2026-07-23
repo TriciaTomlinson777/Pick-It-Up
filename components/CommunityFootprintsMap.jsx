@@ -1,13 +1,10 @@
 "use client";
 
-import { useMemo } from 'react';
-import { MapContainer, Marker, TileLayer } from 'react-leaflet';
-import { icon } from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import { useEffect, useRef, useState } from "react";
+import "leaflet/dist/leaflet.css";
 
 const SEATTLE_CENTER = [47.6062, -122.3321];
 const BASE_ZOOM = 11;
-const FOOTPRINT_ICON_TEMPLATE_VERSION = 'v3-leaflet-image-icon';
 
 export default function CommunityFootprintsMap({
   footprintLatLng,
@@ -15,51 +12,96 @@ export default function CommunityFootprintsMap({
   showExistingFootprints,
   hasNewFootprintMarker,
 }) {
-  const markerIcon = useMemo(
-    () =>
-      icon({
-        className: 'cleanup-footprint-marker',
-        iconUrl: '/green-footprints-marker.png',
+  const containerRef = useRef(null);
+  const mapRef = useRef(null);
+  const markerLayerRef = useRef(null);
+  const iconRef = useRef(null);
+  const [ready, setReady] = useState(false);
+
+  // Create the map exactly once. The cleanup below is what prevents the
+  // "Map container is being reused by another instance" error.
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      // Imported inside the effect so Leaflet never loads during server rendering.
+      const L = (await import("leaflet")).default;
+
+      if (cancelled || !containerRef.current || mapRef.current) return;
+
+      const map = L.map(containerRef.current, {
+        center: SEATTLE_CENTER,
+        zoom: BASE_ZOOM,
+        zoomControl: false,
+        scrollWheelZoom: false,
+        attributionControl: false,
+      });
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(map);
+
+      iconRef.current = L.icon({
+        className: "cleanup-footprint-marker",
+        iconUrl: "/green-footprints-marker.png",
         iconSize: [22, 30],
         iconAnchor: [11, 15],
-      }),
-    [FOOTPRINT_ICON_TEMPLATE_VERSION]
-  );
+      });
+
+      markerLayerRef.current = L.layerGroup().addTo(map);
+      mapRef.current = map;
+
+      // Leaflet sometimes measures the container before CSS settles.
+      setTimeout(() => map.invalidateSize(), 0);
+
+      setReady(true);
+    })();
+
+    return () => {
+      cancelled = true;
+      if (mapRef.current) {
+        mapRef.current.remove(); // <-- the critical line
+        mapRef.current = null;
+        markerLayerRef.current = null;
+      }
+      setReady(false);
+    };
+  }, []);
+
+  // Redraw markers whenever the props change. The map itself is never rebuilt.
+  useEffect(() => {
+    if (!ready || !markerLayerRef.current || !iconRef.current) return;
+
+    const layer = markerLayerRef.current;
+    layer.clearLayers();
+
+    (async () => {
+      const L = (await import("leaflet")).default;
+
+      if (showExistingFootprints) {
+        (existingFootprintLatLngs || []).forEach((latLng) => {
+          L.marker(latLng, { icon: iconRef.current }).addTo(layer);
+        });
+      }
+
+      if (hasNewFootprintMarker && footprintLatLng) {
+        L.marker(footprintLatLng, { icon: iconRef.current }).addTo(layer);
+      }
+    })();
+  }, [
+    ready,
+    showExistingFootprints,
+    hasNewFootprintMarker,
+    // Serialized so a new-but-identical array from the parent doesn't rerun this.
+    JSON.stringify(existingFootprintLatLngs || []),
+    JSON.stringify(footprintLatLng || null),
+  ]);
 
   return (
     <>
       <div className="map-stage mt-6 overflow-hidden rounded-[1.5rem] border border-[#002b49]/10">
-        <MapContainer
-          center={SEATTLE_CENTER}
-          zoom={BASE_ZOOM}
-          className="h-44 w-full"
-          zoomControl={false}
-          scrollWheelZoom={false}
-          attributionControl={false}
-          preferCanvas
-        >
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          />
-
-          {showExistingFootprints &&
-            (existingFootprintLatLngs || []).map((existingLatLng, index) => (
-              <Marker
-                key={`existing-footprint-${index}-${existingLatLng[0]}-${existingLatLng[1]}`}
-                position={existingLatLng}
-                icon={markerIcon}
-              />
-            ))}
-
-          {hasNewFootprintMarker && footprintLatLng && (
-            <Marker
-              key={`footprint-${FOOTPRINT_ICON_TEMPLATE_VERSION}`}
-              position={footprintLatLng}
-              icon={markerIcon}
-            />
-          )}
-        </MapContainer>
+        <div ref={containerRef} className="h-44 w-full" />
       </div>
 
       <style jsx global>{`
@@ -74,7 +116,7 @@ export default function CommunityFootprintsMap({
           border: 0;
           line-height: 0;
           transform-origin: center center;
-          filter: drop-shadow(0 2px 5px rgba(0,43,73, 0.18));
+          filter: drop-shadow(0 2px 5px rgba(0, 43, 73, 0.18));
           object-fit: contain;
         }
       `}</style>
