@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 import { MapContainer, Marker, TileLayer } from 'react-leaflet';
 import { icon } from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 const SEATTLE_CENTER = [47.6062, -122.3321];
 const BASE_ZOOM = 11;
