@@ -137,7 +137,45 @@ Create a `.env.local` file for local development:
 ```
 NEXT_PUBLIC_APP_NAME=Pick It Up Seattle
 NEXT_PUBLIC_API_URL=http://localhost:3000
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
+
+# Server-only (never expose in browser code)
+SUPABASE_URL=your_supabase_project_url
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+
+# Blog admin auth
+BLOG_ADMIN_USERNAME=admin
+BLOG_ADMIN_PASSWORD=choose_a_strong_password
+BLOG_ADMIN_SESSION_SECRET=choose_a_long_random_secret
+
+# Optional: defaults to "Community Photos"
+SUPABASE_BLOG_IMAGES_BUCKET=Community Photos
 ```
+
+### Blog Publishing Setup
+
+1. In Supabase SQL Editor, run:
+	- `scripts/sql/blog_posts.sql`
+2. Ensure your storage bucket exists:
+	- `Community Photos` (or set `SUPABASE_BLOG_IMAGES_BUCKET`)
+3. Start the app and visit:
+	- `/admin/blog/login`
+
+The public Blog reads only published posts and sorts them newest first.
+
+### Story Workflow
+
+- Public visitors can submit stories from `/blog` using the Share Your Story form.
+- New submissions are saved as `pending_review` and never publish automatically.
+- Admin workflow in `/admin/blog` supports:
+	- Review submissions
+	- Edit stories
+	- Approve or reject
+	- Schedule publication by setting a future publication date
+	- Feature/unfeature stories
+	- Change categories
+	- Archive and restore
 
 ## Contributing
 

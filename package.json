@@ -21,8 +21,10 @@
   },
   "homepage": "https://github.com/TriciaTomlinson777/Pick-It-Up#readme",
   "dependencies": {
+    "heic2any": "^0.0.4",
     "leaflet": "^1.9.4",
     "next": "^16.2.10",
+    "nodemailer": "^9.0.3",
     "puppeteer": "^25.3.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",

@@ -3,33 +3,6 @@ import Footer from '@/components/Footer';
 import Link from 'next/link';
 
 export default function About() {
-  const team = [
-    {
-      name: 'Sarah Johnson',
-      role: 'Founder & Executive Director',
-      image: '👩‍💼',
-      bio: 'Community organizer passionate about environmental action',
-    },
-    {
-      name: 'Marcus Chen',
-      role: 'Events Coordinator',
-      image: '👨‍💼',
-      bio: 'Brings Seattle neighborhoods together through events',
-    },
-    {
-      name: 'Elena Rodriguez',
-      role: 'Community Outreach',
-      image: '👩‍💼',
-      bio: 'Connects with local businesses and organizations',
-    },
-    {
-      name: 'James Park',
-      role: 'Operations Manager',
-      image: '👨‍💼',
-      bio: 'Ensures every cleanup runs smoothly and safely',
-    },
-  ];
-
   return (
     <>
       <Header />
@@ -37,159 +10,133 @@ export default function About() {
       {/* Hero */}
       <section className="bg-gradient-to-r from-seattle-green to-green-700 text-white py-16">
         <div className="container-custom">
-          <h1 className="heading-xl mb-4">About Pick It Up Seattle</h1>
-          <p className="text-lg text-green-100">
-            Our story, our values, and our vision for Seattle
+          <h1 className="heading-xl mb-4 text-[#1f5f7a]">About Pick It Up Seattle</h1>
+          <p className="max-w-3xl text-[1.12rem] font-bold text-[#fffaf0] [text-shadow:0_2px_8px_rgba(0,34,68,0.34)] sm:text-[1.32rem] lg:text-[1.42rem]">
+            Imagine a cleaner, more welcoming city built by ordinary people choosing one simple act of kindness.
           </p>
         </div>
       </section>
 
-      {/* Our Story */}
-      <section className="py-16 sm:py-24">
+      {/* About Letter */}
+      <section className="py-12 sm:py-16">
         <div className="container-custom">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="heading-lg mb-8">Our Story</h2>
-            <div className="prose prose-lg max-w-none text-gray-700 space-y-6">
+          <div className="max-w-[820px] mx-auto">
+            <div className="max-w-none space-y-5 text-left text-[1.1rem] font-medium leading-[1.66] text-slate-800 sm:text-[1.18rem] lg:text-[1.28rem]">
               <p>
-                Pick It Up Seattle started in 2023 with a simple idea: make it easy and fun for people
-                to make their neighborhoods cleaner and more beautiful. What began as a small group of
-                friends cleaning up their local park has grown into a movement with hundreds of
-                volunteers.
+                Imagine walking through your neighborhood, your city, a local park, or along
+                Seattle&apos;s beautiful waterfront and seeing a cleaner, more welcoming city because
+                thousands of ordinary people decided to do one simple thing...
+              </p>
+              <p className="text-center text-[#ef7f2d] text-[1.72rem] font-extrabold sm:text-[1.92rem]">
+                Pick up one piece of litter.
+              </p>
+              <p className="text-center text-[1.16rem] font-bold text-[#0f9aa1] sm:text-[1.24rem]">Simple. Powerful. Contagious.</p>
+              <p>
+                That&apos;s how Pick It Up Seattle was born.
               </p>
               <p>
-                We believe that environmental change starts with individuals taking action in their
-                own communities. Every piece of trash picked up, every park beautified, and every
-                neighborhood cleaned makes Seattle better for everyone.
+                We believe creating a cleaner city doesn&apos;t require waiting for someone else.
+                It starts with everyday people making small choices that add up to extraordinary
+                results.
+              </p>
+              <p className="text-center text-[#69be28] text-[1.72rem] font-extrabold sm:text-[1.92rem]">
+                One Person. One Piece. One Cleaner City.
               </p>
               <p>
-                Today, Pick It Up Seattle hosts regular events across the city, from Green Lake to
-                Ballard, from Capitol Hill to the Eastside. We\' ve removed tons of litter, connected
-                hundreds of community members, and proven that when we work together, we can create
-                real change.
+                Our mission is simple: <span className="font-semibold">To inspire people to leave every place a little better than they found it.</span>
               </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Our Values */}
-      <section className="py-16 sm:py-24 bg-gray-50">
-        <div className="container-custom">
-          <h2 className="heading-lg mb-12 text-center">Our Values</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              {
-                icon: '🌍',
-                title: 'Environmental Stewardship',
-                description: 'Protecting and preserving Seattle\' s natural beauty for future generations',
-              },
-              {
-                icon: '🤝',
-                title: 'Community First',
-                description: 'Bringing people together to achieve more than we could alone',
-              },
-              {
-                icon: '✨',
-                title: 'Fun & Inclusive',
-                description: 'Making cleanup enjoyable and welcoming for everyone',
-              },
-              {
-                icon: '📈',
-                title: 'Impact Driven',
-                description: 'Measuring and celebrating the real difference we make',
-              },
-            ].map((value, idx) => (
-              <div key={idx} className="bg-white p-8 rounded-lg shadow-md text-center">
-                <div className="text-5xl mb-4">{value.icon}</div>
-                <h3 className="text-xl font-bold mb-3 text-seattle-green">{value.title}</h3>
-                <p className="text-gray-600">{value.description}</p>
+              <p>
+                Whether you spend five minutes picking up litter during your morning walk or join
+                a community cleanup with dozens of volunteers, every act of kindness matters.
+                Together, those moments create cleaner, more vibrant cities, safer parks,
+                healthier waterways, stronger neighborhoods, and a greater sense of community
+                pride.
+              </p>
+              <div className="space-y-2">
+                <p className="text-[1.16rem] font-extrabold text-[#f4c94c] sm:text-[1.24rem]">
+                  But Pick It Up Seattle is about much more than litter.
+                </p>
+                <p>
+                  It&apos;s about neighbors meeting neighbors.
+                </p>
+                <p>
+                  It&apos;s about teaching children that caring for their community is something to be
+                  proud of.
+                </p>
+                <p>
+                  It&apos;s about businesses investing in the places they serve.
+                </p>
+                <p>
+                  It&apos;s about discovering that one small act of kindness inspires another.
+                </p>
+                <p>
+                  It&apos;s about proving that ordinary people can accomplish extraordinary things when
+                  they work together.
+                </p>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Our Team */}
-      <section className="py-16 sm:py-24">
-        <div className="container-custom">
-          <h2 className="heading-lg mb-12 text-center">Our Team</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {team.map((member, idx) => (
-              <div key={idx} className="bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition">
-                <div className="text-6xl mb-4">{member.image}</div>
-                <h3 className="text-xl font-bold mb-1">{member.name}</h3>
-                <p className="text-seattle-green font-semibold mb-3">{member.role}</p>
-                <p className="text-gray-600 text-sm">{member.bio}</p>
+              <p className="text-[1.16rem] font-extrabold text-[#ef7f2d] sm:text-[1.24rem]">
+                This movement belongs to everyone.
+              </p>
+              <p>
+                Whether you&apos;re eight or eighty, whether you clean up every day or once a year,
+                whether you volunteer alone, with friends, your family, coworkers, your school, or
+                your business, you are helping build something much bigger than a cleaner city.
+              </p>
+              <p className="text-[1.16rem] font-extrabold text-[#0f9aa1] sm:text-[1.24rem]">
+                You&apos;re helping build a culture where people care.
+              </p>
+              <p>
+                Every cleanup logged, every photo shared, every event organized, every volunteer
+                welcomed, and every new community partnership reminds others that positive change
+                is contagious.
+              </p>
+              <p>
+                Every person who joins proves that one small act really can inspire another.
+              </p>
+              <h2 className="heading-lg mt-10 mb-2 text-center text-[#1f5f7a] sm:text-[2.9rem]">Seattle Is Just the Beginning</h2>
+              <p>
+                Seattle is where this movement begins&mdash;but we hope it doesn&apos;t end here.
+              </p>
+              <p>
+                Our vision is to inspire communities across the country to create their own Pick It
+                Up movements, bringing neighbors together to care for the places they call home.
+              </p>
+              <p>Imagine <span className="text-[#ef7f2d]">Phoenix.</span></p>
+              <p>Imagine <span className="text-[#0f9aa1]">Los Angeles.</span></p>
+              <p>Imagine <span className="text-[#69be28]">Chicago.</span></p>
+              <p>Imagine <span className="text-[#f4c94c]">New York.</span></p>
+              <p>Imagine thousands of communities connected by one simple idea.</p>
+              <p className="text-center text-[#f4c94c] text-[1.72rem] font-extrabold sm:text-[1.92rem]">
+                One Person. One Piece. One Cleaner Community.
+              </p>
+              <p>
+                Because when enough people decide to care, there&apos;s no limit to what we can
+                accomplish together.
+              </p>
+              <p>
+                We believe that one day, picking up litter won&apos;t be seen as someone else&apos;s
+                responsibility&mdash;it will simply be something neighbors do because they care.
+              </p>
+              <p>
+                Imagine children growing up believing that caring for their city is simply part of
+                being a good neighbor.
+              </p>
+              <p>
+                Imagine businesses, schools, churches, nonprofits, and community groups all working
+                together to leave their communities better than they found them.
+              </p>
+              <p>
+                Imagine millions of people proving that real change doesn&apos;t begin with
+                governments or organizations.
+              </p>
+              <p>It begins with one person making one simple choice.</p>
+              <p>When that happens, we&apos;ll know this movement has succeeded.</p>
+              <div className="mx-auto mt-2 inline-flex w-fit flex-col items-start text-left gap-1">
+                <p className="m-0 text-[#69be28] text-[1.72rem] font-extrabold sm:text-[1.92rem]">The next piece is yours...</p>
+                <p className="m-0">Welcome to Pick It Up Seattle.</p>
+                <p className="m-0">Welcome to the movement.</p>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* By the Numbers */}
-      <section className="py-16 sm:py-24 bg-seattle-green text-white">
-        <div className="container-custom">
-          <h2 className="heading-lg mb-12 text-center">By the Numbers</h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="text-5xl font-bold mb-2">500+</div>
-              <p className="text-green-100">Active Volunteers</p>
             </div>
-            <div className="text-center">
-              <div className="text-5xl font-bold mb-2">50+</div>
-              <p className="text-green-100">Events Hosted</p>
-            </div>
-            <div className="text-center">
-              <div className="text-5xl font-bold mb-2">10</div>
-              <p className="text-green-100">Tons of Trash Collected</p>
-            </div>
-            <div className="text-center">
-              <div className="text-5xl font-bold mb-2">25</div>
-              <p className="text-green-100">Seattle Neighborhoods</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Partnerships */}
-      <section className="py-16 sm:py-24">
-        <div className="container-custom">
-          <h2 className="heading-lg mb-12 text-center">Our Partners</h2>
-          <p className="text-center text-gray-600 mb-8 max-w-2xl mx-auto">
-            We work with amazing organizations to make Seattle cleaner and more beautiful
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              'Seattle Parks & Recreation',
-              'Washington Environmental Council',
-              'Local Neighborhood Associations',
-              'Green Seattle Partnership',
-              'University of Washington Sustainability',
-              'Seattle Audubon Society',
-            ].map((partner, idx) => (
-              <div key={idx} className="bg-gray-50 p-6 rounded-lg text-center border border-gray-200">
-                <p className="font-semibold text-gray-800">{partner}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="border-y border-[#0f9aa1]/40 bg-[linear-gradient(125deg,_#9ddfeb_0%,_#82d9e8_40%,_#c7eecf_72%,_#ffd89f_100%)] py-16 text-[#002B49] sm:py-24">
-        <div className="container-custom text-center">
-          <h2 className="text-4xl font-bold mb-6">Join Our Movement</h2>
-          <p className="text-xl mb-8 text-[#114b66] max-w-2xl mx-auto">
-            Help us make Seattle cleaner, one event at a time. Whether you volunteer, donate, or
-            spread the word, you\' re part of the solution.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/volunteer" className="inline-flex items-center justify-center rounded-full bg-[#69BE28] px-6 py-3 font-semibold text-[#002B49] shadow-[0_10px_24px_rgba(105,190,40,0.34)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#7fd33e]">
-              Volunteer Now
-            </Link>
-            <Link href="/donate" className="inline-flex items-center justify-center rounded-full border-2 border-[#0f9aa1]/75 bg-[#fff3cf] px-6 py-3 font-semibold text-[#006f8f] shadow-[0_10px_24px_rgba(0,111,143,0.2)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-white">
-              Support Us
-            </Link>
           </div>
         </div>
       </section>

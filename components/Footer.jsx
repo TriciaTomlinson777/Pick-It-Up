@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-10 xl:gap-12 mb-10 lg:mb-12">
           {/* Brand */}
           <div>
-            <h3 className="text-xl font-bold mb-4 lg:text-2xl">Pick It Up Seattle</h3>
+            <h3 className="mb-4 text-xl font-bold text-[#0f9aa1] lg:text-2xl">Pick It Up Seattle</h3>
             <p className="text-[#1a5570] lg:text-lg">
               Making it easy to leave Seattle better than you found it.
             </p>
@@ -17,7 +17,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="mb-4 font-semibold lg:text-lg">Quick Links</h4>
+            <h4 className="mb-4 font-semibold text-[#ef7f2d] lg:text-lg">Quick Links</h4>
             <ul className="space-y-2 text-[#1a5570]">
               <li>
                 <Link href="/events" className="transition hover:text-[#0f9aa1]">
@@ -35,6 +35,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/partners" className="transition hover:text-[#0f9aa1]">
+                  Partners
+                </Link>
+              </li>
+              <li>
                 <Link href="/blog" className="transition hover:text-[#0f9aa1]">
                   Blog
                 </Link>
@@ -44,7 +49,7 @@ export default function Footer() {
 
           {/* Resources */}
           <div>
-            <h4 className="mb-4 font-semibold lg:text-lg">Resources</h4>
+            <h4 className="mb-4 font-semibold text-[#61b826] lg:text-lg">Resources</h4>
             <ul className="space-y-2 text-[#1a5570]">
               <li>
                 <Link href="/community-resources" className="transition hover:text-[#0f9aa1]">
@@ -71,7 +76,7 @@ export default function Footer() {
 
           {/* Contact & Social */}
           <div>
-            <h4 className="font-semibold mb-4 lg:text-lg">Follow Us</h4>
+            <h4 className="mb-4 font-semibold text-[#f4c94c] lg:text-lg">Follow Us</h4>
             <div className="flex space-x-4">
               <a
                 href="https://twitter.com/pickitupseattle"

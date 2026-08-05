@@ -1,4 +1,10 @@
 import './globals.css';
+import { Baloo_2 } from 'next/font/google';
+
+const balooDisplay = Baloo_2({
+  subsets: ['latin'],
+  variable: '--font-baloo-2',
+});
 
 export const metadata = {
   title: 'Pick It Up Seattle - Community Cleanup Movement',
@@ -10,7 +16,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={balooDisplay.variable}>
       <body className="bg-[#f4efda] text-[#002b49]">
         <div className="page-shell">
           {children}

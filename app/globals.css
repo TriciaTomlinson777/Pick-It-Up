@@ -133,4 +133,29 @@
   .heading-sm {
     @apply text-xl sm:text-2xl font-bold text-[#002b49];
   }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .heading-xl,
+  .heading-lg,
+  .heading-md,
+  .heading-sm {
+    font-family: var(--font-baloo-2), 'Trebuchet MS', 'Segoe UI', sans-serif;
+    letter-spacing: -0.01em;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-green,
+  .btn-aqua,
+  .btn-warm,
+  .btn-orange,
+  .btn-outline {
+    font-family: var(--font-baloo-2), 'Trebuchet MS', 'Segoe UI', sans-serif;
+    letter-spacing: 0.01em;
+  }
 }

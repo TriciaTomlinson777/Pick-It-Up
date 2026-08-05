@@ -1,123 +1,118 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import "leaflet/dist/leaflet.css";
+import { useEffect, useMemo, useState } from 'react';
+import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from 'react-leaflet';
+import { icon } from 'leaflet';
 
 const SEATTLE_CENTER = [47.6062, -122.3321];
 const BASE_ZOOM = 11;
-const FOCUS_ZOOM = 16;
+const FOCUS_ZOOM = 11;
+const MIN_MARKER_ZOOM = 10;
+const MAX_MARKER_ZOOM = 16;
+const MIN_MARKER_WIDTH = 20;
+const MAX_MARKER_WIDTH = 42;
+const FOOTPRINT_ICON_TEMPLATE_VERSION = 'v4-leaflet-image-icon';
+
+const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+function MapViewController({ footprintLatLng, mapZoomPhase }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!footprintLatLng || mapZoomPhase !== 'focus') {
+      return;
+    }
+
+    map.setView(footprintLatLng, FOCUS_ZOOM, { animate: false });
+    map.invalidateSize({ pan: false });
+  }, [footprintLatLng, map, mapZoomPhase]);
+
+  return null;
+}
+
+function ZoomTracker({ onZoomChange }) {
+  const map = useMapEvents({
+    zoom: () => {
+      onZoomChange(map.getZoom());
+    },
+    zoomend: () => {
+      onZoomChange(map.getZoom());
+    },
+  });
+
+  useEffect(() => {
+    onZoomChange(map.getZoom());
+  }, [map, onZoomChange]);
+
+  return null;
+}
 
 export default function CommunityFootprintsMap({
   footprintLatLng,
   existingFootprintLatLngs,
-  showExistingFootprints,
   hasNewFootprintMarker,
+  mapZoomPhase,
 }) {
-  const containerRef = useRef(null);
-  const mapRef = useRef(null);
-  const markerLayerRef = useRef(null);
-  const iconRef = useRef(null);
-  const [ready, setReady] = useState(false);
+  const [currentZoom, setCurrentZoom] = useState(BASE_ZOOM);
 
-  // Create the map exactly once. The cleanup below is what prevents the
-  // "Map container is being reused by another instance" error.
-  useEffect(() => {
-    let cancelled = false;
-    let resizeObserver = null;
+  const markerWidth = useMemo(() => {
+    const zoom = clamp(currentZoom, MIN_MARKER_ZOOM, MAX_MARKER_ZOOM);
+    const zoomProgress = (zoom - MIN_MARKER_ZOOM) / (MAX_MARKER_ZOOM - MIN_MARKER_ZOOM);
 
-    (async () => {
-      // Imported inside the effect so Leaflet never loads during server rendering.
-      const L = (await import("leaflet")).default;
+    return Math.round(MIN_MARKER_WIDTH + zoomProgress * (MAX_MARKER_WIDTH - MIN_MARKER_WIDTH));
+  }, [currentZoom]);
 
-      if (cancelled || !containerRef.current || mapRef.current) return;
+  const markerHeight = useMemo(() => Math.round(markerWidth * (78 / 56)), [markerWidth]);
 
-      const map = L.map(containerRef.current, {
-        center: SEATTLE_CENTER,
-        zoom: BASE_ZOOM,
-        zoomControl: false,
-        scrollWheelZoom: false,
-        attributionControl: false,
-      });
-
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      }).addTo(map);
-
-      iconRef.current = L.icon({
-        className: "cleanup-footprint-marker",
-        iconUrl: "/green-footprints-marker.png",
-        iconSize: [22, 30],
-        iconAnchor: [11, 15],
-      });
-
-      markerLayerRef.current = L.layerGroup().addTo(map);
-      mapRef.current = map;
-
-      // If the map lives inside a form or panel that starts collapsed, Leaflet
-      // measures it at zero height and draws nothing. This re-measures whenever
-      // the container's size changes, so the map fills in when the form opens.
-      resizeObserver = new ResizeObserver(() => {
-        if (mapRef.current) mapRef.current.invalidateSize();
-      });
-      resizeObserver.observe(containerRef.current);
-
-      setTimeout(() => map.invalidateSize(), 0);
-      setReady(true);
-    })();
-
-    return () => {
-      cancelled = true;
-      if (resizeObserver) resizeObserver.disconnect();
-      if (mapRef.current) {
-        mapRef.current.remove(); // <-- releases the container for the next mount
-        mapRef.current = null;
-        markerLayerRef.current = null;
-      }
-      setReady(false);
-    };
-  }, []);
-
-  // Redraw markers when props change. The map itself is never rebuilt, so this
-  // same instance serves both the "locate" step and the "place marker" step.
-  useEffect(() => {
-    if (!ready || !markerLayerRef.current || !iconRef.current) return;
-
-    const layer = markerLayerRef.current;
-    layer.clearLayers();
-
-    (async () => {
-      const L = (await import("leaflet")).default;
-
-      if (showExistingFootprints) {
-        (existingFootprintLatLngs || []).forEach((latLng) => {
-          L.marker(latLng, { icon: iconRef.current }).addTo(layer);
-        });
-      }
-
-      if (hasNewFootprintMarker && footprintLatLng) {
-        L.marker(footprintLatLng, { icon: iconRef.current }).addTo(layer);
-      }
-    })();
-  }, [
-    ready,
-    showExistingFootprints,
-    hasNewFootprintMarker,
-    // Serialized so a new-but-identical array from the parent doesn't rerun this.
-    JSON.stringify(existingFootprintLatLngs || []),
-    JSON.stringify(footprintLatLng || null),
-  ]);
-
-  // Pan to the located spot once it's known.
-  useEffect(() => {
-    if (!ready || !mapRef.current || !footprintLatLng) return;
-    mapRef.current.setView(footprintLatLng, FOCUS_ZOOM, { animate: true });
-  }, [ready, JSON.stringify(footprintLatLng || null)]);
+  const markerIcon = useMemo(
+    () =>
+      icon({
+        className: 'cleanup-footprint-marker track-picker-marker',
+        iconUrl: '/pick-it-up-map-marker.png',
+        iconSize: [markerWidth, markerHeight],
+        iconAnchor: [Math.round(markerWidth / 2), Math.round(markerHeight / 2)],
+      }),
+    [markerHeight, markerWidth]
+  );
 
   return (
     <>
       <div className="map-stage mt-6 overflow-hidden rounded-[1.5rem] border border-[#002b49]/10">
-        <div ref={containerRef} className="h-44 w-full" />
+        <MapContainer
+          center={SEATTLE_CENTER}
+          zoom={BASE_ZOOM}
+          className="h-44 w-full"
+          zoomControl
+          dragging
+          touchZoom
+          scrollWheelZoom
+          attributionControl={false}
+          preferCanvas
+        >
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          />
+
+          <MapViewController footprintLatLng={footprintLatLng} mapZoomPhase={mapZoomPhase} />
+          <ZoomTracker onZoomChange={setCurrentZoom} />
+
+          {(existingFootprintLatLngs || []).map((existingLatLng, index) => (
+            <Marker
+              key={`existing-footprint-${index}-${existingLatLng[0]}-${existingLatLng[1]}`}
+              position={existingLatLng}
+              icon={markerIcon}
+            />
+          ))}
+
+          {hasNewFootprintMarker && footprintLatLng && (
+            <Marker
+              key={`footprint-${FOOTPRINT_ICON_TEMPLATE_VERSION}`}
+              position={footprintLatLng}
+              icon={markerIcon}
+            />
+          )}
+        </MapContainer>
       </div>
 
       <style jsx global>{`
@@ -132,7 +127,7 @@ export default function CommunityFootprintsMap({
           border: 0;
           line-height: 0;
           transform-origin: center center;
-          filter: drop-shadow(0 2px 5px rgba(0, 43, 73, 0.18));
+          filter: drop-shadow(0 2px 5px rgba(0,43,73, 0.18));
           object-fit: contain;
         }
       `}</style>

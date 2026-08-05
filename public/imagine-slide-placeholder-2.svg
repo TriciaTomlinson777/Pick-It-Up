@@ -1,0 +1,35 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sky" x1="960" y1="0" x2="960" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F0D7A2"/>
+      <stop offset="0.48" stop-color="#D6A96D"/>
+      <stop offset="1" stop-color="#8B4F3D"/>
+    </linearGradient>
+    <linearGradient id="water" x1="960" y1="700" x2="960" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7E5E5A"/>
+      <stop offset="1" stop-color="#4A3437"/>
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#sky)"/>
+  <rect y="708" width="1920" height="372" fill="url(#water)"/>
+  <path d="M0 716C220 698 430 692 650 701C870 710 1070 730 1290 728C1510 726 1715 705 1920 694V1080H0V716Z" fill="#2F1E24" fill-opacity="0.24"/>
+  <g fill="#512F2F">
+    <rect x="58" y="548" width="92" height="178"/>
+    <rect x="164" y="506" width="54" height="220"/>
+    <rect x="228" y="566" width="76" height="160"/>
+    <rect x="314" y="520" width="68" height="206"/>
+    <rect x="398" y="466" width="104" height="260"/>
+    <rect x="520" y="542" width="70" height="184"/>
+    <rect x="606" y="488" width="92" height="238"/>
+    <rect x="718" y="438" width="132" height="288"/>
+    <rect x="870" y="524" width="78" height="202"/>
+    <rect x="960" y="444" width="102" height="282"/>
+    <rect x="1088" y="356" width="138" height="370"/>
+    <rect x="1252" y="500" width="82" height="226"/>
+    <rect x="1348" y="452" width="114" height="274"/>
+    <rect x="1478" y="530" width="72" height="196"/>
+    <rect x="1570" y="484" width="108" height="242"/>
+    <rect x="1700" y="552" width="74" height="174"/>
+    <rect x="1790" y="512" width="82" height="214"/>
+  </g>
+</svg>
