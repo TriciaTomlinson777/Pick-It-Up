@@ -2998,30 +2998,30 @@ export default function Home() {
 
               <div className="md:col-span-2">
                 <h3 className={`${balooDisplay.className} text-center text-3xl font-bold text-[#0f9aa1] sm:text-4xl lg:text-5xl`}>See the Difference.</h3>
-                <div className="relative mt-6 px-2 sm:px-10">
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="relative mt-6 w-full min-w-0 max-w-[100vw] overflow-x-hidden box-border px-2 md:px-10">
+                  <div className="grid w-full min-w-0 max-w-full box-border grid-cols-1 gap-4 md:grid-cols-2">
                     {(visibleBeforeAfterPairs.length ? [0, 1] : [0]).map((slotIndex) => {
                       const pair = visibleBeforeAfterPairs[slotIndex] || null;
 
                       return (
-                        <div key={pair?.id || `before-after-slot-${slotIndex}`} className={`mx-auto flex h-full w-full max-w-[32rem] flex-col rounded-[1.4rem] border border-[#0f9aa1]/45 bg-[linear-gradient(145deg,_#0f9aa1_0%,_#0a5065_100%)] px-3 pb-2 pt-2 text-left text-white shadow-[0_14px_34px_rgba(15,154,161,0.28)] transition-shadow duration-700 sm:max-w-none sm:px-4 sm:pb-3 sm:pt-3 ${pair?.id === activeBeforeAfterHighlightKey ? 'shadow-[0_0_0_3px_rgba(244,201,76,0.7),0_18px_45px_rgba(244,201,76,0.38)]' : ''}`}>
-                          <div className="relative mt-0.5 aspect-video min-h-[16rem] overflow-hidden rounded-[1rem] border border-[#002b49]/45 bg-[linear-gradient(145deg,_#0f9aa1_0%,_#0a5065_100%)] sm:min-h-[18rem] lg:min-h-[21rem]" aria-label="Before and after photo pair">
+                        <div key={pair?.id || `before-after-slot-${slotIndex}`} className={`mx-auto flex h-full w-full min-w-0 max-w-full box-border flex-col rounded-[1.4rem] border border-[#0f9aa1]/45 bg-[linear-gradient(145deg,_#0f9aa1_0%,_#0a5065_100%)] px-3 pb-2 pt-2 text-left text-white shadow-[0_14px_34px_rgba(15,154,161,0.28)] transition-shadow duration-700 md:max-w-none md:px-4 md:pb-3 md:pt-3 ${pair?.id === activeBeforeAfterHighlightKey ? 'shadow-[0_0_0_3px_rgba(244,201,76,0.7),0_18px_45px_rgba(244,201,76,0.38)]' : ''}`}>
+                          <div className="relative mt-0.5 aspect-video min-h-[16rem] w-full min-w-0 max-w-full box-border overflow-hidden rounded-[1rem] border border-[#002b49]/45 bg-[linear-gradient(145deg,_#0f9aa1_0%,_#0a5065_100%)] sm:min-h-[18rem] lg:min-h-[21rem]" aria-label="Before and after photo pair">
                             {pair ? (
-                              <div className="grid h-full grid-cols-2 gap-1">
-                                <div className="flex h-full flex-col">
+                              <div className="grid h-full min-w-0 max-w-full box-border grid-cols-2 gap-1">
+                                <div className="flex h-full min-w-0 max-w-full box-border flex-col">
                                   <div className="h-full overflow-hidden rounded-[0.8rem] border border-[#002b49]/35 bg-[#0b6d87]/30">
                                     {pair.beforeImage ? (
-                                      <img src={getStoredImageUrl(pair.beforeImage)} alt="Neighborhood cleanup before photo" className="h-full w-full object-cover" style={{ objectPosition: getPhotoObjectPosition(pair.beforeImage) }} />
+                                      <img src={getStoredImageUrl(pair.beforeImage)} alt="Neighborhood cleanup before photo" className="h-full w-full max-w-full object-cover" style={{ objectPosition: getPhotoObjectPosition(pair.beforeImage) }} />
                                     ) : (
                                       <div className="flex h-full items-center justify-center text-xs font-semibold uppercase tracking-[0.14em] text-white/80">Before</div>
                                     )}
                                   </div>
                                 </div>
 
-                                <div className="flex h-full flex-col">
+                                <div className="flex h-full min-w-0 max-w-full box-border flex-col">
                                   <div className="h-full overflow-hidden rounded-[0.8rem] border border-[#002b49]/35 bg-[#2b7e22]/25">
                                     {pair.afterImage ? (
-                                      <img src={getStoredImageUrl(pair.afterImage)} alt="Neighborhood cleanup after photo" className="h-full w-full object-cover" style={{ objectPosition: getPhotoObjectPosition(pair.afterImage) }} />
+                                      <img src={getStoredImageUrl(pair.afterImage)} alt="Neighborhood cleanup after photo" className="h-full w-full max-w-full object-cover" style={{ objectPosition: getPhotoObjectPosition(pair.afterImage) }} />
                                     ) : (
                                       <div className="flex h-full items-center justify-center text-xs font-semibold uppercase tracking-[0.14em] text-white/80">After</div>
                                     )}
@@ -3029,7 +3029,7 @@ export default function Home() {
                                 </div>
                               </div>
                             ) : (
-                              <div className="flex h-full items-center justify-center px-4 text-center text-sm font-medium text-white/85">
+                              <div className="flex h-full w-full min-w-0 max-w-full box-border items-center justify-center px-4 text-center text-sm font-medium whitespace-normal break-words text-white/85">
                                 Your newest cleanup before-and-after photo pairs will appear here.
                               </div>
                             )}
