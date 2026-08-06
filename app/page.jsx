@@ -3000,7 +3000,7 @@ export default function Home() {
                 <h3 className={`${balooDisplay.className} text-center text-3xl font-bold text-[#0f9aa1] sm:text-4xl lg:text-5xl`}>See the Difference.</h3>
                 <div className="relative mt-6 w-full min-w-0 max-w-[100vw] overflow-x-hidden box-border px-2 md:px-10">
                   <div className="grid w-full min-w-0 max-w-full box-border grid-cols-1 gap-4 md:grid-cols-2">
-                    {(visibleBeforeAfterPairs.length ? [0, 1] : [0]).map((slotIndex) => {
+                    {[0, 1].map((slotIndex) => {
                       const pair = visibleBeforeAfterPairs[slotIndex] || null;
 
                       return (
@@ -3029,8 +3029,18 @@ export default function Home() {
                                 </div>
                               </div>
                             ) : (
-                              <div className="flex h-full w-full min-w-0 max-w-full box-border items-center justify-center px-4 text-center text-sm font-medium whitespace-normal break-words text-white/85">
-                                Your newest cleanup before-and-after photo pairs will appear here.
+                              <div className="grid h-full min-w-0 max-w-full box-border grid-cols-2 gap-1">
+                                <div className="flex h-full min-w-0 max-w-full box-border flex-col">
+                                  <div className="flex h-full items-center justify-center rounded-[0.8rem] border border-[#002b49]/35 bg-[#0b6d87]/30 text-xs font-semibold uppercase tracking-[0.14em] text-white/80">
+                                    Before
+                                  </div>
+                                </div>
+
+                                <div className="flex h-full min-w-0 max-w-full box-border flex-col">
+                                  <div className="flex h-full items-center justify-center rounded-[0.8rem] border border-[#002b49]/35 bg-[#2b7e22]/25 text-xs font-semibold uppercase tracking-[0.14em] text-white/80">
+                                    After
+                                  </div>
+                                </div>
                               </div>
                             )}
                           </div>
