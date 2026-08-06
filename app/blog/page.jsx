@@ -8,6 +8,20 @@ import { STORY_CATEGORIES } from '@/lib/story-categories';
 
 export const dynamic = 'force-dynamic';
 
+function getPublicImageSrc(post) {
+  const imageUrl = String(post?.featuredImageUrl || '').trim();
+  if (!imageUrl) {
+    return '';
+  }
+
+  const version = encodeURIComponent(post?.updatedAt || post?.publishedAt || '');
+  if (!version) {
+    return imageUrl;
+  }
+
+  return `${imageUrl}${imageUrl.includes('?') ? '&' : '?'}v=${version}`;
+}
+
 const storyCategoryCardStyles = [
   {
     className: 'bg-[linear-gradient(145deg,_#0f9aa1_0%,_#2ec4c7_45%,_#69be28_100%)]',
@@ -114,11 +128,13 @@ export default async function BlogPage() {
               {posts.map((post) => (
                 <article key={post.id} className="overflow-hidden rounded-3xl border border-[#0f9aa1]/20 bg-white shadow-[0_20px_52px_-32px_rgba(0,64,84,0.55)]">
                   {post.featuredImageUrl ? (
-                    <img
-                      src={post.featuredImageUrl}
-                      alt={post.title}
-                      className="h-56 w-full object-cover"
-                    />
+                    <div className="flex h-56 items-center justify-center bg-[#f2fbfd]">
+                      <img
+                        src={getPublicImageSrc(post)}
+                        alt={post.title}
+                        className="h-full w-full object-contain object-center"
+                      />
+                    </div>
                   ) : null}
                   <div className="px-7 py-7 sm:px-8 sm:py-8">
                     <p className="inline-flex rounded-full bg-[#eaf8f9] px-3 py-1 text-xs font-semibold text-[#0f9aa1]">

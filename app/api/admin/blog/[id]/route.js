@@ -5,8 +5,16 @@ import {
   updatePost,
   uploadFeaturedImage,
 } from '@/lib/blog-repository';
+import { revalidatePath } from 'next/cache';
 import { getVerifiedAdminSession, requireAdminApiSession } from '@/lib/admin-request';
 import { parsePostFormData } from '@/lib/blog-admin-form';
+
+function revalidatePublicBlogPaths(post) {
+  revalidatePath('/blog');
+  if (post?.slug) {
+    revalidatePath(`/blog/${post.slug}`);
+  }
+}
 
 export async function GET(_, context) {
   const session = await getVerifiedAdminSession();
@@ -44,6 +52,8 @@ export async function PATCH(request, context) {
         return Response.json({ error: 'Post not found.' }, { status: 404 });
       }
 
+      revalidatePublicBlogPaths(post);
+
       return Response.json({ post });
     }
 
@@ -56,6 +66,8 @@ export async function PATCH(request, context) {
       if (!post) {
         return Response.json({ error: 'Post not found.' }, { status: 404 });
       }
+
+      revalidatePublicBlogPaths(post);
 
       return Response.json({ post });
     }
@@ -83,6 +95,8 @@ export async function PATCH(request, context) {
     if (!post) {
       return Response.json({ error: 'Post not found.' }, { status: 404 });
     }
+
+    revalidatePublicBlogPaths(post);
 
     return Response.json({ post });
   } catch (error) {

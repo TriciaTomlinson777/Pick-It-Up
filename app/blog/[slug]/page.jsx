@@ -13,6 +13,20 @@ import { formatPublicationDate } from '@/lib/blog-post-utils';
 export const dynamic = 'force-dynamic';
 const FIRST_POST_SLUG = 'what-i-didnt-expect-when-i-started-picking-up-litter';
 
+function getPublicImageSrc(post) {
+  const imageUrl = String(post?.featuredImageUrl || '').trim();
+  if (!imageUrl) {
+    return '';
+  }
+
+  const version = encodeURIComponent(post?.updatedAt || post?.publishedAt || '');
+  if (!version) {
+    return imageUrl;
+  }
+
+  return `${imageUrl}${imageUrl.includes('?') ? '&' : '?'}v=${version}`;
+}
+
 function getAdjacentPosts(posts, currentSlug) {
   const index = posts.findIndex((post) => post.slug === currentSlug);
   if (index === -1) {
@@ -92,9 +106,18 @@ export default async function BlogPostPage({ params }) {
 
             {post.featuredImageUrl ? (
               <img
-                src={post.featuredImageUrl}
+                src={getPublicImageSrc(post)}
                 alt={post.title}
-                className="mt-6 h-64 w-full rounded-xl object-cover sm:h-80"
+                style={{
+                  width: '100%',
+                  maxWidth: '800px',
+                  height: 'auto',
+                  objectFit: 'contain',
+                  objectPosition: 'center',
+                  display: 'block',
+                  margin: '1.5rem auto 0',
+                }}
+                className="rounded-xl"
               />
             ) : null}
 

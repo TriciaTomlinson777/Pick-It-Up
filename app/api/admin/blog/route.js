@@ -4,6 +4,7 @@ import {
   getAdminPosts,
   uploadFeaturedImage,
 } from '@/lib/blog-repository';
+import { revalidatePath } from 'next/cache';
 import { getVerifiedAdminSession, requireAdminApiSession } from '@/lib/admin-request';
 import { parsePostFormData } from '@/lib/blog-admin-form';
 
@@ -37,6 +38,10 @@ export async function POST(request) {
     }
 
     const post = await createPost(postInput);
+    revalidatePath('/blog');
+    if (post?.slug) {
+      revalidatePath(`/blog/${post.slug}`);
+    }
     return Response.json({ post });
   } catch (error) {
     return Response.json({ error: error.message || 'Failed to create post.' }, { status: 400 });

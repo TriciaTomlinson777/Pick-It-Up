@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 export default function BlogAdminLoginForm() {
-  const [username, setUsername] = useState('admin');
+  const [username, setUsername] = useState('blog_admin');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -16,6 +16,7 @@ export default function BlogAdminLoginForm() {
     try {
       const response = await fetch('/api/admin/session/login', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },

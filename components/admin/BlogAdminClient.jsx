@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { formatPublicationDate } from '@/lib/blog-post-utils';
 import { STORY_CATEGORIES } from '@/lib/story-categories';
 
@@ -62,20 +62,57 @@ function categoryTitleFromValue(value) {
   return found ? found.title : STORY_CATEGORIES[0].title;
 }
 
-export default function BlogAdminClient() {
-  const [posts, setPosts] = useState([]);
+async function requestAdminPosts() {
+  const response = await fetch('/api/admin/blog', {
+    cache: 'no-store',
+    credentials: 'include',
+  });
+  if (response.status === 401) {
+    return { unauthorized: true, posts: [] };
+  }
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Unable to load stories.');
+  }
+
+  return {
+    unauthorized: false,
+    posts: Array.isArray(data.posts) ? data.posts : [],
+  };
+}
+
+export default function BlogAdminClient({ initialPosts = [] }) {
+  const [posts, setPosts] = useState(() =>
+    Array.isArray(initialPosts) ? initialPosts : []
+  );
   const [statusFilter, setStatusFilter] = useState('all');
   const [form, setForm] = useState(EMPTY_FORM);
   const [selectedPost, setSelectedPost] = useState(null);
   const [featuredImageFile, setFeaturedImageFile] = useState(null);
+  const [featuredImagePreviewUrl, setFeaturedImagePreviewUrl] = useState('');
   const [removeFeaturedImage, setRemoveFeaturedImage] = useState(false);
+  const [featuredImageStatusMessage, setFeaturedImageStatusMessage] = useState('');
+  const [featuredImageErrorMessage, setFeaturedImageErrorMessage] = useState('');
   const [statusMessage, setStatusMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [isLoadingPosts, setIsLoadingPosts] = useState(true);
+  const [isLoadingPosts, setIsLoadingPosts] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const selectedPostRef = useRef(selectedPost);
 
   const isEditing = Boolean(form.id);
+
+  useEffect(() => {
+    return () => {
+      if (featuredImagePreviewUrl) {
+        URL.revokeObjectURL(featuredImagePreviewUrl);
+      }
+    };
+  }, [featuredImagePreviewUrl]);
+
+  useEffect(() => {
+    selectedPostRef.current = selectedPost;
+  }, [selectedPost]);
 
   const pendingCount = useMemo(
     () => posts.filter((post) => post.status === 'pending_review').length,
@@ -99,22 +136,18 @@ export default function BlogAdminClient() {
     setErrorMessage('');
 
     try {
-      const response = await fetch('/api/admin/blog', { cache: 'no-store' });
-      if (response.status === 401) {
+      const { unauthorized, posts: nextPosts } = await requestAdminPosts();
+
+      if (unauthorized) {
         window.location.href = '/admin/blog/login';
         return;
       }
 
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || 'Unable to load stories.');
-      }
-
-      const nextPosts = Array.isArray(data.posts) ? data.posts : [];
       setPosts(nextPosts);
 
-      if (selectedPost) {
-        const refreshedSelection = nextPosts.find((post) => post.id === selectedPost.id);
+      const currentSelection = selectedPostRef.current;
+      if (currentSelection) {
+        const refreshedSelection = nextPosts.find((post) => post.id === currentSelection.id);
         if (refreshedSelection) {
           setSelectedPost(refreshedSelection);
           setForm(mapPostToForm(refreshedSelection));
@@ -127,10 +160,6 @@ export default function BlogAdminClient() {
     }
   }
 
-  useEffect(() => {
-    loadPosts();
-  }, []);
-
   function updateField(field, value) {
     setForm((current) => ({ ...current, [field]: value }));
   }
@@ -139,7 +168,10 @@ export default function BlogAdminClient() {
     setSelectedPost(null);
     setForm(EMPTY_FORM);
     setFeaturedImageFile(null);
+    setFeaturedImagePreviewUrl('');
     setRemoveFeaturedImage(false);
+    setFeaturedImageStatusMessage('');
+    setFeaturedImageErrorMessage('');
     setStatusMessage('');
     setErrorMessage('');
   }
@@ -148,7 +180,10 @@ export default function BlogAdminClient() {
     setSelectedPost(post);
     setForm(mapPostToForm(post));
     setFeaturedImageFile(null);
+    setFeaturedImagePreviewUrl('');
     setRemoveFeaturedImage(false);
+    setFeaturedImageStatusMessage('');
+    setFeaturedImageErrorMessage('');
     setStatusMessage('');
     setErrorMessage('');
   }
@@ -157,6 +192,10 @@ export default function BlogAdminClient() {
     setIsSaving(true);
     setStatusMessage('');
     setErrorMessage('');
+    setFeaturedImageStatusMessage('');
+    setFeaturedImageErrorMessage('');
+
+    const hasFeaturedImageUpdate = Boolean(featuredImageFile) || removeFeaturedImage;
 
     try {
       const payload = new FormData();
@@ -179,6 +218,7 @@ export default function BlogAdminClient() {
       const method = isEditing ? 'PATCH' : 'POST';
       const response = await fetch(endpoint, {
         method,
+        credentials: 'include',
         body: payload,
       });
 
@@ -194,10 +234,24 @@ export default function BlogAdminClient() {
       }
 
       setFeaturedImageFile(null);
+      if (featuredImagePreviewUrl) {
+        URL.revokeObjectURL(featuredImagePreviewUrl);
+      }
+      setFeaturedImagePreviewUrl('');
       setRemoveFeaturedImage(false);
       setStatusMessage(nextStatus === 'published' ? 'Story published or scheduled.' : 'Story saved.');
+
+      if (featuredImageFile) {
+        setFeaturedImageStatusMessage('Featured image uploaded and saved to this story.');
+      } else if (removeFeaturedImage) {
+        setFeaturedImageStatusMessage('Featured image removed from this story.');
+      }
     } catch (error) {
-      setErrorMessage(error.message || 'Unable to save story.');
+      const message = error.message || 'Unable to save story.';
+      setErrorMessage(message);
+      if (hasFeaturedImageUpdate) {
+        setFeaturedImageErrorMessage(`Featured image update failed: ${message}`);
+      }
     } finally {
       setIsSaving(false);
     }
@@ -224,6 +278,7 @@ export default function BlogAdminClient() {
 
       const response = await fetch(`/api/admin/blog/${form.id}`, {
         method: 'PATCH',
+        credentials: 'include',
         body: payload,
       });
 
@@ -246,15 +301,6 @@ export default function BlogAdminClient() {
     }
   }
 
-  async function handleLogout() {
-    setIsLoggingOut(true);
-    try {
-      await fetch('/api/admin/session/logout', { method: 'POST' });
-    } finally {
-      window.location.href = '/admin/blog/login';
-    }
-  }
-
   return (
     <div className="min-h-screen bg-[#f7fcfb]">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
@@ -272,14 +318,12 @@ export default function BlogAdminClient() {
               >
                 New Story
               </button>
-              <button
-                type="button"
-                onClick={handleLogout}
-                disabled={isLoggingOut}
-                className="rounded-full border border-[#002244]/25 px-4 py-2 text-sm font-semibold text-[#002244] transition hover:bg-[#edf4f7] disabled:opacity-70"
+              <a
+                href="/api/admin/session/logout"
+                className="rounded-full border border-[#002244]/25 px-4 py-2 text-sm font-semibold text-[#002244] transition hover:bg-[#edf4f7]"
               >
-                {isLoggingOut ? 'Signing Out...' : 'Sign Out'}
-              </button>
+                Sign Out
+              </a>
             </div>
           </div>
           <div className="mt-4 flex flex-wrap gap-3 text-sm text-[#1f5f7a]">
@@ -458,20 +502,64 @@ export default function BlogAdminClient() {
                   accept="image/jpeg,image/png,image/webp,image/gif"
                   onChange={(event) => {
                     const file = event.target.files?.[0] || null;
+
+                    if (featuredImagePreviewUrl) {
+                      URL.revokeObjectURL(featuredImagePreviewUrl);
+                    }
+
                     setFeaturedImageFile(file);
                     if (file) {
+                      const localPreviewUrl = URL.createObjectURL(file);
+                      setFeaturedImagePreviewUrl(localPreviewUrl);
                       setRemoveFeaturedImage(false);
+                      setFeaturedImageStatusMessage('Selected image ready. Click Save Story to upload and attach it.');
+                      setFeaturedImageErrorMessage('');
+                    } else {
+                      setFeaturedImagePreviewUrl('');
+                      setFeaturedImageStatusMessage('');
                     }
                   }}
                   className="mt-2 block w-full text-sm text-[#1f5f7a] file:mr-3 file:rounded-full file:border-0 file:bg-[#0f9aa1] file:px-4 file:py-2 file:font-semibold file:text-white hover:file:bg-[#0b8a90]"
                 />
 
+                {featuredImagePreviewUrl ? (
+                  <div className="mt-3">
+                    <p className="text-xs font-semibold text-[#1f5f7a]">Selected image preview</p>
+                    <img
+                      src={featuredImagePreviewUrl}
+                      alt="Selected featured preview"
+                      style={{
+                        width: '100%',
+                        maxWidth: '420px',
+                        height: 'auto',
+                        maxHeight: '260px',
+                        objectFit: 'contain',
+                        objectPosition: 'center',
+                        display: 'block',
+                        margin: '0 auto',
+                      }}
+                      className="mt-2 rounded-lg"
+                    />
+                  </div>
+                ) : null}
+
                 {!removeFeaturedImage && form.featuredImageUrl ? (
                   <div className="mt-3">
+                    <p className="text-xs font-semibold text-[#1f5f7a]">Current saved featured image</p>
                     <img
                       src={form.featuredImageUrl}
                       alt="Current featured"
-                      className="h-36 w-full max-w-md rounded-lg object-cover"
+                      style={{
+                        width: '100%',
+                        maxWidth: '420px',
+                        height: 'auto',
+                        maxHeight: '260px',
+                        objectFit: 'contain',
+                        objectPosition: 'center',
+                        display: 'block',
+                        margin: '0 auto',
+                      }}
+                      className="mt-2 rounded-lg"
                     />
                     <label className="mt-2 inline-flex items-center gap-2 text-sm text-[#1f5f7a]">
                       <input
@@ -482,6 +570,18 @@ export default function BlogAdminClient() {
                       Remove current featured image
                     </label>
                   </div>
+                ) : null}
+
+                {featuredImageStatusMessage ? (
+                  <p className="mt-3 rounded-xl border border-[#1f8f3c]/20 bg-[#ecf9f0] px-3 py-2 text-xs font-semibold text-[#1f8f3c]">
+                    {featuredImageStatusMessage}
+                  </p>
+                ) : null}
+
+                {featuredImageErrorMessage ? (
+                  <p className="mt-3 rounded-xl border border-[#b23d31]/20 bg-[#fff2f0] px-3 py-2 text-xs font-semibold text-[#b23d31]">
+                    {featuredImageErrorMessage}
+                  </p>
                 ) : null}
               </div>
 
