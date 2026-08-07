@@ -123,6 +123,7 @@ export default function Home() {
   const [communityActionSelectedPhoto, setCommunityActionSelectedPhoto] = useState(null);
   const [latestNeighborhoodCleanupPhotos, setLatestNeighborhoodCleanupPhotos] = useState(null);
   const [photoSubmissions, setPhotoSubmissions] = useState([]);
+  const [approvedBeforeAfterSubmissions, setApprovedBeforeAfterSubmissions] = useState([]);
   const [communityActionSubmissions, setCommunityActionSubmissions] = useState([]);
   const [photoFormError, setPhotoFormError] = useState('');
   const [isUploadingCleanupPhotos, setIsUploadingCleanupPhotos] = useState(false);
@@ -515,7 +516,7 @@ export default function Home() {
   const volunteerGroupPhotos = uploadedVolunteerPhotos;
   const featuredCommunityActionPhotos = volunteerGroupPhotos.slice(0, 4);
 
-  const beforeAfterPhotoPairs = photoSubmissions
+  const beforeAfterPhotoPairs = approvedBeforeAfterSubmissions
     .filter((submission) => submission && Array.isArray(submission.images) && submission.images.length)
     .filter((submission) => getSubmissionType(submission) === PHOTO_TYPE_BEFORE_AFTER && submission.images.length >= 2)
     .map((submission, submissionIndex) => {
@@ -1132,6 +1133,78 @@ export default function Home() {
       setPhotoSubmissions([]);
       setCommunityActionSubmissions([]);
     }
+  }, []);
+
+  useEffect(() => {
+    const abortController = new AbortController();
+
+    const loadApprovedBeforeAfterPairs = async () => {
+      try {
+        const response = await fetch('/api/community-before-after', {
+          signal: abortController.signal,
+          cache: 'no-store',
+        });
+
+        if (!response.ok) {
+          throw new Error('Unable to load approved before/after pairs.');
+        }
+
+        const data = await response.json();
+        const approvedPairs = Array.isArray(data?.pairs) ? data.pairs : [];
+
+        const approvedPairSubmissions = approvedPairs
+          .map((pair) => {
+            const beforeImageUrl = String(pair?.before_image_url || '').trim();
+            const afterImageUrl = String(pair?.after_image_url || '').trim();
+
+            if (!beforeImageUrl || !afterImageUrl) {
+              return null;
+            }
+
+            const pairCaption = String(pair?.pair_caption || '').trim();
+            const submittedAt = String(pair?.submitted_at || '').trim() || new Date().toISOString();
+
+            return {
+              id: pair?.id || submittedAt,
+              submittedAt,
+              photoType: PHOTO_TYPE_BEFORE_AFTER,
+              ownerId: '',
+              beforeCaption: pairCaption,
+              afterCaption: pairCaption,
+              pairCaption,
+              images: [
+                {
+                  publicUrl: beforeImageUrl,
+                  storagePath: '',
+                  caption: pairCaption,
+                  role: 'before',
+                  cropPosition: createDefaultCropPosition(),
+                },
+                {
+                  publicUrl: afterImageUrl,
+                  storagePath: '',
+                  caption: pairCaption,
+                  role: 'after',
+                  cropPosition: createDefaultCropPosition(),
+                },
+              ],
+            };
+          })
+          .filter(Boolean);
+
+        setApprovedBeforeAfterSubmissions(normalizePhotoSubmissions(approvedPairSubmissions));
+      } catch {
+        if (!abortController.signal.aborted) {
+          setApprovedBeforeAfterSubmissions([]);
+        }
+      }
+    };
+
+    loadApprovedBeforeAfterPairs();
+
+    return () => {
+      abortController.abort();
+    };
   }, []);
 
   useEffect(() => {
@@ -2164,6 +2237,43 @@ export default function Home() {
     };
   };
 
+  const submitBeforeAfterPairForReview = async (submission) => {
+    const images = Array.isArray(submission?.images) ? submission.images : [];
+    const beforeImage = images.find((image) => image?.role === 'before') || images[0] || null;
+    const afterImage = images.find((image) => image?.role === 'after') || images[1] || null;
+    const beforeImageUrl = String(beforeImage?.publicUrl || '').trim();
+    const afterImageUrl = String(afterImage?.publicUrl || '').trim();
+
+    if (!beforeImageUrl || !afterImageUrl) {
+      throw new Error('Please upload both a BEFORE photo and an AFTER photo before submitting.');
+    }
+
+    const response = await fetch('/api/community-before-after', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        before_image_url: beforeImageUrl,
+        after_image_url: afterImageUrl,
+        before_image_path: String(beforeImage?.storagePath || ''),
+        after_image_path: String(afterImage?.storagePath || ''),
+        pair_caption: String(submission?.pairCaption || ''),
+      }),
+    });
+
+    let data = null;
+    try {
+      data = await response.json();
+    } catch {
+      data = null;
+    }
+
+    if (!response.ok) {
+      throw new Error(data?.error || 'Unable to submit before/after pair.');
+    }
+  };
+
   const buildCommunityActionSubmission = async (submissionId) => {
     if (!communityActionSelectedPhoto) {
       throw new Error('Please add one Community in Action photo before submitting.');
@@ -2214,6 +2324,7 @@ export default function Home() {
 
     try {
       const newSubmission = await buildBeforeAfterSubmission(submissionId);
+      await submitBeforeAfterPairForReview(newSubmission);
       setPendingTrackPhotoSubmission(newSubmission);
       closePhotoModal();
       finalizeTrackSubmission(newSubmission);
