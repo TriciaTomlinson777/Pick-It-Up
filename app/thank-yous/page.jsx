@@ -5,7 +5,6 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ThankYouCard from '@/components/ThankYouCard';
 
-const COMMUNITY_SHARE_SUBMISSIONS_KEY = 'pick-it-up-community-share-submissions-v1';
 const COMMUNITY_SHARE_TYPE_THANK_YOU = 'thank-you';
 
 export default function ThankYousPage() {
@@ -31,47 +30,58 @@ export default function ThankYousPage() {
   };
 
   useEffect(() => {
-    try {
-      const savedShares = JSON.parse(localStorage.getItem(COMMUNITY_SHARE_SUBMISSIONS_KEY) || '[]');
-      const possibleEntries = Array.isArray(savedShares)
-        ? savedShares
-        : savedShares && Array.isArray(savedShares.submissions)
-          ? savedShares.submissions
-          : [];
+    const abortController = new AbortController();
 
-      const filteredEntries = possibleEntries
-        .filter((submission) => submission?.type === COMMUNITY_SHARE_TYPE_THANK_YOU)
-        .map((submission, index) => {
-          const photoPublicUrl = typeof submission?.photo?.publicUrl === 'string' ? submission.photo.publicUrl.trim() : '';
-          const note = typeof submission?.message === 'string'
-            ? submission.message.trim()
-            : typeof submission?.caption === 'string'
-              ? submission.caption.trim()
-              : '';
-          const submittedAt = submission?.submittedAt || '';
-
-          if (!note) {
-            return null;
-          }
-
-          return {
-            id: submission?.id || `saved-thank-you-${submittedAt || index}`,
-            note,
-            photoUrl: photoPublicUrl,
-            submittedAt,
-          };
-        })
-        .filter(Boolean)
-        .sort((first, second) => {
-          const firstTime = new Date(first.submittedAt || 0).getTime();
-          const secondTime = new Date(second.submittedAt || 0).getTime();
-          return secondTime - firstTime;
+    const loadThankYouCards = async () => {
+      try {
+        const response = await fetch('/api/community-shares', {
+          signal: abortController.signal,
+          cache: 'no-store',
         });
 
-      setSavedThankYouCards(dedupeSavedThankYouCards(filteredEntries));
-    } catch {
-      setSavedThankYouCards([]);
-    }
+        if (!response.ok) {
+          throw new Error('Unable to load thank-you notes.');
+        }
+
+        const data = await response.json();
+        const submissions = Array.isArray(data?.submissions) ? data.submissions : [];
+
+        const filteredEntries = submissions
+          .filter((submission) => submission?.note)
+          .map((submission, index) => {
+            const photoPublicUrl = typeof submission?.image_url === 'string' ? submission.image_url.trim() : '';
+            const note = typeof submission?.note === 'string' ? submission.note.trim() : '';
+            const submittedAt = submission?.submitted_at || '';
+
+            if (!note) {
+              return null;
+            }
+
+            return {
+              id: submission?.id || `saved-thank-you-${submittedAt || index}`,
+              note,
+              photoUrl: photoPublicUrl,
+              submittedAt,
+            };
+          })
+          .filter(Boolean)
+          .sort((first, second) => {
+            const firstTime = new Date(first.submittedAt || 0).getTime();
+            const secondTime = new Date(second.submittedAt || 0).getTime();
+            return secondTime - firstTime;
+          });
+
+        setSavedThankYouCards(dedupeSavedThankYouCards(filteredEntries));
+      } catch {
+        setSavedThankYouCards([]);
+      }
+    };
+
+    loadThankYouCards();
+
+    return () => {
+      abortController.abort();
+    };
   }, []);
 
   return (

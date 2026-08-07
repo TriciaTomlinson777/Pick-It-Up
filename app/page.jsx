@@ -58,7 +58,6 @@ const HEIC_IMAGE_TYPES = new Set(['image/heic', 'image/heif', 'image/heic-sequen
 const DEFAULT_PHOTO_CROP_POSITION = { x: 50, y: 50 };
 const SUPABASE_UPLOAD_TIMEOUT_MS = 30000;
 const SUPABASE_STORAGE_BUCKET = 'Community Photos';
-const COMMUNITY_SHARE_SUBMISSIONS_KEY = 'pick-it-up-community-share-submissions-v1';
 const COMMUNITY_SHARE_TYPE_THANK_YOU = 'thank-you';
 const COMMUNITY_SHARE_TYPE_SCENIC_DISCOVERY = 'scenic-discovery';
 const IMAGINE_SLIDES = [
@@ -899,44 +898,39 @@ export default function Home() {
 
   const persistNormalizedCommunityShareSubmissions = (submissions) => {
     const normalized = normalizeCommunityShareSubmissions(submissions);
-
-    if (!normalized.length) {
-      localStorage.removeItem(COMMUNITY_SHARE_SUBMISSIONS_KEY);
-      setCommunityShareSubmissions([]);
-      return;
-    }
-
-    localStorage.setItem(COMMUNITY_SHARE_SUBMISSIONS_KEY, JSON.stringify(normalized));
     setCommunityShareSubmissions(normalized);
   };
 
-  const saveCommunityShareSubmissionToStorage = (newSubmission) => {
+  const saveCommunityShareSubmissionToStorage = async (newSubmission) => {
     try {
-      let existingSubmissions = Array.isArray(communityShareSubmissions) ? [...communityShareSubmissions] : [];
-
-      if (!existingSubmissions.length) {
-        try {
-          const savedShares = JSON.parse(localStorage.getItem(COMMUNITY_SHARE_SUBMISSIONS_KEY) || '[]');
-          if (Array.isArray(savedShares)) {
-            existingSubmissions = savedShares;
-          } else if (savedShares && Array.isArray(savedShares.submissions)) {
-            existingSubmissions = savedShares.submissions;
-          }
-        } catch {
-          existingSubmissions = [];
-        }
-      }
-
       const submissionId = newSubmission?.id || newSubmission?.submittedAt || '';
       const deduplicatedSubmissions = submissionId
-        ? existingSubmissions.filter((submission) => {
+        ? communityShareSubmissions.filter((submission) => {
             const existingId = submission?.id || submission?.submittedAt || '';
             return existingId !== submissionId;
           })
-        : existingSubmissions;
+        : communityShareSubmissions;
 
       const submissions = normalizeCommunityShareSubmissions([...deduplicatedSubmissions, newSubmission]);
       persistNormalizedCommunityShareSubmissions(submissions);
+
+      const response = await fetch('/api/community-shares', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          note: newSubmission?.message || '',
+          image_url: newSubmission?.photo?.publicUrl || null,
+          image_path: newSubmission?.photo?.storagePath || null,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData?.error || 'Unable to save thank-you note.');
+      }
+
       return true;
     } catch {
       return false;
@@ -1266,20 +1260,50 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    try {
-      const savedShares = JSON.parse(localStorage.getItem(COMMUNITY_SHARE_SUBMISSIONS_KEY) || '[]');
+    const abortController = new AbortController();
 
-      let normalizedShares = [];
-      if (Array.isArray(savedShares)) {
-        normalizedShares = savedShares;
-      } else if (savedShares && Array.isArray(savedShares.submissions)) {
-        normalizedShares = savedShares.submissions;
+    const loadCommunityShares = async () => {
+      try {
+        const response = await fetch('/api/community-shares', {
+          signal: abortController.signal,
+          cache: 'no-store',
+        });
+
+        if (!response.ok) {
+          throw new Error('Unable to load community thank-you notes.');
+        }
+
+        const data = await response.json();
+        const submissions = Array.isArray(data?.submissions) ? data.submissions : [];
+        const normalizedShares = submissions.map((submission) => ({
+          id: submission?.id || '',
+          type: COMMUNITY_SHARE_TYPE_THANK_YOU,
+          submittedAt: submission?.submitted_at || submission?.submittedAt || '',
+          ownerId: '',
+          message: typeof submission?.note === 'string' ? submission.note.trim() : '',
+          caption: '',
+          photo: submission?.image_url
+            ? {
+                publicUrl: submission.image_url,
+                storagePath: submission?.image_path || '',
+                cropPosition: createDefaultCropPosition(),
+              }
+            : null,
+        }));
+
+        setCommunityShareSubmissions(normalizeCommunityShareSubmissions(normalizedShares));
+      } catch {
+        if (!abortController.signal.aborted) {
+          setCommunityShareSubmissions([]);
+        }
       }
+    };
 
-      setCommunityShareSubmissions(normalizeCommunityShareSubmissions(normalizedShares));
-    } catch {
-      setCommunityShareSubmissions([]);
-    }
+    loadCommunityShares();
+
+    return () => {
+      abortController.abort();
+    };
   }, []);
 
   const getPhotoFileValidationError = (file) => {
@@ -1829,7 +1853,7 @@ export default function Home() {
           : null,
       };
 
-      const didPersistShare = saveCommunityShareSubmissionToStorage(newSubmission);
+      const didPersistShare = await saveCommunityShareSubmissionToStorage(newSubmission);
 
       if (!didPersistShare) {
         throw new Error('Your share was uploaded, but it could not be saved. Please try again.');
@@ -3244,13 +3268,13 @@ export default function Home() {
                             )}
                           </div>
 
-                          <div className="mt-1 min-h-[1.5rem] px-1">
-                            {pair?.pairCaption ? (
-                              <p className="text-[11px] font-medium leading-5 text-[#fff9ea] whitespace-pre-wrap break-words">
+                          {pair?.pairCaption ? (
+                            <div className="mt-2 px-1 pb-1">
+                              <p className="text-center text-sm font-medium leading-5 text-[#fff9ea] whitespace-pre-wrap break-words">
                                 {pair.pairCaption}
                               </p>
-                            ) : null}
-                          </div>
+                            </div>
+                          ) : null}
                         </div>
                       );
                     })}
