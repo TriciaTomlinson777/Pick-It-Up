@@ -5,51 +5,64 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-const COMMUNITY_SHARE_SUBMISSIONS_KEY = 'pick-it-up-community-share-submissions-v1';
 const COMMUNITY_SHARE_TYPE_SCENIC_DISCOVERY = 'scenic-discovery';
 
 export default function VolunteerMemorablePhotosPage() {
   const [savedScenicCards, setSavedScenicCards] = useState([]);
 
   useEffect(() => {
-    try {
-      const savedShares = JSON.parse(localStorage.getItem(COMMUNITY_SHARE_SUBMISSIONS_KEY) || '[]');
-      const possibleEntries = Array.isArray(savedShares)
-        ? savedShares
-        : savedShares && Array.isArray(savedShares.submissions)
-          ? savedShares.submissions
-          : [];
+    const abortController = new AbortController();
 
-      const filteredEntries = possibleEntries
-        .filter((submission) => submission?.type === COMMUNITY_SHARE_TYPE_SCENIC_DISCOVERY)
-        .map((submission, index) => {
-          const publicUrl = typeof submission?.photo?.publicUrl === 'string' ? submission.photo.publicUrl.trim() : '';
-          const caption = typeof submission?.caption === 'string' ? submission.caption.trim() : '';
-          const submittedAt = submission?.submittedAt || '';
-
-          if (!publicUrl) {
-            return null;
-          }
-
-          return {
-            id: submission?.id || `saved-scenic-${submittedAt || index}`,
-            kind: 'saved-share',
-            publicUrl,
-            caption,
-            submittedAt,
-          };
-        })
-        .filter(Boolean)
-        .sort((first, second) => {
-          const firstTime = new Date(first.submittedAt || 0).getTime();
-          const secondTime = new Date(second.submittedAt || 0).getTime();
-          return secondTime - firstTime;
+    const loadScenicCards = async () => {
+      try {
+        const response = await fetch('/api/scenic-discoveries', {
+          signal: abortController.signal,
+          cache: 'no-store',
         });
 
-      setSavedScenicCards(filteredEntries);
-    } catch {
-      setSavedScenicCards([]);
-    }
+        if (!response.ok) {
+          throw new Error('Unable to load scenic discoveries.');
+        }
+
+        const data = await response.json();
+        const submissions = Array.isArray(data?.submissions) ? data.submissions : [];
+
+        const filteredEntries = submissions
+          .map((submission, index) => {
+            const publicUrl = typeof submission?.image_url === 'string' ? submission.image_url.trim() : '';
+            const caption = typeof submission?.caption === 'string' ? submission.caption.trim() : '';
+            const submittedAt = submission?.submitted_at || '';
+
+            if (!publicUrl) {
+              return null;
+            }
+
+            return {
+              id: submission?.id || `saved-scenic-${submittedAt || index}`,
+              kind: 'saved-share',
+              publicUrl,
+              caption,
+              submittedAt,
+            };
+          })
+          .filter(Boolean)
+          .sort((first, second) => {
+            const firstTime = new Date(first.submittedAt || 0).getTime();
+            const secondTime = new Date(second.submittedAt || 0).getTime();
+            return secondTime - firstTime;
+          });
+
+        setSavedScenicCards(filteredEntries);
+      } catch {
+        setSavedScenicCards([]);
+      }
+    };
+
+    loadScenicCards();
+
+    return () => {
+      abortController.abort();
+    };
   }, []);
 
   return (

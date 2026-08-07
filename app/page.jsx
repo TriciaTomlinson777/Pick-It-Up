@@ -914,21 +914,33 @@ export default function Home() {
       const submissions = normalizeCommunityShareSubmissions([...deduplicatedSubmissions, newSubmission]);
       persistNormalizedCommunityShareSubmissions(submissions);
 
-      const response = await fetch('/api/community-shares', {
+      const endpoint = newSubmission?.type === COMMUNITY_SHARE_TYPE_SCENIC_DISCOVERY
+        ? '/api/scenic-discoveries'
+        : '/api/community-shares';
+
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          note: newSubmission?.message || '',
-          image_url: newSubmission?.photo?.publicUrl || null,
-          image_path: newSubmission?.photo?.storagePath || null,
-        }),
+        body: JSON.stringify(
+          newSubmission?.type === COMMUNITY_SHARE_TYPE_SCENIC_DISCOVERY
+            ? {
+                caption: newSubmission?.caption || '',
+                image_url: newSubmission?.photo?.publicUrl || null,
+                image_path: newSubmission?.photo?.storagePath || null,
+              }
+            : {
+                note: newSubmission?.message || '',
+                image_url: newSubmission?.photo?.publicUrl || null,
+                image_path: newSubmission?.photo?.storagePath || null,
+              }
+        ),
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData?.error || 'Unable to save thank-you note.');
+        throw new Error(errorData?.error || 'Unable to save share.');
       }
 
       return true;
@@ -1264,32 +1276,55 @@ export default function Home() {
 
     const loadCommunityShares = async () => {
       try {
-        const response = await fetch('/api/community-shares', {
-          signal: abortController.signal,
-          cache: 'no-store',
-        });
+        const [thankYouResponse, scenicResponse] = await Promise.all([
+          fetch('/api/community-shares', {
+            signal: abortController.signal,
+            cache: 'no-store',
+          }),
+          fetch('/api/scenic-discoveries', {
+            signal: abortController.signal,
+            cache: 'no-store',
+          }),
+        ]);
 
-        if (!response.ok) {
-          throw new Error('Unable to load community thank-you notes.');
-        }
+        const thankYouData = thankYouResponse.ok ? await thankYouResponse.json() : { submissions: [] };
+        const scenicData = scenicResponse.ok ? await scenicResponse.json() : { submissions: [] };
 
-        const data = await response.json();
-        const submissions = Array.isArray(data?.submissions) ? data.submissions : [];
-        const normalizedShares = submissions.map((submission) => ({
-          id: submission?.id || '',
-          type: COMMUNITY_SHARE_TYPE_THANK_YOU,
-          submittedAt: submission?.submitted_at || submission?.submittedAt || '',
-          ownerId: '',
-          message: typeof submission?.note === 'string' ? submission.note.trim() : '',
-          caption: '',
-          photo: submission?.image_url
-            ? {
-                publicUrl: submission.image_url,
-                storagePath: submission?.image_path || '',
-                cropPosition: createDefaultCropPosition(),
-              }
-            : null,
-        }));
+        const thankYouSubmissions = Array.isArray(thankYouData?.submissions) ? thankYouData.submissions : [];
+        const scenicSubmissions = Array.isArray(scenicData?.submissions) ? scenicData.submissions : [];
+
+        const normalizedShares = [
+          ...thankYouSubmissions.map((submission) => ({
+            id: submission?.id || '',
+            type: COMMUNITY_SHARE_TYPE_THANK_YOU,
+            submittedAt: submission?.submitted_at || submission?.submittedAt || '',
+            ownerId: '',
+            message: typeof submission?.note === 'string' ? submission.note.trim() : '',
+            caption: '',
+            photo: submission?.image_url
+              ? {
+                  publicUrl: submission.image_url,
+                  storagePath: submission?.image_path || '',
+                  cropPosition: createDefaultCropPosition(),
+                }
+              : null,
+          })),
+          ...scenicSubmissions.map((submission) => ({
+            id: submission?.id || '',
+            type: COMMUNITY_SHARE_TYPE_SCENIC_DISCOVERY,
+            submittedAt: submission?.submitted_at || submission?.submittedAt || '',
+            ownerId: '',
+            message: '',
+            caption: typeof submission?.caption === 'string' ? submission.caption.trim() : '',
+            photo: submission?.image_url
+              ? {
+                  publicUrl: submission.image_url,
+                  storagePath: submission?.image_path || '',
+                  cropPosition: createDefaultCropPosition(),
+                }
+              : null,
+          })),
+        ];
 
         setCommunityShareSubmissions(normalizeCommunityShareSubmissions(normalizedShares));
       } catch {
