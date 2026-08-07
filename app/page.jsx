@@ -71,20 +71,11 @@ const DAY_ONE_FIXED_PAIR_CAPTIONS = {
   before: 'Even parking lots can look better!',
   after: 'So simple!',
 };
-const SEE_THE_DIFFERENCE_FIXED_PAIR = {
-  id: 'see-the-difference-fixed-public-pair',
-  beforeImage: {
-    publicUrl: '/1817.jpg',
-  },
-  afterImage: {
-    publicUrl: '/1720.jpg',
-  },
-  pairCaption: '',
-  beforeCaption: '',
-  afterCaption: '',
-  submittedAt: '',
-  ownerId: '',
-  submissionId: 'see-the-difference-fixed-public-pair',
+const DAY_ONE_FIXED_BEFORE_IMAGE = {
+  publicUrl: '/1817.jpg',
+};
+const DAY_ONE_FIXED_AFTER_IMAGE = {
+  publicUrl: '/1720.jpg',
 };
 
 const SHARE_DESTINATION_BY_TYPE = {
@@ -557,22 +548,16 @@ export default function Home() {
       };
     });
 
-  const normalizeCaption = (value) => String(value || '').trim().toLowerCase();
-  const dayOneFixedPair = beforeAfterPhotoPairs.find((pair) => {
-    const pairBeforeCaption = normalizeCaption(pair.beforeCaption || pair.beforeImage?.caption);
-    const pairAfterCaption = normalizeCaption(pair.afterCaption || pair.afterImage?.caption);
-
-    return (
-      pairBeforeCaption === normalizeCaption(DAY_ONE_FIXED_PAIR_CAPTIONS.before)
-      && pairAfterCaption === normalizeCaption(DAY_ONE_FIXED_PAIR_CAPTIONS.after)
-    );
-  }) || null;
-  const dayOneFixedBeforeImage = dayOneFixedPair?.beforeImage || null;
-  const dayOneFixedAfterImage = dayOneFixedPair?.afterImage || null;
+  const dayOneFixedBeforeImage = DAY_ONE_FIXED_BEFORE_IMAGE;
+  const dayOneFixedAfterImage = DAY_ONE_FIXED_AFTER_IMAGE;
 
   const beforeAfterPairsPerView = 2;
-  const beforeAfterGalleryPageCount = 1;
-  const visibleBeforeAfterPairs = [SEE_THE_DIFFERENCE_FIXED_PAIR];
+  const beforeAfterGalleryPageCount = Math.max(1, Math.ceil(beforeAfterPhotoPairs.length / beforeAfterPairsPerView));
+  const beforeAfterGalleryStartIndex = beforeAfterPairIndex * beforeAfterPairsPerView;
+  const visibleBeforeAfterPairs = beforeAfterPhotoPairs.slice(
+    beforeAfterGalleryStartIndex,
+    beforeAfterGalleryStartIndex + beforeAfterPairsPerView
+  );
 
   const activeVolunteerPhoto = volunteerGroupPhotos[volunteerPhotoIndex] || null;
   const activeBeforeAfterPair = beforeAfterPhotoPairs[beforeAfterPairIndex] || null;
@@ -3269,7 +3254,9 @@ export default function Home() {
                 <h3 className={`${balooDisplay.className} text-center text-3xl font-bold text-[#0f9aa1] sm:text-4xl lg:text-5xl`}>See the Difference.</h3>
                 <div className="relative mt-6 w-full min-w-0 max-w-[100vw] overflow-x-hidden box-border px-2 md:px-10">
                   <div className="grid w-full min-w-0 max-w-full box-border grid-cols-1 gap-4 md:grid-cols-2">
-                    {visibleBeforeAfterPairs.map((pair, slotIndex) => {
+                    {[0, 1].map((slotIndex) => {
+                      const pair = visibleBeforeAfterPairs[slotIndex] || null;
+
                       return (
                         <div key={pair?.id || `before-after-slot-${slotIndex}`} className={`mx-auto flex h-full w-full min-w-0 max-w-full box-border flex-col rounded-[1.4rem] border border-[#0f9aa1]/45 bg-[linear-gradient(145deg,_#0f9aa1_0%,_#0a5065_100%)] px-3 pb-2 pt-2 text-left text-white shadow-[0_14px_34px_rgba(15,154,161,0.28)] transition-shadow duration-700 md:max-w-none md:px-4 md:pb-3 md:pt-3 ${pair?.id === activeBeforeAfterHighlightKey ? 'shadow-[0_0_0_3px_rgba(244,201,76,0.7),0_18px_45px_rgba(244,201,76,0.38)]' : ''}`}>
                           <div className="relative mt-0.5 aspect-video min-h-[16rem] w-full min-w-0 max-w-full box-border overflow-hidden rounded-[1rem] border border-[#002b49]/45 bg-[linear-gradient(145deg,_#0f9aa1_0%,_#0a5065_100%)] sm:min-h-[18rem] lg:min-h-[21rem]" aria-label="Before and after photo pair">
@@ -3346,7 +3333,7 @@ export default function Home() {
 
                 <div className="mt-2 flex items-center justify-center gap-2 text-[10px] font-medium leading-4 text-[#1f5f7a] sm:text-[11px] sm:leading-5">
                   <p>
-                    {visibleBeforeAfterPairs.length
+                    {beforeAfterPhotoPairs.length
                       ? `${Math.min(beforeAfterPairIndex + 1, beforeAfterGalleryPageCount)} of ${beforeAfterGalleryPageCount}`
                       : '0 of 0'}
                   </p>
