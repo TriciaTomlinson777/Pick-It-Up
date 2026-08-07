@@ -4,11 +4,14 @@ import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
-import { SITE_CONTACT_MAILTO } from '@/lib/site-contact';
+import { submitContactStyleForm, buildSubmissionFields } from '@/lib/contact-form-submission';
 
 export default function Partners() {
   const [isPartnerModalOpen, setIsPartnerModalOpen] = useState(false);
   const [selectedOrganizationType, setSelectedOrganizationType] = useState('');
+  const [isSubmittingPartnerForm, setIsSubmittingPartnerForm] = useState(false);
+  const [partnerFormErrorMessage, setPartnerFormErrorMessage] = useState('');
+  const [partnerConfirmationMessage, setPartnerConfirmationMessage] = useState('');
 
   const partnerTypes = [
     {
@@ -62,7 +65,51 @@ export default function Partners() {
   const closePartnerModal = () => {
     setIsPartnerModalOpen(false);
     setSelectedOrganizationType('');
+    setPartnerFormErrorMessage('');
   };
+
+  async function handlePartnerSubmit(event) {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    setIsSubmittingPartnerForm(true);
+    setPartnerFormErrorMessage('');
+    setPartnerConfirmationMessage('');
+
+    try {
+      const formData = new FormData(form);
+      const email = String(formData.get('email') || '').trim();
+      const organizationType = String(formData.get('organizationType') || '').trim() || 'Partner Inquiry';
+
+      await submitContactStyleForm({
+        formType: 'Partners Form',
+        subject: `Partners Form: ${organizationType}`,
+        replyTo: email,
+        sourcePath: '/partners',
+        fields: buildSubmissionFields(formData, [
+          { name: 'organizationName', label: 'Organization Name' },
+          { name: 'contactName', label: 'Contact Name' },
+          { name: 'email', label: 'Email' },
+          { name: 'phone', label: 'Phone Number' },
+          { name: 'organizationType', label: 'Organization Type' },
+          { name: 'partnershipDetails', label: 'Partnership Details' },
+        ]),
+      });
+
+      form.reset();
+      closePartnerModal();
+      setPartnerConfirmationMessage('Thank you for reaching out! We\'ve received your partnership inquiry and will be in touch soon.');
+    } catch (error) {
+      setPartnerFormErrorMessage(error.message || 'Unable to send partnership inquiry.');
+    } finally {
+      setIsSubmittingPartnerForm(false);
+    }
+  }
 
   return (
     <>
@@ -82,6 +129,12 @@ export default function Partners() {
       {/* Partnership Opportunities */}
       <section className="py-16 sm:py-24">
         <div className="container-custom">
+          {partnerConfirmationMessage ? (
+            <p className="mb-6 rounded-xl border border-[#1f8f3c]/20 bg-[#ecf9f0] px-4 py-3 text-sm font-semibold text-[#1f8f3c]">
+              {partnerConfirmationMessage}
+            </p>
+          ) : null}
+
           <div className="rounded-2xl bg-white p-6 shadow-md sm:p-8">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {partnerTypes.map((partnerType) => (
@@ -136,7 +189,7 @@ export default function Partners() {
               Partner With Pick It Up Seattle
             </h3>
 
-            <form className="mt-6 space-y-6" action={SITE_CONTACT_MAILTO} method="post" encType="text/plain">
+            <form className="mt-6 space-y-6" onSubmit={handlePartnerSubmit}>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <label className="block">
                   <span className="mb-1 block text-sm font-medium text-gray-700">Organization Name</span>
@@ -203,8 +256,14 @@ export default function Partners() {
                 />
               </div>
 
-              <button type="submit" className="btn-primary w-full sm:w-auto">
-                Submit
+              {partnerFormErrorMessage ? (
+                <p className="rounded-xl border border-[#b23d31]/20 bg-[#fff2f0] px-4 py-2.5 text-sm font-semibold text-[#b23d31]">
+                  {partnerFormErrorMessage}
+                </p>
+              ) : null}
+
+              <button type="submit" disabled={isSubmittingPartnerForm} className="btn-primary w-full sm:w-auto disabled:opacity-70">
+                {isSubmittingPartnerForm ? 'Sending...' : 'Submit'}
               </button>
             </form>
           </div>

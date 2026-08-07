@@ -1,8 +1,57 @@
+"use client";
+
+import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { SITE_CONTACT_EMAIL, SITE_CONTACT_MAILTO } from '@/lib/site-contact';
+import { buildSubmissionFields, submitContactStyleForm } from '@/lib/contact-form-submission';
 
 export default function Contact() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSuccessMessage('');
+    setErrorMessage('');
+
+    try {
+      const formData = new FormData(form);
+      const email = String(formData.get('email') || '').trim();
+      const inquirySubject = String(formData.get('subject') || '').trim() || 'General Inquiry';
+
+      await submitContactStyleForm({
+        formType: 'Contact Form',
+        subject: `Contact Form: ${inquirySubject}`,
+        replyTo: email,
+        sourcePath: '/contact',
+        fields: buildSubmissionFields(formData, [
+          { name: 'firstName', label: 'First Name' },
+          { name: 'lastName', label: 'Last Name' },
+          { name: 'email', label: 'Email' },
+          { name: 'subject', label: 'Subject' },
+          { name: 'message', label: 'Message' },
+        ]),
+      });
+
+      form.reset();
+      setSuccessMessage('Thank you for reaching out! We\'ve received your message and will be in touch soon.');
+    } catch (error) {
+      setErrorMessage(error.message || 'Unable to send message.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   return (
     <>
       <Header />
@@ -44,7 +93,7 @@ export default function Contact() {
             {/* Contact Form */}
             <div className="lg:col-span-1">
               <h2 className="mb-8 text-2xl font-bold text-[#ef7f2d]">Send us a Message</h2>
-              <form className="space-y-6" action={SITE_CONTACT_MAILTO} method="post" encType="text/plain">
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -110,8 +159,20 @@ export default function Contact() {
                   ></textarea>
                 </div>
 
-                <button type="submit" className="btn-primary w-full">
-                  Send Message
+                {successMessage ? (
+                  <p className="rounded-xl border border-[#1f8f3c]/20 bg-[#ecf9f0] px-4 py-2.5 text-sm font-semibold text-[#1f8f3c]">
+                    {successMessage}
+                  </p>
+                ) : null}
+
+                {errorMessage ? (
+                  <p className="rounded-xl border border-[#b23d31]/20 bg-[#fff2f0] px-4 py-2.5 text-sm font-semibold text-[#b23d31]">
+                    {errorMessage}
+                  </p>
+                ) : null}
+
+                <button type="submit" disabled={isSubmitting} className="btn-primary w-full disabled:opacity-70">
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
 
                 <p className="text-center text-sm text-gray-600">

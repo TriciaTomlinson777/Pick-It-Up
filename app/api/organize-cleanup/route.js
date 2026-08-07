@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { getConfiguredFormDestinationEmail, isValidEmailAddress, sendMailMessage } from '@/lib/form-mailer';
 
 function formatConfirmationMessage({
   organizerName,
@@ -48,7 +46,7 @@ export async function POST(request) {
       });
     }
 
-    if (!EMAIL_PATTERN.test(organizerEmail)) {
+    if (!isValidEmailAddress(organizerEmail)) {
       return NextResponse.json({
         ok: true,
         message:
@@ -56,13 +54,9 @@ export async function POST(request) {
       });
     }
 
-    const host = process.env.SMTP_HOST;
-    const port = Number(process.env.SMTP_PORT || '587');
-    const user = process.env.SMTP_USER;
-    const pass = process.env.SMTP_PASS;
-    const from = process.env.SMTP_FROM || user;
+    const destination = getConfiguredFormDestinationEmail();
 
-    if (!host || !user || !pass || !from) {
+    if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
       const message =
         'Cleanup saved successfully. Confirmation email skipped because SMTP is not configured.';
       console.info(message);
@@ -70,18 +64,7 @@ export async function POST(request) {
     }
 
     try {
-      const transporter = nodemailer.createTransport({
-        host,
-        port,
-        secure: port === 465,
-        auth: {
-          user,
-          pass,
-        },
-      });
-
-      await transporter.sendMail({
-        from,
+      await sendMailMessage({
         to: organizerEmail,
         subject: 'Your Pick It Up Seattle Cleanup Has Been Posted',
         text: formatConfirmationMessage({
@@ -92,6 +75,24 @@ export async function POST(request) {
           meetingPlace,
         }),
       });
+
+      if (destination) {
+        await sendMailMessage({
+          to: destination,
+          subject: `New Organize a Cleanup Submission: ${cleanupTitle}`,
+          text: [
+            'A new cleanup was submitted to Pick It Up Seattle.',
+            '',
+            `Cleanup Title: ${cleanupTitle}`,
+            `Date: ${eventDate}`,
+            `Start Time: ${startTime}`,
+            `Meeting Place: ${meetingPlace}`,
+            `Organizer Name: ${organizerName}`,
+            `Organizer Email: ${organizerEmail}`,
+          ].join('\n'),
+          replyTo: organizerEmail,
+        });
+      }
     } catch (emailError) {
       console.error('Cleanup saved, but confirmation email failed:', emailError);
       return NextResponse.json({

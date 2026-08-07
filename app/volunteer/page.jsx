@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { SITE_CONTACT_EMAIL, SITE_CONTACT_MAILTO } from '@/lib/site-contact';
+import { buildSubmissionFields, submitContactStyleForm } from '@/lib/contact-form-submission';
 
 export default function Volunteer() {
   const participationCardBackgroundClasses = [
@@ -66,6 +66,24 @@ export default function Volunteer() {
   const [copyMessage, setCopyMessage] = useState('');
   const [showPhotographerForm, setShowPhotographerForm] = useState(false);
   const [showAmbassadorForm, setShowAmbassadorForm] = useState(false);
+  const [formSubmissionState, setFormSubmissionState] = useState({});
+  const [submissionConfirmationMessage, setSubmissionConfirmationMessage] = useState('');
+
+  const getFormState = (formKey) => formSubmissionState[formKey] || {
+    isSubmitting: false,
+    successMessage: '',
+    errorMessage: '',
+  };
+
+  const updateFormState = (formKey, nextState) => {
+    setFormSubmissionState((current) => ({
+      ...current,
+      [formKey]: {
+        ...(current[formKey] || {}),
+        ...nextState,
+      },
+    }));
+  };
 
   const closeModal = () => {
     setActivePanel('');
@@ -172,6 +190,55 @@ export default function Volunteer() {
     }
   };
 
+  async function handleServerSubmittedForm(event, config) {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    updateFormState(config.formKey, {
+      isSubmitting: true,
+      successMessage: '',
+      errorMessage: '',
+    });
+    setSubmissionConfirmationMessage('');
+
+    try {
+      const formData = new FormData(form);
+      const replyTo = String(formData.get(config.replyToFieldName || 'email') || '').trim();
+
+      await submitContactStyleForm({
+        formType: config.formType,
+        subject: config.subject(formData),
+        replyTo,
+        sourcePath: '/volunteer',
+        fields: buildSubmissionFields(formData, config.fields),
+      });
+
+      form.reset();
+
+      if (config.closeOnSuccess) {
+        closeModal();
+        setSubmissionConfirmationMessage(config.confirmationMessage || 'Thank you for reaching out! We\'ve received your message and will be in touch soon.');
+      }
+
+      updateFormState(config.formKey, {
+        isSubmitting: false,
+        successMessage: config.successMessage,
+        errorMessage: '',
+      });
+    } catch (error) {
+      updateFormState(config.formKey, {
+        isSubmitting: false,
+        successMessage: '',
+        errorMessage: error.message || 'Unable to send message.',
+      });
+    }
+  }
+
   const renderCard = (option, index) => {
     const backgroundClassName = participationCardBackgroundClasses[index] || participationCardBackgroundClasses[0];
     const contentStyle = participationCardContentStyles[index] || participationCardContentStyles[0];
@@ -273,7 +340,20 @@ export default function Volunteer() {
           </button>
 
           {showAmbassadorForm ? (
-            <form className="mt-6 space-y-4" action={SITE_CONTACT_MAILTO} method="post" encType="text/plain">
+            <form className="mt-6 space-y-4" onSubmit={(event) => handleServerSubmittedForm(event, {
+              formKey: 'ambassador',
+              formType: 'Join Us Community Ambassador Form',
+              subject: () => 'Join Us: Community Ambassador Content Submission',
+              fields: [
+                { name: 'name', label: 'Name' },
+                { name: 'email', label: 'Email' },
+                { name: 'contentLink', label: 'Content Link' },
+                { name: 'message', label: 'Optional Message' },
+              ],
+              successMessage: 'Your content submission has been sent.',
+              closeOnSuccess: true,
+              confirmationMessage: 'Thank you for reaching out! We\'ve received your message and will be in touch soon.',
+            })}>
               <label className="block">
                 <span className="mb-1 block text-sm font-medium text-gray-700">Name</span>
                 <input name="name" type="text" required className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-seattle-green" />
@@ -290,8 +370,19 @@ export default function Volunteer() {
                 <span className="mb-1 block text-sm font-medium text-gray-700">Optional message</span>
                 <textarea name="message" rows="4" className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-seattle-green" />
               </label>
-              <button type="submit" className="btn-primary">Submit</button>
-              <p className="text-xs text-gray-600">This form is prepared for future connection to {SITE_CONTACT_EMAIL}.</p>
+              {getFormState('ambassador').successMessage ? (
+                <p className="rounded-xl border border-[#1f8f3c]/20 bg-[#ecf9f0] px-4 py-2.5 text-sm font-semibold text-[#1f8f3c]">
+                  {getFormState('ambassador').successMessage}
+                </p>
+              ) : null}
+              {getFormState('ambassador').errorMessage ? (
+                <p className="rounded-xl border border-[#b23d31]/20 bg-[#fff2f0] px-4 py-2.5 text-sm font-semibold text-[#b23d31]">
+                  {getFormState('ambassador').errorMessage}
+                </p>
+              ) : null}
+              <button type="submit" disabled={getFormState('ambassador').isSubmitting} className="btn-primary disabled:opacity-70">
+                {getFormState('ambassador').isSubmitting ? 'Sending...' : 'Submit'}
+              </button>
             </form>
           ) : null}
         </div>
@@ -311,7 +402,19 @@ export default function Volunteer() {
           </div>
 
           {showPhotographerForm ? (
-            <form className="mt-6 space-y-4" action={SITE_CONTACT_MAILTO} method="post" encType="text/plain">
+            <form className="mt-6 space-y-4" onSubmit={(event) => handleServerSubmittedForm(event, {
+              formKey: 'photographer',
+              formType: 'Join Us Event Photographer Form',
+              subject: () => 'Join Us: Event Photographer Volunteer',
+              fields: [
+                { name: 'name', label: 'Name' },
+                { name: 'email', label: 'Email' },
+                { name: 'message', label: 'Message' },
+              ],
+              successMessage: 'Your volunteer message has been sent.',
+              closeOnSuccess: true,
+              confirmationMessage: 'Thank you for reaching out! We\'ve received your message and will be in touch soon.',
+            })}>
               <label className="block">
                 <span className="mb-1 block text-sm font-medium text-gray-700">Name</span>
                 <input name="name" type="text" required className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-seattle-green" />
@@ -324,8 +427,19 @@ export default function Volunteer() {
                 <span className="mb-1 block text-sm font-medium text-gray-700">Message</span>
                 <textarea name="message" rows="4" required className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-seattle-green" />
               </label>
-              <button type="submit" className="btn-primary">Submit</button>
-              <p className="text-xs text-gray-600">This form is prepared for future connection to {SITE_CONTACT_EMAIL}.</p>
+              {getFormState('photographer').successMessage ? (
+                <p className="rounded-xl border border-[#1f8f3c]/20 bg-[#ecf9f0] px-4 py-2.5 text-sm font-semibold text-[#1f8f3c]">
+                  {getFormState('photographer').successMessage}
+                </p>
+              ) : null}
+              {getFormState('photographer').errorMessage ? (
+                <p className="rounded-xl border border-[#b23d31]/20 bg-[#fff2f0] px-4 py-2.5 text-sm font-semibold text-[#b23d31]">
+                  {getFormState('photographer').errorMessage}
+                </p>
+              ) : null}
+              <button type="submit" disabled={getFormState('photographer').isSubmitting} className="btn-primary disabled:opacity-70">
+                {getFormState('photographer').isSubmitting ? 'Sending...' : 'Submit'}
+              </button>
             </form>
           ) : null}
         </div>
@@ -335,7 +449,23 @@ export default function Volunteer() {
     if (activePanel === 'community-partner') {
       return (
         <div className="rounded-2xl border border-[#0f9aa1]/18 bg-white p-6 shadow-[0_14px_30px_rgba(0,43,73,0.1)] sm:p-8">
-          <form className="space-y-4" action={SITE_CONTACT_MAILTO} method="post" encType="text/plain">
+          <form className="space-y-4" onSubmit={(event) => handleServerSubmittedForm(event, {
+            formKey: 'community-partner',
+            formType: 'Join Us Community Partner Form',
+            subject: (formData) => `Join Us: Community Partner - ${String(formData.get('organizationType') || '').trim() || 'Inquiry'}`,
+            fields: [
+              { name: 'organization', label: 'Organization or Business' },
+              { name: 'contactName', label: 'Contact Name' },
+              { name: 'email', label: 'Email' },
+              { name: 'phone', label: 'Phone' },
+              { name: 'organizationType', label: 'Type of Organization' },
+              { name: 'partnershipIdea', label: 'How Would You Like to Partner' },
+              { name: 'message', label: 'Message' },
+            ],
+            successMessage: 'Your partnership message has been sent.',
+            closeOnSuccess: true,
+            confirmationMessage: 'Thank you for reaching out! We\'ve received your partnership inquiry and will be in touch soon.',
+          })}>
             <label className="block">
               <span className="mb-1 block text-sm font-medium text-gray-700">Organization or Business</span>
               <input name="organization" type="text" required className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-seattle-green" />
@@ -364,8 +494,19 @@ export default function Volunteer() {
               <span className="mb-1 block text-sm font-medium text-gray-700">Message</span>
               <textarea name="message" rows="4" required className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-seattle-green" />
             </label>
-            <button type="submit" className="btn-primary">Submit</button>
-            <p className="text-xs text-gray-600">This form is prepared for future connection to {SITE_CONTACT_EMAIL}.</p>
+            {getFormState('community-partner').successMessage ? (
+              <p className="rounded-xl border border-[#1f8f3c]/20 bg-[#ecf9f0] px-4 py-2.5 text-sm font-semibold text-[#1f8f3c]">
+                {getFormState('community-partner').successMessage}
+              </p>
+            ) : null}
+            {getFormState('community-partner').errorMessage ? (
+              <p className="rounded-xl border border-[#b23d31]/20 bg-[#fff2f0] px-4 py-2.5 text-sm font-semibold text-[#b23d31]">
+                {getFormState('community-partner').errorMessage}
+              </p>
+            ) : null}
+            <button type="submit" disabled={getFormState('community-partner').isSubmitting} className="btn-primary disabled:opacity-70">
+              {getFormState('community-partner').isSubmitting ? 'Sending...' : 'Submit'}
+            </button>
           </form>
         </div>
       );
@@ -376,7 +517,20 @@ export default function Volunteer() {
         <div className="rounded-2xl border border-[#0f9aa1]/18 bg-white p-6 shadow-[0_14px_30px_rgba(0,43,73,0.1)] sm:p-8">
           <h3 className="text-2xl font-bold text-[#002b49]">Have an Idea?</h3>
           <p className="mt-3 text-base leading-7 text-[#516b7d]">Great ideas help movements grow. We’d love to hear yours.</p>
-          <form className="mt-6 space-y-4" action={SITE_CONTACT_MAILTO} method="post" encType="text/plain">
+          <form className="mt-6 space-y-4" onSubmit={(event) => handleServerSubmittedForm(event, {
+            formKey: 'creative-team',
+            formType: 'Join Us Creative Team Form',
+            subject: () => 'Join Us: Creative Team Idea',
+            fields: [
+              { name: 'name', label: 'Name' },
+              { name: 'email', label: 'Email' },
+              { name: 'interestArea', label: 'Area of Interest' },
+              { name: 'idea', label: 'Idea' },
+            ],
+            successMessage: 'Your idea has been sent.',
+            closeOnSuccess: true,
+            confirmationMessage: 'Thank you for reaching out! We\'ve received your message and will be in touch soon.',
+          })}>
             <label className="block">
               <span className="mb-1 block text-sm font-medium text-gray-700">Name</span>
               <input name="name" type="text" required className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-seattle-green" />
@@ -393,8 +547,19 @@ export default function Volunteer() {
               <span className="mb-1 block text-sm font-medium text-gray-700">Tell us your idea</span>
               <textarea name="idea" rows="4" required className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-seattle-green" />
             </label>
-            <button type="submit" className="btn-primary">Submit</button>
-            <p className="text-xs text-gray-600">This form is prepared for future connection to {SITE_CONTACT_EMAIL}.</p>
+            {getFormState('creative-team').successMessage ? (
+              <p className="rounded-xl border border-[#1f8f3c]/20 bg-[#ecf9f0] px-4 py-2.5 text-sm font-semibold text-[#1f8f3c]">
+                {getFormState('creative-team').successMessage}
+              </p>
+            ) : null}
+            {getFormState('creative-team').errorMessage ? (
+              <p className="rounded-xl border border-[#b23d31]/20 bg-[#fff2f0] px-4 py-2.5 text-sm font-semibold text-[#b23d31]">
+                {getFormState('creative-team').errorMessage}
+              </p>
+            ) : null}
+            <button type="submit" disabled={getFormState('creative-team').isSubmitting} className="btn-primary disabled:opacity-70">
+              {getFormState('creative-team').isSubmitting ? 'Sending...' : 'Submit'}
+            </button>
           </form>
         </div>
       );
@@ -403,7 +568,20 @@ export default function Volunteer() {
     return (
       <div className="rounded-2xl border border-[#0f9aa1]/18 bg-white p-6 shadow-[0_14px_30px_rgba(0,43,73,0.1)] sm:p-8">
         <h3 className="text-2xl font-bold text-[#002b49]">How Would You Like to Help?</h3>
-        <form className="mt-6 space-y-4" action={SITE_CONTACT_MAILTO} method="post" encType="text/plain">
+        <form className="mt-6 space-y-4" onSubmit={(event) => handleServerSubmittedForm(event, {
+          formKey: 'support-mission',
+          formType: 'Join Us Support the Mission Form',
+          subject: () => 'Join Us: Support the Mission',
+          fields: [
+            { name: 'supportOptions', label: 'Support Options' },
+            { name: 'name', label: 'Name' },
+            { name: 'email', label: 'Email' },
+            { name: 'message', label: 'Message' },
+          ],
+          successMessage: 'Your support message has been sent.',
+          closeOnSuccess: true,
+          confirmationMessage: 'Thank you for reaching out! We\'ve received your message and will be in touch soon.',
+        })}>
           <fieldset className="space-y-2">
             <legend className="mb-2 block text-sm font-medium text-gray-700">Select all that apply</legend>
             {[
@@ -433,8 +611,19 @@ export default function Volunteer() {
             <span className="mb-1 block text-sm font-medium text-gray-700">Message</span>
             <textarea name="message" rows="4" required className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-seattle-green" />
           </label>
-          <button type="submit" className="btn-primary">Submit</button>
-          <p className="text-xs text-gray-600">This form is prepared for future connection to {SITE_CONTACT_EMAIL}.</p>
+          {getFormState('support-mission').successMessage ? (
+            <p className="rounded-xl border border-[#1f8f3c]/20 bg-[#ecf9f0] px-4 py-2.5 text-sm font-semibold text-[#1f8f3c]">
+              {getFormState('support-mission').successMessage}
+            </p>
+          ) : null}
+          {getFormState('support-mission').errorMessage ? (
+            <p className="rounded-xl border border-[#b23d31]/20 bg-[#fff2f0] px-4 py-2.5 text-sm font-semibold text-[#b23d31]">
+              {getFormState('support-mission').errorMessage}
+            </p>
+          ) : null}
+          <button type="submit" disabled={getFormState('support-mission').isSubmitting} className="btn-primary disabled:opacity-70">
+            {getFormState('support-mission').isSubmitting ? 'Sending...' : 'Submit'}
+          </button>
         </form>
       </div>
     );
@@ -461,6 +650,12 @@ export default function Volunteer() {
       <section className="bg-[linear-gradient(180deg,_#fff9eb_0%,_#f6fcff_100%)] py-16">
         <div className="container-custom">
           <div className="mx-auto max-w-6xl">
+            {submissionConfirmationMessage ? (
+              <p className="mb-8 rounded-xl border border-[#1f8f3c]/20 bg-[#ecf9f0] px-4 py-3 text-sm font-semibold text-[#1f8f3c]">
+                {submissionConfirmationMessage}
+              </p>
+            ) : null}
+
             <h2 className="heading-lg mb-4 text-center text-[#0f9aa1]">Ways to Make a Difference</h2>
             <p className="mx-auto mb-12 max-w-4xl text-center text-lg leading-relaxed text-[#1f5f7a]">
               There are many ways to take part in the movement, and every one of them helps move Seattle forward.
