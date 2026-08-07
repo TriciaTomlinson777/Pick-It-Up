@@ -1208,6 +1208,64 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    const abortController = new AbortController();
+
+    const loadCommunityActionPhotos = async () => {
+      try {
+        const response = await fetch('/api/community-action-photos', {
+          signal: abortController.signal,
+          cache: 'no-store',
+        });
+
+        if (!response.ok) {
+          throw new Error('Unable to load Community in Action photos.');
+        }
+
+        const data = await response.json();
+        const photos = Array.isArray(data?.photos) ? data.photos : [];
+
+        const submissions = photos
+          .map((photo) => {
+            const publicUrl = String(photo?.image_url || '').trim();
+            const storagePath = String(photo?.image_path || '').trim();
+            const submittedAt = String(photo?.submitted_at || '').trim() || new Date().toISOString();
+
+            if (!publicUrl && !storagePath) {
+              return null;
+            }
+
+            return {
+              id: photo?.id || submittedAt,
+              submittedAt,
+              photoType: PHOTO_TYPE_COMMUNITY_ACTION,
+              ownerId: '',
+              images: [
+                {
+                  publicUrl,
+                  storagePath,
+                  cropPosition: createDefaultCropPosition(),
+                },
+              ],
+            };
+          })
+          .filter(Boolean);
+
+        setCommunityActionSubmissions(normalizeCommunityActionSubmissions(submissions));
+      } catch {
+        if (!abortController.signal.aborted) {
+          // Keep local fallback data when server loading fails.
+        }
+      }
+    };
+
+    loadCommunityActionPhotos();
+
+    return () => {
+      abortController.abort();
+    };
+  }, []);
+
+  useEffect(() => {
     try {
       const savedShares = JSON.parse(localStorage.getItem(COMMUNITY_SHARE_SUBMISSIONS_KEY) || '[]');
 
@@ -2274,6 +2332,39 @@ export default function Home() {
     }
   };
 
+  const submitCommunityActionPhotoForReview = async (submission) => {
+    const images = Array.isArray(submission?.images) ? submission.images : [];
+    const image = images[0] || null;
+    const imageUrl = String(image?.publicUrl || '').trim();
+
+    if (!imageUrl) {
+      throw new Error('Please add one Community in Action photo before submitting.');
+    }
+
+    const response = await fetch('/api/community-action-photos', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        image_url: imageUrl,
+        image_path: String(image?.storagePath || ''),
+        caption: '',
+      }),
+    });
+
+    let data = null;
+    try {
+      data = await response.json();
+    } catch {
+      data = null;
+    }
+
+    if (!response.ok) {
+      throw new Error(data?.error || 'Unable to submit community action photo.');
+    }
+  };
+
   const buildCommunityActionSubmission = async (submissionId) => {
     if (!communityActionSelectedPhoto) {
       throw new Error('Please add one Community in Action photo before submitting.');
@@ -2353,11 +2444,8 @@ export default function Home() {
 
     try {
       const newSubmission = await buildCommunityActionSubmission(submissionId);
-      const didPersist = saveCommunityActionSubmissionToStorage(newSubmission);
-
-      if (!didPersist) {
-        throw new Error('Your photo was uploaded, but it could not be saved. Please try again.');
-      }
+      await submitCommunityActionPhotoForReview(newSubmission);
+      saveCommunityActionSubmissionToStorage(newSubmission);
 
       closePhotoModal();
     } catch (error) {
