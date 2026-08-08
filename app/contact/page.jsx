@@ -10,6 +10,7 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [formResetKey, setFormResetKey] = useState(0);
   const confirmationRef = useRef(null);
 
   useEffect(() => {
@@ -18,6 +19,19 @@ export default function Contact() {
     }
 
     confirmationRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, [successMessage]);
+
+  useEffect(() => {
+    if (!successMessage) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setSuccessMessage('');
+      setFormResetKey((value) => value + 1);
+    }, 4000);
+
+    return () => window.clearTimeout(timeoutId);
   }, [successMessage]);
 
   async function handleSubmit(event) {
@@ -52,7 +66,6 @@ export default function Contact() {
         ]),
       });
 
-      form.reset();
       setSuccessMessage('Thank you for reaching out! We\'ve received your message and will be in touch soon.');
     } catch (error) {
       setErrorMessage(error.message || 'Unable to send message.');
@@ -108,7 +121,7 @@ export default function Contact() {
                   <p className="mt-3 text-base font-semibold text-[#1f8f3c]">We’ve received your message and will be in touch soon.</p>
                 </div>
               ) : (
-                <form className="space-y-6" onSubmit={handleSubmit}>
+                <form key={formResetKey} className="space-y-6" onSubmit={handleSubmit}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
