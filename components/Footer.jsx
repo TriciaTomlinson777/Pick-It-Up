@@ -118,6 +118,18 @@ export default function Footer({ showHomeShareButton = false }) {
           </div>
         </div>
 
+        {showHomeShareButton ? (
+          <div className="mb-4 mt-4 flex w-full -translate-y-8 justify-center [&_.inline-flex]:relative [&_.inline-flex>span]:absolute [&_.inline-flex>span]:left-[calc(100%+0.5rem)] [&_.inline-flex>span]:top-1/2 [&_.inline-flex>span]:-translate-y-1/2">
+            <ShareButton
+              url="/"
+              title="Pick It Up Seattle"
+              text="Join me in supporting Pick It Up Seattle."
+              label="Share Pick It Up Seattle"
+              className="bg-[linear-gradient(145deg,_#2ec4c7_0%,_#7cd157_62%,_#69be28_100%)] text-[#002244]"
+            />
+          </div>
+        ) : null}
+
         <div className="border-t border-[#69BE28]/35 pt-6 lg:pt-8">
           <div className="flex flex-col items-center justify-between text-sm text-[#1a5570] md:flex-row lg:text-base">
             <p>&copy; {currentYear} Pick It Up Seattle. All rights reserved.</p>
@@ -131,18 +143,6 @@ export default function Footer({ showHomeShareButton = false }) {
             </div>
           </div>
         </div>
-
-        {showHomeShareButton ? (
-          <div className="mt-8 flex w-full justify-center [&_.inline-flex]:relative [&_.inline-flex>span]:absolute [&_.inline-flex>span]:left-[calc(100%+0.5rem)] [&_.inline-flex>span]:top-1/2 [&_.inline-flex>span]:-translate-y-1/2">
-            <ShareButton
-              url="/"
-              title="Pick It Up Seattle"
-              text="Join me in supporting Pick It Up Seattle."
-              label="Share Pick It Up Seattle"
-              className="bg-[linear-gradient(145deg,_#2ec4c7_0%,_#7cd157_62%,_#69be28_100%)] text-[#002244]"
-            />
-          </div>
-        ) : null}
       </div>
     </footer>
   );
