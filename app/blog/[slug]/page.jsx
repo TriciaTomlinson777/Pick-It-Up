@@ -111,6 +111,7 @@ export default async function BlogPostPage({ params }) {
                 title={`${post.title} | Pick It Up Seattle`}
                 text={`Read this story from Pick It Up Seattle: ${post.title}`}
                 label="Share Story"
+                className="btn-secondary"
               />
             </div>
 

@@ -3144,7 +3144,7 @@ export default function Home() {
                 title="Pick It Up Seattle"
                 text="Join me in supporting Pick It Up Seattle."
                 label="Share Pick It Up Seattle"
-                className="border-white/35 bg-[#fff9ee] text-[#1f5f7a] hover:bg-[#fff2d9]"
+                className="btn-warm"
               />
             </div>
             <div className="homepage-featured-gallery-row relative mx-auto mt-10 grid w-full gap-7 text-left md:gap-8 lg:grid-cols-2 lg:items-stretch lg:gap-8">
