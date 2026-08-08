@@ -3,6 +3,7 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import ShareButton from '@/components/ShareButton';
 import { useEffect, useState } from 'react';
 import { Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -63,6 +64,9 @@ function EventsContent() {
   const [joinedCleanupIds, setJoinedCleanupIds] = useState([]);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [latestCleanupId, setLatestCleanupId] = useState('');
+  const [joinSafetyAcknowledgments, setJoinSafetyAcknowledgments] = useState({});
+  const [joinValidationMessages, setJoinValidationMessages] = useState({});
+  const [openSafetyGuidelinesByCleanupId, setOpenSafetyGuidelinesByCleanupId] = useState({});
 
   useEffect(() => {
     setSubmittedCleanups(readStoredArray(PUBLIC_CLEANUPS_KEY));
@@ -172,6 +176,14 @@ function EventsContent() {
       return;
     }
 
+    if (!joinSafetyAcknowledgments[cleanupId]) {
+      setJoinValidationMessages((current) => ({
+        ...current,
+        [cleanupId]: 'Please check the Safety & Participation acknowledgment before signing up.',
+      }));
+      return;
+    }
+
     let updatedJoinedIds = joinedCleanupIds;
 
     const updatedCleanups = submittedCleanups.map((event) => {
@@ -197,6 +209,11 @@ function EventsContent() {
     if (updatedJoinedIds === joinedCleanupIds) {
       return;
     }
+
+    setJoinValidationMessages((current) => ({
+      ...current,
+      [cleanupId]: '',
+    }));
 
     setSubmittedCleanups(updatedCleanups);
     setJoinedCleanupIds(updatedJoinedIds);
@@ -457,6 +474,14 @@ function EventsContent() {
                 <p className="text-gray-600">
                   Find an upcoming cleanup event and sign up to participate.
                 </p>
+                <div className="mt-4 inline-flex">
+                  <ShareButton
+                    url="/events?view=join#join-cleanup"
+                    title="Join a Cleanup Adventure | Pick It Up Seattle"
+                    text="Invite someone to join a cleanup adventure with Pick It Up Seattle."
+                    label="Share This Section"
+                  />
+                </div>
               </div>
 
               {submittedCleanups.length > 0 ? (
@@ -495,6 +520,99 @@ function EventsContent() {
                             <p>👥 {signedUpCount} signed up</p>
                           </div>
                           <p className="text-gray-700 mb-6">{event.description}</p>
+
+                          {(() => {
+                            const isGuidelinesOpen = Boolean(openSafetyGuidelinesByCleanupId[event.id]);
+                            const hasAcknowledged = Boolean(joinSafetyAcknowledgments[event.id]);
+                            const validationMessage = joinValidationMessages[event.id];
+
+                            return (
+                              <div className="mb-4 space-y-3">
+                                <label className="flex items-start gap-2.5 rounded-xl border border-[#002b49]/12 bg-[#fffdf7] px-3 py-3 text-sm text-[#002b49]">
+                                  <input
+                                    type="checkbox"
+                                    checked={hasAcknowledged}
+                                    onChange={(acknowledgeEvent) => {
+                                      const isChecked = acknowledgeEvent.target.checked;
+
+                                      setJoinSafetyAcknowledgments((current) => ({
+                                        ...current,
+                                        [event.id]: isChecked,
+                                      }));
+
+                                      if (isChecked) {
+                                        setJoinValidationMessages((current) => ({
+                                          ...current,
+                                          [event.id]: '',
+                                        }));
+                                      }
+                                    }}
+                                    required
+                                    aria-required="true"
+                                    className="mt-0.5 h-4 w-4 rounded border-[#002b49]/25"
+                                  />
+                                  <span>
+                                    I have read and agree to the{' '}
+                                    <button
+                                      type="button"
+                                      onClick={(guidelineEvent) => {
+                                        guidelineEvent.preventDefault();
+                                        setOpenSafetyGuidelinesByCleanupId((current) => ({
+                                          ...current,
+                                          [event.id]: !current[event.id],
+                                        }));
+                                      }}
+                                      className="font-semibold text-[#0b6e85] underline underline-offset-2"
+                                      aria-expanded={isGuidelinesOpen}
+                                    >
+                                      Safety &amp; Participation Guidelines
+                                    </button>
+                                    .
+                                  </span>
+                                </label>
+
+                                <div className="rounded-xl border border-[#0f9aa1]/25 bg-[#eef9fc] px-3.5 py-3 text-sm text-[#1f5f7a]">
+                                  <div className="rounded-lg border border-[#0f9aa1]/22 bg-white/70">
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setOpenSafetyGuidelinesByCleanupId((current) => ({
+                                          ...current,
+                                          [event.id]: !current[event.id],
+                                        }));
+                                      }}
+                                      className="flex w-full items-center justify-between px-3 py-2 text-left text-sm font-semibold text-[#0b6e85]"
+                                      aria-expanded={isGuidelinesOpen}
+                                    >
+                                      <span>Safety &amp; Participation Guidelines</span>
+                                      <span className="text-xs text-[#0f9aa1]">{isGuidelinesOpen ? 'Hide' : 'Show'}</span>
+                                    </button>
+                                    {isGuidelinesOpen ? (
+                                      <div className="border-t border-[#0f9aa1]/15 px-3 py-2 text-sm text-[#1f5f7a]">
+                                        <p className="font-semibold text-[#0b6e85]">Safety &amp; Participation</p>
+                                        <p className="mt-2 leading-6">
+                                          Thank you for helping make Seattle cleaner and brighter. Please use good judgment and participate only in activities you can do safely. Wear appropriate clothing and gloves, stay aware of traffic and your surroundings, and do not handle needles, broken glass, hazardous materials, or anything that feels unsafe.
+                                        </p>
+                                        <p className="mt-2 leading-6">
+                                          Children should participate with appropriate adult supervision.
+                                        </p>
+                                        <p className="mt-2 leading-6">
+                                          By participating in a Pick It Up Seattle cleanup, you understand that outdoor volunteer activities involve ordinary risks and that you are responsible for your own safety and personal belongings. Please follow any instructions provided by cleanup organizers and step away from any situation that does not feel safe.
+                                        </p>
+                                      </div>
+                                    ) : null}
+                                  </div>
+                                </div>
+
+                                {validationMessage ? (
+                                  <p className="rounded-xl border border-[#D9665B]/25 bg-[#fff3f0] px-3 py-2 text-sm font-medium text-[#D9665B]">
+                                    {validationMessage}
+                                  </p>
+                                ) : null}
+                              </div>
+                            );
+                          })()}
+
                           <div className="mt-auto pt-2">
                             <button
                               type="button"

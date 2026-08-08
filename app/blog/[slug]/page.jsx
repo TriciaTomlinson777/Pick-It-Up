@@ -2,8 +2,10 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import ShareButton from '@/components/ShareButton';
 import {
   ensureFirstPostExists,
+  FIRST_POST_SLUG,
   getPublishedPostBySlug,
   getPublishedPosts,
   normalizeBodyParagraphs,
@@ -11,7 +13,6 @@ import {
 import { formatPublicationDate } from '@/lib/blog-post-utils';
 
 export const dynamic = 'force-dynamic';
-const FIRST_POST_SLUG = 'what-i-didnt-expect-when-i-started-picking-up-litter';
 
 function getPublicImageSrc(post) {
   const imageUrl = String(post?.featuredImageUrl || '').trim();
@@ -103,6 +104,15 @@ export default async function BlogPostPage({ params }) {
                 {formatPublicationDate(post.publishedAt)} • By {post.author}
               </p>
             )}
+
+            <div className="mt-4">
+              <ShareButton
+                url={`/blog/${post.slug}`}
+                title={`${post.title} | Pick It Up Seattle`}
+                text={`Read this story from Pick It Up Seattle: ${post.title}`}
+                label="Share Story"
+              />
+            </div>
 
             {post.featuredImageUrl ? (
               <img

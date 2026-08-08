@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import Logo from '@/components/Logo';
+import ShareButton from '@/components/ShareButton';
 import dynamic from 'next/dynamic';
 import { Baloo_2 } from 'next/font/google';
 import { Poppins } from 'next/font/google';
@@ -3058,6 +3059,14 @@ export default function Home() {
                 <h3 className={`${balooDisplay.className} text-3xl font-bold text-[#0f9aa1] sm:text-4xl lg:text-5xl`}>
                   Community in Action Photos!
                 </h3>
+                <div className="mt-4 flex justify-center">
+                  <ShareButton
+                    url="/#day-one"
+                    title="Community in Action | Pick It Up Seattle"
+                    text="Check out Community in Action photos from Pick It Up Seattle."
+                    label="Share Community in Action"
+                  />
+                </div>
                 <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6">
                   {[0, 1, 2, 3].map((slotIndex) => {
                     const photo = featuredCommunityActionPhotos[slotIndex] || null;
@@ -3129,6 +3138,15 @@ export default function Home() {
             <p className="mx-auto mt-4 max-w-3xl text-xl font-semibold leading-relaxed text-[#fef9ee] sm:text-2xl lg:text-2xl">
               Join the movement, share kindness, and help our city shine.
             </p>
+            <div className="mt-5 flex justify-center">
+              <ShareButton
+                url="/"
+                title="Pick It Up Seattle"
+                text="Join me in supporting Pick It Up Seattle."
+                label="Share Pick It Up Seattle"
+                className="border-white/35 bg-[#fff9ee] text-[#1f5f7a] hover:bg-[#fff2d9]"
+              />
+            </div>
             <div className="homepage-featured-gallery-row relative mx-auto mt-10 grid w-full gap-7 text-left md:gap-8 lg:grid-cols-2 lg:items-stretch lg:gap-8">
               <Link
                 href="/thank-yous"
@@ -3252,6 +3270,14 @@ export default function Home() {
 
               <div className="md:col-span-2">
                 <h3 className={`${balooDisplay.className} text-center text-3xl font-bold text-[#0f9aa1] sm:text-4xl lg:text-5xl`}>See the Difference.</h3>
+                <div className="mt-4 flex justify-center">
+                  <ShareButton
+                    url="/#how-it-works"
+                    title="See the Difference | Pick It Up Seattle"
+                    text="See these cleanup before-and-after moments from Pick It Up Seattle."
+                    label="Share See the Difference"
+                  />
+                </div>
                 <div className="relative mt-6 w-full min-w-0 max-w-[100vw] overflow-x-hidden box-border px-2 md:px-10">
                   <div className="grid w-full min-w-0 max-w-full box-border grid-cols-1 gap-4 md:grid-cols-2">
                     {[0, 1].map((slotIndex) => {

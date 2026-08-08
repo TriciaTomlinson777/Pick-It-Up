@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import ShareButton from '@/components/ShareButton';
 
 const COMMUNITY_SHARE_TYPE_SCENIC_DISCOVERY = 'scenic-discovery';
 
@@ -79,6 +80,7 @@ export default function VolunteerMemorablePhotosPage() {
             {savedScenicCards.map((card) => (
               <article
                 key={card.id}
+                id={`scenic-${card.id}`}
                 className="mb-6 break-inside-avoid rounded-[1.4rem] border border-[#002b49]/14 bg-white/88 p-4 shadow-[0_16px_34px_rgba(0,43,73,0.12)]"
               >
                 <div className="w-full rounded-xl border border-[#002b49]/10 bg-[#f7fbfc] p-2">
@@ -91,6 +93,14 @@ export default function VolunteerMemorablePhotosPage() {
                 {card.caption ? (
                   <p className="mt-3 text-[15px] leading-7 text-[#1d4254] whitespace-pre-wrap break-words">{card.caption}</p>
                 ) : null}
+                <div className="mt-3">
+                  <ShareButton
+                    url={`/volunteer-memorable-photos#scenic-${card.id}`}
+                    title="Scenic Discoveries | Pick It Up Seattle"
+                    text="Take a look at this scenic discovery from Pick It Up Seattle."
+                    label="Share"
+                  />
+                </div>
               </article>
             ))}
           </div>
