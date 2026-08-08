@@ -3584,7 +3584,7 @@ export default function Home() {
           </div>
         </section>
 
-        <Footer />
+        <Footer showHomeShareButton />
 
         {isTrackModalOpen && (
           <div className="fixed inset-0 z-50 bg-[#002b49]/72 backdrop-blur-[2px]" role="dialog" aria-modal="true" aria-labelledby="track-it-title">

@@ -1,6 +1,7 @@
 import Link from 'next/link';
+import ShareButton from '@/components/ShareButton';
 
-export default function Footer() {
+export default function Footer({ showHomeShareButton = false }) {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -130,6 +131,18 @@ export default function Footer() {
             </div>
           </div>
         </div>
+
+        {showHomeShareButton ? (
+          <div className="mt-8 flex w-full justify-center [&_.inline-flex]:relative [&_.inline-flex>span]:absolute [&_.inline-flex>span]:left-[calc(100%+0.5rem)] [&_.inline-flex>span]:top-1/2 [&_.inline-flex>span]:-translate-y-1/2">
+            <ShareButton
+              url="/"
+              title="Pick It Up Seattle"
+              text="Join me in supporting Pick It Up Seattle."
+              label="Share Pick It Up Seattle"
+              className="bg-[linear-gradient(145deg,_#2ec4c7_0%,_#7cd157_62%,_#69be28_100%)] text-[#002244]"
+            />
+          </div>
+        ) : null}
       </div>
     </footer>
   );
