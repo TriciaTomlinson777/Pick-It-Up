@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { SITE_CONTACT_EMAIL, SITE_CONTACT_MAILTO } from '@/lib/site-contact';
@@ -10,6 +10,15 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const confirmationRef = useRef(null);
+
+  useEffect(() => {
+    if (!successMessage) {
+      return;
+    }
+
+    confirmationRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, [successMessage]);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -94,7 +103,7 @@ export default function Contact() {
             <div className="lg:col-span-1">
               <h2 className="mb-8 text-2xl font-bold text-[#ef7f2d]">Send us a Message</h2>
               {successMessage ? (
-                <div className="rounded-xl border border-[#1f8f3c]/20 bg-[#ecf9f0] px-6 py-10 text-center">
+                <div ref={confirmationRef} className="rounded-xl border border-[#1f8f3c]/20 bg-[#ecf9f0] px-6 py-10 text-center">
                   <p className="text-2xl font-bold text-[#1f8f3c]">Thank you for reaching out!</p>
                   <p className="mt-3 text-base font-semibold text-[#1f8f3c]">We’ve received your message and will be in touch soon.</p>
                 </div>
