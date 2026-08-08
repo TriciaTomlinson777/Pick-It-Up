@@ -5,7 +5,6 @@ import Footer from '@/components/Footer';
 import ShareButton from '@/components/ShareButton';
 import {
   ensureFirstPostExists,
-  FIRST_POST_SLUG,
   getPublishedPostBySlug,
   getPublishedPosts,
   normalizeBodyParagraphs,
@@ -13,6 +12,7 @@ import {
 import { formatPublicationDate } from '@/lib/blog-post-utils';
 
 export const dynamic = 'force-dynamic';
+const FIRST_POST_SLUG = 'what-i-didnt-expect-when-i-started-picking-up-litter';
 
 function getPublicImageSrc(post) {
   const imageUrl = String(post?.featuredImageUrl || '').trim();

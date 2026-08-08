@@ -10,6 +10,7 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isFormVisible, setIsFormVisible] = useState(true);
   const confirmationRef = useRef(null);
 
   useEffect(() => {
