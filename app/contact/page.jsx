@@ -93,92 +93,93 @@ export default function Contact() {
             {/* Contact Form */}
             <div className="lg:col-span-1">
               <h2 className="mb-8 text-2xl font-bold text-[#ef7f2d]">Send us a Message</h2>
-              <form className="space-y-6" onSubmit={handleSubmit}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {successMessage ? (
+                <div className="rounded-xl border border-[#1f8f3c]/20 bg-[#ecf9f0] px-6 py-10 text-center">
+                  <p className="text-2xl font-bold text-[#1f8f3c]">Thank you for reaching out!</p>
+                  <p className="mt-3 text-base font-semibold text-[#1f8f3c]">We’ve received your message and will be in touch soon.</p>
+                </div>
+              ) : (
+                <form className="space-y-6" onSubmit={handleSubmit}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        First Name
+                      </label>
+                      <input
+                        type="text"
+                        name="firstName"
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-seattle-green"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Last Name
+                      </label>
+                      <input
+                        type="text"
+                        name="lastName"
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-seattle-green"
+                      />
+                    </div>
+                  </div>
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      First Name
+                      Email
                     </label>
                     <input
-                      type="text"
-                      name="firstName"
+                      type="email"
+                      name="email"
                       required
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-seattle-green"
                     />
                   </div>
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Last Name
+                      Subject
                     </label>
-                    <input
-                      type="text"
-                      name="lastName"
+                    <select
+                      name="subject"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-seattle-green"
+                    >
+                      <option>General Inquiry</option>
+                      <option>Event Partnership</option>
+                      <option>Corporate Group</option>
+                      <option>Feedback</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Message
+                    </label>
+                    <textarea
+                      rows="6"
+                      name="message"
                       required
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-seattle-green"
-                    />
+                    ></textarea>
                   </div>
-                </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-seattle-green"
-                  />
-                </div>
+                  {errorMessage ? (
+                    <p className="rounded-xl border border-[#b23d31]/20 bg-[#fff2f0] px-4 py-2.5 text-sm font-semibold text-[#b23d31]">
+                      {errorMessage}
+                    </p>
+                  ) : null}
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Subject
-                  </label>
-                  <select
-                    name="subject"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-seattle-green"
-                  >
-                    <option>General Inquiry</option>
-                    <option>Event Partnership</option>
-                    <option>Corporate Group</option>
-                    <option>Feedback</option>
-                    <option>Other</option>
-                  </select>
-                </div>
+                  <button type="submit" disabled={isSubmitting} className="btn-primary w-full disabled:opacity-70">
+                    {isSubmitting ? 'Sending...' : 'Send Message'}
+                  </button>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Message
-                  </label>
-                  <textarea
-                    rows="6"
-                    name="message"
-                    required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-seattle-green"
-                  ></textarea>
-                </div>
-
-                {successMessage ? (
-                  <p className="rounded-xl border border-[#1f8f3c]/20 bg-[#ecf9f0] px-4 py-2.5 text-sm font-semibold text-[#1f8f3c]">
-                    {successMessage}
+                  <p className="text-center text-sm text-gray-600">
+                    Every great community starts with a conversation.
                   </p>
-                ) : null}
-
-                {errorMessage ? (
-                  <p className="rounded-xl border border-[#b23d31]/20 bg-[#fff2f0] px-4 py-2.5 text-sm font-semibold text-[#b23d31]">
-                    {errorMessage}
-                  </p>
-                ) : null}
-
-                <button type="submit" disabled={isSubmitting} className="btn-primary w-full disabled:opacity-70">
-                  {isSubmitting ? 'Sending...' : 'Send Message'}
-                </button>
-
-                <p className="text-center text-sm text-gray-600">
-                  Every great community starts with a conversation.
-                </p>
-              </form>
+                </form>
+              )}
             </div>
           </div>
         </div>
