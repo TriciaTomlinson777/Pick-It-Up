@@ -95,7 +95,7 @@ export default function ShareButton({
       <button
         type="button"
         onClick={handleShare}
-        className={`inline-flex items-center rounded-full border border-[#0f9aa1]/28 bg-[#fff8e9] px-4 py-2 text-sm font-semibold text-[#1f5f7a] shadow-[0_6px_16px_rgba(0,43,73,0.08)] transition hover:-translate-y-0.5 hover:bg-[#fff2d9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0f9aa1]/35 ${className}`.trim()}
+        className={`inline-flex items-center rounded-full border border-[#69be28]/45 bg-[linear-gradient(145deg,_#2ec4c7_0%,_#7cd157_62%,_#69be28_100%)] px-4 py-2 text-sm font-semibold text-[#002244] shadow-[0_8px_18px_rgba(46,196,199,0.2)] transition hover:-translate-y-0.5 hover:brightness-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#69be28]/45 ${className}`.trim()}
       >
         {label}
       </button>
