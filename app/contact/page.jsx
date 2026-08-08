@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { SITE_CONTACT_EMAIL, SITE_CONTACT_MAILTO } from '@/lib/site-contact';
 import { buildSubmissionFields, submitContactStyleForm } from '@/lib/contact-form-submission';
 
 export default function Contact() {
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -28,10 +30,11 @@ export default function Contact() {
 
     const timeoutId = window.setTimeout(() => {
       setSuccessMessage('');
+      router.push('/');
     }, 4000);
 
     return () => window.clearTimeout(timeoutId);
-  }, [successMessage]);
+  }, [router, successMessage]);
 
   async function handleSubmit(event) {
     event.preventDefault();
