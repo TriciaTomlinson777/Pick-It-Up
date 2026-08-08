@@ -3059,8 +3059,8 @@ export default function Home() {
                 <h3 className={`${balooDisplay.className} text-3xl font-bold text-[#0f9aa1] sm:text-4xl lg:text-5xl`}>
                   Community in Action Photos!
                 </h3>
-                <div className="mt-4 flex justify-center">
-                  <div className="translate-x-[43px]">
+                <div className="mt-4 flex w-full justify-center">
+                  <div className="share-button-visible-center">
                     <ShareButton
                       url="/#day-one"
                       title="Community in Action | Pick It Up Seattle"
@@ -3140,8 +3140,8 @@ export default function Home() {
             <p className="mx-auto mt-4 max-w-3xl text-xl font-semibold leading-relaxed text-[#fef9ee] sm:text-2xl lg:text-2xl">
               Join the movement, share kindness, and help our city shine.
             </p>
-            <div className="mt-5 flex justify-center">
-              <div className="translate-x-[43px]">
+            <div className="mt-5 flex w-full justify-center">
+              <div className="share-button-visible-center">
                 <ShareButton
                   url="/"
                   title="Pick It Up Seattle"
@@ -3278,8 +3278,8 @@ export default function Home() {
 
               <div className="md:col-span-2">
                 <h3 className={`${balooDisplay.className} text-center text-3xl font-bold text-[#0f9aa1] sm:text-4xl lg:text-5xl`}>See the Difference.</h3>
-                <div className="mt-4 flex justify-center">
-                  <div className="translate-x-[43px]">
+                <div className="mt-4 flex w-full justify-center">
+                  <div className="share-button-visible-center">
                     <ShareButton
                       url="/#how-it-works"
                       title="See the Difference | Pick It Up Seattle"
@@ -3532,6 +3532,17 @@ export default function Home() {
                 .homepage-featured-gallery-card {
                   width: 39rem;
                 }
+              }
+
+              .share-button-visible-center > .inline-flex {
+                position: relative;
+              }
+
+              .share-button-visible-center > .inline-flex > span {
+                position: absolute;
+                left: calc(100% + 0.5rem);
+                top: 50%;
+                transform: translateY(-50%);
               }
 
               @media (min-width: 1024px) {
