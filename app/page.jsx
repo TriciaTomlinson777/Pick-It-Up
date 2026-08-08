@@ -3144,6 +3144,7 @@ export default function Home() {
                 title="Pick It Up Seattle"
                 text="Join me in supporting Pick It Up Seattle."
                 label="Share Pick It Up Seattle"
+                className="!bg-[linear-gradient(145deg,_#f4c94c_0%,_#f59a2d_55%,_#0f9aa1_100%)] !border-[#f4c94c]/55 !text-[#002244]"
               />
             </div>
             <div className="homepage-featured-gallery-row relative mx-auto mt-10 grid w-full gap-7 text-left md:gap-8 lg:grid-cols-2 lg:items-stretch lg:gap-8">
