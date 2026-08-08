@@ -3060,12 +3060,14 @@ export default function Home() {
                   Community in Action Photos!
                 </h3>
                 <div className="mt-4 flex justify-center">
-                  <ShareButton
-                    url="/#day-one"
-                    title="Community in Action | Pick It Up Seattle"
-                    text="Check out Community in Action photos from Pick It Up Seattle."
-                    label="Share Community in Action"
-                  />
+                  <div className="translate-x-[43px]">
+                    <ShareButton
+                      url="/#day-one"
+                      title="Community in Action | Pick It Up Seattle"
+                      text="Check out Community in Action photos from Pick It Up Seattle."
+                      label="Share Community in Action"
+                    />
+                  </div>
                 </div>
                 <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6">
                   {[0, 1, 2, 3].map((slotIndex) => {
@@ -3139,17 +3141,19 @@ export default function Home() {
               Join the movement, share kindness, and help our city shine.
             </p>
             <div className="mt-5 flex justify-center">
-              <ShareButton
-                url="/"
-                title="Pick It Up Seattle"
-                text="Join me in supporting Pick It Up Seattle."
-                label="Share Pick It Up Seattle"
-                style={{
-                  backgroundImage: 'linear-gradient(145deg, #f4c94c 0%, #f59a2d 55%, #0f9aa1 100%)',
-                  borderColor: 'rgba(244, 201, 76, 0.55)',
-                  color: '#002244',
-                }}
-              />
+              <div className="translate-x-[43px]">
+                <ShareButton
+                  url="/"
+                  title="Pick It Up Seattle"
+                  text="Join me in supporting Pick It Up Seattle."
+                  label="Share Pick It Up Seattle"
+                  style={{
+                    backgroundImage: 'linear-gradient(145deg, #f4c94c 0%, #f59a2d 55%, #0f9aa1 100%)',
+                    borderColor: 'rgba(244, 201, 76, 0.55)',
+                    color: '#002244',
+                  }}
+                />
+              </div>
             </div>
             <div className="homepage-featured-gallery-row relative mx-auto mt-10 grid w-full gap-7 text-left md:gap-8 lg:grid-cols-2 lg:items-stretch lg:gap-8">
               <Link
@@ -3275,12 +3279,14 @@ export default function Home() {
               <div className="md:col-span-2">
                 <h3 className={`${balooDisplay.className} text-center text-3xl font-bold text-[#0f9aa1] sm:text-4xl lg:text-5xl`}>See the Difference.</h3>
                 <div className="mt-4 flex justify-center">
-                  <ShareButton
-                    url="/#how-it-works"
-                    title="See the Difference | Pick It Up Seattle"
-                    text="See these cleanup before-and-after moments from Pick It Up Seattle."
-                    label="Share See the Difference"
-                  />
+                  <div className="translate-x-[43px]">
+                    <ShareButton
+                      url="/#how-it-works"
+                      title="See the Difference | Pick It Up Seattle"
+                      text="See these cleanup before-and-after moments from Pick It Up Seattle."
+                      label="Share See the Difference"
+                    />
+                  </div>
                 </div>
                 <div className="relative mt-6 w-full min-w-0 max-w-[100vw] overflow-x-hidden box-border px-2 md:px-10">
                   <div className="grid w-full min-w-0 max-w-full box-border grid-cols-1 gap-4 md:grid-cols-2">
