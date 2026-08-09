@@ -68,6 +68,8 @@ const IMAGINE_SLIDES = [
 ];
 const IMAGINE_SLIDE_INTERVAL_MS = 6000;
 const IMAGINE_SLIDE_FADE_MS = 2500;
+const COMMUNITY_ACTION_RECENT_RANDOM_WINDOW = 8;
+const COMMUNITY_ACTION_FEATURED_COUNT = 4;
 const BEFORE_AFTER_RECENT_RANDOM_WINDOW = 8;
 const BEFORE_AFTER_FEATURED_COUNT = 2;
 const DAY_ONE_FIXED_PAIR_CAPTIONS = {
@@ -162,6 +164,7 @@ export default function Home() {
   const [browserOwnerId, setBrowserOwnerId] = useState('');
   const [volunteerPhotoIndex, setVolunteerPhotoIndex] = useState(0);
   const [beforeAfterPairIndex, setBeforeAfterPairIndex] = useState(0);
+  const [featuredCommunityActionPhotoIds, setFeaturedCommunityActionPhotoIds] = useState([]);
   const [featuredBeforeAfterPairIds, setFeaturedBeforeAfterPairIds] = useState([]);
   const [queuedVolunteerHighlightKey, setQueuedVolunteerHighlightKey] = useState('');
   const [queuedBeforeAfterHighlightKey, setQueuedBeforeAfterHighlightKey] = useState('');
@@ -524,7 +527,21 @@ export default function Home() {
   });
 
   const volunteerGroupPhotos = uploadedVolunteerPhotos;
-  const featuredCommunityActionPhotos = volunteerGroupPhotos.slice(0, 4);
+  const featuredCommunityActionPhotoIdSet = new Set(featuredCommunityActionPhotoIds);
+  const selectedFeaturedCommunityActionPhotos = volunteerGroupPhotos
+    .filter((photo) => featuredCommunityActionPhotoIdSet.has(photo.id))
+    .sort((first, second) => {
+      const firstIndex = featuredCommunityActionPhotoIds.indexOf(first.id);
+      const secondIndex = featuredCommunityActionPhotoIds.indexOf(second.id);
+      return firstIndex - secondIndex;
+    });
+  const remainingCommunityActionPhotos = volunteerGroupPhotos.filter(
+    (photo) => !featuredCommunityActionPhotoIdSet.has(photo.id)
+  );
+  const featuredCommunityActionPhotos = [
+    ...selectedFeaturedCommunityActionPhotos,
+    ...remainingCommunityActionPhotos,
+  ].slice(0, COMMUNITY_ACTION_FEATURED_COUNT);
 
   const beforeAfterPhotoPairs = approvedBeforeAfterSubmissions
     .filter((submission) => submission && Array.isArray(submission.images) && submission.images.length)
@@ -1966,6 +1983,41 @@ export default function Home() {
   useEffect(() => {
     setVolunteerPhotoIndex((current) => Math.min(current, Math.max(volunteerGroupPhotos.length - 1, 0)));
   }, [volunteerGroupPhotos.length]);
+
+  useEffect(() => {
+    if (volunteerGroupPhotos.length <= 1) {
+      setFeaturedCommunityActionPhotoIds((current) => (current.length ? [] : current));
+      return;
+    }
+
+    const recentPhotos = volunteerGroupPhotos.slice(
+      0,
+      Math.min(volunteerGroupPhotos.length, COMMUNITY_ACTION_RECENT_RANDOM_WINDOW)
+    );
+
+    const shuffledRecentPhotos = [...recentPhotos];
+    for (let index = shuffledRecentPhotos.length - 1; index > 0; index -= 1) {
+      const randomIndex = Math.floor(Math.random() * (index + 1));
+      const currentPhoto = shuffledRecentPhotos[index];
+      shuffledRecentPhotos[index] = shuffledRecentPhotos[randomIndex];
+      shuffledRecentPhotos[randomIndex] = currentPhoto;
+    }
+
+    const nextFeaturedIds = shuffledRecentPhotos
+      .slice(0, Math.min(COMMUNITY_ACTION_FEATURED_COUNT, shuffledRecentPhotos.length))
+      .map((photo) => photo.id);
+
+    setFeaturedCommunityActionPhotoIds((current) => {
+      if (
+        current.length === nextFeaturedIds.length
+        && current.every((id, index) => id === nextFeaturedIds[index])
+      ) {
+        return current;
+      }
+
+      return nextFeaturedIds;
+    });
+  }, [communityActionSubmissions]);
 
   useEffect(() => {
     setBeforeAfterPairIndex((current) => Math.min(current, Math.max(beforeAfterGalleryPageCount - 1, 0)));
