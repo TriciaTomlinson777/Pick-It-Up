@@ -68,6 +68,8 @@ const IMAGINE_SLIDES = [
 ];
 const IMAGINE_SLIDE_INTERVAL_MS = 6000;
 const IMAGINE_SLIDE_FADE_MS = 2500;
+const BEFORE_AFTER_RECENT_RANDOM_WINDOW = 8;
+const BEFORE_AFTER_FEATURED_COUNT = 2;
 const DAY_ONE_FIXED_PAIR_CAPTIONS = {
   before: 'Even parking lots can look better!',
   after: 'So simple!',
@@ -160,6 +162,7 @@ export default function Home() {
   const [browserOwnerId, setBrowserOwnerId] = useState('');
   const [volunteerPhotoIndex, setVolunteerPhotoIndex] = useState(0);
   const [beforeAfterPairIndex, setBeforeAfterPairIndex] = useState(0);
+  const [featuredBeforeAfterPairIds, setFeaturedBeforeAfterPairIds] = useState([]);
   const [queuedVolunteerHighlightKey, setQueuedVolunteerHighlightKey] = useState('');
   const [queuedBeforeAfterHighlightKey, setQueuedBeforeAfterHighlightKey] = useState('');
   const [activeVolunteerHighlightKey, setActiveVolunteerHighlightKey] = useState('');
@@ -550,19 +553,35 @@ export default function Home() {
       };
     });
 
+  const featuredBeforeAfterPairIdSet = new Set(featuredBeforeAfterPairIds);
+  const featuredBeforeAfterPhotoPairs = beforeAfterPhotoPairs
+    .filter((pair) => featuredBeforeAfterPairIdSet.has(pair.id))
+    .sort((first, second) => {
+      const firstIndex = featuredBeforeAfterPairIds.indexOf(first.id);
+      const secondIndex = featuredBeforeAfterPairIds.indexOf(second.id);
+      return firstIndex - secondIndex;
+    });
+  const remainingBeforeAfterPhotoPairs = beforeAfterPhotoPairs.filter(
+    (pair) => !featuredBeforeAfterPairIdSet.has(pair.id)
+  );
+  const visibleBeforeAfterGalleryPairs = [
+    ...featuredBeforeAfterPhotoPairs,
+    ...remainingBeforeAfterPhotoPairs,
+  ];
+
   const dayOneFixedBeforeImage = DAY_ONE_FIXED_BEFORE_IMAGE;
   const dayOneFixedAfterImage = DAY_ONE_FIXED_AFTER_IMAGE;
 
   const beforeAfterPairsPerView = 2;
-  const beforeAfterGalleryPageCount = Math.max(1, Math.ceil(beforeAfterPhotoPairs.length / beforeAfterPairsPerView));
+  const beforeAfterGalleryPageCount = Math.max(1, Math.ceil(visibleBeforeAfterGalleryPairs.length / beforeAfterPairsPerView));
   const beforeAfterGalleryStartIndex = beforeAfterPairIndex * beforeAfterPairsPerView;
-  const visibleBeforeAfterPairs = beforeAfterPhotoPairs.slice(
+  const visibleBeforeAfterPairs = visibleBeforeAfterGalleryPairs.slice(
     beforeAfterGalleryStartIndex,
     beforeAfterGalleryStartIndex + beforeAfterPairsPerView
   );
 
   const activeVolunteerPhoto = volunteerGroupPhotos[volunteerPhotoIndex] || null;
-  const activeBeforeAfterPair = beforeAfterPhotoPairs[beforeAfterPairIndex] || null;
+  const activeBeforeAfterPair = visibleBeforeAfterGalleryPairs[beforeAfterPairIndex] || null;
   const isTrackBeforeAfterPhotoModal = photoModalMode === PHOTO_MODAL_MODE_TRACK_BEFORE_AFTER;
   const thankYouShareSubmissions = communityShareSubmissions.filter(
     (submission) => submission.type === COMMUNITY_SHARE_TYPE_THANK_YOU
@@ -1951,6 +1970,41 @@ export default function Home() {
   useEffect(() => {
     setBeforeAfterPairIndex((current) => Math.min(current, Math.max(beforeAfterGalleryPageCount - 1, 0)));
   }, [beforeAfterGalleryPageCount]);
+
+  useEffect(() => {
+    if (beforeAfterPhotoPairs.length <= 1) {
+      setFeaturedBeforeAfterPairIds((current) => (current.length ? [] : current));
+      return;
+    }
+
+    const recentPairs = beforeAfterPhotoPairs.slice(
+      0,
+      Math.min(beforeAfterPhotoPairs.length, BEFORE_AFTER_RECENT_RANDOM_WINDOW)
+    );
+
+    const shuffledRecentPairs = [...recentPairs];
+    for (let index = shuffledRecentPairs.length - 1; index > 0; index -= 1) {
+      const randomIndex = Math.floor(Math.random() * (index + 1));
+      const currentPair = shuffledRecentPairs[index];
+      shuffledRecentPairs[index] = shuffledRecentPairs[randomIndex];
+      shuffledRecentPairs[randomIndex] = currentPair;
+    }
+
+    const nextFeaturedIds = shuffledRecentPairs
+      .slice(0, Math.min(BEFORE_AFTER_FEATURED_COUNT, shuffledRecentPairs.length))
+      .map((pair) => pair.id);
+
+    setFeaturedBeforeAfterPairIds((current) => {
+      if (
+        current.length === nextFeaturedIds.length
+        && current.every((id, index) => id === nextFeaturedIds[index])
+      ) {
+        return current;
+      }
+
+      return nextFeaturedIds;
+    });
+  }, [approvedBeforeAfterSubmissions]);
 
   useEffect(() => {
     if (!queuedVolunteerHighlightKey && !queuedBeforeAfterHighlightKey) {
@@ -3390,7 +3444,7 @@ export default function Home() {
 
                 <div className="mt-2 flex items-center justify-center gap-2 text-[10px] font-medium leading-4 text-[#1f5f7a] sm:text-[11px] sm:leading-5">
                   <p>
-                    {beforeAfterPhotoPairs.length
+                    {visibleBeforeAfterGalleryPairs.length
                       ? `${Math.min(beforeAfterPairIndex + 1, beforeAfterGalleryPageCount)} of ${beforeAfterGalleryPageCount}`
                       : '0 of 0'}
                   </p>
@@ -4451,9 +4505,9 @@ export default function Home() {
                         Community in Action photos will appear here.
                       </div>
                     )
-                  ) : beforeAfterPhotoPairs.length ? (
+                  ) : visibleBeforeAfterGalleryPairs.length ? (
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-                      {beforeAfterPhotoPairs.map((pair, submissionIndex) => {
+                      {visibleBeforeAfterGalleryPairs.map((pair, submissionIndex) => {
                         const beforeImage = pair.beforeImage;
                         const afterImage = pair.afterImage;
 
