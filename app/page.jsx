@@ -165,7 +165,7 @@ export default function Home() {
   const [volunteerPhotoIndex, setVolunteerPhotoIndex] = useState(0);
   const [beforeAfterPairIndex, setBeforeAfterPairIndex] = useState(0);
   const [featuredCommunityActionPhotoIds, setFeaturedCommunityActionPhotoIds] = useState([]);
-  const [featuredBeforeAfterPairIds, setFeaturedBeforeAfterPairIds] = useState([]);
+  const [featuredBeforeAfterSecondaryPairId, setFeaturedBeforeAfterSecondaryPairId] = useState('');
   const [queuedVolunteerHighlightKey, setQueuedVolunteerHighlightKey] = useState('');
   const [queuedBeforeAfterHighlightKey, setQueuedBeforeAfterHighlightKey] = useState('');
   const [activeVolunteerHighlightKey, setActiveVolunteerHighlightKey] = useState('');
@@ -570,14 +570,15 @@ export default function Home() {
       };
     });
 
-  const featuredBeforeAfterPairIdSet = new Set(featuredBeforeAfterPairIds);
-  const featuredBeforeAfterPhotoPairs = beforeAfterPhotoPairs
-    .filter((pair) => featuredBeforeAfterPairIdSet.has(pair.id))
-    .sort((first, second) => {
-      const firstIndex = featuredBeforeAfterPairIds.indexOf(first.id);
-      const secondIndex = featuredBeforeAfterPairIds.indexOf(second.id);
-      return firstIndex - secondIndex;
-    });
+  const newestBeforeAfterPair = beforeAfterPhotoPairs[0] || null;
+  const featuredBeforeAfterSecondaryPair = beforeAfterPhotoPairs.find(
+    (pair) => pair.id === featuredBeforeAfterSecondaryPairId && pair.id !== newestBeforeAfterPair?.id
+  ) || null;
+  const featuredBeforeAfterPhotoPairs = [
+    newestBeforeAfterPair,
+    featuredBeforeAfterSecondaryPair,
+  ].filter(Boolean);
+  const featuredBeforeAfterPairIdSet = new Set(featuredBeforeAfterPhotoPairs.map((pair) => pair.id));
   const remainingBeforeAfterPhotoPairs = beforeAfterPhotoPairs.filter(
     (pair) => !featuredBeforeAfterPairIdSet.has(pair.id)
   );
@@ -2025,36 +2026,31 @@ export default function Home() {
 
   useEffect(() => {
     if (beforeAfterPhotoPairs.length <= 1) {
-      setFeaturedBeforeAfterPairIds((current) => (current.length ? [] : current));
+      setFeaturedBeforeAfterSecondaryPairId((current) => (current ? '' : current));
       return;
     }
 
-    const recentPairs = beforeAfterPhotoPairs.slice(
-      0,
-      Math.min(beforeAfterPhotoPairs.length, BEFORE_AFTER_RECENT_RANDOM_WINDOW)
-    );
-
-    const shuffledRecentPairs = [...recentPairs];
-    for (let index = shuffledRecentPairs.length - 1; index > 0; index -= 1) {
-      const randomIndex = Math.floor(Math.random() * (index + 1));
-      const currentPair = shuffledRecentPairs[index];
-      shuffledRecentPairs[index] = shuffledRecentPairs[randomIndex];
-      shuffledRecentPairs[randomIndex] = currentPair;
-    }
-
-    const nextFeaturedIds = shuffledRecentPairs
-      .slice(0, Math.min(BEFORE_AFTER_FEATURED_COUNT, shuffledRecentPairs.length))
-      .map((pair) => pair.id);
-
-    setFeaturedBeforeAfterPairIds((current) => {
+    setFeaturedBeforeAfterSecondaryPairId((current) => {
       if (
-        current.length === nextFeaturedIds.length
-        && current.every((id, index) => id === nextFeaturedIds[index])
+        current
+        && beforeAfterPhotoPairs.some((pair) => pair.id === current)
+        && current !== beforeAfterPhotoPairs[0]?.id
       ) {
         return current;
       }
 
-      return nextFeaturedIds;
+      const recentPairs = beforeAfterPhotoPairs.slice(
+        1,
+        Math.min(beforeAfterPhotoPairs.length, BEFORE_AFTER_RECENT_RANDOM_WINDOW)
+      );
+
+      if (!recentPairs.length) {
+        return '';
+      }
+
+      const randomIndex = Math.floor(Math.random() * recentPairs.length);
+      const nextPair = recentPairs[randomIndex] || null;
+      return nextPair?.id || '';
     });
   }, [approvedBeforeAfterSubmissions]);
 
@@ -2490,6 +2486,11 @@ export default function Home() {
     if (!response.ok) {
       throw new Error(data?.error || 'Unable to submit before/after pair.');
     }
+
+    return {
+      id: String(data?.id || '').trim(),
+      moderationStatus: String(data?.moderation_status || '').trim(),
+    };
   };
 
   const submitCommunityActionPhotoForReview = async (submission) => {
@@ -2575,7 +2576,16 @@ export default function Home() {
 
     try {
       const newSubmission = await buildBeforeAfterSubmission(submissionId);
-      await submitBeforeAfterPairForReview(newSubmission);
+      const createdPair = await submitBeforeAfterPairForReview(newSubmission);
+      const approvedSubmission = {
+        ...newSubmission,
+        id: createdPair?.id || newSubmission.id,
+      };
+
+      setApprovedBeforeAfterSubmissions((current) => normalizePhotoSubmissions([
+        approvedSubmission,
+        ...current,
+      ]));
       setPendingTrackPhotoSubmission(newSubmission);
       closePhotoModal();
       finalizeTrackSubmission(newSubmission);
