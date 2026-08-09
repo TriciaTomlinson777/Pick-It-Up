@@ -106,6 +106,7 @@ export default function Home() {
   const [mapZoomPhase, setMapZoomPhase] = useState('idle');
   const [newFootprintLatLng, setNewFootprintLatLng] = useState([47.6062, -122.3321]);
   const [nearbyExistingFootprints, setNearbyExistingFootprints] = useState([]);
+  const [sharedSubmissions, setSharedSubmissions] = useState([]);
   const [showExpandedMapPreview, setShowExpandedMapPreview] = useState(false);
   const [runFootprintSequence, setRunFootprintSequence] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
@@ -1050,26 +1051,23 @@ export default function Home() {
   };
 
   useEffect(() => {
-    try {
-      const savedEntries = JSON.parse(localStorage.getItem(TRACK_SUBMISSIONS_KEY) || '[]');
-      const savedFootprints = savedEntries
-        .map((savedEntry) => getFootprintLatLng(savedEntry))
-        .filter(
-          (latLng) =>
-            Array.isArray(latLng) &&
-            latLng.length === 2 &&
-            Number.isFinite(latLng[0]) &&
-            Number.isFinite(latLng[1])
-        );
-
-      setNearbyExistingFootprints(savedFootprints);
-      setSavedCleanupSubmissionCount(savedEntries.length);
-      setSavedCleanupBagTotal(savedEntries.reduce((total, savedEntry) => total + normalizeBagCount(savedEntry?.bagCount), 0));
-    } catch {
-      setNearbyExistingFootprints([]);
-      setSavedCleanupSubmissionCount(0);
-      setSavedCleanupBagTotal(0);
-    }
+    fetch('/api/cleanup-submissions')
+      .then((res) => (res.ok ? res.json() : Promise.reject(res.status)))
+      .then(({ submissions }) => {
+        const rows = Array.isArray(submissions) ? submissions : [];
+        setSharedSubmissions(rows);
+        const footprints = rows
+          .filter((row) => Number.isFinite(row.marker_lat) && Number.isFinite(row.marker_lng))
+          .map((row) => [row.marker_lat, row.marker_lng]);
+        setNearbyExistingFootprints(footprints);
+        setSavedCleanupSubmissionCount(rows.length);
+        setSavedCleanupBagTotal(rows.reduce((total, row) => total + (row.bag_count || 0), 0));
+      })
+      .catch(() => {
+        setNearbyExistingFootprints([]);
+        setSavedCleanupSubmissionCount(0);
+        setSavedCleanupBagTotal(0);
+      });
   }, []);
 
   useEffect(() => {
@@ -2573,6 +2571,38 @@ export default function Home() {
       currentEntries.push(entry);
       localStorage.setItem(TRACK_SUBMISSIONS_KEY, JSON.stringify(currentEntries));
 
+      // On success, re-fetch to rebuild shared counters and map from confirmed server rows.
+      fetch('/api/cleanup-submissions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action_type: entry.actionType,
+          bag_count: entry.bagCount,
+          marker_lat: resolvedTrackLatLng[0],
+          marker_lng: resolvedTrackLatLng[1],
+          gps_lat: gpsLocation?.latitude ?? null,
+          gps_lng: gpsLocation?.longitude ?? null,
+          neighborhood: String(trackForm.neighborhood || '').trim() || null,
+          city: String(trackForm.city || '').trim() || null,
+          cross_streets: String(trackForm.crossStreets || '').trim() || null,
+          location_description: String(trackForm.locationDescription || '').trim() || null,
+          raw_payload: entry,
+        }),
+      })
+        .then((res) => (res.ok ? fetch('/api/cleanup-submissions') : Promise.reject()))
+        .then((res) => (res.ok ? res.json() : Promise.reject()))
+        .then(({ submissions }) => {
+          const rows = Array.isArray(submissions) ? submissions : [];
+          setSharedSubmissions(rows);
+          const footprints = rows
+            .filter((row) => Number.isFinite(row.marker_lat) && Number.isFinite(row.marker_lng))
+            .map((row) => [row.marker_lat, row.marker_lng]);
+          setNearbyExistingFootprints(footprints);
+          setSavedCleanupSubmissionCount(rows.length);
+          setSavedCleanupBagTotal(rows.reduce((total, row) => total + (row.bag_count || 0), 0));
+        })
+        .catch(() => {});
+
       if (normalizedPhotoSubmission?.images?.length) {
         const submissionToPersist = {
           ...normalizedPhotoSubmission,
@@ -2595,16 +2625,7 @@ export default function Home() {
         setPendingTrackPhotoSubmission(null);
       }
 
-      const submittedLatLng = [resolvedTrackLatLng[0], resolvedTrackLatLng[1]];
-      const existingNearbyLatLngs = currentEntries
-        .filter((savedEntry) => savedEntry?.id !== entry.id)
-        .map((savedEntry) => getFootprintLatLng(savedEntry))
-        .filter((latLng) => milesBetween(submittedLatLng, latLng) <= 10);
-
-      setNewFootprintLatLng(submittedLatLng);
-      setNearbyExistingFootprints(existingNearbyLatLngs);
-      setSavedCleanupSubmissionCount(currentEntries.length);
-      setSavedCleanupBagTotal(currentEntries.reduce((total, savedEntry) => total + normalizeBagCount(savedEntry?.bagCount), 0));
+      setNewFootprintLatLng([resolvedTrackLatLng[0], resolvedTrackLatLng[1]]);
       setShowExpandedMapPreview(false);
       setSubmitMessage('Cleanup Recorded!');
       setIsSubmissionSuccess(true);
