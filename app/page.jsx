@@ -3393,7 +3393,11 @@ export default function Home() {
                 </span>
               </button>
 
-              <div className="paint-card border-[#2ec4c7]/35 p-7 text-center lg:p-8" style={{ background: 'linear-gradient(145deg, #002244 0%, #0f9aa1 48%, #69be28 82%, #f4c94c 100%)' }}>
+              <div
+                className="paint-card border-[#2ec4c7]/35 p-7 text-center lg:p-8"
+                style={{ background: 'linear-gradient(145deg, #002244 0%, #0f9aa1 48%, #69be28 82%, #f4c94c 100%)' }}
+                onClick={() => setIsTrackModalOpen(true)}
+              >
                 <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white/20 text-3xl text-white">
                   📸
                 </div>
