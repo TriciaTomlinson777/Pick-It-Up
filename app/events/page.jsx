@@ -8,8 +8,6 @@ import { useEffect, useState } from 'react';
 import { Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 
-const PUBLIC_CLEANUPS_KEY = 'pick-it-up-organized-cleanups-v1';
-const PRIVATE_ORGANIZERS_KEY = 'pick-it-up-organizer-contacts-private-v1';
 const JOINED_CLEANUPS_KEY = 'pick-it-up-joined-cleanups-v1';
 
 function readStoredArray(key) {
@@ -53,6 +51,17 @@ function formatPublicDate(isoDate) {
   });
 }
 
+async function loadCleanupAdventures() {
+  const response = await fetch('/api/cleanup-adventures');
+
+  if (!response.ok) {
+    throw new Error('Unable to load cleanup adventures.');
+  }
+
+  const data = await response.json();
+  return Array.isArray(data?.events) ? data.events : [];
+}
+
 function EventsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -69,8 +78,16 @@ function EventsContent() {
   const [openSafetyGuidelinesByCleanupId, setOpenSafetyGuidelinesByCleanupId] = useState({});
 
   useEffect(() => {
-    setSubmittedCleanups(readStoredArray(PUBLIC_CLEANUPS_KEY));
     setJoinedCleanupIds(readStoredArray(JOINED_CLEANUPS_KEY));
+
+    loadCleanupAdventures()
+      .then((events) => {
+        setSubmittedCleanups(events);
+      })
+      .catch((error) => {
+        console.error(error);
+        setSubmittedCleanups([]);
+      });
   }, []);
 
   useEffect(() => {
@@ -94,10 +111,7 @@ function EventsContent() {
     }
 
     const formData = new FormData(form);
-    const cleanupId = `cleanup-${Date.now()}`;
-
     const publicCleanup = {
-      id: cleanupId,
       title: String(formData.get('cleanupTitle') || '').trim(),
       date: String(formData.get('eventDate') || '').trim(),
       startTime: String(formData.get('startTime') || '').trim(),
@@ -107,25 +121,55 @@ function EventsContent() {
       description: String(formData.get('eventDescription') || '').trim(),
       organizerName: String(formData.get('organizerName') || '').trim(),
       maxVolunteers: String(formData.get('maxVolunteers') || '').trim(),
-      signedUpCount: 0,
-      createdAt: new Date().toISOString(),
     };
 
     const privateOrganizerData = {
-      cleanupId,
       organizerEmail: String(formData.get('organizerEmail') || '').trim(),
       organizerPhone: String(formData.get('organizerPhone') || '').trim(),
-      createdAt: new Date().toISOString(),
     };
 
-    const existingPublicCleanups = readStoredArray(PUBLIC_CLEANUPS_KEY);
-    const updatedPublicCleanups = [publicCleanup, ...existingPublicCleanups];
-    writeStoredArray(PUBLIC_CLEANUPS_KEY, updatedPublicCleanups);
-    setSubmittedCleanups(updatedPublicCleanups);
+    let createdCleanupId = '';
 
-    const existingPrivateContacts = readStoredArray(PRIVATE_ORGANIZERS_KEY);
-    const updatedPrivateContacts = [privateOrganizerData, ...existingPrivateContacts];
-    writeStoredArray(PRIVATE_ORGANIZERS_KEY, updatedPrivateContacts);
+    try {
+      const createResponse = await fetch('/api/cleanup-adventures', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cleanupTitle: publicCleanup.title,
+          eventDate: publicCleanup.date,
+          startTime: publicCleanup.startTime,
+          endTime: publicCleanup.endTime,
+          generalLocation: publicCleanup.generalLocation,
+          meetingPlace: publicCleanup.meetingPlace,
+          eventDescription: publicCleanup.description,
+          organizerName: publicCleanup.organizerName,
+          maxVolunteers: publicCleanup.maxVolunteers,
+          organizerEmail: privateOrganizerData.organizerEmail,
+          organizerPhone: privateOrganizerData.organizerPhone,
+        }),
+      });
+
+      if (!createResponse.ok) {
+        const createFailure = await createResponse.text();
+        console.error('Unable to save cleanup adventure:', createFailure);
+        return;
+      }
+
+      const createResult = await createResponse.json();
+      const createdEvent = createResult?.event;
+      if (!createdEvent?.id) {
+        console.error('Unable to save cleanup adventure: API did not return an event id.');
+        return;
+      }
+
+      createdCleanupId = String(createdEvent.id);
+      setSubmittedCleanups((current) => [createdEvent, ...current]);
+    } catch (createError) {
+      console.error('Unable to save cleanup adventure:', createError);
+      return;
+    }
 
     try {
       const emailResponse = await fetch('/api/organize-cleanup', {
@@ -156,7 +200,7 @@ function EventsContent() {
       console.error('Cleanup saved, but confirmation email request failed:', error);
     }
 
-    setLatestCleanupId(cleanupId);
+    setLatestCleanupId(createdCleanupId);
     setShowSuccessDialog(true);
   }
 
@@ -170,7 +214,7 @@ function EventsContent() {
     setShowSuccessDialog(false);
   }
 
-  function handleJoinCleanup(cleanupId) {
+  async function handleJoinCleanup(cleanupId) {
     const alreadyJoined = joinedCleanupIds.includes(cleanupId);
     if (alreadyJoined) {
       return;
@@ -184,29 +228,58 @@ function EventsContent() {
       return;
     }
 
-    let updatedJoinedIds = joinedCleanupIds;
+    const targetCleanup = submittedCleanups.find((cleanup) => cleanup.id === cleanupId);
+    if (!targetCleanup) {
+      return;
+    }
 
-    const updatedCleanups = submittedCleanups.map((event) => {
-      if (event.id !== cleanupId) {
-        return event;
+    const maxVolunteers = parseMaxVolunteers(targetCleanup.maxVolunteers);
+    const currentCount = Number.parseInt(String(targetCleanup.signedUpCount || 0), 10) || 0;
+
+    if (maxVolunteers !== null && currentCount >= maxVolunteers) {
+      return;
+    }
+
+    let nextSignedUpCount = currentCount;
+
+    try {
+      const response = await fetch(`/api/cleanup-adventures/${encodeURIComponent(cleanupId)}/signup`, {
+        method: 'POST',
+      });
+
+      if (response.status === 409) {
+        const conflictResult = await response.json();
+        const conflictCount = Number.parseInt(String(conflictResult?.signedUpCount ?? ''), 10);
+        if (Number.isFinite(conflictCount)) {
+          setSubmittedCleanups((current) =>
+            current.map((cleanup) =>
+              cleanup.id === cleanupId
+                ? {
+                  ...cleanup,
+                  signedUpCount: conflictCount,
+                }
+                : cleanup
+            )
+          );
+        }
+        return;
       }
 
-      const maxVolunteers = parseMaxVolunteers(event.maxVolunteers);
-      const currentCount = Number.parseInt(String(event.signedUpCount || 0), 10) || 0;
-
-      if (maxVolunteers !== null && currentCount >= maxVolunteers) {
-        return event;
+      if (!response.ok) {
+        const failure = await response.text();
+        console.error('Unable to join cleanup adventure:', failure);
+        return;
       }
 
-      updatedJoinedIds = [...joinedCleanupIds, cleanupId];
-
-      return {
-        ...event,
-        signedUpCount: currentCount + 1,
-      };
-    });
-
-    if (updatedJoinedIds === joinedCleanupIds) {
+      const result = await response.json();
+      const updatedCount = Number.parseInt(String(result?.signedUpCount ?? ''), 10);
+      if (Number.isFinite(updatedCount)) {
+        nextSignedUpCount = updatedCount;
+      } else {
+        nextSignedUpCount = currentCount + 1;
+      }
+    } catch (error) {
+      console.error('Unable to join cleanup adventure:', error);
       return;
     }
 
@@ -215,9 +288,19 @@ function EventsContent() {
       [cleanupId]: '',
     }));
 
-    setSubmittedCleanups(updatedCleanups);
+    setSubmittedCleanups((current) =>
+      current.map((cleanup) =>
+        cleanup.id === cleanupId
+          ? {
+            ...cleanup,
+            signedUpCount: nextSignedUpCount,
+          }
+          : cleanup
+      )
+    );
+
+    const updatedJoinedIds = [...joinedCleanupIds, cleanupId];
     setJoinedCleanupIds(updatedJoinedIds);
-    writeStoredArray(PUBLIC_CLEANUPS_KEY, updatedCleanups);
     writeStoredArray(JOINED_CLEANUPS_KEY, updatedJoinedIds);
   }
 
