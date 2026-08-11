@@ -4,11 +4,13 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import ShareButton from '@/components/ShareButton';
+import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
 import { Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 
 const JOINED_CLEANUPS_KEY = 'pick-it-up-joined-cleanups-v1';
+const PUBLIC_SITE_ORIGIN = 'https://www.pickitupseattle.org';
 
 function readStoredArray(key) {
   try {
@@ -76,6 +78,9 @@ function EventsContent() {
   const [joinSafetyAcknowledgments, setJoinSafetyAcknowledgments] = useState({});
   const [joinValidationMessages, setJoinValidationMessages] = useState({});
   const [openSafetyGuidelinesByCleanupId, setOpenSafetyGuidelinesByCleanupId] = useState({});
+  const [inviteCleanup, setInviteCleanup] = useState(null);
+  const [inviteQrCodeDataUrl, setInviteQrCodeDataUrl] = useState('');
+  const [inviteCopyButtonLabel, setInviteCopyButtonLabel] = useState('COPY INVITE LINK');
 
   useEffect(() => {
     setJoinedCleanupIds(readStoredArray(JOINED_CLEANUPS_KEY));
@@ -100,6 +105,38 @@ function EventsContent() {
       card.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [highlightCleanupId, isJoinView, submittedCleanups]);
+
+  useEffect(() => {
+    let isCurrent = true;
+
+    if (!inviteCleanup?.url) {
+      setInviteQrCodeDataUrl('');
+      return undefined;
+    }
+
+    QRCode.toDataURL(inviteCleanup.url, {
+      width: 520,
+      margin: 1,
+      color: {
+        dark: '#002b49',
+        light: '#ffffff',
+      },
+    })
+      .then((dataUrl) => {
+        if (isCurrent) {
+          setInviteQrCodeDataUrl(dataUrl);
+        }
+      })
+      .catch(() => {
+        if (isCurrent) {
+          setInviteQrCodeDataUrl('');
+        }
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [inviteCleanup]);
 
   async function submitOrganizeCleanupForm(event) {
     event.preventDefault();
@@ -302,6 +339,44 @@ function EventsContent() {
     const updatedJoinedIds = [...joinedCleanupIds, cleanupId];
     setJoinedCleanupIds(updatedJoinedIds);
     writeStoredArray(JOINED_CLEANUPS_KEY, updatedJoinedIds);
+  }
+
+  function getCleanupInviteUrl(cleanupId) {
+    const sharePath = `/events?view=join&cleanupId=${encodeURIComponent(cleanupId)}#join-cleanup`;
+    return `${PUBLIC_SITE_ORIGIN}${sharePath}`;
+  }
+
+  function handleInviteOthers(cleanupId, cleanupTitle) {
+    setInviteCopyButtonLabel('COPY INVITE LINK');
+    setInviteCleanup({
+      id: cleanupId,
+      title: cleanupTitle,
+      url: getCleanupInviteUrl(cleanupId),
+    });
+  }
+
+  function closeInviteModal() {
+    setInviteCleanup(null);
+    setInviteQrCodeDataUrl('');
+    setInviteCopyButtonLabel('COPY INVITE LINK');
+  }
+
+  async function copyInviteLink() {
+    if (!inviteCleanup?.url) {
+      return;
+    }
+
+    try {
+      if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(inviteCleanup.url);
+        setInviteCopyButtonLabel('Copied!');
+        window.setTimeout(() => {
+          setInviteCopyButtonLabel('COPY INVITE LINK');
+        }, 1800);
+      }
+    } catch {
+      setInviteCopyButtonLabel('COPY INVITE LINK');
+    }
   }
 
   return (
@@ -697,14 +772,23 @@ function EventsContent() {
                           })()}
 
                           <div className="mt-auto pt-2">
-                            <button
-                              type="button"
-                              onClick={() => handleJoinCleanup(event.id)}
-                              disabled={isJoined || isFull}
-                              className="btn-primary mx-auto flex min-h-[3rem] justify-center text-center disabled:cursor-not-allowed disabled:opacity-70"
-                            >
-                              {buttonLabel}
-                            </button>
+                            <div className="flex flex-col gap-3 sm:flex-row">
+                              <button
+                                type="button"
+                                onClick={() => handleJoinCleanup(event.id)}
+                                disabled={isJoined || isFull}
+                                className="btn-primary flex min-h-[3rem] w-full justify-center text-center disabled:cursor-not-allowed disabled:opacity-70"
+                              >
+                                {buttonLabel}
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleInviteOthers(event.id, event.title)}
+                                className="btn-secondary flex min-h-[3rem] w-full justify-center text-center"
+                              >
+                                INVITE OTHERS
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -747,6 +831,42 @@ function EventsContent() {
             </div>
             <button type="button" className="btn-primary mt-6 w-full sm:w-auto" onClick={handleViewCleanup}>
               View My Cleanup
+            </button>
+          </div>
+        </div>
+      ) : null}
+
+      {inviteCleanup ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 px-4" onClick={closeInviteModal}>
+          <div
+            className="w-full max-w-md rounded-2xl border border-seattle-green/20 bg-white p-6 sm:p-8 shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <h2 className="text-3xl font-bold text-gray-900 text-center">Invite Others</h2>
+            <p className="mt-3 text-center text-gray-700">Scan or share this QR code to invite others</p>
+
+            <div className="mt-6 flex justify-center">
+              <div className="w-full max-w-[320px] rounded-2xl bg-white p-4 shadow-sm ring-1 ring-[#002b49]/10">
+                {inviteQrCodeDataUrl ? (
+                  <img
+                    src={inviteQrCodeDataUrl}
+                    alt={`QR code invite for ${inviteCleanup.title}`}
+                    className="h-full w-full rounded-lg bg-white"
+                  />
+                ) : (
+                  <div className="flex h-[320px] w-full items-center justify-center rounded-lg bg-white text-sm text-gray-500">
+                    Generating QR code...
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={copyInviteLink}
+              className="btn-secondary mt-6 w-full"
+            >
+              {inviteCopyButtonLabel}
             </button>
           </div>
         </div>
