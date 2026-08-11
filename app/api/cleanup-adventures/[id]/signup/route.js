@@ -19,13 +19,14 @@ async function parseSupabaseError(response) {
   }
 }
 
-export async function POST(_request, { params }) {
+export async function POST(_request, context) {
   const { isConfigured } = getSupabaseServerConfig();
   if (!isConfigured) {
     console.error('cleanup-adventures signup POST: Supabase service-role not configured.');
     return NextResponse.json({ error: 'Service temporarily unavailable.' }, { status: 503 });
   }
 
+  const params = await context?.params;
   const eventId = String(params?.id || '').trim();
   if (!isUuid(eventId)) {
     return NextResponse.json({ error: 'Invalid event id.' }, { status: 400 });

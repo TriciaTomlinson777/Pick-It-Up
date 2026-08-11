@@ -82,7 +82,7 @@ begin
   end if;
 
   update public.cleanup_adventures_events
-  set signed_up_count = signed_up_count + 1
+  set signed_up_count = cleanup_adventures_events.signed_up_count + 1
   where id = v_event.id
   returning * into v_event;
 
