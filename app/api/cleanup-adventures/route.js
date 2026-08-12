@@ -136,6 +136,28 @@ function validateCreateBody(body) {
   };
 }
 
+async function findRecentDuplicateEvent(payload) {
+  const recentCutoffIso = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+  const params = new URLSearchParams();
+  params.set('select', PUBLIC_SELECT_FIELDS);
+  params.set('title', `eq.${payload.cleanupTitle}`);
+  params.set('event_date', `eq.${payload.eventDate}`);
+  params.set('start_time', `eq.${payload.startTime}`);
+  params.set('organizer_name', `eq.${payload.organizerName}`);
+  params.set('created_at', `gte.${recentCutoffIso}`);
+  params.set('order', 'created_at.desc');
+  params.set('limit', '1');
+
+  const response = await supabaseServerFetch(`/rest/v1/${EVENTS_TABLE_NAME}?${params.toString()}`);
+
+  if (!response.ok) {
+    return null;
+  }
+
+  const rows = await response.json();
+  return Array.isArray(rows) && rows[0]?.id ? rows[0] : null;
+}
+
 export async function GET() {
   const { isConfigured } = getSupabaseServerConfig();
   if (!isConfigured) {
@@ -197,6 +219,14 @@ export async function POST(request) {
   let createdEventRow = null;
 
   try {
+    const existingEventRow = await findRecentDuplicateEvent(payload);
+    if (existingEventRow) {
+      return NextResponse.json({
+        ok: true,
+        event: mapEventRowToPublicEvent(existingEventRow),
+      });
+    }
+
     const eventInsertQuery = createQueryString({ select: PUBLIC_SELECT_FIELDS });
     const eventInsertResponse = await supabaseServerFetch(
       `/rest/v1/${EVENTS_TABLE_NAME}?${eventInsertQuery}`,
