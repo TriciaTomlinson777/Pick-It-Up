@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 import Link from 'next/link';
 import ShareButton from '@/components/ShareButton';
 import QRCode from 'qrcode';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 
@@ -81,6 +81,9 @@ function EventsContent() {
   const [inviteCleanup, setInviteCleanup] = useState(null);
   const [inviteQrCodeDataUrl, setInviteQrCodeDataUrl] = useState('');
   const [inviteCopyButtonLabel, setInviteCopyButtonLabel] = useState('COPY INVITE LINK');
+  const [isSubmittingCleanup, setIsSubmittingCleanup] = useState(false);
+  // Ref lock: React state updates are batched, so two rapid taps would both see `false`.
+  const isSubmittingCleanupRef = useRef(false);
 
   useEffect(() => {
     setJoinedCleanupIds(readStoredArray(JOINED_CLEANUPS_KEY));
@@ -141,11 +144,18 @@ function EventsContent() {
   async function submitOrganizeCleanupForm(event) {
     event.preventDefault();
 
+    if (isSubmittingCleanupRef.current) {
+      return;
+    }
+
     const form = event.currentTarget;
     if (!form.checkValidity()) {
       form.reportValidity();
       return;
     }
+
+    isSubmittingCleanupRef.current = true;
+    setIsSubmittingCleanup(true);
 
     const formData = new FormData(form);
     const publicCleanup = {
@@ -191,6 +201,8 @@ function EventsContent() {
       if (!createResponse.ok) {
         const createFailure = await createResponse.text();
         console.error('Unable to save cleanup adventure:', createFailure);
+        isSubmittingCleanupRef.current = false;
+        setIsSubmittingCleanup(false);
         return;
       }
 
@@ -198,13 +210,20 @@ function EventsContent() {
       const createdEvent = createResult?.event;
       if (!createdEvent?.id) {
         console.error('Unable to save cleanup adventure: API did not return an event id.');
+        isSubmittingCleanupRef.current = false;
+        setIsSubmittingCleanup(false);
         return;
       }
 
       createdCleanupId = String(createdEvent.id);
-      setSubmittedCleanups((current) => [createdEvent, ...current]);
+      setSubmittedCleanups((current) => [
+        createdEvent,
+        ...current.filter((cleanup) => cleanup.id !== createdEvent.id),
+      ]);
     } catch (createError) {
       console.error('Unable to save cleanup adventure:', createError);
+      isSubmittingCleanupRef.current = false;
+      setIsSubmittingCleanup(false);
       return;
     }
 
@@ -239,6 +258,8 @@ function EventsContent() {
 
     setLatestCleanupId(createdCleanupId);
     setShowSuccessDialog(true);
+    isSubmittingCleanupRef.current = false;
+    setIsSubmittingCleanup(false);
   }
 
   function handleViewCleanup() {
@@ -613,7 +634,7 @@ function EventsContent() {
                   Your contact information will only be used by Pick It Up Seattle to confirm your cleanup or contact you about the event. It will not be publicly displayed.
                 </p>
 
-                <button type="submit" className="btn-primary w-full sm:w-auto">
+                <button type="submit" className="btn-primary w-full sm:w-auto" disabled={isSubmittingCleanup}>
                   Post Clean Up
                 </button>
               </form>
@@ -659,7 +680,7 @@ function EventsContent() {
                       <div
                         key={event.id}
                         id={`cleanup-card-${event.id}`}
-                        className="bg-white rounded-lg border border-seattle-green/20 shadow-md overflow-hidden hover:shadow-lg transition h-full min-h-[28rem] flex flex-col"
+                        className="bg-white rounded-lg border border-seattle-green/20 shadow-md overflow-visible sm:overflow-hidden hover:shadow-lg transition h-full min-h-[28rem] flex flex-col"
                       >
                         <div className="bg-gradient-to-r from-seattle-green to-green-600 h-24 flex items-center justify-center">
                           <span className="text-sm font-semibold tracking-wide text-white px-4 text-center">
