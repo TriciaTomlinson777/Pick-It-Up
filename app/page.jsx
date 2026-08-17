@@ -3141,7 +3141,8 @@ export default function Home() {
                 DAY ONE
               </p>
               <p className="text-lg font-bold leading-relaxed text-[#157a9a] sm:hidden">
-                One person. One piece. One better Seattle.
+                <span className="block">One person. One piece.</span>
+                <span className="block">One better Seattle.</span>
               </p>
 
               <div className="mt-9 grid gap-6 sm:grid-cols-2 sm:gap-8 lg:gap-10">
