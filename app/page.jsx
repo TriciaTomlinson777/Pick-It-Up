@@ -3241,7 +3241,15 @@ export default function Home() {
                           />
                         </div>
                         <p className="px-1 pt-2 text-center text-xs font-medium leading-4 text-[#1f5f7a] sm:text-sm">
-                          Tag us on Instagram: @PickItUpSeattle
+                          Tag us on Instagram:{' '}
+                          <a
+                            href="https://instagram.com/pickitupseattle"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-semibold underline underline-offset-2 transition hover:opacity-80"
+                          >
+                            @PickItUpSeattle
+                          </a>
                         </p>
                       </div>
                     );
@@ -3492,7 +3500,15 @@ export default function Home() {
                           ) : null}
                           {pair ? (
                             <p className="px-1 pt-1 text-center text-xs font-medium leading-4 text-[#d9f7ec] sm:text-sm">
-                              Tag us on Instagram: @PickItUpSeattle
+                              Tag us on Instagram:{' '}
+                              <a
+                                href="https://instagram.com/pickitupseattle"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-semibold underline underline-offset-2 transition hover:opacity-80"
+                              >
+                                @PickItUpSeattle
+                              </a>
                             </p>
                           ) : null}
                         </div>
@@ -4567,7 +4583,15 @@ export default function Home() {
                               <img src={getStoredImageUrl(photo)} alt="Community in Action photo" className="h-52 w-full object-contain object-center" />
                             </div>
                             <p className="pt-2 text-center text-xs font-medium leading-4 text-[#1f5f7a] sm:text-sm">
-                              Tag us on Instagram: @PickItUpSeattle
+                              Tag us on Instagram:{' '}
+                              <a
+                                href="https://instagram.com/pickitupseattle"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-semibold underline underline-offset-2 transition hover:opacity-80"
+                              >
+                                @PickItUpSeattle
+                              </a>
                             </p>
                             {photo.ownerId && browserOwnerId && photo.ownerId === browserOwnerId ? (
                               <button
@@ -4624,7 +4648,15 @@ export default function Home() {
                               </p>
                             ) : null}
                             <p className="pt-2 text-center text-xs font-medium leading-4 text-[#1f5f7a] sm:text-sm">
-                              Tag us on Instagram: @PickItUpSeattle
+                              Tag us on Instagram:{' '}
+                              <a
+                                href="https://instagram.com/pickitupseattle"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-semibold underline underline-offset-2 transition hover:opacity-80"
+                              >
+                                @PickItUpSeattle
+                              </a>
                             </p>
                             {pair.ownerId && browserOwnerId && pair.ownerId === browserOwnerId ? (
                               <button
