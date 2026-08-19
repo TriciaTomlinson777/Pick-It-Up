@@ -93,6 +93,9 @@ export default function VolunteerMemorablePhotosPage() {
                 {card.caption ? (
                   <p className="mt-3 text-[15px] leading-7 text-[#1d4254] whitespace-pre-wrap break-words">{card.caption}</p>
                 ) : null}
+                <p className="mt-3 text-center text-xs font-medium leading-4 text-[#1f5f7a] sm:text-sm">
+                  Tag us on Instagram: @PickItUpSeattle
+                </p>
                 <div className="mt-3">
                   <ShareButton
                     url={`/volunteer-memorable-photos#scenic-${card.id}`}

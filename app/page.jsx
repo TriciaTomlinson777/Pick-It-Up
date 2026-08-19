@@ -3240,6 +3240,9 @@ export default function Home() {
                             className="h-full w-full object-contain object-center"
                           />
                         </div>
+                        <p className="px-1 pt-2 text-center text-xs font-medium leading-4 text-[#1f5f7a] sm:text-sm">
+                          Tag us on Instagram: @PickItUpSeattle
+                        </p>
                       </div>
                     );
                   })}
@@ -3486,6 +3489,11 @@ export default function Home() {
                                 {pair.pairCaption}
                               </p>
                             </div>
+                          ) : null}
+                          {pair ? (
+                            <p className="px-1 pt-1 text-center text-xs font-medium leading-4 text-[#d9f7ec] sm:text-sm">
+                              Tag us on Instagram: @PickItUpSeattle
+                            </p>
                           ) : null}
                         </div>
                       );
@@ -4558,6 +4566,9 @@ export default function Home() {
                             <div className="overflow-hidden rounded-lg border border-[#0f9aa1]/22 bg-white">
                               <img src={getStoredImageUrl(photo)} alt="Community in Action photo" className="h-52 w-full object-contain object-center" />
                             </div>
+                            <p className="pt-2 text-center text-xs font-medium leading-4 text-[#1f5f7a] sm:text-sm">
+                              Tag us on Instagram: @PickItUpSeattle
+                            </p>
                             {photo.ownerId && browserOwnerId && photo.ownerId === browserOwnerId ? (
                               <button
                                 type="button"
@@ -4612,6 +4623,9 @@ export default function Home() {
                                 {pair.pairCaption}
                               </p>
                             ) : null}
+                            <p className="pt-2 text-center text-xs font-medium leading-4 text-[#1f5f7a] sm:text-sm">
+                              Tag us on Instagram: @PickItUpSeattle
+                            </p>
                             {pair.ownerId && browserOwnerId && pair.ownerId === browserOwnerId ? (
                               <button
                                 type="button"

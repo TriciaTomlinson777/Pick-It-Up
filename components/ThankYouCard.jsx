@@ -47,6 +47,12 @@ export default function ThankYouCard({ note, photoUrl = '', className = '' }) {
           </p>
         </div>
       </div>
+
+      {photoUrl ? (
+        <p className="px-1 pt-3 text-center text-xs font-medium leading-4 text-[#1f5f7a] sm:text-sm">
+          Tag us on Instagram: @PickItUpSeattle
+        </p>
+      ) : null}
     </article>
   );
 }
