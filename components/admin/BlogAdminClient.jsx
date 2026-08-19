@@ -486,6 +486,15 @@ export default function BlogAdminClient({ initialPosts = [] }) {
                 />
               </label>
 
+              {form.slug === 'apparently-david-sedaris-picks-up-litter-too' ? (
+                <div className="rounded-xl border border-[#0f9aa1]/20 bg-[#f3fbfc] px-4 py-3 text-sm text-[#123e56]">
+                  <p className="font-semibold text-[#002244]">
+                    Embedded Video: David Sedaris&apos; New Passion Is Picking Up Garbage — Late Night with Seth Meyers
+                  </p>
+                  <p className="mt-1">Status: Will appear on the published story page</p>
+                </div>
+              ) : null}
+
               <label className="inline-flex items-center gap-2 text-sm font-semibold text-[#002244]">
                 <input
                   type="checkbox"

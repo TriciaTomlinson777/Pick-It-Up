@@ -15,7 +15,11 @@ export async function GET() {
     return unauthorizedResponse;
   }
 
-  await ensureFirstPostExists();
+  try {
+    await ensureFirstPostExists();
+  } catch {
+    // The queue should remain available when the optional first-post seed cannot run.
+  }
   const posts = await getAdminPosts();
   return Response.json({ posts });
 }

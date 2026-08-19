@@ -13,6 +13,8 @@ import { formatPublicationDate } from '@/lib/blog-post-utils';
 
 export const dynamic = 'force-dynamic';
 const FIRST_POST_SLUG = 'what-i-didnt-expect-when-i-started-picking-up-litter';
+const DAVID_SEDARIS_POST_SLUG = 'apparently-david-sedaris-picks-up-litter-too';
+const DAVID_SEDARIS_VIDEO_ID = '5A2yC0-xPvo';
 
 function getPublicImageSrc(post) {
   const imageUrl = String(post?.featuredImageUrl || '').trim();
@@ -71,6 +73,7 @@ export default async function BlogPostPage({ params }) {
   const paragraphs = normalizeBodyParagraphs(post.body);
   const { previousPost, nextPost } = getAdjacentPosts(publishedPosts, post.slug);
   const isFirstPost = post.slug === FIRST_POST_SLUG;
+  const hasDavidSedarisVideo = post.slug === DAVID_SEDARIS_POST_SLUG;
 
   return (
     <>
@@ -136,6 +139,25 @@ export default async function BlogPostPage({ params }) {
                 <p key={`paragraph-${index}`}>{paragraph}</p>
               ))}
             </div>
+
+            {hasDavidSedarisVideo ? (
+              <div className="mt-8">
+                <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-xl bg-[#002244] shadow-sm">
+                  <div className="aspect-video w-full">
+                    <iframe
+                      className="h-full w-full"
+                      src={`https://www.youtube.com/embed/${DAVID_SEDARIS_VIDEO_ID}`}
+                      title="David Sedaris' New Passion Is Picking Up Garbage"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    />
+                  </div>
+                </div>
+                <p className="mt-3 text-center text-sm italic leading-6 text-[#1f5f7a]">
+                  Video from Late Night with Seth Meyers via its official YouTube channel. David Sedaris is not affiliated with or endorsing Pick It Up Seattle.
+                </p>
+              </div>
+            ) : null}
 
             <div className="mt-10 rounded-xl border border-[#0f9aa1]/22 bg-[#f3fbfc] px-5 py-5 text-[#123e56]">
               <p className="text-[1.06rem] leading-8">Have you discovered something while cleaning up your community?</p>

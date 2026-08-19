@@ -15,9 +15,14 @@ export default async function BlogAdminPage() {
 
   try {
     await ensureFirstPostExists();
+  } catch {
+    // Keep loading the real queue if the optional first-post seed fails.
+  }
+
+  try {
     initialPosts = await getAdminPosts();
   } catch {
-    // Keep rendering admin page even if initial seed fails.
+    // Keep rendering the Admin page if the queue query itself fails.
   }
 
   return <BlogAdminClient initialPosts={initialPosts} />;

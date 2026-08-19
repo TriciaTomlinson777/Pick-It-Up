@@ -80,6 +80,9 @@ export default async function BlogPage() {
     posts = [];
   }
 
+  const featuredPost = posts.find((post) => post.isFeatured) || null;
+  const latestPosts = posts.filter((post) => post.id !== featuredPost?.id);
+
   return (
     <>
       <Header />
@@ -112,20 +115,67 @@ export default async function BlogPage() {
         </div>
       </section>
 
+      <section className="py-4 sm:py-5" id="featured-article">
+        <div className="container-custom mx-auto max-w-[1080px]">
+          <h2 className="text-[2.05rem] font-bold text-[#002244] sm:text-[2.45rem]">Featured Article</h2>
+
+          {!featuredPost ? (
+            <div className="mt-6 mx-auto max-w-3xl rounded-2xl border border-[#0f9aa1]/20 bg-white px-6 py-10 text-center shadow-sm">
+              <h2 className="text-2xl font-bold text-[#002244]">No featured article yet.</h2>
+              <p className="mt-3 text-base leading-relaxed text-[#1f5f7a]">
+                A featured story will appear here when one is marked featured.
+              </p>
+            </div>
+          ) : (
+            <div className="mt-7 mx-auto flex max-w-[800px] flex-col gap-6">
+              {[featuredPost].map((post) => (
+                <article key={post.id} className="overflow-hidden rounded-3xl border border-[#0f9aa1]/20 bg-white shadow-[0_20px_52px_-32px_rgba(0,64,84,0.55)]">
+                  {post.featuredImageUrl ? (
+                    <div className="flex h-56 items-center justify-center bg-[#f2fbfd]">
+                      <img
+                        src={getPublicImageSrc(post)}
+                        alt={post.title}
+                        className="h-full w-full object-contain object-center"
+                      />
+                    </div>
+                  ) : null}
+                  <div className="px-7 py-7 sm:px-8 sm:py-8">
+                    <p className="inline-flex rounded-full bg-[#eaf8f9] px-3 py-1 text-xs font-semibold text-[#0f9aa1]">
+                      {post.category}
+                    </p>
+                    <h3 className="mt-3 text-[2rem] font-bold leading-tight text-[#002244]">{post.title}</h3>
+                    <p className="mt-2 text-base font-medium text-[#1f5f7a]">
+                      {formatPublicationDate(post.publishedAt)} • By {post.author}
+                    </p>
+                    <p className="mt-4 text-[1.1rem] leading-8 text-[#123e56]">{post.previewText}</p>
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      className="mt-5 inline-flex text-[1.02rem] font-semibold text-[#0f9aa1] transition hover:text-[#0b8188] hover:underline"
+                    >
+                      Read Story →
+                    </Link>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
       <section className="py-4 sm:py-5" id="latest-stories">
         <div className="container-custom mx-auto max-w-[1080px]">
           <h2 className="text-[2.05rem] font-bold text-[#002244] sm:text-[2.45rem]">Latest Stories</h2>
 
-          {posts.length === 0 ? (
+          {latestPosts.length === 0 ? (
             <div className="mt-6 mx-auto max-w-3xl rounded-2xl border border-[#0f9aa1]/20 bg-white px-6 py-10 text-center shadow-sm">
-              <h2 className="text-2xl font-bold text-[#002244]">No published posts yet.</h2>
+              <h2 className="text-2xl font-bold text-[#002244]">No latest stories yet.</h2>
               <p className="mt-3 text-base leading-relaxed text-[#1f5f7a]">
                 New stories will appear here as soon as they are published.
               </p>
             </div>
           ) : (
             <div className="mt-7 mx-auto flex max-w-[800px] flex-col gap-6">
-              {posts.map((post) => (
+              {latestPosts.map((post) => (
                 <article key={post.id} className="overflow-hidden rounded-3xl border border-[#0f9aa1]/20 bg-white shadow-[0_20px_52px_-32px_rgba(0,64,84,0.55)]">
                   {post.featuredImageUrl ? (
                     <div className="flex h-56 items-center justify-center bg-[#f2fbfd]">
