@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { supabaseServerFetch, getSupabaseServerConfig } from '@/lib/supabase-server';
 import { isValidEmailAddress } from '@/lib/form-mailer';
+import { getSeattleTodayIsoDate, filterVisiblePublicEvents } from '@/lib/event-expiration';
 
 const EVENTS_TABLE_NAME = 'cleanup_adventures_events';
 const ORGANIZERS_TABLE_NAME = 'cleanup_adventures_organizers';
@@ -166,8 +167,10 @@ export async function GET() {
   }
 
   try {
+    // Expired events stay in the database for admin history; they are only hidden from this public read.
     const query = createQueryString({
       select: PUBLIC_SELECT_FIELDS,
+      event_date: `gte.${getSeattleTodayIsoDate()}`,
       order: 'created_at.desc',
     });
 
@@ -180,7 +183,9 @@ export async function GET() {
     }
 
     const rows = await response.json();
-    const events = Array.isArray(rows) ? rows.map(mapEventRowToPublicEvent) : [];
+    const events = filterVisiblePublicEvents(
+      Array.isArray(rows) ? rows.map(mapEventRowToPublicEvent) : [],
+    );
     return NextResponse.json({ events });
   } catch (error) {
     console.error('Unexpected error loading cleanup adventures.', error);

@@ -8,6 +8,7 @@ import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from 'react';
 import { Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { filterVisiblePublicEvents } from '@/lib/event-expiration';
 
 const JOINED_CLEANUPS_KEY = 'pick-it-up-joined-cleanups-v1';
 const PUBLIC_SITE_ORIGIN = 'https://www.pickitupseattle.org';
@@ -61,7 +62,7 @@ async function loadCleanupAdventures() {
   }
 
   const data = await response.json();
-  return Array.isArray(data?.events) ? data.events : [];
+  return filterVisiblePublicEvents(data?.events);
 }
 
 function EventsContent() {
@@ -84,6 +85,7 @@ function EventsContent() {
   const [isSubmittingCleanup, setIsSubmittingCleanup] = useState(false);
   // Ref lock: React state updates are batched, so two rapid taps would both see `false`.
   const isSubmittingCleanupRef = useRef(false);
+  const visibleCleanups = filterVisiblePublicEvents(submittedCleanups);
 
   useEffect(() => {
     setJoinedCleanupIds(readStoredArray(JOINED_CLEANUPS_KEY));
@@ -663,9 +665,9 @@ function EventsContent() {
                 </div>
               </div>
 
-              {submittedCleanups.length > 0 ? (
+              {visibleCleanups.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8 items-stretch">
-                  {submittedCleanups.map((event) => {
+                  {visibleCleanups.map((event) => {
                     const maxVolunteers = parseMaxVolunteers(event.maxVolunteers);
                     const signedUpCount = Number.parseInt(String(event.signedUpCount || 0), 10) || 0;
                     const isJoined = joinedCleanupIds.includes(event.id);
