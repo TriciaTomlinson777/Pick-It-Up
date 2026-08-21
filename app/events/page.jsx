@@ -227,9 +227,9 @@ export default function Events() {
           <div className="container-custom">
             <div className="mb-8 max-w-3xl">
               <h2 className="heading-lg">Other Community Events</h2>
-              <p className="mt-3 text-lg leading-8 text-[#516b7d]">Explore community events Pick It Up Seattle has reviewed and approved.</p>
+              <p className="mt-3 text-lg leading-8 text-[#516b7d]">Explore community events shared with Pick It Up Seattle for the community to discover.</p>
             </div>
-            {events.length > 0 ? <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">{events.map((event) => <CommunityEventCard key={event.id} event={event} />)}</div> : <div className="paint-card px-6 py-8 text-[#516b7d]">No approved community events are posted yet. Check back soon.</div>}
+            {events.length > 0 ? <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">{events.map((event) => <CommunityEventCard key={event.id} event={event} />)}</div> : <div className="paint-card px-6 py-8 text-[#516b7d]">No community events are posted yet. Check back soon.</div>}
           </div>
         </section>
 

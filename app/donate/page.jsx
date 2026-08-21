@@ -6,22 +6,22 @@ export default function Donate() {
   const donationTiers = [
     {
       amount: '$10',
-      description: 'Supplies one volunteer with gloves and tools',
+      description: 'Supports volunteer T-shirts, outreach, and mission materials',
       impact: 'One Volunteer Support',
     },
     {
       amount: '$25',
-      description: 'Provides supplies for a small cleanup team',
+      description: 'Supports promotional and educational materials',
       impact: 'Small Team',
     },
     {
       amount: '$50',
-      description: 'Hosts a complete neighborhood cleanup event',
+      description: 'Supports the Sponsor a Can program',
       impact: 'Full Event',
     },
     {
       amount: '$100',
-      description: 'Supports monthly community cleanups',
+      description: 'Supports community outreach and mission-focused activities',
       impact: 'Monthly Series',
     },
   ];
@@ -35,7 +35,7 @@ export default function Donate() {
         <div className="container-custom">
           <h1 className="heading-xl mb-4">Support Our Mission</h1>
           <p className="text-lg text-green-100">
-            Your donation helps us keep Seattle clean and beautiful
+            Your donation helps inspire cleaner communities across Seattle
           </p>
         </div>
       </section>
@@ -46,14 +46,14 @@ export default function Donate() {
           <div className="max-w-3xl mx-auto mb-12">
             <h2 className="text-3xl font-bold mb-6 text-center">Why Donate?</h2>
             <p className="text-lg text-gray-700 mb-6">
-              100% of donations go directly to our mission of making Seattle cleaner and more
-              beautiful. Your contribution helps us:
+              Donations support the mission of making Seattle cleaner and more beautiful. Your
+              contribution helps Pick It Up Seattle:
             </p>
             <ul className="space-y-4">
               {[
-                'Purchase and maintain cleanup supplies (gloves, trash bags, grabbers)',
-                'Organize regular events across Seattle neighborhoods',
-                'Provide training and support for volunteer leaders',
+                'Create volunteer T-shirts, promotional materials, and educational materials',
+                'Support community outreach and the Sponsor a Can program',
+                'Encourage individual action and community participation',
                 'Expand our reach to new neighborhoods and communities',
                 'Create educational materials about sustainability',
                 'Partner with local organizations and parks',
@@ -178,15 +178,16 @@ export default function Donate() {
             <details className="bg-gray-50 p-4 rounded-lg cursor-pointer hover:bg-gray-100 transition">
               <summary className="font-bold text-seattle-green">How are donations used?</summary>
               <p className="text-gray-700 mt-2">
-                100% of donations go to supplies, event organization, training, and community
-                outreach.
+                Donations support volunteer T-shirts, promotional materials, educational
+                materials, community outreach, the Sponsor a Can program, and other activities
+                that advance Pick It Up Seattle’s mission.
               </p>
             </details>
             <details className="bg-gray-50 p-4 rounded-lg cursor-pointer hover:bg-gray-100 transition">
               <summary className="font-bold text-seattle-green">Can I donate items instead of money?</summary>
               <p className="text-gray-700 mt-2">
-                Yes! We accept donations of supplies like gloves, trash bags, and tools. Contact us
-                to learn more.
+                Yes! Contact us if you would like to support volunteer T-shirts, promotional
+                materials, educational materials, or the Sponsor a Can program.
               </p>
             </details>
             <details className="bg-gray-50 p-4 rounded-lg cursor-pointer hover:bg-gray-100 transition">

@@ -82,7 +82,7 @@ export default function Contact() {
         <div className="container-custom">
           <h1 className="heading-xl mb-4 font-bold text-[#0f9aa1]">We’d Love to Hear From You</h1>
           <p className="text-[1.18rem] font-semibold leading-relaxed text-[#002244]">
-            Whether you have a question, an idea, would like to organize a cleanup, become a community partner, or simply want to say hello, we’d love to hear from you.
+            Whether you have a question, an idea, would like resources for organizing a cleanup, become a community partner, or simply want to say hello, we’d love to hear from you.
           </p>
           <p className="mt-4 text-[1.18rem] font-semibold text-[#002244]">
             We’ll get back to you as soon as we can.

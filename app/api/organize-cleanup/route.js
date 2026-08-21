@@ -10,9 +10,9 @@ function formatConfirmationMessage({
 }) {
   return `Hi ${organizerName},
 
-Thank you for organizing a cleanup with Pick It Up Seattle!
+Thank you for posting your cleanup here!
 
-Your cleanup has been posted and is now available for volunteers to view in Join a Cleanup.
+After your cleanup, share the impact with Pick It Up Seattle — post a Before/After, thank someone who helped, share a Scenic Discovery, or log your cleanup.
 
 Cleanup: ${cleanupTitle}
 Date: ${eventDate}
@@ -66,7 +66,7 @@ export async function POST(request) {
     try {
       await sendMailMessage({
         to: organizerEmail,
-        subject: 'Your Pick It Up Seattle Cleanup Has Been Posted',
+        subject: 'Thank You for Posting Your Cleanup',
         text: formatConfirmationMessage({
           organizerName,
           cleanupTitle,

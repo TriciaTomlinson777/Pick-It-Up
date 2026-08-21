@@ -53,12 +53,12 @@ export default function HowToParticipate() {
       buttonLabel: 'Step 1. Find an Event',
       title: 'Step 1: Find an Event',
       icon: '📍',
-      cardDescription: 'Browse our events calendar to find a cleanup event that works for you.',
+      cardDescription: 'Browse the Events page to find a community cleanup that works for you.',
       content: (
         <>
           <p className="text-gray-700 leading-relaxed">
-            Browse our events calendar to find a cleanup event that works for you. Events are
-            hosted throughout Seattle and surrounding cities. You&apos;ll find parks,
+            Browse the Events page to find a community cleanup that works for you. You&apos;ll find
+            community cleanups throughout Seattle and surrounding cities, including parks,
             neighborhoods, beaches, and specific areas where others are coming together to make
             a difference.
             <br />
@@ -81,26 +81,25 @@ export default function HowToParticipate() {
       buttonLabel: 'Step 2. Sign Up',
       title: 'Step 2: Sign Up',
       icon: '📝',
-      cardDescription: 'Register for an event directly through our website and let us know how many people will be joining you.',
+      cardDescription: 'Follow the host organization\'s registration details and share your group size when requested.',
       content: (
         <>
           <p className="text-gray-700 leading-relaxed">
-            Register for an event directly through our website and let us know how many people
-            will be joining you.
+            Follow the host organization&apos;s registration details and share your group size when
+            requested.
             <br />
             <br />
             That&apos;s it-you&apos;re all set!
             <br />
             <br />
-            Or organize your own Cleanup Adventure!
+            Or plan your own Cleanup Adventure!
             <br />
             <br />
-            Simply visit our website, select Events, and follow the prompts to create your own
-            cleanup event. Maybe you&apos;re new to the area and want to meet new people,
-            you&apos;re organizing a fun event for singles, your business wants to give back,
-            or your community group is looking for a meaningful activity. Whatever theme you
-            dream up, create your own adventure while making a positive impact on our
-            community.
+            Use the Events page to find community organizations and resources that can help you
+            plan a cleanup. Maybe you&apos;re new to the area and want to meet new people,
+            your business wants to give back, or your community group is looking for a meaningful
+            activity. After your cleanup, share the impact with Pick It Up Seattle — post a
+            Before/After, thank someone who helped, share a Scenic Discovery, or log your cleanup.
           </p>
           <Link href="/volunteer" className="inline-block mt-4 text-seattle-green font-semibold hover:underline">
             Volunteer Now →
@@ -186,11 +185,11 @@ export default function HowToParticipate() {
             volunteers and strengthen this community movement.
             <br />
             <br />
-            Sponsor a cleanup event by providing volunteer T-shirts, litter grabbers, gloves,
-            refreshments, or other supplies. Place a public trash can outside your business to
+            Sponsor a cleanup by providing volunteer T-shirts or supporting our Sponsor a Can
+            program. Place a public trash can outside your business to
             help reduce litter, encourage your employees to participate in a Cleanup Adventure,
-            or make a donation to help cover the operating costs of our completely
-            volunteer-run organization.
+            or make a donation to support promotional materials, educational materials,
+            community outreach, the Sponsor a Can program, and other mission-focused work.
             <br />
             <br />
             Have another creative idea? We&apos;d love to hear it! We believe the best ideas
@@ -296,13 +295,13 @@ export default function HowToParticipate() {
               </ul>
             </div>
             <div>
-              <h3 className="mb-6 text-xl font-bold text-[#f4c94c]">Spread the Message</h3>
+              <h3 className="mb-6 text-xl font-bold text-[#f4c94c]">Represent the Movement</h3>
               <ul className="space-y-3">
                 {[
-                  'Volunteer Apparel',
-                  'Hats & Accessories',
-                  'Cleanup Gear',
+                  'Volunteer T-shirt',
+                  'Hat or other PIUS apparel',
                   'Reusable Bags',
+                  'Share PickItUpSeattle.org',
                   'Available in our Shop',
                 ].map((item, idx) => (
                   <li key={idx} className="flex items-start">
@@ -326,9 +325,9 @@ export default function HowToParticipate() {
                 Can I bring my family or friends?
               </summary>
               <p className="mt-3 text-sm leading-6 text-[#f2fdff]">
-                Absolutely! We encourage families, friends, and groups to join us. It's a great
-                way to make a difference together. Just let us know how many people will be
-                attending when you sign up.
+                Absolutely! Families, friends, and groups can join community cleanups together.
+                Check the host organization&apos;s signup details for group size and participation
+                information.
               </p>
             </details>
 
@@ -337,9 +336,8 @@ export default function HowToParticipate() {
                 What if it rains?
               </summary>
               <p className="mt-3 text-sm leading-6 text-[#3b2c00]">
-                We clean up rain or shine unless there is severe weather or unsafe conditions. If
-                rain is expected, simply dress for the weather. We'll keep you informed of any
-                schedule changes.
+                Cleanup hosts set their own weather and safety plans. Check the event details
+                before heading out, and dress for the conditions.
               </p>
             </details>
 
@@ -348,8 +346,8 @@ export default function HowToParticipate() {
                 Can I organize a private group event?
               </summary>
               <p className="mt-3 text-sm leading-6 text-[#fff6ec]">
-                Yes! We'd love to help you organize a cleanup for your business, school,
-                neighborhood, or community group. Visit our Partners page or Contact Us to get
+                Yes! The Events page and partner resources can help your business, neighborhood,
+                or community group plan a cleanup. Visit our Partners page or Contact Us to get
                 started.
               </p>
             </details>
@@ -362,8 +360,8 @@ export default function HowToParticipate() {
         <div className="container-custom text-center">
           <h2 className="text-4xl font-bold mb-6 text-[#002244]">Ready to Get Started?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto text-[#1f2937]">
-            Join us at an upcoming event and be part of the movement to make Seattle cleaner and
-            more beautiful!
+            Pick up one piece (or more) wherever you are, or join a Cleanup Adventure hosted by a
+            community partner.
           </p>
           <Link href="/events" className="btn-primary bg-seattle-green text-white hover:bg-green-700 transform-none hover:translate-y-0">
             Find an Event
