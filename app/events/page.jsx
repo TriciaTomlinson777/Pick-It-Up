@@ -41,7 +41,10 @@ const JOIN_OPTIONS = [
 
 function formatEventDate(value) {
   if (!value) return '';
-  const date = new Date(`${value}T00:00:00`);
+  const dateOnlyMatch = String(value).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  const date = dateOnlyMatch
+    ? new Date(Number(dateOnlyMatch[1]), Number(dateOnlyMatch[2]) - 1, Number(dateOnlyMatch[3]))
+    : new Date(value);
   if (Number.isNaN(date.getTime())) return value;
   return date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
 }

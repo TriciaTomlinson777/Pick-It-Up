@@ -28,7 +28,7 @@ export default function BlogAdminLoginForm() {
         throw new Error(data.error || 'Login failed.');
       }
 
-      window.location.href = '/admin/blog';
+      window.location.href = '/admin';
     } catch (error) {
       setErrorMessage(error.message || 'Login failed.');
       setIsSubmitting(false);
