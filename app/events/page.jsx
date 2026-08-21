@@ -46,6 +46,11 @@ function formatEventDate(value) {
   return date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
 }
 
+function formatEventTime(startTime, endTime) {
+  const times = [startTime, endTime].map((time) => String(time || '').trim()).filter(Boolean);
+  return times.join(' - ');
+}
+
 function OrganizationCard({ organization, organize = false }) {
   return (
     <article className="paint-card flex h-full flex-col p-6 sm:p-7">
@@ -60,6 +65,8 @@ function OrganizationCard({ organization, organize = false }) {
 }
 
 function CommunityEventCard({ event }) {
+  const eventTime = formatEventTime(event.startTime, event.endTime);
+
   return (
     <article className="paint-card overflow-hidden">
       {event.imageUrl ? <img src={event.imageUrl} alt="" className="h-48 w-full object-cover" /> : null}
@@ -69,7 +76,7 @@ function CommunityEventCard({ event }) {
         <p className="mt-2 font-semibold text-[#0b6e85]">Hosted by {event.organizationName}</p>
         <div className="mt-5 space-y-2 text-sm text-[#516b7d]">
           <p>📅 {formatEventDate(event.eventDate)}</p>
-          <p>⏰ {event.startTime} - {event.endTime}</p>
+          {eventTime ? <p>⏰ {eventTime}</p> : null}
           <p>📍 {event.location}</p>
         </div>
         <p className="mt-5 leading-7 text-[#516b7d]">{event.description}</p>
@@ -123,10 +130,11 @@ function EventSubmissionForm() {
   const inputClass = 'w-full rounded-xl border border-[#002244]/18 bg-white px-4 py-3 text-[#002244] focus:outline-none focus:ring-2 focus:ring-[#0f9aa1]/35';
   const fields = [
     ['eventName', 'Event name', 'text'], ['organizationName', 'Organization or group name', 'text'],
-    ['eventDate', 'Event date', 'date'], ['startTime', 'Start time', 'time'], ['endTime', 'End time', 'time'],
+    ['eventDate', 'Event date', 'date'], ['startTime', 'Start time (optional)', 'time'], ['endTime', 'End time (optional)', 'time'],
     ['location', 'Location', 'text'], ['eventUrl', 'Event or Registration Link (optional)', 'url'],
     ['contactName', 'Contact Name (optional)', 'text'], ['contactEmail', 'Email (optional)', 'email'], ['contactPhone', 'Phone Number (optional)', 'tel'],
   ];
+  const optionalFields = ['startTime', 'endTime', 'eventUrl', 'contactName', 'contactEmail', 'contactPhone'];
 
   return (
     <form onSubmit={submit} className="paint-card p-6 sm:p-8">
@@ -134,7 +142,7 @@ function EventSubmissionForm() {
         {fields.map(([name, label, type]) => (
           <label key={name} className={`block ${name === 'eventUrl' || name === 'location' ? 'md:col-span-2' : ''}`}>
             <span className="mb-1.5 block text-sm font-semibold text-[#002244]">{label}</span>
-            <input className={inputClass} name={name} type={type} value={form[name]} onChange={updateField} required={!['eventUrl', 'contactName', 'contactEmail', 'contactPhone'].includes(name)} />
+            <input className={inputClass} name={name} type={type} value={form[name]} onChange={updateField} required={!optionalFields.includes(name)} />
           </label>
         ))}
         <label className="block md:col-span-2">
