@@ -97,7 +97,7 @@ export default function ThankYousPage() {
           {savedThankYouCards.length ? (
             <div className="mt-10 columns-1 gap-6 sm:columns-2 lg:columns-3">
               {savedThankYouCards.map((card) => (
-                <ThankYouCard key={card.id} note={card.note} photoUrl={card.photoUrl} />
+                <ThankYouCard key={card.id} note={card.note} photoUrl={card.photoUrl} shareId={card.id} />
               ))}
             </div>
           ) : null}

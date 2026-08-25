@@ -1,4 +1,6 @@
-export default function ThankYouCard({ note, photoUrl = '', className = '' }) {
+import InstagramShareButton from '@/components/InstagramShareButton';
+
+export default function ThankYouCard({ note, photoUrl = '', shareId = '', className = '' }) {
   if (!note) {
     return null;
   }
@@ -50,15 +52,10 @@ export default function ThankYouCard({ note, photoUrl = '', className = '' }) {
 
       {photoUrl ? (
         <p className="px-1 pt-3 text-center text-xs font-medium leading-4 text-[#1f5f7a] sm:text-sm">
-          Tag us on Instagram:{' '}
-          <a
-            href="https://instagram.com/pickitupseattle"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-semibold underline underline-offset-2 transition hover:opacity-80"
-          >
-            @PickItUpSeattle
-          </a>
+          <InstagramShareButton
+            images={photoUrl}
+            shareUrl={shareId && typeof window !== 'undefined' ? `${window.location.origin}/thank-yous/${shareId}` : ''}
+          />
         </p>
       ) : null}
     </article>

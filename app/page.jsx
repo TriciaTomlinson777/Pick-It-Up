@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import Link from 'next/link';
 import Logo from '@/components/Logo';
 import ShareButton from '@/components/ShareButton';
+import InstagramShareButton from '@/components/InstagramShareButton';
 import dynamic from 'next/dynamic';
 import { Baloo_2 } from 'next/font/google';
 import { Poppins } from 'next/font/google';
@@ -3200,7 +3201,7 @@ export default function Home() {
                 <h3 className={`${balooDisplay.className} text-3xl font-bold text-[#0f9aa1] sm:text-4xl lg:text-5xl`}>
                   Community in Action Photos!
                 </h3>
-                <div className="mt-4 flex w-full justify-center">
+                <div className="mt-4 flex w-full justify-center md:hidden">
                   <div className="share-button-visible-center">
                     <ShareButton
                       url="/#day-one"
@@ -3241,15 +3242,10 @@ export default function Home() {
                           />
                         </div>
                         <p className="px-1 pt-2 text-center text-xs font-medium leading-4 text-[#1f5f7a] sm:text-sm">
-                          Tag us on Instagram:{' '}
-                          <a
-                            href="https://instagram.com/pickitupseattle"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-semibold underline underline-offset-2 transition hover:opacity-80"
-                          >
-                            @PickItUpSeattle
-                          </a>
+                          <InstagramShareButton
+                            images={getStoredImageUrl(photo)}
+                            shareUrl={photo.submissionId && typeof window !== 'undefined' ? `${window.location.origin}/community-in-action/${photo.submissionId}` : ''}
+                          />
                         </p>
                       </div>
                     );
@@ -3434,7 +3430,7 @@ export default function Home() {
 
               <div className="md:col-span-2">
                 <h3 className={`${balooDisplay.className} text-center text-3xl font-bold text-[#0f9aa1] sm:text-4xl lg:text-5xl`}>See the Difference.</h3>
-                <div className="mt-4 flex w-full justify-center">
+                <div className="mt-4 flex w-full justify-center md:hidden">
                   <div className="share-button-visible-center">
                     <ShareButton
                       url="/#how-it-works"
@@ -3500,15 +3496,11 @@ export default function Home() {
                           ) : null}
                           {pair ? (
                             <p className="px-1 pt-1 text-center text-xs font-medium leading-4 text-[#d9f7ec] sm:text-sm">
-                              Tag us on Instagram:{' '}
-                              <a
-                                href="https://instagram.com/pickitupseattle"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="font-semibold underline underline-offset-2 transition hover:opacity-80"
-                              >
-                                @PickItUpSeattle
-                              </a>
+                              <InstagramShareButton
+                                images={[pair.beforeImage, pair.afterImage].filter(Boolean).map(getStoredImageUrl)}
+                                shareUrl={pair.submissionId && typeof window !== 'undefined' ? `${window.location.origin}/before-after/${pair.submissionId}` : ''}
+                                className="text-white"
+                              />
                             </p>
                           ) : null}
                         </div>
@@ -4583,15 +4575,10 @@ export default function Home() {
                               <img src={getStoredImageUrl(photo)} alt="Community in Action photo" className="h-52 w-full object-contain object-center" />
                             </div>
                             <p className="pt-2 text-center text-xs font-medium leading-4 text-[#1f5f7a] sm:text-sm">
-                              Tag us on Instagram:{' '}
-                              <a
-                                href="https://instagram.com/pickitupseattle"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="font-semibold underline underline-offset-2 transition hover:opacity-80"
-                              >
-                                @PickItUpSeattle
-                              </a>
+                              <InstagramShareButton
+                                images={getStoredImageUrl(photo)}
+                                shareUrl={photo.submissionId && typeof window !== 'undefined' ? `${window.location.origin}/community-in-action/${photo.submissionId}` : ''}
+                              />
                             </p>
                             {photo.ownerId && browserOwnerId && photo.ownerId === browserOwnerId ? (
                               <button
@@ -4648,15 +4635,10 @@ export default function Home() {
                               </p>
                             ) : null}
                             <p className="pt-2 text-center text-xs font-medium leading-4 text-[#1f5f7a] sm:text-sm">
-                              Tag us on Instagram:{' '}
-                              <a
-                                href="https://instagram.com/pickitupseattle"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="font-semibold underline underline-offset-2 transition hover:opacity-80"
-                              >
-                                @PickItUpSeattle
-                              </a>
+                              <InstagramShareButton
+                                images={[beforeImage, afterImage].filter(Boolean).map(getStoredImageUrl)}
+                                shareUrl={pair.submissionId && typeof window !== 'undefined' ? `${window.location.origin}/before-after/${pair.submissionId}` : ''}
+                              />
                             </p>
                             {pair.ownerId && browserOwnerId && pair.ownerId === browserOwnerId ? (
                               <button

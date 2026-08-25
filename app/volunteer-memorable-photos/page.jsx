@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ShareButton from '@/components/ShareButton';
+import InstagramShareButton from '@/components/InstagramShareButton';
 
 const COMMUNITY_SHARE_TYPE_SCENIC_DISCOVERY = 'scenic-discovery';
 
@@ -94,17 +95,12 @@ export default function VolunteerMemorablePhotosPage() {
                   <p className="mt-3 text-[15px] leading-7 text-[#1d4254] whitespace-pre-wrap break-words">{card.caption}</p>
                 ) : null}
                 <p className="mt-3 text-center text-xs font-medium leading-4 text-[#1f5f7a] sm:text-sm">
-                  Tag us on Instagram:{' '}
-                  <a
-                    href="https://instagram.com/pickitupseattle"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-semibold underline underline-offset-2 transition hover:opacity-80"
-                  >
-                    @PickItUpSeattle
-                  </a>
+                  <InstagramShareButton
+                    images={card.publicUrl}
+                    shareUrl={typeof window !== 'undefined' ? `${window.location.origin}/scenic-discoveries/${card.id}` : ''}
+                  />
                 </p>
-                <div className="mt-3">
+                <div className="mt-3 md:hidden">
                   <ShareButton
                     url={`/volunteer-memorable-photos#scenic-${card.id}`}
                     title="Scenic Discoveries | Pick It Up Seattle"
