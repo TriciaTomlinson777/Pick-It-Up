@@ -105,6 +105,32 @@ export default function Shop() {
       imageStyle: 'bg-[linear-gradient(145deg,_#002244_0%,_#0f9aa1_48%,_#69be28_82%,_#f4c94c_100%)]',
       productUrl: 'https://pick-it-up-seattle-shop.fourthwall.com/products/official-pick-it-up-seattle-signature-hat',
     },
+    {
+      id: 'dont-be-trashy-tee',
+      group: 'Signature Collection',
+      name: 'Don’t Be Trashy Tee',
+      price: '$29.95',
+      description: 'Bring a little humor to doing something good. The Don’t Be Trashy Tee puts a playful spin on the Pick It Up Seattle message while encouraging others to leave the city a little better than they found it.',
+      descriptionSpacer: true,
+      imageSrc: "/Don't be Trashy Tee.png",
+      imageContainerClass: 'h-full w-full p-2',
+      imageClass: 'scale-[1.1]',
+      imagePlaceholder: 'Add dont-be-trashy-tee image',
+      imageStyle: 'bg-[linear-gradient(145deg,_#0f9aa1_0%,_#2ec4c7_45%,_#69be28_100%)]',
+      productUrl: 'https://pick-it-up-seattle-shop.fourthwall.com/products/dont-be-trashy-te',
+    },
+    {
+      id: 'mess-master-tee',
+      group: 'Signature Collection',
+      name: 'Mess Master Tee',
+      description: 'Bring a little attitude to doing something good. The Mess Master Tee celebrates the people who aren’t afraid to tackle the mess and leave Seattle a little better than they found it. Playful, bold, and unmistakably Pick It Up Seattle.',
+      imageSrc: '/Mess Master tee.png',
+      imageContainerClass: 'h-full w-full p-2',
+      imageClass: 'scale-x-[1.52] scale-y-[1.4]',
+      imagePlaceholder: 'Add mess-master-tee image',
+      imageStyle: 'bg-[linear-gradient(145deg,_#0f9aa1_0%,_#2ec4c7_45%,_#69be28_100%)]',
+      productUrl: 'https://pick-it-up-seattle-shop.fourthwall.com/products/mess-master-tee',
+    },
   ];
 
   return (
@@ -175,7 +201,10 @@ export default function Shop() {
                     <h2 className={`${balooDisplay.className} text-center text-[1.45rem] font-bold leading-tight text-[#002b49]`}>
                       {product.name}
                     </h2>
-                    <p className="mt-3 text-[0.98rem] leading-7 text-[#516b7d] sm:text-[1.04rem]">{product.description}</p>
+                    <p className="mt-3 text-[0.98rem] leading-7 text-[#516b7d] sm:text-[1.04rem]">
+                      {product.description}
+                      {product.descriptionSpacer ? <><br /><br /></> : null}
+                    </p>
                   </div>
 
                   <div className="mt-3 pt-2">
