@@ -167,6 +167,18 @@ export default function Shop() {
       imageStyle: 'bg-[linear-gradient(145deg,_#0f9aa1_0%,_#2ec4c7_45%,_#69be28_100%)]',
       productUrl: 'https://pick-it-up-seattle-shop.fourthwall.com/products/official-pick-it-up-seattle-one-person-one-piece-one-better-seattle-unisex-hoodie',
     },
+    {
+      id: 'one-person-one-piece-one-better-seattle-unisex-tee',
+      group: 'Signature Collection',
+      name: 'One Person. One Piece. One Better Seattle. Unisex Tee',
+      description: 'A refined take on the Pick It Up Seattle message, this tee pairs everyday comfort with a more elevated feel. Perfect for neighborhood walks, volunteer days, community events, or simply carrying the message wherever you go.',
+      imageSrc: '/One person Unisex Tee.png',
+      imageContainerClass: 'h-full w-full p-2',
+      imageClass: 'scale-[1.1]',
+      imagePlaceholder: 'Add one-person-one-piece-one-better-seattle-unisex-tee image',
+      imageStyle: 'bg-[linear-gradient(145deg,_#0f9aa1_0%,_#2ec4c7_45%,_#69be28_100%)]',
+      productUrl: 'https://pick-it-up-seattle-shop.fourthwall.com/products/official-pick-it-up-seattle-one-person-one-piece-one-better-seattle-unisex-t-shirt',
+    },
   ];
 
   return (
