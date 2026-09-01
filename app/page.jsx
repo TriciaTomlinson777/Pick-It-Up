@@ -4154,14 +4154,14 @@ export default function Home() {
                             <label
                               htmlFor="community-action-photo-input-camera"
                               aria-disabled={isUploadingCleanupPhotos}
-                              className="btn-green sm:hidden inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.08em]"
+                              className="sm:hidden inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border border-[#D9665B]/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#D9665B] transition hover:bg-[#fff3f0]"
                             >
                               Take Photo
                             </label>
                             <label
                               htmlFor="community-action-photo-input"
                               aria-disabled={isUploadingCleanupPhotos}
-                              className="btn-green inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.08em]"
+                              className="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border border-[#D9665B]/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#D9665B] transition hover:bg-[#fff3f0]"
                             >
                               Choose Photo
                             </label>
@@ -4345,29 +4345,23 @@ export default function Home() {
                           onChange={handleSharePhotoInputChange}
                           className="sr-only"
                         />
-                        <div className="mt-3 flex flex-wrap gap-2">
-                          <label
-                            htmlFor="share-thank-you-photo-camera"
-                            aria-disabled={isSubmittingShareSubmission}
-                            className={`sm:hidden inline-flex min-h-11 items-center justify-center rounded-full px-5 py-2 text-sm font-semibold text-white transition ${
-                              isSubmittingShareSubmission
-                                ? 'cursor-not-allowed bg-[#1fb8c2]/60'
-                                : 'cursor-pointer bg-[#1fb8c2] hover:bg-[#0fa5af]'
-                            }`}
-                          >
-                            Take Photo
-                          </label>
-                          <label
-                            htmlFor="share-thank-you-photo"
-                            aria-disabled={isSubmittingShareSubmission}
-                            className={`inline-flex min-h-11 items-center justify-center rounded-full px-5 py-2 text-sm font-semibold text-white transition ${
-                              isSubmittingShareSubmission
-                                ? 'cursor-not-allowed bg-[#1fb8c2]/60'
-                                : 'cursor-pointer bg-[#1fb8c2] hover:bg-[#0fa5af]'
-                            }`}
-                          >
-                            Choose Photo
-                          </label>
+                        <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+                          <div className="flex gap-2">
+                            <label
+                              htmlFor="share-thank-you-photo-camera"
+                              aria-disabled={isSubmittingShareSubmission}
+                              className="sm:hidden inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border border-[#D9665B]/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#D9665B] transition hover:bg-[#fff3f0]"
+                            >
+                              Take Photo
+                            </label>
+                            <label
+                              htmlFor="share-thank-you-photo"
+                              aria-disabled={isSubmittingShareSubmission}
+                              className="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border border-[#D9665B]/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#D9665B] transition hover:bg-[#fff3f0]"
+                            >
+                              Choose Photo
+                            </label>
+                          </div>
                         </div>
 
                         {shareSelectedPhoto ? (
@@ -4500,29 +4494,23 @@ export default function Home() {
                           onChange={handleSharePhotoInputChange}
                           className="sr-only"
                         />
-                        <div className="mt-3 flex flex-wrap gap-2">
-                          <label
-                            htmlFor="share-scenic-photo-camera"
-                            aria-disabled={isSubmittingShareSubmission}
-                            className={`sm:hidden inline-flex min-h-11 items-center justify-center rounded-full px-5 py-2 text-sm font-semibold text-white transition ${
-                              isSubmittingShareSubmission
-                                ? 'cursor-not-allowed bg-[#1fb8c2]/60'
-                                : 'cursor-pointer bg-[#1fb8c2] hover:bg-[#0fa5af]'
-                            }`}
-                          >
-                            Take Photo
-                          </label>
-                          <label
-                            htmlFor="share-scenic-photo"
-                            aria-disabled={isSubmittingShareSubmission}
-                            className={`inline-flex min-h-11 items-center justify-center rounded-full px-5 py-2 text-sm font-semibold text-white transition ${
-                              isSubmittingShareSubmission
-                                ? 'cursor-not-allowed bg-[#1fb8c2]/60'
-                                : 'cursor-pointer bg-[#1fb8c2] hover:bg-[#0fa5af]'
-                            }`}
-                          >
-                            Choose Photo
-                          </label>
+                        <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+                          <div className="flex gap-2">
+                            <label
+                              htmlFor="share-scenic-photo-camera"
+                              aria-disabled={isSubmittingShareSubmission}
+                              className="sm:hidden inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border border-[#D9665B]/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#D9665B] transition hover:bg-[#fff3f0]"
+                            >
+                              Take Photo
+                            </label>
+                            <label
+                              htmlFor="share-scenic-photo"
+                              aria-disabled={isSubmittingShareSubmission}
+                              className="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border border-[#D9665B]/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#D9665B] transition hover:bg-[#fff3f0]"
+                            >
+                              Choose Photo
+                            </label>
+                          </div>
                         </div>
 
                         {shareSelectedPhoto ? (
