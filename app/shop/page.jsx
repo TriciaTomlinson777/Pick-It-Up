@@ -179,6 +179,18 @@ export default function Shop() {
       imageStyle: 'bg-[linear-gradient(145deg,_#0f9aa1_0%,_#2ec4c7_45%,_#69be28_100%)]',
       productUrl: 'https://pick-it-up-seattle-shop.fourthwall.com/products/official-pick-it-up-seattle-one-person-one-piece-one-better-seattle-unisex-t-shirt',
     },
+    {
+      id: 'mess-master-unisex-tee',
+      group: 'Signature Collection',
+      name: 'Mess Master Unisex Tee',
+      description: 'Bring a little attitude to doing something good. The Mess Master Unisex Tee celebrates the people who aren’t afraid to tackle the mess and leave Seattle a little better than they found it. Playful, bold, and unmistakably Pick It Up Seattle.',
+      imageSrc: '/Mess Master Unisex Tee.png',
+      imageContainerClass: 'h-full w-full p-2',
+      imageClass: 'scale-[1.1]',
+      imagePlaceholder: 'Add mess-master-unisex-tee image',
+      imageStyle: 'bg-[linear-gradient(145deg,_#0f9aa1_0%,_#2ec4c7_45%,_#69be28_100%)]',
+      productUrl: 'https://pick-it-up-seattle-shop.fourthwall.com/products/mess-master-unisex-black-tee',
+    },
   ];
 
   return (
