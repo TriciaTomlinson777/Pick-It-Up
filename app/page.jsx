@@ -3936,9 +3936,27 @@ export default function Home() {
                       className="sr-only"
                     />
                     <input
+                      id="before-photo-input-camera"
+                      type="file"
+                      accept="image/*"
+                      capture="environment"
+                      disabled={isUploadingCleanupPhotos || !isTrackBeforeAfterPhotoModal}
+                      onChange={(event) => handleBeforeAfterPhotoInputChange(0, event)}
+                      className="sr-only"
+                    />
+                    <input
                       id="after-photo-input"
                       type="file"
                       accept="image/*"
+                      disabled={isUploadingCleanupPhotos || !isTrackBeforeAfterPhotoModal}
+                      onChange={(event) => handleBeforeAfterPhotoInputChange(1, event)}
+                      className="sr-only"
+                    />
+                    <input
+                      id="after-photo-input-camera"
+                      type="file"
+                      accept="image/*"
+                      capture="environment"
                       disabled={isUploadingCleanupPhotos || !isTrackBeforeAfterPhotoModal}
                       onChange={(event) => handleBeforeAfterPhotoInputChange(1, event)}
                       className="sr-only"
@@ -3948,6 +3966,17 @@ export default function Home() {
                         id="community-action-photo-input"
                         type="file"
                         accept="image/*"
+                        disabled={isUploadingCleanupPhotos || isTrackBeforeAfterPhotoModal}
+                        onChange={handleCommunityActionPhotoInputChange}
+                        className="sr-only"
+                      />
+                    ) : null}
+                    {!isTrackBeforeAfterPhotoModal ? (
+                      <input
+                        id="community-action-photo-input-camera"
+                        type="file"
+                        accept="image/*"
+                        capture="environment"
                         disabled={isUploadingCleanupPhotos || isTrackBeforeAfterPhotoModal}
                         onChange={handleCommunityActionPhotoInputChange}
                         className="sr-only"
@@ -3990,10 +4019,7 @@ export default function Home() {
                       <div className="grid gap-4 sm:grid-cols-2">
                         <div className="rounded-[1.2rem] border border-[#D9665B]/24 bg-white p-4 shadow-[0_10px_22px_rgba(0,43,73,0.08)]">
                           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#8f5e56]">BEFORE</p>
-                          <label
-                            htmlFor="before-photo-input"
-                            className="mt-3 block h-64 overflow-hidden rounded-xl border border-[#002b49]/10 bg-white cursor-pointer"
-                          >
+                          <div className="mt-3 block h-64 overflow-hidden rounded-xl border border-[#002b49]/10 bg-white">
                             {selectedimages[0] ? (
                               <img
                                 src={selectedimages[0].previewUrl}
@@ -4011,9 +4037,25 @@ export default function Home() {
                                 onDragEnd={handlePhotoPreviewDragEnd}
                               />
                             ) : null}
-                          </label>
-                          {selectedimages[0] ? (
-                            <div className="mt-3 flex justify-end">
+                          </div>
+                          <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+                            <div className="flex gap-2">
+                              <label
+                                htmlFor="before-photo-input-camera"
+                                aria-disabled={isUploadingCleanupPhotos || !isTrackBeforeAfterPhotoModal}
+                                className="sm:hidden inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border border-[#D9665B]/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#D9665B] transition hover:bg-[#fff3f0]"
+                              >
+                                Take Photo
+                              </label>
+                              <label
+                                htmlFor="before-photo-input"
+                                aria-disabled={isUploadingCleanupPhotos || !isTrackBeforeAfterPhotoModal}
+                                className="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border border-[#D9665B]/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#D9665B] transition hover:bg-[#fff3f0]"
+                              >
+                                Choose Photo
+                              </label>
+                            </div>
+                            {selectedimages[0] ? (
                               <button
                                 type="button"
                                 onClick={() => handleRemoveSelectedPhoto(0)}
@@ -4021,16 +4063,13 @@ export default function Home() {
                               >
                                 Remove
                               </button>
-                            </div>
-                          ) : null}
+                            ) : null}
+                          </div>
                         </div>
 
                         <div className="rounded-[1.2rem] border border-[#69BE28]/24 bg-white p-4 shadow-[0_10px_22px_rgba(0,43,73,0.08)]">
                           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#4b7430]">AFTER</p>
-                          <label
-                            htmlFor="after-photo-input"
-                            className="mt-3 block h-64 overflow-hidden rounded-xl border border-[#002b49]/10 bg-white cursor-pointer"
-                          >
+                          <div className="mt-3 block h-64 overflow-hidden rounded-xl border border-[#002b49]/10 bg-white">
                             {selectedimages[1] ? (
                               <img
                                 src={selectedimages[1].previewUrl}
@@ -4048,9 +4087,25 @@ export default function Home() {
                                 onDragEnd={handlePhotoPreviewDragEnd}
                               />
                             ) : null}
-                          </label>
-                          {selectedimages[1] ? (
-                            <div className="mt-3 flex justify-end">
+                          </div>
+                          <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+                            <div className="flex gap-2">
+                              <label
+                                htmlFor="after-photo-input-camera"
+                                aria-disabled={isUploadingCleanupPhotos || !isTrackBeforeAfterPhotoModal}
+                                className="sm:hidden inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border border-[#D9665B]/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#D9665B] transition hover:bg-[#fff3f0]"
+                              >
+                                Take Photo
+                              </label>
+                              <label
+                                htmlFor="after-photo-input"
+                                aria-disabled={isUploadingCleanupPhotos || !isTrackBeforeAfterPhotoModal}
+                                className="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border border-[#D9665B]/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#D9665B] transition hover:bg-[#fff3f0]"
+                              >
+                                Choose Photo
+                              </label>
+                            </div>
+                            {selectedimages[1] ? (
                               <button
                                 type="button"
                                 onClick={() => handleRemoveSelectedPhoto(1)}
@@ -4058,8 +4113,8 @@ export default function Home() {
                               >
                                 Remove
                               </button>
-                            </div>
-                          ) : null}
+                            ) : null}
+                          </div>
                         </div>
                       </div>
 
@@ -4084,27 +4139,34 @@ export default function Home() {
                   ) : (
                     <div className="mt-5">
                       <div className="rounded-[1.2rem] border border-[#0f9aa1]/24 bg-white p-4 shadow-[0_10px_22px_rgba(0,43,73,0.08)]">
-                        <label
-                          htmlFor="community-action-photo-input"
-                          className="block h-64 overflow-hidden rounded-xl border border-[#002b49]/10 bg-white cursor-pointer"
-                        >
+                        <div className="block h-64 overflow-hidden rounded-xl border border-[#002b49]/10 bg-white">
                           {communityActionSelectedPhoto ? (
                             <img
                               src={communityActionSelectedPhoto.previewUrl}
                               alt="Cleanup upload preview"
                               className="h-full w-full object-contain object-center select-none"
                             />
-                          ) : (
-                            <div className="flex h-full items-center justify-center">
-                              <span className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#0f9aa1]/30 bg-[#ecfbfe] px-6 py-2 text-sm font-semibold text-[#0b7485] shadow-[0_8px_16px_rgba(15,154,161,0.12)]">
-                                Post Photo
-                              </span>
-                            </div>
-                          )}
-                        </label>
+                          ) : null}
+                        </div>
 
-                        {communityActionSelectedPhoto ? (
-                          <div className="mt-3 flex justify-end">
+                        <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+                          <div className="flex gap-2">
+                            <label
+                              htmlFor="community-action-photo-input-camera"
+                              aria-disabled={isUploadingCleanupPhotos}
+                              className="btn-green sm:hidden inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.08em]"
+                            >
+                              Take Photo
+                            </label>
+                            <label
+                              htmlFor="community-action-photo-input"
+                              aria-disabled={isUploadingCleanupPhotos}
+                              className="btn-green inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.08em]"
+                            >
+                              Choose Photo
+                            </label>
+                          </div>
+                          {communityActionSelectedPhoto ? (
                             <button
                               type="button"
                               onClick={handleRemoveCommunityActionPhoto}
@@ -4112,8 +4174,8 @@ export default function Home() {
                             >
                               Remove
                             </button>
-                          </div>
-                        ) : null}
+                          ) : null}
+                        </div>
 
                       </div>
                     </div>
@@ -4274,7 +4336,27 @@ export default function Home() {
                           onChange={handleSharePhotoInputChange}
                           className="sr-only"
                         />
-                        <div className="mt-3">
+                        <input
+                          id="share-thank-you-photo-camera"
+                          type="file"
+                          accept="image/*"
+                          capture="environment"
+                          disabled={isSubmittingShareSubmission}
+                          onChange={handleSharePhotoInputChange}
+                          className="sr-only"
+                        />
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          <label
+                            htmlFor="share-thank-you-photo-camera"
+                            aria-disabled={isSubmittingShareSubmission}
+                            className={`sm:hidden inline-flex min-h-11 items-center justify-center rounded-full px-5 py-2 text-sm font-semibold text-white transition ${
+                              isSubmittingShareSubmission
+                                ? 'cursor-not-allowed bg-[#1fb8c2]/60'
+                                : 'cursor-pointer bg-[#1fb8c2] hover:bg-[#0fa5af]'
+                            }`}
+                          >
+                            Take Photo
+                          </label>
                           <label
                             htmlFor="share-thank-you-photo"
                             aria-disabled={isSubmittingShareSubmission}
@@ -4284,7 +4366,7 @@ export default function Home() {
                                 : 'cursor-pointer bg-[#1fb8c2] hover:bg-[#0fa5af]'
                             }`}
                           >
-                            Choose File
+                            Choose Photo
                           </label>
                         </div>
 
@@ -4407,8 +4489,41 @@ export default function Home() {
                           accept="image/*"
                           disabled={isSubmittingShareSubmission}
                           onChange={handleSharePhotoInputChange}
-                          className="mt-3 block w-full rounded-xl border border-[#002b49]/16 bg-white px-3 py-2 text-sm text-[#002b49] file:mr-3 file:rounded-full file:border-0 file:bg-[#1fb8c2] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-[#0fa5af] disabled:cursor-not-allowed disabled:opacity-60"
+                          className="sr-only"
                         />
+                        <input
+                          id="share-scenic-photo-camera"
+                          type="file"
+                          accept="image/*"
+                          capture="environment"
+                          disabled={isSubmittingShareSubmission}
+                          onChange={handleSharePhotoInputChange}
+                          className="sr-only"
+                        />
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          <label
+                            htmlFor="share-scenic-photo-camera"
+                            aria-disabled={isSubmittingShareSubmission}
+                            className={`sm:hidden inline-flex min-h-11 items-center justify-center rounded-full px-5 py-2 text-sm font-semibold text-white transition ${
+                              isSubmittingShareSubmission
+                                ? 'cursor-not-allowed bg-[#1fb8c2]/60'
+                                : 'cursor-pointer bg-[#1fb8c2] hover:bg-[#0fa5af]'
+                            }`}
+                          >
+                            Take Photo
+                          </label>
+                          <label
+                            htmlFor="share-scenic-photo"
+                            aria-disabled={isSubmittingShareSubmission}
+                            className={`inline-flex min-h-11 items-center justify-center rounded-full px-5 py-2 text-sm font-semibold text-white transition ${
+                              isSubmittingShareSubmission
+                                ? 'cursor-not-allowed bg-[#1fb8c2]/60'
+                                : 'cursor-pointer bg-[#1fb8c2] hover:bg-[#0fa5af]'
+                            }`}
+                          >
+                            Choose Photo
+                          </label>
+                        </div>
 
                         {shareSelectedPhoto ? (
                           <div className="mt-4 grid gap-3">
