@@ -11,6 +11,7 @@ export default function Shop() {
   const products = [
     {
       id: 'official-volunteer-tshirt',
+      category: 'Adult & Unisex',
       group: 'Volunteer Collection',
       name: 'Volunteer T-Shirt',
       description: 'The official everyday volunteer tee made to represent clean neighborhoods and civic pride.',
@@ -23,6 +24,7 @@ export default function Shop() {
     },
     {
       id: 'volunteer-hat',
+      category: 'Accessories',
       group: 'Volunteer Collection',
       name: 'Volunteer Hat',
       description: 'A durable hat for cleanup days, neighborhood walks, and everyday support of the mission.',
@@ -35,6 +37,7 @@ export default function Shop() {
     },
     {
       id: 'youth-volunteer-tshirt',
+      category: 'Youth',
       group: 'Volunteer Collection',
       name: 'Youth Volunteer T-Shirt',
       description: 'Youth-sized volunteer apparel to help younger supporters join and champion cleaner streets.',
@@ -47,6 +50,7 @@ export default function Shop() {
     },
     {
       id: 'donor-hat',
+      category: 'Accessories',
       group: 'Supporter Collection',
       name: 'Donor Hat',
       description: 'A supporter favorite that celebrates your contribution to local cleanup momentum.',
@@ -59,6 +63,7 @@ export default function Shop() {
     },
     {
       id: 'founding-donor-hat',
+      category: 'Accessories',
       group: 'Supporter Collection',
       name: 'Founding Donor Hat',
       description: 'Commemorates early supporters who helped establish the Pick It Up Seattle movement.',
@@ -71,6 +76,7 @@ export default function Shop() {
     },
     {
       id: 'legacy-donor-hat',
+      category: 'Accessories',
       group: 'Supporter Collection',
       name: 'Legacy Donor Hat',
       description: 'Honors ongoing donors building a lasting legacy of stewardship across Seattle neighborhoods.',
@@ -83,6 +89,7 @@ export default function Shop() {
     },
     {
       id: 'signature-hat',
+      category: 'Adult & Unisex',
       group: 'Signature Collection',
       name: 'Legacy Donor T-Shirt',
       description: 'Recognizes extraordinary generosity and a lasting commitment to cleaner, stronger communities.',
@@ -95,6 +102,7 @@ export default function Shop() {
     },
     {
       id: 'official-pick-it-up-seattle-hat',
+      category: 'Accessories',
       group: 'Signature Collection',
       name: 'Pick It Up Seattle Hat',
       description: 'The official flagship hat representing one simple action that improves every neighborhood.',
@@ -107,6 +115,7 @@ export default function Shop() {
     },
     {
       id: 'dont-be-trashy-tee',
+      category: 'Adult & Unisex',
       group: 'Signature Collection',
       name: 'Don’t Be Trashy Tee',
       price: '$29.95',
@@ -121,6 +130,7 @@ export default function Shop() {
     },
     {
       id: 'mess-master-tee',
+      category: 'Adult & Unisex',
       group: 'Signature Collection',
       name: 'Mess Master Tee',
       description: 'Bring a little attitude to doing something good. The Mess Master Tee celebrates the people who aren’t afraid to tackle the mess and leave Seattle a little better than they found it. Playful, bold, and unmistakably Pick It Up Seattle.',
@@ -133,6 +143,7 @@ export default function Shop() {
     },
     {
       id: 'one-person-one-piece-one-better-seattle-youth-tee',
+      category: 'Youth',
       group: 'Signature Collection',
       name: 'One Better Seattle Youth Tee',
       description: 'Our core PIUS message in a simple tee for kids and small adults who want to be part of the movement.',
@@ -145,6 +156,7 @@ export default function Shop() {
     },
     {
       id: 'one-person-one-piece-one-better-seattle-adult-tee',
+      category: 'Adult & Unisex',
       group: 'Signature Collection',
       name: 'One Better Seattle Adult Tee',
       description: 'Wear the Pick It Up Seattle message wherever you go—and inspire someone else to do the same.',
@@ -157,6 +169,7 @@ export default function Shop() {
     },
     {
       id: 'one-person-one-piece-one-better-seattle-unisex-hoodie',
+      category: 'Adult & Unisex',
       group: 'Signature Collection',
       name: 'One Person. One Piece. One Better Seattle. Unisex Hoodie',
       description: 'Stay warm while wearing the Pick It Up Seattle message. A comfortable, practical zip-up hoodie with the PIUS logo on the back and “One person. One piece. One Better Seattle.” on the sleeve.',
@@ -169,6 +182,7 @@ export default function Shop() {
     },
     {
       id: 'one-person-one-piece-one-better-seattle-unisex-tee',
+      category: 'Adult & Unisex',
       group: 'Signature Collection',
       name: 'One Person. One Piece. One Better Seattle. Unisex Tee',
       description: 'A refined take on the Pick It Up Seattle message, this tee pairs everyday comfort with a more elevated feel. Perfect for neighborhood walks, volunteer days, community events, or simply carrying the message wherever you go.',
@@ -181,6 +195,7 @@ export default function Shop() {
     },
     {
       id: 'mess-master-unisex-tee',
+      category: 'Adult & Unisex',
       group: 'Signature Collection',
       name: 'Mess Master Unisex Tee',
       description: 'Bring a little attitude to doing something good. The Mess Master Unisex Tee celebrates the people who aren’t afraid to tackle the mess and leave Seattle a little better than they found it. Playful, bold, and unmistakably Pick It Up Seattle.',
@@ -192,6 +207,8 @@ export default function Shop() {
       productUrl: 'https://pick-it-up-seattle-shop.fourthwall.com/products/mess-master-unisex-black-tee',
     },
   ];
+
+  const productCategories = ['Adult & Unisex', 'Youth', 'Accessories'];
 
   return (
     <>
@@ -226,59 +243,69 @@ export default function Shop() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 xl:grid-cols-4">
-            {products.map((product) => (
-              <div
-                key={product.id}
-                className="flex h-full flex-col overflow-hidden rounded-2xl border border-[#0f9aa1]/20 bg-white shadow-[0_14px_30px_rgba(0,43,73,0.12)] transition hover:shadow-[0_18px_40px_rgba(0,43,73,0.16)]"
-              >
-                <div className={`${product.imageStyle} relative flex h-56 items-center justify-center`}>
-                  {product.imageSrc ? (
-                    <div className={`mx-4 flex items-center justify-center ${product.imageContainerClass ?? 'h-[88%] w-[88%] p-3'}`}>
-                      <img
-                        src={product.imageSrc}
-                        alt={`${product.name} product image`}
-                        className={`h-full w-full object-contain object-center ${product.imageClass ?? ''}`}
-                      />
-                    </div>
-                  ) : product.hidePlaceholder ? (
-                    <div className="h-[88%] w-[88%]" aria-hidden="true" />
-                  ) : (
-                    <div className="mx-4 rounded-xl border border-white/55 bg-white/22 px-4 py-3 text-center text-xs font-semibold uppercase tracking-[0.12em] text-white sm:text-sm">
-                      Image Placeholder: {product.imagePlaceholder}
-                    </div>
-                  )}
-                </div>
+          {productCategories.map((category) => (
+            <div key={category} className="mb-12 last:mb-0">
+              <h2 className={`${balooDisplay.className} mb-6 text-2xl font-extrabold text-[#002b49] sm:text-3xl`}>
+                {category}
+              </h2>
 
-                <div className="flex h-full flex-col p-6">
-                  <p className={`${balooDisplay.className} text-center text-xs font-bold uppercase tracking-[0.18em] text-[#0f9aa1]`}>
-                    {product.group}
-                  </p>
-                  <div className="mt-2 min-h-[12rem]">
-                    <p className={`${balooDisplay.className} text-center text-[0.82rem] font-bold uppercase tracking-[0.14em] text-[#1f5f7a]`}>
-                      Official
-                    </p>
-                    <h2 className={`${balooDisplay.className} text-center text-[1.45rem] font-bold leading-tight text-[#002b49]`}>
-                      {product.name}
-                    </h2>
-                    <p className="mt-3 text-[0.98rem] leading-7 text-[#516b7d] sm:text-[1.04rem]">
-                      {product.description}
-                      {product.descriptionSpacer ? <><br /><br /></> : null}
-                    </p>
-                  </div>
-
-                  <div className="mt-auto pt-2">
-                    <a
-                      href={product.productUrl}
-                      className="btn-primary w-full rounded-xl px-5 py-3 text-center text-sm font-extrabold sm:text-base"
+              <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 xl:grid-cols-4">
+                {products
+                  .filter((product) => product.category === category)
+                  .map((product) => (
+                    <div
+                      key={product.id}
+                      className="flex h-full flex-col overflow-hidden rounded-2xl border border-[#0f9aa1]/20 bg-white shadow-[0_14px_30px_rgba(0,43,73,0.12)] transition hover:shadow-[0_18px_40px_rgba(0,43,73,0.16)]"
                     >
-                      Shop Now
-                    </a>
-                  </div>
-                </div>
+                      <div className={`${product.imageStyle} relative flex h-56 items-center justify-center`}>
+                        {product.imageSrc ? (
+                          <div className={`mx-4 flex items-center justify-center ${product.imageContainerClass ?? 'h-[88%] w-[88%] p-3'}`}>
+                            <img
+                              src={product.imageSrc}
+                              alt={`${product.name} product image`}
+                              className={`h-full w-full object-contain object-center ${product.imageClass ?? ''}`}
+                            />
+                          </div>
+                        ) : product.hidePlaceholder ? (
+                          <div className="h-[88%] w-[88%]" aria-hidden="true" />
+                        ) : (
+                          <div className="mx-4 rounded-xl border border-white/55 bg-white/22 px-4 py-3 text-center text-xs font-semibold uppercase tracking-[0.12em] text-white sm:text-sm">
+                            Image Placeholder: {product.imagePlaceholder}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex h-full flex-col p-6">
+                        <p className={`${balooDisplay.className} text-center text-xs font-bold uppercase tracking-[0.18em] text-[#0f9aa1]`}>
+                          {product.group}
+                        </p>
+                        <div className="mt-2 min-h-[12rem]">
+                          <p className={`${balooDisplay.className} text-center text-[0.82rem] font-bold uppercase tracking-[0.14em] text-[#1f5f7a]`}>
+                            Official
+                          </p>
+                          <h2 className={`${balooDisplay.className} text-center text-[1.45rem] font-bold leading-tight text-[#002b49]`}>
+                            {product.name}
+                          </h2>
+                          <p className="mt-3 text-[0.98rem] leading-7 text-[#516b7d] sm:text-[1.04rem]">
+                            {product.description}
+                            {product.descriptionSpacer ? <><br /><br /></> : null}
+                          </p>
+                        </div>
+
+                        <div className="mt-auto pt-2">
+                          <a
+                            href={product.productUrl}
+                            className="btn-primary w-full rounded-xl px-5 py-3 text-center text-sm font-extrabold sm:text-base"
+                          >
+                            Shop Now
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </section>
 
