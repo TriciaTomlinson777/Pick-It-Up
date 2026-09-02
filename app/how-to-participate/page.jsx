@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
@@ -180,21 +181,69 @@ export default function HowToParticipate() {
       content: (
         <>
           <p className="text-gray-700 leading-relaxed">
-            Businesses, organizations, and community partners play an important role in helping
-            us build a cleaner Seattle. There are many meaningful ways to support our
-            volunteers and strengthen this community movement.
+            Businesses, organizations, and community partners can play an important role in
+            helping build a cleaner Seattle.
             <br />
             <br />
-            Sponsor a cleanup by providing volunteer T-shirts or supporting our Sponsor a Can
-            program. Place a public trash can outside your business to
-            help reduce litter, encourage your employees to participate in a Cleanup Adventure,
-            or make a donation to support promotional materials, educational materials,
-            community outreach, the Sponsor a Can program, and other mission-focused work.
+            Imagine… if every person left every place better than they found it.
             <br />
             <br />
-            Have another creative idea? We&apos;d love to hear it! We believe the best ideas
-            often come from our community, and we&apos;re always excited to explore new
-            partnerships that inspire others and make an even greater impact.
+            Pick It Up Seattle is built on the idea that small actions matter. One person
+            picking up one piece of litter may seem small, but when a community joins in,
+            those small acts can help create a cleaner, brighter, more connected city.
+            <br />
+            <br />
+            We encourage people to notice the beauty around them, take pride in their
+            neighborhoods, and help inspire others through simple everyday action. Through
+            photos, shared stories, community participation, and positive recognition, Pick It
+            Up Seattle is designed to make caring for our city feel visible, rewarding, and
+            contagious.
+          </p>
+
+          <div className="mt-8 grid grid-cols-1 items-center gap-6 rounded-2xl bg-[#f2fbff] p-5 sm:p-6 md:grid-cols-2 md:gap-8">
+            <div>
+              <h4 className="text-lg font-bold text-[#0f9aa1]">Sponsor a Can</h4>
+              <p className="mt-3 text-gray-700 leading-relaxed">
+                One of our most exciting next steps is our Sponsor a Can initiative.
+                <br />
+                <br />
+                The idea is simple: place attractive public-facing litter cans where they can
+                make a real difference, and invite businesses and community partners to help
+                support a cleaner block, street, or neighborhood.
+                <br />
+                <br />
+                We are developing this as a pilot program, with the goal of using grant funding
+                to help with the initial cost of the can while participating businesses or
+                property owners help support ongoing service. We are currently looking for our
+                first 10 Founding Sponsor a Can partners.
+              </p>
+            </div>
+            <div className="flex flex-col items-center text-center">
+              <div className="relative h-56 w-full max-w-[220px] overflow-hidden rounded-xl bg-white p-3 shadow-md sm:h-64">
+                <Image
+                  src="/PIUS Litter Can.png"
+                  alt="Pick It Up Seattle Sponsor a Can litter can"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <p className="mt-3 text-sm font-semibold text-[#1f5f7a]">Help create a cleaner block.</p>
+            </div>
+          </div>
+
+          <p className="mt-6 text-gray-700 leading-relaxed">
+            This is a practical, visible, and community-minded way for local businesses and
+            supporters to help make Seattle cleaner — not just for themselves, but for everyone
+            who lives, works, and walks in our city.
+            <br />
+            <br />
+            In addition to Sponsor a Can, partners may also support Pick It Up Seattle through
+            volunteer T-shirts, outreach support, community encouragement, donated materials, or
+            other creative ideas that help grow the movement.
+            <br />
+            <br />
+            Have another idea? We&apos;d love to hear it. Some of the best community
+            partnerships begin with one thoughtful conversation.
           </p>
           <Link href="/contact" className="inline-block mt-4 text-seattle-green font-semibold hover:underline">
             Become a Community Partner →
