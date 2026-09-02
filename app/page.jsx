@@ -3529,7 +3529,7 @@ export default function Home() {
                 </div>
 
                 <div className="mt-2 flex items-center justify-center gap-2 text-[10px] font-medium leading-4 text-[#1f5f7a] sm:text-[11px] sm:leading-5">
-                  <p>
+                  <p className="hidden">
                     {visibleBeforeAfterGalleryPairs.length
                       ? `${Math.min(beforeAfterPairIndex + 1, beforeAfterGalleryPageCount)} of ${beforeAfterGalleryPageCount}`
                       : '0 of 0'}
