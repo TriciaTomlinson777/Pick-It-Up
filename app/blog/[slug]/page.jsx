@@ -9,7 +9,7 @@ import {
   getPublishedPosts,
   normalizeBodyParagraphs,
 } from '@/lib/blog-repository';
-import { formatPublicationDate } from '@/lib/blog-post-utils';
+import { formatPublicationDate, parseInlineFormatting } from '@/lib/blog-post-utils';
 
 export const dynamic = 'force-dynamic';
 const FIRST_POST_SLUG = 'what-i-didnt-expect-when-i-started-picking-up-litter';
@@ -136,7 +136,15 @@ export default async function BlogPostPage({ params }) {
 
             <div className="mt-8 space-y-6 text-[1.14rem] leading-[1.88] text-[#123e56]">
               {paragraphs.map((paragraph, index) => (
-                <p key={`paragraph-${index}`}>{paragraph}</p>
+                <p key={`paragraph-${index}`}>
+                  {parseInlineFormatting(paragraph).map((segment, segmentIndex) => (
+                    segment.bold ? (
+                      <strong key={segmentIndex}>{segment.text}</strong>
+                    ) : (
+                      <span key={segmentIndex}>{segment.text}</span>
+                    )
+                  ))}
+                </p>
               ))}
             </div>
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { formatPublicationDate } from '@/lib/blog-post-utils';
+import { articleTextToParagraphs, formatPublicationDate, parseInlineFormatting } from '@/lib/blog-post-utils';
 import { STORY_CATEGORIES } from '@/lib/story-categories';
 
 const EMPTY_FORM = {
@@ -62,6 +62,59 @@ function categoryTitleFromValue(value) {
   return found ? found.title : STORY_CATEGORIES[0].title;
 }
 
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+// Renders stored text (which may contain **bold** markers and \n breaks) as real
+// <strong> and <br> HTML so it appears bold in the editor instead of showing markers.
+function storedTextToEditableHtml(value) {
+  return String(value || '')
+    .split('\n')
+    .map((line) => (
+      parseInlineFormatting(line)
+        .map((segment) => (
+          segment.bold ? `<strong>${escapeHtml(segment.text)}</strong>` : escapeHtml(segment.text)
+        ))
+        .join('')
+    ))
+    .join('<br>');
+}
+
+// Reverses storedTextToEditableHtml: walks the editable DOM node back into the same
+// **bold**/\n plain-text format used by Preview and the published article.
+function editableNodeToStoredText(root) {
+  let text = '';
+
+  root.childNodes.forEach((node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      text += node.textContent;
+      return;
+    }
+
+    if (node.nodeType !== Node.ELEMENT_NODE) {
+      return;
+    }
+
+    const tagName = node.tagName;
+    if (tagName === 'BR') {
+      text += '\n';
+    } else if (tagName === 'B' || tagName === 'STRONG') {
+      const inner = editableNodeToStoredText(node);
+      text += inner ? `**${inner}**` : '';
+    } else if (tagName === 'DIV' || tagName === 'P') {
+      text += `${editableNodeToStoredText(node)}\n`;
+    } else {
+      text += editableNodeToStoredText(node);
+    }
+  });
+
+  return text;
+}
+
 async function requestAdminPosts() {
   const response = await fetch('/api/admin/blog', {
     cache: 'no-store',
@@ -98,9 +151,20 @@ export default function BlogAdminClient({ initialPosts = [] }) {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoadingPosts, setIsLoadingPosts] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [removedSubmissionPhotoUrls, setRemovedSubmissionPhotoUrls] = useState([]);
   const selectedPostRef = useRef(selectedPost);
+  const previewTextTextareaRef = useRef(null);
+  const bodyTextareaRef = useRef(null);
 
   const isEditing = Boolean(form.id);
+
+  const previewFeaturedImageUrl = featuredImagePreviewUrl
+    || (!removeFeaturedImage ? form.featuredImageUrl : '');
+  const previewParagraphs = useMemo(
+    () => articleTextToParagraphs(form.body),
+    [form.body]
+  );
 
   useEffect(() => {
     return () => {
@@ -164,6 +228,46 @@ export default function BlogAdminClient({ initialPosts = [] }) {
     setForm((current) => ({ ...current, [field]: value }));
   }
 
+  // Reflects stored text (which may contain **bold** markers and \n breaks) into the
+  // rich text editors as real <strong> and <br> elements.
+  function resetEditableContent(nextForm) {
+    if (previewTextTextareaRef.current) {
+      previewTextTextareaRef.current.innerHTML = storedTextToEditableHtml(nextForm.previewText || '');
+    }
+    if (bodyTextareaRef.current) {
+      bodyTextareaRef.current.innerHTML = storedTextToEditableHtml(nextForm.body || '');
+    }
+  }
+
+  function handleEditableInput(field, event) {
+    updateField(field, editableNodeToStoredText(event.currentTarget));
+  }
+
+  function handleEditableKeyDown(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      document.execCommand('insertLineBreak');
+    }
+  }
+
+  function handleEditablePaste(event) {
+    event.preventDefault();
+    const text = event.clipboardData.getData('text/plain');
+    document.execCommand('insertText', false, text);
+  }
+
+  function applyBoldToSelection() {
+    document.execCommand('styleWithCSS', false, false);
+    document.execCommand('bold');
+
+    if (previewTextTextareaRef.current) {
+      updateField('previewText', editableNodeToStoredText(previewTextTextareaRef.current));
+    }
+    if (bodyTextareaRef.current) {
+      updateField('body', editableNodeToStoredText(bodyTextareaRef.current));
+    }
+  }
+
   function startNewPost() {
     setSelectedPost(null);
     setForm(EMPTY_FORM);
@@ -172,20 +276,25 @@ export default function BlogAdminClient({ initialPosts = [] }) {
     setRemoveFeaturedImage(false);
     setFeaturedImageStatusMessage('');
     setFeaturedImageErrorMessage('');
+    setRemovedSubmissionPhotoUrls([]);
     setStatusMessage('');
     setErrorMessage('');
+    resetEditableContent(EMPTY_FORM);
   }
 
   function editPost(post) {
+    const nextForm = mapPostToForm(post);
     setSelectedPost(post);
-    setForm(mapPostToForm(post));
+    setForm(nextForm);
     setFeaturedImageFile(null);
     setFeaturedImagePreviewUrl('');
     setRemoveFeaturedImage(false);
     setFeaturedImageStatusMessage('');
     setFeaturedImageErrorMessage('');
+    setRemovedSubmissionPhotoUrls([]);
     setStatusMessage('');
     setErrorMessage('');
+    resetEditableContent(nextForm);
   }
 
   async function submitPost(nextStatus) {
@@ -214,6 +323,19 @@ export default function BlogAdminClient({ initialPosts = [] }) {
         payload.append('featuredImage', featuredImageFile);
       }
 
+      if (selectedPost && removedSubmissionPhotoUrls.length > 0) {
+        const remainingUrls = [];
+        const remainingPaths = [];
+        (selectedPost.submissionPhotoUrls || []).forEach((photoUrl, index) => {
+          if (!removedSubmissionPhotoUrls.includes(photoUrl)) {
+            remainingUrls.push(photoUrl);
+            remainingPaths.push((selectedPost.submissionPhotoPaths || [])[index] || '');
+          }
+        });
+        payload.append('submissionPhotoUrls', JSON.stringify(remainingUrls));
+        payload.append('submissionPhotoPaths', JSON.stringify(remainingPaths));
+      }
+
       const endpoint = isEditing ? `/api/admin/blog/${form.id}` : '/api/admin/blog';
       const method = isEditing ? 'PATCH' : 'POST';
       const response = await fetch(endpoint, {
@@ -229,8 +351,10 @@ export default function BlogAdminClient({ initialPosts = [] }) {
 
       await loadPosts();
       if (data.post) {
+        const nextForm = mapPostToForm(data.post);
         setSelectedPost(data.post);
-        setForm(mapPostToForm(data.post));
+        setForm(nextForm);
+        resetEditableContent(nextForm);
       }
 
       setFeaturedImageFile(null);
@@ -239,6 +363,7 @@ export default function BlogAdminClient({ initialPosts = [] }) {
       }
       setFeaturedImagePreviewUrl('');
       setRemoveFeaturedImage(false);
+      setRemovedSubmissionPhotoUrls([]);
       setStatusMessage(nextStatus === 'published' ? 'Story published or scheduled.' : 'Story saved.');
 
       if (featuredImageFile) {
@@ -467,22 +592,31 @@ export default function BlogAdminClient({ initialPosts = [] }) {
 
               <label className="block">
                 <span className="mb-1 block text-sm font-semibold text-[#002244]">Short Preview (2-4 sentences)</span>
-                <textarea
-                  rows={4}
-                  value={form.previewText}
-                  onChange={(event) => updateField('previewText', event.target.value)}
-                  className="w-full rounded-xl border border-[#002244]/18 px-4 py-3 text-[#002244] focus:outline-none focus:ring-2 focus:ring-[#0f9aa1]/35"
+                <div
+                  ref={previewTextTextareaRef}
+                  contentEditable
+                  suppressContentEditableWarning
+                  role="textbox"
+                  aria-multiline="true"
+                  onInput={(event) => handleEditableInput('previewText', event)}
+                  onKeyDown={handleEditableKeyDown}
+                  onPaste={handleEditablePaste}
+                  className="min-h-[6rem] w-full rounded-xl border border-[#002244]/18 px-4 py-3 text-[#002244] focus:outline-none focus:ring-2 focus:ring-[#0f9aa1]/35"
                 />
               </label>
 
               <label className="block">
                 <span className="mb-1 block text-sm font-semibold text-[#002244]">Full Story</span>
-                <textarea
-                  rows={16}
-                  value={form.body}
-                  onChange={(event) => updateField('body', event.target.value)}
-                  className="w-full rounded-xl border border-[#002244]/18 px-4 py-3 text-[1rem] leading-7 text-[#002244] focus:outline-none focus:ring-2 focus:ring-[#0f9aa1]/35"
-                  required
+                <div
+                  ref={bodyTextareaRef}
+                  contentEditable
+                  suppressContentEditableWarning
+                  role="textbox"
+                  aria-multiline="true"
+                  onInput={(event) => handleEditableInput('body', event)}
+                  onKeyDown={handleEditableKeyDown}
+                  onPaste={handleEditablePaste}
+                  className="min-h-[22rem] w-full rounded-xl border border-[#002244]/18 px-4 py-3 text-[1rem] leading-7 text-[#002244] focus:outline-none focus:ring-2 focus:ring-[#0f9aa1]/35"
                 />
               </label>
 
@@ -598,10 +732,41 @@ export default function BlogAdminClient({ initialPosts = [] }) {
                 <div className="rounded-xl border border-[#002244]/12 bg-[#f9fdfc] p-4">
                   <p className="text-sm font-semibold text-[#002244]">Submitted Photos</p>
                   <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
-                    {selectedPost.submissionPhotoUrls.map((photoUrl) => (
-                      <img key={photoUrl} src={photoUrl} alt="Submitted" className="h-24 w-full rounded-lg object-cover" />
-                    ))}
+                    {selectedPost.submissionPhotoUrls.map((photoUrl) => {
+                      const isRemoved = removedSubmissionPhotoUrls.includes(photoUrl);
+                      return (
+                        <div key={photoUrl} className="relative">
+                          <img
+                            src={photoUrl}
+                            alt="Submitted"
+                            className={`h-24 w-full rounded-lg object-cover ${isRemoved ? 'opacity-30' : ''}`}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setRemovedSubmissionPhotoUrls((current) => (
+                                isRemoved
+                                  ? current.filter((url) => url !== photoUrl)
+                                  : [...current, photoUrl]
+                              ));
+                            }}
+                            className={`absolute right-1 top-1 rounded-full px-2 py-1 text-[10px] font-semibold shadow-sm transition ${
+                              isRemoved
+                                ? 'bg-white text-[#1f5f7a] hover:bg-[#edf5f9]'
+                                : 'bg-[#b23d31] text-white hover:bg-[#8f2f26]'
+                            }`}
+                          >
+                            {isRemoved ? 'Undo' : 'Remove'}
+                          </button>
+                        </div>
+                      );
+                    })}
                   </div>
+                  {removedSubmissionPhotoUrls.length > 0 ? (
+                    <p className="mt-3 rounded-xl border border-[#1f8f3c]/20 bg-[#ecf9f0] px-3 py-2 text-xs font-semibold text-[#1f8f3c]">
+                      Click Save Story to remove the marked photo(s) from this story.
+                    </p>
+                  ) : null}
                 </div>
               ) : null}
             </div>
@@ -626,6 +791,22 @@ export default function BlogAdminClient({ initialPosts = [] }) {
                 className="rounded-full border border-[#002244]/24 px-5 py-2.5 text-sm font-semibold text-[#002244] transition hover:bg-[#edf4f7] disabled:opacity-70"
               >
                 {isSaving ? 'Saving...' : 'Save Story'}
+              </button>
+              <button
+                type="button"
+                onMouseDown={(event) => event.preventDefault()}
+                onClick={applyBoldToSelection}
+                className="rounded-full border border-[#002244]/24 px-5 py-2.5 text-sm font-extrabold text-[#002244] transition hover:bg-[#edf4f7]"
+                title="Bold the selected text in Short Preview or Full Story"
+              >
+                Bold
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsPreviewOpen(true)}
+                className="rounded-full border border-[#1f5f7a]/30 px-5 py-2.5 text-sm font-semibold text-[#1f5f7a] transition hover:bg-[#edf5f9]"
+              >
+                Preview
               </button>
               <button
                 type="button"
@@ -675,6 +856,87 @@ export default function BlogAdminClient({ initialPosts = [] }) {
           </section>
         </div>
       </div>
+
+      {isPreviewOpen ? (
+        <div
+          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-[#002244]/70 px-4 py-8"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Story preview"
+        >
+          <div className="relative w-full max-w-3xl">
+            <button
+              type="button"
+              onClick={() => setIsPreviewOpen(false)}
+              className="absolute -top-2 right-0 z-10 rounded-full border border-white/40 bg-white px-4 py-2 text-sm font-semibold text-[#002244] shadow-sm transition hover:bg-[#edf4f7]"
+            >
+              Close Preview
+            </button>
+
+            <article className="mt-10 rounded-2xl border border-[#0f9aa1]/18 bg-white px-6 py-8 shadow-sm sm:px-10 sm:py-10">
+              <h1 className="text-4xl font-bold leading-tight text-[#002244] sm:text-5xl">
+                {form.title || 'Untitled Story'}
+              </h1>
+              <p className="mt-3 inline-flex rounded-full bg-[#eaf8f9] px-3 py-1 text-xs font-semibold text-[#0f9aa1]">
+                {categoryTitleFromValue(form.category)}
+              </p>
+              <p className="mt-3 text-sm font-semibold text-[#1f5f7a]">
+                {form.publishedAt ? `${formatPublicationDate(form.publishedAt)} • ` : ''}By {form.author || 'Unknown'}
+              </p>
+
+              {previewFeaturedImageUrl ? (
+                <img
+                  src={previewFeaturedImageUrl}
+                  alt={form.title}
+                  style={{
+                    width: '100%',
+                    maxWidth: '800px',
+                    height: 'auto',
+                    objectFit: 'contain',
+                    objectPosition: 'center',
+                    display: 'block',
+                    margin: '1.5rem auto 0',
+                  }}
+                  className="rounded-xl"
+                />
+              ) : null}
+
+              {form.previewText ? (
+                <p className="mt-6 text-lg italic leading-8 text-[#1f5f7a]">{form.previewText}</p>
+              ) : null}
+
+              <div className="mt-8 space-y-6 text-[1.14rem] leading-[1.88] text-[#123e56]">
+                {previewParagraphs.length > 0 ? (
+                  previewParagraphs.map((paragraph, index) => (
+                    <p key={`preview-paragraph-${index}`}>
+                      {parseInlineFormatting(paragraph).map((segment, segmentIndex) => (
+                        segment.bold ? (
+                          <strong key={segmentIndex}>{segment.text}</strong>
+                        ) : (
+                          <span key={segmentIndex}>{segment.text}</span>
+                        )
+                      ))}
+                    </p>
+                  ))
+                ) : (
+                  <p className="italic text-[#6d7081]">No story text yet.</p>
+                )}
+              </div>
+
+              {selectedPost?.submissionPhotoUrls?.length > 0 ? (
+                <div className="mt-10 rounded-xl border border-[#002244]/12 bg-[#f9fdfc] p-4">
+                  <p className="text-sm font-semibold text-[#002244]">Submitted Photos</p>
+                  <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                    {selectedPost.submissionPhotoUrls.map((photoUrl) => (
+                      <img key={photoUrl} src={photoUrl} alt="Submitted" className="h-24 w-full rounded-lg object-cover" />
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+            </article>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
