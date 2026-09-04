@@ -15,6 +15,9 @@ export default function Header() {
   const kidsCornerLetters = 'Kids Corner'.split('');
   let kidsCornerColorIndex = 0;
 
+  // Matches the per-letter colors on the "Kids Corner!" heading (app/kids-corner/page.jsx).
+  const kidsCornerHeadingColors = ['#0f9aa1', '#f59a2d', '#69be28', '#f4c94c', null, '#ef7f2d', '#2ec4c7', '#61b826', '#0fa5af', '#1fb8c2', '#d9665b'];
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -122,10 +125,18 @@ export default function Header() {
             </Link>
             <Link
               href="/kids-corner"
-              className="block rounded-xl px-3 py-2.5 text-[1.08rem] font-bold text-[#d9665b] transition hover:bg-[#fdeceb] hover:text-[#d9665b] focus-visible:text-[#d9665b] active:text-[#d9665b]"
+              className="block rounded-xl px-3 py-2.5 text-[1.08rem] font-bold transition hover:bg-[#fdeceb]"
               onClick={() => setIsOpen(false)}
             >
-              Kids Corner
+              {kidsCornerLetters.map((char, index) =>
+                char === ' ' ? (
+                  <span key={index}>&nbsp;</span>
+                ) : (
+                  <span key={index} style={{ color: kidsCornerHeadingColors[index] }}>
+                    {char}
+                  </span>
+                )
+              )}
             </Link>
             <Link
               href="/blog"

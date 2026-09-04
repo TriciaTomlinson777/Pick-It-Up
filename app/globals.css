@@ -46,6 +46,22 @@
   min-height: 100vh;
 }
 
+/* Lets the standalone Captain Can reader page (mobile only) end with its content
+   instead of stretching to the shell/body's full-viewport min-height. */
+@media (max-width: 1023px) {
+  .page-shell:has(> .captain-can-reader-page) {
+    height: auto;
+    min-height: 0;
+    margin-bottom: 0;
+  }
+
+  body:has(.captain-can-reader-page) {
+    height: auto;
+    min-height: 0;
+    margin-bottom: 0;
+  }
+}
+
 @layer components {
   .container-custom {
     @apply px-5 sm:px-8 lg:px-12;

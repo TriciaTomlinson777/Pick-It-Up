@@ -8,8 +8,8 @@ export const metadata = {
 
 export default function CaptainCanMessyBlockReaderPage() {
   return (
-    <main className="min-h-screen bg-[#11100d] text-[#fff8e5]">
-      <section className="mx-auto flex w-full max-w-[92rem] flex-col px-5 pb-16 pt-10 sm:px-8 sm:pb-20 sm:pt-14 lg:px-12 lg:pb-24">
+    <main className="captain-can-reader-page bg-[#11100d] text-[#fff8e5] lg:min-h-screen">
+      <section className="mx-auto flex w-full max-w-[92rem] flex-col px-5 pb-10 pt-10 sm:px-8 sm:pb-20 sm:pt-14 lg:px-12 lg:pb-24">
         <div className="mx-auto w-full max-w-[78rem] text-center">
           <p className="text-sm font-bold uppercase tracking-[0.22em] text-[#f4c94c]">
             Read This Book
