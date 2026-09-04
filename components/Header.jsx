@@ -10,6 +10,11 @@ export default function Header() {
   const navLinkClassName =
     'rounded-full px-2.5 py-2 text-[1.04rem] font-bold tracking-[0.01em] transition hover:bg-[#e7f7f8] lg:px-3.5 lg:py-2.5 lg:text-[1.28rem] xl:text-[1.42rem] whitespace-nowrap';
 
+  // Alternates through the same colors already used by the other nav links.
+  const kidsCornerNavColors = ['#0f9aa1', '#61b826', '#ef7f2d', '#1fb8c2', '#f59a2d', '#0fa5af'];
+  const kidsCornerLetters = 'Kids Corner'.split('');
+  let kidsCornerColorIndex = 0;
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -17,7 +22,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-[#0f9aa1]/20 bg-[#fffaf0]/95 shadow-[0_10px_24px_rgba(0,34,68,0.1)] backdrop-blur-sm">
       <nav className="container-custom py-1 sm:py-5 lg:py-0 xl:py-0">
-        <div className="flex items-center justify-between">
+        <div className="relative flex items-center justify-between">
           <Logo href="/" className="inline-flex sm:ml-6 lg:ml-8 xl:ml-10 lg:relative lg:h-[17.4rem] lg:w-[24.3rem] lg:overflow-hidden xl:h-[18.75rem] xl:w-[26.1rem]" imgClassName="h-8 w-[7.5rem] object-contain sm:h-[7.5rem] sm:w-auto lg:absolute lg:left-[-1rem] lg:top-[-4.3rem] lg:h-[26.5rem] lg:w-[26.5rem] lg:max-w-none xl:left-[-1.2rem] xl:top-[-4.7rem] xl:h-[28.65rem] xl:w-[28.65rem]" />
 
           {/* Mobile menu button */}
@@ -61,6 +66,17 @@ export default function Header() {
             <Link href="/about" className={`${navLinkClassName} text-[#ef7f2d] hover:bg-[#fff2da] hover:text-[#ef7f2d] focus-visible:text-[#ef7f2d] active:text-[#ef7f2d]`}>
               About
             </Link>
+            <Link href="/kids-corner" className={`${navLinkClassName} hover:bg-[#e7f7f8]`}>
+              {kidsCornerLetters.map((char, index) =>
+                char === ' ' ? (
+                  <span key={index}>&nbsp;</span>
+                ) : (
+                  <span key={index} style={{ color: kidsCornerNavColors[kidsCornerColorIndex++ % kidsCornerNavColors.length] }}>
+                    {char}
+                  </span>
+                )
+              )}
+            </Link>
             <Link href="/blog" className={`${navLinkClassName} text-[#1fb8c2] hover:bg-[#e3f2fb] hover:text-[#1fb8c2] focus-visible:text-[#1fb8c2] active:text-[#1fb8c2]`}>
               Blog
             </Link>
@@ -70,10 +86,14 @@ export default function Header() {
             <Link href="/contact" className={`${navLinkClassName} text-[#0fa5af] hover:text-[#0fa5af] focus-visible:text-[#0fa5af] active:text-[#0fa5af]`}>
               Contact
             </Link>
-            <Link href="/volunteer" className="btn-green min-h-12 whitespace-nowrap px-4.5 text-[1.04rem] font-bold lg:px-6 lg:text-[1.26rem] xl:text-[1.38rem]">
-              Join the Movement
-            </Link>
           </div>
+
+          <Link
+            href="/volunteer"
+            className="btn-green absolute bottom-6 right-0 hidden min-h-12 whitespace-nowrap px-4.5 text-[1.04rem] font-bold lg:inline-flex lg:bottom-7 lg:px-6 lg:text-[1.26rem] xl:bottom-8 xl:text-[1.38rem]"
+          >
+            Join the Movement
+          </Link>
         </div>
 
         {/* Mobile menu */}
@@ -99,6 +119,13 @@ export default function Header() {
               onClick={() => setIsOpen(false)}
             >
               About
+            </Link>
+            <Link
+              href="/kids-corner"
+              className="block rounded-xl px-3 py-2.5 text-[1.08rem] font-bold text-[#d9665b] transition hover:bg-[#fdeceb] hover:text-[#d9665b] focus-visible:text-[#d9665b] active:text-[#d9665b]"
+              onClick={() => setIsOpen(false)}
+            >
+              Kids Corner
             </Link>
             <Link
               href="/blog"
