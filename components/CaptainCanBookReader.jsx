@@ -24,8 +24,9 @@ const bookPages = [
   { label: 'Page 17', src: '/captain-can-redesigned-pages/18_page_17.jpg' },
   { label: 'Page 18', src: '/captain-can-redesigned-pages/19_page_18.jpg' },
   { label: 'Page 19', src: '/captain-can-redesigned-pages/20_page_19.jpg' },
-  { label: 'Page 21', src: '/captain-can-redesigned-pages/21_page_21.jpg' },
-  { label: 'Page 22', src: '/captain-can-redesigned-pages/22_page_22.jpg' },
+  { label: 'Page 20', src: '/page 20 CCMM.png' },
+  { label: 'Page 21', src: '/page 21 CCMM.png' },
+  { label: 'Page 22', src: '/page 22 CCMM.png' },
 ];
 
 function getSpreadStart(index) {
