@@ -256,16 +256,70 @@ export default function BlogAdminClient({ initialPosts = [] }) {
     document.execCommand('insertText', false, text);
   }
 
-  function applyBoldToSelection() {
-    document.execCommand('styleWithCSS', false, false);
-    document.execCommand('bold');
+  function getEditableRootFromNode(node) {
+    let current = node;
+    while (current) {
+      if (current === previewTextTextareaRef.current || current === bodyTextareaRef.current) {
+        return current;
+      }
+      current = current.parentNode;
+    }
+    return null;
+  }
 
-    if (previewTextTextareaRef.current) {
-      updateField('previewText', editableNodeToStoredText(previewTextTextareaRef.current));
+  function getBoldAncestorWithinRoot(node, root) {
+    let current = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
+    while (current && current !== root) {
+      if (current.tagName === 'STRONG' || current.tagName === 'B') {
+        return current;
+      }
+      current = current.parentElement;
     }
-    if (bodyTextareaRef.current) {
-      updateField('body', editableNodeToStoredText(bodyTextareaRef.current));
+    return null;
+  }
+
+  function unwrapElement(element) {
+    const parent = element.parentNode;
+    while (element.firstChild) {
+      parent.insertBefore(element.firstChild, element);
     }
+    parent.removeChild(element);
+  }
+
+  // Manually wraps/unwraps the selection in a <strong> element instead of relying on
+  // document.execCommand('bold'), which some browsers apply as CSS styling that never
+  // gets picked up when the story is serialized and saved.
+  function applyBoldToSelection() {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0 || selection.isCollapsed) {
+      return;
+    }
+
+    const range = selection.getRangeAt(0);
+    const editableRoot = getEditableRootFromNode(range.commonAncestorContainer);
+    if (!editableRoot) {
+      return;
+    }
+
+    const existingBoldAncestor = getBoldAncestorWithinRoot(range.commonAncestorContainer, editableRoot);
+
+    if (existingBoldAncestor) {
+      unwrapElement(existingBoldAncestor);
+    } else {
+      const strong = document.createElement('strong');
+      try {
+        range.surroundContents(strong);
+      } catch {
+        const fragment = range.extractContents();
+        strong.appendChild(fragment);
+        range.insertNode(strong);
+      }
+    }
+
+    selection.removeAllRanges();
+
+    const field = editableRoot === bodyTextareaRef.current ? 'body' : 'previewText';
+    updateField(field, editableNodeToStoredText(editableRoot));
   }
 
   function startNewPost() {
