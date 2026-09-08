@@ -98,7 +98,7 @@ export default function Shop() {
       imageClass: 'scale-[1.1]',
       imagePlaceholder: 'ADD OFFICIAL LEGACY DONOR T-SHIRT IMAGE',
       imageStyle: 'bg-[linear-gradient(145deg,_#1f5f7a_0%,_#0f9aa1_55%,_#f4c94c_100%)]',
-        productUrl: 'https://pick-it-up-seattle-shop.fourthwall.com/products/the-official-pick-t-p-seattle-legacy-donor-embroidered-t-shirt',
+        productUrl: 'https://pick-it-up-seattle-shop.fourthwall.com/products/the-official-pick-it-up-seattle-legacy-donor-embroidered-t-shirt',
     },
     {
       id: 'official-pick-it-up-seattle-hat',
