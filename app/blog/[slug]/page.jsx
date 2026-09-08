@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import ShareButton from '@/components/ShareButton';
+import BlogShareMenu from '@/components/BlogShareMenu';
 import {
   ensureFirstPostExists,
   getPublishedPostBySlug,
@@ -109,10 +109,10 @@ export default async function BlogPostPage({ params }) {
             )}
 
             <div className="mt-4">
-              <ShareButton
+              <BlogShareMenu
                 url={`/blog/${post.slug}`}
                 title={`${post.title} | Pick It Up Seattle`}
-                text={`Read this story from Pick It Up Seattle: ${post.title}`}
+                imageUrl={getPublicImageSrc(post)}
                 label="Share Story"
               />
             </div>
