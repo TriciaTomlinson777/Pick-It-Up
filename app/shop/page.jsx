@@ -126,7 +126,7 @@ export default function Shop() {
       imageClass: 'scale-[1.1]',
       imagePlaceholder: 'Add dont-be-trashy-tee image',
       imageStyle: 'bg-[linear-gradient(145deg,_#0f9aa1_0%,_#2ec4c7_45%,_#69be28_100%)]',
-      productUrl: 'https://pick-it-up-seattle-shop.fourthwall.com/products/dont-be-trashy-te',
+      productUrl: 'https://pick-it-up-seattle-shop.fourthwall.com/products/dont-be-trashy-tee',
     },
     {
       id: 'mess-master-tee',
