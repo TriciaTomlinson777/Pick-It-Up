@@ -37,6 +37,8 @@ function isMobileDevice() {
   return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
 
+const PUBLIC_SITE_URL = 'https://www.pickitupseattle.org';
+
 const MENU_ICONS = {
   email: (
     <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -94,6 +96,20 @@ export default function BlogShareMenu({
     return () => document.removeEventListener('mousedown', handleOutsideClick);
   }, []);
 
+  const getCurrentStoryUrl = () => {
+    if (typeof window === 'undefined') {
+      const fallbackPath = String(url || '').trim() || '/';
+      return new URL(fallbackPath, PUBLIC_SITE_URL).toString();
+    }
+
+    const path = String(window.location.pathname || '/');
+    const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+    const search = window.location.search || '';
+    const hash = window.location.hash || '';
+
+    return `${PUBLIC_SITE_URL}${normalizedPath}${search}${hash}`;
+  };
+
   const showFeedback = (message) => {
     setFeedback(message);
 
@@ -107,27 +123,40 @@ export default function BlogShareMenu({
     }, 2200);
   };
 
-  const handleEmail = () => {
+  const handleEmail = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
     setMenuOpen(false);
-    const shareUrl = toAbsoluteUrl(url);
+
+    const shareUrl = getCurrentStoryUrl();
     const subject = encodeURIComponent(title);
     const body = encodeURIComponent(`${title}\n${shareUrl}`);
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
   };
 
-  const handleFacebook = () => {
+  const handleFacebook = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
     setMenuOpen(false);
-    const shareUrl = toAbsoluteUrl(url);
-    window.open(
+
+    const shareUrl = getCurrentStoryUrl();
+    const shareWindow = window.open(
       `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
       '_blank',
       'noopener,noreferrer,width=600,height=520'
     );
+
+    if (!shareWindow) {
+      window.location.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+    }
   };
 
-  const handleCopyLink = async () => {
+  const handleCopyLink = async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
     setMenuOpen(false);
-    const shareUrl = toAbsoluteUrl(url);
+
+    const shareUrl = getCurrentStoryUrl();
 
     try {
       if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
@@ -158,7 +187,7 @@ export default function BlogShareMenu({
 
     try {
       const file = await createWatermarkedShareFile([imageUrl]);
-      const result = await shareFileToInstagram(file);
+      const result = await shareFileToInstagram(file, getCurrentStoryUrl());
 
       if (result.shared) {
         showFeedback('Instagram opened — finish your post there.');
@@ -189,7 +218,11 @@ export default function BlogShareMenu({
     <div className="relative inline-flex flex-col items-start gap-1" ref={containerRef}>
       <button
         type="button"
-        onClick={() => setMenuOpen((open) => !open)}
+        onClick={(event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          setMenuOpen((open) => !open);
+        }}
         className={`inline-flex items-center rounded-full border border-[#69be28]/45 bg-[linear-gradient(145deg,_#2ec4c7_0%,_#7cd157_62%,_#69be28_100%)] px-4 py-2 text-sm font-semibold text-[#002244] shadow-[0_8px_18px_rgba(46,196,199,0.2)] transition hover:-translate-y-0.5 hover:brightness-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#69be28]/45 ${className}`.trim()}
       >
         {label}
@@ -200,7 +233,7 @@ export default function BlogShareMenu({
             <button
               key={item.key}
               type="button"
-              onClick={item.onClick}
+              onClick={(event) => item.onClick(event)}
               className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-[#1f5f7a] no-underline hover:bg-[#0f9aa1]/10"
             >
               {MENU_ICONS[item.key]}
