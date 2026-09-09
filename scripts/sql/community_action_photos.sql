@@ -5,7 +5,7 @@ create extension if not exists pgcrypto;
 
 create table if not exists public.community_action_photos (
   id uuid primary key default gen_random_uuid(),
-  image_url text not null,
+  image_url text,
   image_path text,
   caption text,
   moderation_status text not null default 'pending_review',
@@ -16,6 +16,11 @@ create table if not exists public.community_action_photos (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+-- Future uploads store private paths and do not receive a permanent public URL.
+alter table public.community_action_photos
+  alter column image_url drop not null,
+  alter column moderation_status set default 'pending_review';
 
 do $$
 begin

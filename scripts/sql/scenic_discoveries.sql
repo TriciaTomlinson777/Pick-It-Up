@@ -8,7 +8,7 @@ create table if not exists public.scenic_discoveries (
   caption text not null,
   image_url text,
   image_path text,
-  moderation_status text not null default 'approved',
+  moderation_status text not null default 'pending_review',
   submitted_at timestamptz not null default now(),
   reviewed_at timestamptz,
   reviewed_by text,
@@ -16,6 +16,9 @@ create table if not exists public.scenic_discoveries (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+alter table public.scenic_discoveries
+  alter column moderation_status set default 'pending_review';
 
 do $$
 begin
@@ -33,7 +36,7 @@ end $$;
 
 alter table public.scenic_discoveries
   add constraint scenic_discoveries_moderation_status_check
-  check (moderation_status in ('approved', 'rejected', 'removed'));
+  check (moderation_status in ('pending_review', 'approved', 'rejected', 'removed'));
 
 create index if not exists scenic_discoveries_moderation_status_idx
   on public.scenic_discoveries (moderation_status);

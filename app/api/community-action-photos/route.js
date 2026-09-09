@@ -1,4 +1,5 @@
 import { supabaseServerFetch } from '@/lib/supabase-server';
+import { createSignedPhotoUrl, deleteFuturePhoto, getFutureUploadStatus, isFutureUploadPath, storeAndModerateFutureImage } from '@/lib/future-photo-moderation';
 
 const TABLE_NAME = 'community_action_photos';
 const PUBLIC_SELECT_FIELDS = 'id,image_url,image_path,caption,submitted_at';
@@ -88,7 +89,11 @@ export async function GET() {
     }
 
     const rows = await response.json();
-    return Response.json({ photos: Array.isArray(rows) ? rows : [] });
+    const photos = await Promise.all((Array.isArray(rows) ? rows : []).map(async (row) => ({
+      ...row,
+      image_url: row.image_url || (isFutureUploadPath(row.image_path) ? await createSignedPhotoUrl(row.image_path) : null),
+    })));
+    return Response.json({ photos });
   } catch (error) {
     console.error('Unexpected error loading community action photos.', error);
     return Response.json(
@@ -99,19 +104,20 @@ export async function GET() {
 }
 
 export async function POST(request) {
-  let body;
-
+  let storagePath = '';
   try {
-    body = await request.json();
-  } catch {
-    return Response.json(
-      { error: 'Request body must contain valid JSON.' },
-      { status: 400 }
+    const formData = await request.formData();
+    const file = formData.get('file');
+    const caption = String(formData.get('caption') || '').trim() || null;
+    const submissionId = crypto.randomUUID();
+    const upload = await storeAndModerateFutureImage(
+      file,
+      'community-action',
+      submissionId
     );
-  }
-
-  try {
-    const payload = validatePostBody(body);
+    storagePath = upload.storagePath;
+    const { moderation } = upload;
+    const moderationStatus = getFutureUploadStatus(moderation);
 
     const query = createQueryString({
       select: 'id,moderation_status',
@@ -123,26 +129,26 @@ export async function POST(request) {
         'Content-Type': 'application/json',
         Prefer: 'return=representation',
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        image_url: null,
+        image_path: storagePath,
+        caption,
+        moderation_status: moderationStatus,
+        rejection_reason: moderation.reason,
+      }),
     });
 
     if (!response.ok) {
       const supabaseMessage = await parseSupabaseError(response);
       console.error('Failed to create community action photo.', supabaseMessage || response.status);
-      return Response.json(
-        { error: 'Unable to submit community action photo.' },
-        { status: 500 }
-      );
+      throw new Error('Unable to submit community action photo.');
     }
 
     const rows = await response.json();
     const createdRow = Array.isArray(rows) ? rows[0] : null;
 
     if (!createdRow?.id) {
-      return Response.json(
-        { error: 'Unable to submit community action photo.' },
-        { status: 500 }
-      );
+      throw new Error('Unable to submit community action photo.');
     }
 
     return Response.json({
@@ -151,17 +157,7 @@ export async function POST(request) {
       moderation_status: createdRow.moderation_status,
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unable to submit community action photo.';
-    const isValidationError =
-      message.includes('required')
-      || message.includes('must be')
-      || message.includes('unsupported fields')
-      || message.includes('JSON object');
-
-    if (isValidationError) {
-      return Response.json({ error: message }, { status: 400 });
-    }
-
+    await deleteFuturePhoto(storagePath);
     console.error('Unexpected error creating community action photo.', error);
     return Response.json(
       { error: 'Unable to submit community action photo.' },

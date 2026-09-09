@@ -19,11 +19,12 @@ export async function PATCH(request, context) {
   try {
     const body = await request.json();
     const action = String(body.action || '').trim().toLowerCase();
-    if (action !== 'remove') {
+    if (!['approve', 'reject', 'remove'].includes(action)) {
       return NextResponse.json({ error: 'Unsupported moderation action.' }, { status: 400 });
     }
 
-    const item = await updateAdminCommunityContentStatus(type, id, 'removed');
+    const status = action === 'approve' ? 'approved' : action === 'reject' ? 'rejected' : 'removed';
+    const item = await updateAdminCommunityContentStatus(type, id, status);
     if (!item) return NextResponse.json({ error: 'Submission not found.' }, { status: 404 });
     return NextResponse.json({ item });
   } catch (error) {

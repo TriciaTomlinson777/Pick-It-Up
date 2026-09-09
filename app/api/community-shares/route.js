@@ -1,4 +1,5 @@
 import { supabaseServerFetch } from '@/lib/supabase-server';
+import { createSignedPhotoUrl, deleteFuturePhoto, getFutureUploadStatus, isFutureUploadPath, storeAndModerateFutureImage } from '@/lib/future-photo-moderation';
 
 const TABLE_NAME = 'community_shares';
 const PUBLIC_SELECT_FIELDS = 'id,note,image_url,image_path,submitted_at';
@@ -85,7 +86,11 @@ export async function GET() {
     }
 
     const rows = await response.json();
-    return Response.json({ submissions: Array.isArray(rows) ? rows : [] });
+    const submissions = await Promise.all((Array.isArray(rows) ? rows : []).map(async (row) => ({
+      ...row,
+      image_url: row.image_url || (isFutureUploadPath(row.image_path) ? await createSignedPhotoUrl(row.image_path) : null),
+    })));
+    return Response.json({ submissions });
   } catch (error) {
     console.error('Unexpected error loading community shares.', error);
     return Response.json(
@@ -96,19 +101,18 @@ export async function GET() {
 }
 
 export async function POST(request) {
-  let body;
-
+  let storagePath = '';
   try {
-    body = await request.json();
-  } catch {
-    return Response.json(
-      { error: 'Request body must contain valid JSON.' },
-      { status: 400 }
-    );
-  }
-
-  try {
-    const payload = validatePostBody(body);
+    const formData = await request.formData();
+    const note = String(formData.get('note') || '').trim();
+    if (!note) return Response.json({ error: 'note is required.' }, { status: 400 });
+    const file = formData.get('file');
+    const submissionId = crypto.randomUUID();
+    const uploaded = file?.arrayBuffer
+      ? await storeAndModerateFutureImage(file, 'thank-yous', submissionId)
+      : null;
+    storagePath = uploaded?.storagePath || '';
+    const moderation = uploaded?.moderation || { status: 'approved', reason: null };
 
     const query = createQueryString({
       select: 'id,moderation_status',
@@ -120,26 +124,26 @@ export async function POST(request) {
         'Content-Type': 'application/json',
         Prefer: 'return=representation',
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        note,
+        image_url: null,
+        image_path: uploaded?.storagePath || null,
+        moderation_status: getFutureUploadStatus(moderation),
+        rejection_reason: moderation.reason,
+      }),
     });
 
     if (!response.ok) {
       const supabaseMessage = await parseSupabaseError(response);
       console.error('Failed to create community share.', supabaseMessage || response.status);
-      return Response.json(
-        { error: 'Unable to submit thank-you note.' },
-        { status: 500 }
-      );
+      throw new Error('Unable to submit thank-you note.');
     }
 
     const rows = await response.json();
     const createdRow = Array.isArray(rows) ? rows[0] : null;
 
     if (!createdRow?.id) {
-      return Response.json(
-        { error: 'Unable to submit thank-you note.' },
-        { status: 500 }
-      );
+      throw new Error('Unable to submit thank-you note.');
     }
 
     return Response.json({
@@ -148,17 +152,7 @@ export async function POST(request) {
       moderation_status: createdRow.moderation_status,
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unable to submit thank-you note.';
-    const isValidationError =
-      message.includes('required')
-      || message.includes('must be')
-      || message.includes('unsupported fields')
-      || message.includes('JSON object');
-
-    if (isValidationError) {
-      return Response.json({ error: message }, { status: 400 });
-    }
-
+    await deleteFuturePhoto(storagePath);
     console.error('Unexpected error creating community share.', error);
     return Response.json(
       { error: 'Unable to submit thank-you note.' },

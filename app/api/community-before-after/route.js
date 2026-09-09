@@ -1,4 +1,5 @@
 import { supabaseServerFetch } from '@/lib/supabase-server';
+import { createSignedPhotoUrl, deleteFuturePhoto, getFutureUploadStatus, isFutureUploadPath, storeAndModerateFutureImage } from '@/lib/future-photo-moderation';
 
 const TABLE_NAME = 'community_before_after_pairs';
 const PUBLIC_SELECT_FIELDS = 'id,before_image_url,after_image_url,pair_caption,submitted_at';
@@ -93,7 +94,12 @@ export async function GET() {
     }
 
     const rows = await response.json();
-    return Response.json({ pairs: Array.isArray(rows) ? rows : [] });
+    const pairs = await Promise.all((Array.isArray(rows) ? rows : []).map(async (row) => ({
+      ...row,
+      before_image_url: row.before_image_url || (isFutureUploadPath(row.before_image_path) ? await createSignedPhotoUrl(row.before_image_path) : null),
+      after_image_url: row.after_image_url || (isFutureUploadPath(row.after_image_path) ? await createSignedPhotoUrl(row.after_image_path) : null),
+    })));
+    return Response.json({ pairs });
   } catch (error) {
     console.error('Unexpected error loading community before/after pairs.', error);
     return Response.json(
@@ -104,19 +110,21 @@ export async function GET() {
 }
 
 export async function POST(request) {
-  let body;
-
+  const storagePaths = [];
   try {
-    body = await request.json();
-  } catch {
-    return Response.json(
-      { error: 'Request body must contain valid JSON.' },
-      { status: 400 }
-    );
-  }
-
-  try {
-    const payload = validatePostBody(body);
+    const formData = await request.formData();
+    const beforeFile = formData.get('before_file');
+    const afterFile = formData.get('after_file');
+    const pairCaption = String(formData.get('pair_caption') || '').trim() || null;
+    const submissionId = crypto.randomUUID();
+    const before = await storeAndModerateFutureImage(beforeFile, 'before-after', submissionId, 0);
+    storagePaths.push(before.storagePath);
+    const after = await storeAndModerateFutureImage(afterFile, 'before-after', submissionId, 1);
+    storagePaths.push(after.storagePath);
+    const statuses = [before.moderation, after.moderation].map(getFutureUploadStatus);
+    const moderationStatus = statuses.includes('pending_review')
+      ? 'pending_review'
+      : statuses.includes('rejected') ? 'rejected' : 'approved';
 
     const query = createQueryString({
       select: 'id,moderation_status',
@@ -128,26 +136,28 @@ export async function POST(request) {
         'Content-Type': 'application/json',
         Prefer: 'return=representation',
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        before_image_url: null,
+        after_image_url: null,
+        before_image_path: before.storagePath,
+        after_image_path: after.storagePath,
+        pair_caption: pairCaption,
+        moderation_status: moderationStatus,
+        rejection_reason: [before.moderation.reason, after.moderation.reason].filter(Boolean).join('; ') || null,
+      }),
     });
 
     if (!response.ok) {
       const supabaseMessage = await parseSupabaseError(response);
       console.error('Failed to create community before/after pair.', supabaseMessage || response.status);
-      return Response.json(
-        { error: 'Unable to submit before/after pair.' },
-        { status: 500 }
-      );
+      throw new Error('Unable to submit before/after pair.');
     }
 
     const rows = await response.json();
     const createdRow = Array.isArray(rows) ? rows[0] : null;
 
     if (!createdRow?.id) {
-      return Response.json(
-        { error: 'Unable to submit before/after pair.' },
-        { status: 500 }
-      );
+      throw new Error('Unable to submit before/after pair.');
     }
 
     return Response.json({
@@ -156,17 +166,7 @@ export async function POST(request) {
       moderation_status: createdRow.moderation_status,
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unable to submit before/after pair.';
-    const isValidationError =
-      message.includes('required')
-      || message.includes('must be')
-      || message.includes('unsupported fields')
-      || message.includes('JSON object');
-
-    if (isValidationError) {
-      return Response.json({ error: message }, { status: 400 });
-    }
-
+    await Promise.all(storagePaths.map(deleteFuturePhoto));
     console.error('Unexpected error creating community before/after pair.', error);
     return Response.json(
       { error: 'Unable to submit before/after pair.' },
