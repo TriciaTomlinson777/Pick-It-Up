@@ -43,7 +43,10 @@ export default function AdminDashboardClient({ initialPendingEvents = [], initia
   const [busyKey, setBusyKey] = useState('');
 
   const submissionCount = useMemo(
-    () => contentSections.reduce((total, section) => total + (section.items?.length || 0), 0),
+    () => contentSections.reduce(
+      (total, section) => total + (section.items?.filter((item) => item.status === 'pending_review').length || 0),
+      0
+    ),
     [contentSections]
   );
 
@@ -133,7 +136,7 @@ export default function AdminDashboardClient({ initialPendingEvents = [], initia
         method: isDelete ? 'DELETE' : 'PATCH',
         credentials: 'include',
         headers: isDelete ? undefined : { 'Content-Type': 'application/json' },
-        body: isDelete ? undefined : JSON.stringify({ action: 'remove' }),
+        body: isDelete ? undefined : JSON.stringify({ action }),
       });
 
       if (!response.ok) {
@@ -154,10 +157,10 @@ export default function AdminDashboardClient({ initialPendingEvents = [], initia
       const data = await response.json();
       setContentSections((current) => current.map((section) => (
         section.key === sectionKey
-          ? { ...section, items: section.items.map((item) => (item.id === itemId ? data.item : item)) }
+          ? { ...section, items: section.items.filter((item) => item.id !== itemId) }
           : section
       )));
-      setMessage('Submission removed from the public site.');
+      setMessage(action === 'approve' ? 'Submission approved and now public.' : 'Submission rejected.');
     } catch (moderationError) {
       setError(moderationError.message || 'Unable to moderate submission.');
     } finally {
@@ -192,7 +195,7 @@ export default function AdminDashboardClient({ initialPendingEvents = [], initia
             <p className="mt-2 text-4xl font-bold text-[#002244]">{pendingEvents.length}</p>
           </div>
           <div className="rounded-2xl border border-[#0f9aa1]/20 bg-white p-5 shadow-sm">
-            <p className="text-sm font-semibold text-[#1f5f7a]">Community Submissions</p>
+            <p className="text-sm font-semibold text-[#1f5f7a]">Community Review Queue</p>
             <p className="mt-2 text-4xl font-bold text-[#002244]">{submissionCount}</p>
           </div>
           <div className="rounded-2xl border border-[#0f9aa1]/20 bg-white p-5 shadow-sm">
@@ -299,20 +302,22 @@ export default function AdminDashboardClient({ initialPendingEvents = [], initia
           {pendingEvents.length === 0 ? <p className="mt-5 rounded-xl bg-[#f4fbfc] px-4 py-3 text-sm text-[#1f5f7a]">No pending event submissions.</p> : null}
         </section>
 
-        {contentSections.map((section) => (
+        {contentSections.map((section) => {
+          const pendingItems = (section.items || []).filter((item) => item.status === 'pending_review');
+
+          return (
           <section key={section.key} className="rounded-2xl border border-[#0f9aa1]/20 bg-white p-5 shadow-sm sm:p-6">
             <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <h2 className="text-2xl font-bold text-[#002244]">{section.title}</h2>
-                <p className="mt-1 text-sm text-[#1f5f7a]">Submitted items with remove/delete moderation controls.</p>
+                <p className="mt-1 text-sm text-[#1f5f7a]">Pending submissions awaiting review.</p>
               </div>
-              <p className="text-sm font-semibold text-[#1f5f7a]">{section.items.length} total</p>
+              <p className="text-sm font-semibold text-[#1f5f7a]">{pendingItems.length} pending</p>
             </div>
 
             <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {section.items.map((item) => {
+              {pendingItems.map((item) => {
                 const images = imageSet(item);
-                const isRemoved = item.status === 'removed';
 
                 return (
                   <article key={item.id} className="flex h-full flex-col rounded-xl border border-[#002244]/10 bg-[#fbfefd] p-4">
@@ -331,16 +336,18 @@ export default function AdminDashboardClient({ initialPendingEvents = [], initia
                       <p className="mt-3 whitespace-pre-wrap text-sm leading-6 text-[#516b7d]">{itemTitle(item)}</p>
                     </div>
                     <div className="mt-5 flex flex-wrap gap-3">
-                      <button disabled={Boolean(busyKey) || isRemoved} className="rounded-full border border-[#c84d42]/40 px-4 py-2 text-sm font-semibold text-[#c84d42] disabled:opacity-50" type="button" onClick={() => moderateContent(section.key, item.id, 'remove')}>Remove</button>
+                      <button disabled={Boolean(busyKey)} className="btn-green px-4 py-2 text-sm" type="button" onClick={() => moderateContent(section.key, item.id, 'approve')}>Approve</button>
+                      <button disabled={Boolean(busyKey)} className="rounded-full border border-[#c84d42]/40 px-4 py-2 text-sm font-semibold text-[#c84d42] disabled:opacity-50" type="button" onClick={() => moderateContent(section.key, item.id, 'reject')}>Reject</button>
                       <button disabled={Boolean(busyKey)} className="rounded-full border border-[#002244]/20 px-4 py-2 text-sm font-semibold text-[#002244] disabled:opacity-50" type="button" onClick={() => moderateContent(section.key, item.id, 'delete')}>Delete</button>
                     </div>
                   </article>
                 );
               })}
             </div>
-            {section.items.length === 0 ? <p className="mt-5 rounded-xl bg-[#f4fbfc] px-4 py-3 text-sm text-[#1f5f7a]">No submissions yet.</p> : null}
+            {pendingItems.length === 0 ? <p className="mt-5 rounded-xl bg-[#f4fbfc] px-4 py-3 text-sm text-[#1f5f7a]">No pending submissions.</p> : null}
           </section>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
