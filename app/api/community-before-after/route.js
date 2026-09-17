@@ -122,9 +122,9 @@ export async function POST(request) {
     const after = await storeAndModerateFutureImage(afterFile, 'before-after', submissionId, 1);
     storagePaths.push(after.storagePath);
     const statuses = [before.moderation, after.moderation].map(getFutureUploadStatus);
-    const moderationStatus = statuses.includes('pending_review')
-      ? 'pending_review'
-      : statuses.includes('rejected') ? 'rejected' : 'approved';
+    const moderationStatus = statuses.includes('rejected')
+      ? 'rejected'
+      : statuses.includes('pending_review') ? 'pending_review' : 'approved';
 
     const query = createQueryString({
       select: 'id,moderation_status',
@@ -164,6 +164,10 @@ export async function POST(request) {
       ok: true,
       id: createdRow.id,
       moderation_status: createdRow.moderation_status,
+      before_image_path: before.storagePath,
+      after_image_path: after.storagePath,
+      before_image_url: createdRow.moderation_status === 'approved' ? await createSignedPhotoUrl(before.storagePath) : null,
+      after_image_url: createdRow.moderation_status === 'approved' ? await createSignedPhotoUrl(after.storagePath) : null,
     });
   } catch (error) {
     await Promise.all(storagePaths.map(deleteFuturePhoto));

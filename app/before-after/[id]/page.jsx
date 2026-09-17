@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { supabaseServerFetch } from '@/lib/supabase-server';
+import { createSignedPhotoUrl, hasDetectedChildFace, isFutureUploadPath } from '@/lib/future-photo-moderation';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,7 +12,7 @@ async function getBeforeAfterPair(id) {
   const query = new URLSearchParams({
     id: `eq.${id}`,
     moderation_status: 'eq.approved',
-    select: 'id,before_image_url,after_image_url,pair_caption,submitted_at',
+    select: 'id,before_image_url,after_image_url,before_image_path,after_image_path,pair_caption,submitted_at',
     limit: '1',
   });
 
@@ -24,7 +25,14 @@ async function getBeforeAfterPair(id) {
   }
 
   const rows = await response.json();
-  return Array.isArray(rows) ? rows[0] || null : null;
+  const row = Array.isArray(rows) ? rows[0] || null : null;
+  if (!row) return null;
+
+  return {
+    ...row,
+    before_image_url: row.before_image_url || (isFutureUploadPath(row.before_image_path) ? await createSignedPhotoUrl(row.before_image_path) : ''),
+    after_image_url: row.after_image_url || (isFutureUploadPath(row.after_image_path) ? await createSignedPhotoUrl(row.after_image_path) : ''),
+  };
 }
 
 async function getPageUrl(id) {
@@ -44,7 +52,10 @@ export async function generateMetadata({ params }) {
 
   const pageUrl = await getPageUrl(id);
   const description = pair.pair_caption || 'A before-and-after cleanup moment shared by the Pick It Up Seattle community.';
-  const ogImage = pair.after_image_url || pair.before_image_url || '';
+  const previewImage = new URL('/pick-it-up-seattle-logo.png', pageUrl).toString();
+  const afterImage = hasDetectedChildFace(pair.after_image_path) ? '' : pair.after_image_url;
+  const beforeImage = hasDetectedChildFace(pair.before_image_path) ? '' : pair.before_image_url;
+  const ogImage = afterImage || beforeImage || previewImage;
 
   return {
     title: 'See the Difference | Pick It Up Seattle',
@@ -53,7 +64,7 @@ export async function generateMetadata({ params }) {
       title: 'Pick It Up Seattle',
       description,
       url: pageUrl,
-      images: ogImage ? [{ url: ogImage }] : [],
+      images: [{ url: ogImage }],
     },
   };
 }

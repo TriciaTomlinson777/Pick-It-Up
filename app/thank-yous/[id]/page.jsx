@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { supabaseServerFetch } from '@/lib/supabase-server';
+import { createSignedPhotoUrl, hasDetectedChildFace, isFutureUploadPath } from '@/lib/future-photo-moderation';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,7 +12,7 @@ async function getThankYouShare(id) {
   const query = new URLSearchParams({
     id: `eq.${id}`,
     moderation_status: 'eq.approved',
-    select: 'id,note,image_url,submitted_at',
+    select: 'id,note,image_url,image_path,submitted_at',
     limit: '1',
   });
 
@@ -24,7 +25,13 @@ async function getThankYouShare(id) {
   }
 
   const rows = await response.json();
-  return Array.isArray(rows) ? rows[0] || null : null;
+  const row = Array.isArray(rows) ? rows[0] || null : null;
+  if (!row) return null;
+
+  return {
+    ...row,
+    image_url: row.image_url || (isFutureUploadPath(row.image_path) ? await createSignedPhotoUrl(row.image_path) : ''),
+  };
 }
 
 async function getPageUrl(id) {
@@ -44,6 +51,8 @@ export async function generateMetadata({ params }) {
 
   const pageUrl = await getPageUrl(id);
   const description = share.note || 'A thank-you note shared by the Pick It Up Seattle community.';
+  const previewImage = new URL('/pick-it-up-seattle-logo.png', pageUrl).toString();
+  const ogImage = hasDetectedChildFace(share.image_path) ? previewImage : share.image_url;
 
   return {
     title: 'Thank You | Pick It Up Seattle',
@@ -52,7 +61,7 @@ export async function generateMetadata({ params }) {
       title: 'Pick It Up Seattle',
       description,
       url: pageUrl,
-      images: share.image_url ? [{ url: share.image_url }] : [],
+      images: ogImage ? [{ url: ogImage }] : [],
     },
   };
 }

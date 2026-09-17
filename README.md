@@ -151,6 +151,19 @@ BLOG_ADMIN_SESSION_SECRET=choose_a_long_random_secret
 
 # Optional: defaults to "Community Photos"
 SUPABASE_BLOG_IMAGES_BUCKET=Community Photos
+
+# Future moderation/security layer
+SUPABASE_PRIVATE_PHOTOS_BUCKET=Community Photos Private
+AWS_REGION=us-west-2
+AWS_ACCESS_KEY_ID=your_aws_access_key_id
+AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
+
+# Optional moderation tuning
+SUPABASE_REKOGNITION_TIMEOUT_MS=10000
+TEXT_MODERATION_TIMEOUT_MS=10000
+TEXT_MODERATION_LANGUAGE_CODE=en
+TEXT_MODERATION_REVIEW_THRESHOLD=0.65
+TEXT_MODERATION_REJECT_THRESHOLD=0.92
 ```
 
 ### Blog Publishing Setup

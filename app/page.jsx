@@ -58,8 +58,6 @@ const JPEG_COMPRESSION_QUALITY = 0.8;
 const ALLOWED_IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif']);
 const HEIC_IMAGE_TYPES = new Set(['image/heic', 'image/heif', 'image/heic-sequence', 'image/heif-sequence']);
 const DEFAULT_PHOTO_CROP_POSITION = { x: 50, y: 50 };
-const SUPABASE_UPLOAD_TIMEOUT_MS = 30000;
-const SUPABASE_STORAGE_BUCKET = 'Community Photos';
 const COMMUNITY_SHARE_TYPE_THANK_YOU = 'thank-you';
 const COMMUNITY_SHARE_TYPE_SCENIC_DISCOVERY = 'scenic-discovery';
 const IMAGINE_SLIDES = [
@@ -301,14 +299,6 @@ export default function Home() {
       .replace(/^-|-$/g, '') || 'file';
   };
 
-  const encodeStoragePath = (path) => {
-    return String(path || '')
-      .split('/')
-      .filter(Boolean)
-      .map((segment) => encodeURIComponent(segment))
-      .join('/');
-  };
-
   const getFileExtension = (fileName = '') => {
     const match = String(fileName).trim().match(/\.([a-z0-9]+)$/i);
     return match ? match[1].toLowerCase() : '';
@@ -413,77 +403,6 @@ export default function Home() {
       }
 
       throw new Error(`"${sourceLabel}" could not be processed for upload.`);
-    }
-  };
-
-  const uploadCleanupPhotoToSupabase = async (file, submissionId, index, storageFolder = 'cleanup-submissions', uploadLabel = 'Photo') => {
-    const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || '').trim();
-    const supabaseKey = (process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || '').trim();
-
-    if (!supabaseUrl || !supabaseKey) {
-      throw new Error('Supabase configuration is missing. Check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY.');
-    }
-
-    const safeName = sanitizeStoragePathSegment(file?.name || `photo-${index + 1}`);
-    const objectPath = `${storageFolder}/${submissionId}/${index + 1}-${Date.now()}-${safeName}`;
-    const encodedBucket = encodeURIComponent(SUPABASE_STORAGE_BUCKET);
-    const encodedObjectPath = encodeStoragePath(objectPath);
-    const supabaseBaseUrl = supabaseUrl.replace(/\/$/, '');
-    const uploadUrl = `${supabaseBaseUrl}/storage/v1/object/${encodedBucket}/${encodedObjectPath}`;
-    const uploadAbortController = new AbortController();
-    const timeoutMessage = `${uploadLabel} ${index + 1} (${file?.name || `photo-${index + 1}`}) timed out after ${Math.ceil(SUPABASE_UPLOAD_TIMEOUT_MS / 1000)} seconds.`;
-    let uploadTimeoutId;
-    const timeoutPromise = new Promise((_, reject) => {
-      uploadTimeoutId = window.setTimeout(() => {
-        uploadAbortController.abort();
-        reject(new Error(timeoutMessage));
-      }, SUPABASE_UPLOAD_TIMEOUT_MS);
-    });
-
-    console.info('Supabase Storage upload URL:', uploadUrl);
-
-    try {
-      const uploadResult = await Promise.race([
-        (async () => {
-          const uploadResponse = await fetch(
-            uploadUrl,
-            {
-              method: 'POST',
-              headers: {
-                apikey: supabaseKey,
-                Authorization: `Bearer ${supabaseKey}`,
-                'Content-Type': file.type || 'application/octet-stream',
-                'x-upsert': 'false',
-              },
-              body: file,
-              signal: uploadAbortController.signal,
-            }
-          );
-
-          if (!uploadResponse.ok) {
-            const errorText = await uploadResponse.text();
-            throw new Error(`${uploadLabel} ${index + 1} (${file?.name || `photo-${index + 1}`}) failed to upload: ${uploadResponse.status} ${uploadResponse.statusText}${errorText ? ` - ${errorText}` : ''}`);
-          }
-
-          return {
-            storagePath: objectPath,
-            publicUrl: `${supabaseBaseUrl}/storage/v1/object/public/${encodedBucket}/${encodedObjectPath}`,
-          };
-        })(),
-        timeoutPromise,
-      ]);
-
-      return uploadResult;
-    } catch (error) {
-      if (uploadAbortController.signal.aborted) {
-        throw new Error(timeoutMessage);
-      }
-
-      throw new Error(`${uploadLabel} ${index + 1} (${file?.name || `photo-${index + 1}`}) failed to upload: ${error instanceof Error ? error.message : 'Unknown network error'}`);
-    } finally {
-      if (uploadTimeoutId) {
-        window.clearTimeout(uploadTimeoutId);
-      }
     }
   };
 
@@ -939,39 +858,23 @@ export default function Home() {
 
   const saveCommunityShareSubmissionToStorage = async (newSubmission) => {
     try {
-      const submissionId = newSubmission?.id || newSubmission?.submittedAt || '';
-      const deduplicatedSubmissions = submissionId
-        ? communityShareSubmissions.filter((submission) => {
-            const existingId = submission?.id || submission?.submittedAt || '';
-            return existingId !== submissionId;
-          })
-        : communityShareSubmissions;
-
-      const submissions = normalizeCommunityShareSubmissions([...deduplicatedSubmissions, newSubmission]);
-      persistNormalizedCommunityShareSubmissions(submissions);
-
       const endpoint = newSubmission?.type === COMMUNITY_SHARE_TYPE_SCENIC_DISCOVERY
         ? '/api/scenic-discoveries'
         : '/api/community-shares';
 
+      const payload = new FormData();
+      if (newSubmission?.type === COMMUNITY_SHARE_TYPE_SCENIC_DISCOVERY) {
+        payload.append('caption', newSubmission?.caption || '');
+      } else {
+        payload.append('note', newSubmission?.message || '');
+      }
+      if (newSubmission?.photo?.file) {
+        payload.append('file', newSubmission.photo.file);
+      }
+
       const response = await fetch(endpoint, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(
-          newSubmission?.type === COMMUNITY_SHARE_TYPE_SCENIC_DISCOVERY
-            ? {
-                caption: newSubmission?.caption || '',
-                image_url: newSubmission?.photo?.publicUrl || null,
-                image_path: newSubmission?.photo?.storagePath || null,
-              }
-            : {
-                note: newSubmission?.message || '',
-                image_url: newSubmission?.photo?.publicUrl || null,
-                image_path: newSubmission?.photo?.storagePath || null,
-              }
-        ),
+        body: payload,
       });
 
       if (!response.ok) {
@@ -979,9 +882,34 @@ export default function Home() {
         throw new Error(errorData?.error || 'Unable to save share.');
       }
 
-      return true;
+      const data = await response.json().catch(() => ({}));
+      const createdSubmission = {
+        ...newSubmission,
+        id: String(data?.id || newSubmission?.id || '').trim(),
+        photo: data?.image_url || data?.image_path
+          ? {
+              publicUrl: String(data?.image_url || '').trim(),
+              storagePath: String(data?.image_path || '').trim(),
+              cropPosition: normalizePhotoCropPosition(newSubmission?.photo?.cropPosition),
+            }
+          : null,
+      };
+
+      if (!newSubmission?.photo || data?.moderation_status === 'approved') {
+        const submissionId = createdSubmission?.id || createdSubmission?.submittedAt || '';
+        const deduplicatedSubmissions = submissionId
+          ? communityShareSubmissions.filter((submission) => {
+              const existingId = submission?.id || submission?.submittedAt || '';
+              return existingId !== submissionId;
+            })
+          : communityShareSubmissions;
+        const submissions = normalizeCommunityShareSubmissions([...deduplicatedSubmissions, createdSubmission]);
+        persistNormalizedCommunityShareSubmissions(submissions);
+      }
+
+      return { ok: true, moderationStatus: String(data?.moderation_status || '').trim(), createdSubmission };
     } catch {
-      return false;
+      return { ok: false, moderationStatus: '', createdSubmission: null };
     }
   };
 
@@ -1896,13 +1824,10 @@ export default function Home() {
       let uploadedPhoto = null;
 
       if (hasPhoto) {
-        uploadedPhoto = await uploadCleanupPhotoToSupabase(
-          shareSelectedPhoto.file,
-          submissionId,
-          0,
-          'community-shares',
-          'Share photo'
-        );
+        uploadedPhoto = {
+          file: shareSelectedPhoto.file,
+          cropPosition: normalizePhotoCropPosition(sharePhotoCropPosition),
+        };
       }
 
       const newSubmission = {
@@ -1914,16 +1839,17 @@ export default function Home() {
         caption: shareSubmissionType === COMMUNITY_SHARE_TYPE_SCENIC_DISCOVERY ? trimmedScenicCaption : '',
         photo: uploadedPhoto
           ? {
-              publicUrl: uploadedPhoto.publicUrl,
-              storagePath: uploadedPhoto.storagePath,
+              file: uploadedPhoto.file,
+              publicUrl: '',
+              storagePath: '',
               cropPosition: normalizePhotoCropPosition(sharePhotoCropPosition),
             }
           : null,
       };
 
-      const didPersistShare = await saveCommunityShareSubmissionToStorage(newSubmission);
+      const savedShare = await saveCommunityShareSubmissionToStorage(newSubmission);
 
-      if (!didPersistShare) {
+      if (!savedShare.ok) {
         throw new Error('Your share was uploaded, but it could not be saved. Please try again.');
       }
 
@@ -2388,58 +2314,6 @@ export default function Home() {
     }
 
     const pairCaption = beforeAfterCaption.trim();
-    const filesToUpload = [
-      { image: beforeImage, index: 0, role: 'before' },
-      { image: afterImage, index: 1, role: 'after' },
-    ];
-
-    const uploadResults = await Promise.allSettled(
-      filesToUpload.map(async ({ image, index, role }) => {
-        const uploadedImage = await uploadCleanupPhotoToSupabase(
-          image.file,
-          submissionId,
-          index,
-          'neighborhood-cleanup-photos',
-          role === 'before' ? 'Before photo' : 'After photo'
-        );
-
-        return {
-          storagePath: uploadedImage.storagePath,
-          publicUrl: uploadedImage.publicUrl,
-          role,
-          caption: pairCaption,
-          cropPosition: normalizePhotoCropPosition(photoCropPositions[index]),
-        };
-      })
-    );
-
-    const rejectedUploads = uploadResults
-      .map((result, uploadIndex) => ({ result, uploadIndex }))
-      .filter(({ result }) => result.status === 'rejected');
-
-    if (rejectedUploads.length) {
-      const rejectedMessages = rejectedUploads.map(({ result, uploadIndex }) => {
-        const file = filesToUpload[uploadIndex]?.image?.file;
-        const baseLabel = `Photo ${uploadIndex + 1}${file?.name ? ` (${file.name})` : ''}`;
-
-        if (result.status === 'rejected' && result.reason instanceof Error) {
-          return result.reason.message || `${baseLabel} failed to upload.`;
-        }
-
-        return `${baseLabel} failed to upload.`;
-      });
-
-      throw new Error(rejectedMessages.join(' '));
-    }
-
-    const storedImages = uploadResults
-      .filter((result) => result.status === 'fulfilled')
-      .map((result) => result.value);
-
-    if (storedImages.length !== 2) {
-      throw new Error('Please upload exactly one BEFORE photo and one AFTER photo.');
-    }
-
     return {
       id: submissionId,
       submittedAt: new Date().toISOString(),
@@ -2448,7 +2322,24 @@ export default function Home() {
       pairCaption,
       beforeCaption: pairCaption,
       afterCaption: pairCaption,
-      images: storedImages,
+      images: [
+        {
+          file: beforeImage.file,
+          storagePath: '',
+          publicUrl: '',
+          role: 'before',
+          caption: pairCaption,
+          cropPosition: normalizePhotoCropPosition(photoCropPositions[0]),
+        },
+        {
+          file: afterImage.file,
+          storagePath: '',
+          publicUrl: '',
+          role: 'after',
+          caption: pairCaption,
+          cropPosition: normalizePhotoCropPosition(photoCropPositions[1]),
+        },
+      ],
     };
   };
 
@@ -2456,25 +2347,19 @@ export default function Home() {
     const images = Array.isArray(submission?.images) ? submission.images : [];
     const beforeImage = images.find((image) => image?.role === 'before') || images[0] || null;
     const afterImage = images.find((image) => image?.role === 'after') || images[1] || null;
-    const beforeImageUrl = String(beforeImage?.publicUrl || '').trim();
-    const afterImageUrl = String(afterImage?.publicUrl || '').trim();
 
-    if (!beforeImageUrl || !afterImageUrl) {
+    if (!beforeImage?.file || !afterImage?.file) {
       throw new Error('Please upload both a BEFORE photo and an AFTER photo before submitting.');
     }
 
+    const payload = new FormData();
+    payload.append('before_file', beforeImage.file);
+    payload.append('after_file', afterImage.file);
+    payload.append('pair_caption', String(submission?.pairCaption || ''));
+
     const response = await fetch('/api/community-before-after', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        before_image_url: beforeImageUrl,
-        after_image_url: afterImageUrl,
-        before_image_path: String(beforeImage?.storagePath || ''),
-        after_image_path: String(afterImage?.storagePath || ''),
-        pair_caption: String(submission?.pairCaption || ''),
-      }),
+      body: payload,
     });
 
     let data = null;
@@ -2491,28 +2376,28 @@ export default function Home() {
     return {
       id: String(data?.id || '').trim(),
       moderationStatus: String(data?.moderation_status || '').trim(),
+      beforeImagePath: String(data?.before_image_path || '').trim(),
+      afterImagePath: String(data?.after_image_path || '').trim(),
+      beforeImageUrl: String(data?.before_image_url || '').trim(),
+      afterImageUrl: String(data?.after_image_url || '').trim(),
     };
   };
 
   const submitCommunityActionPhotoForReview = async (submission) => {
     const images = Array.isArray(submission?.images) ? submission.images : [];
     const image = images[0] || null;
-    const imageUrl = String(image?.publicUrl || '').trim();
 
-    if (!imageUrl) {
+    if (!image?.file) {
       throw new Error('Please add one Community in Action photo before submitting.');
     }
 
+    const payload = new FormData();
+    payload.append('file', image.file);
+    payload.append('caption', String(submission?.caption || ''));
+
     const response = await fetch('/api/community-action-photos', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        image_url: imageUrl,
-        image_path: String(image?.storagePath || ''),
-        caption: '',
-      }),
+      body: payload,
     });
 
     let data = null;
@@ -2525,6 +2410,13 @@ export default function Home() {
     if (!response.ok) {
       throw new Error(data?.error || 'Unable to submit community action photo.');
     }
+
+    return {
+      id: String(data?.id || '').trim(),
+      moderationStatus: String(data?.moderation_status || '').trim(),
+      imagePath: String(data?.image_path || '').trim(),
+      imageUrl: String(data?.image_url || '').trim(),
+    };
   };
 
   const buildCommunityActionSubmission = async (submissionId) => {
@@ -2537,22 +2429,15 @@ export default function Home() {
       throw new Error(invalidFile);
     }
 
-    const uploadedImage = await uploadCleanupPhotoToSupabase(
-      communityActionSelectedPhoto.file,
-      submissionId,
-      0,
-      'community-action-submissions',
-      'Community in Action photo'
-    );
-
     return {
       id: submissionId,
       submittedAt: new Date().toISOString(),
       photoType: PHOTO_TYPE_COMMUNITY_ACTION,
       ownerId: browserOwnerId || '',
       images: [{
-        storagePath: uploadedImage.storagePath,
-        publicUrl: uploadedImage.publicUrl,
+        file: communityActionSelectedPhoto.file,
+        storagePath: '',
+        publicUrl: '',
         role: PHOTO_TYPE_COMMUNITY_ACTION,
         cropPosition: createDefaultCropPosition(),
       }],
@@ -2578,18 +2463,37 @@ export default function Home() {
     try {
       const newSubmission = await buildBeforeAfterSubmission(submissionId);
       const createdPair = await submitBeforeAfterPairForReview(newSubmission);
+      const submittedImages = [
+        {
+          ...(newSubmission.images[0] || {}),
+          file: undefined,
+          storagePath: createdPair.beforeImagePath,
+          publicUrl: createdPair.beforeImageUrl,
+        },
+        {
+          ...(newSubmission.images[1] || {}),
+          file: undefined,
+          storagePath: createdPair.afterImagePath,
+          publicUrl: createdPair.afterImageUrl,
+        },
+      ];
       const approvedSubmission = {
         ...newSubmission,
         id: createdPair?.id || newSubmission.id,
+        images: submittedImages,
       };
 
-      setApprovedBeforeAfterSubmissions((current) => normalizePhotoSubmissions([
-        approvedSubmission,
-        ...current,
-      ]));
-      setPendingTrackPhotoSubmission(newSubmission);
+      if (createdPair.moderationStatus === 'approved') {
+        setApprovedBeforeAfterSubmissions((current) => normalizePhotoSubmissions([
+          approvedSubmission,
+          ...current,
+        ]));
+        setPendingTrackPhotoSubmission(approvedSubmission);
+      } else {
+        setPendingTrackPhotoSubmission(null);
+      }
       closePhotoModal();
-      finalizeTrackSubmission(newSubmission);
+      finalizeTrackSubmission(createdPair.moderationStatus === 'approved' ? approvedSubmission : null);
     } catch (error) {
       setPhotoFormError(error instanceof Error ? error.message : 'Photo upload failed. Please try again.');
     } finally {
@@ -2615,8 +2519,20 @@ export default function Home() {
 
     try {
       const newSubmission = await buildCommunityActionSubmission(submissionId);
-      await submitCommunityActionPhotoForReview(newSubmission);
-      saveCommunityActionSubmissionToStorage(newSubmission);
+      const createdPhoto = await submitCommunityActionPhotoForReview(newSubmission);
+
+      if (createdPhoto.moderationStatus === 'approved') {
+        saveCommunityActionSubmissionToStorage({
+          ...newSubmission,
+          id: createdPhoto.id || newSubmission.id,
+          images: [{
+            ...(newSubmission.images[0] || {}),
+            file: undefined,
+            storagePath: createdPhoto.imagePath,
+            publicUrl: createdPhoto.imageUrl,
+          }],
+        });
+      }
 
       closePhotoModal();
     } catch (error) {
@@ -4003,7 +3919,7 @@ export default function Home() {
                         className="mt-0.5 h-4 w-4 rounded border-[#002b49]/25"
                       />
                       <span>
-                        I confirm that my photos and comments follow the Community Photo Guidelines and that I have permission to share them.
+                        I confirm that my photos and comments follow the Community Photo Guidelines, that I have permission to submit them, and that I am the parent or legal guardian if a photo intentionally features a child.
                       </span>
                     </label>
 
@@ -4214,8 +4130,17 @@ export default function Home() {
 
                       <div className="rounded-xl border border-[#0f9aa1]/25 bg-[#eef9fc] px-3.5 py-3 text-sm text-[#1f5f7a]">
                         <p className="leading-6">
-                          Please share photos and comments that are appropriate for all ages and connected to a cleanup or positive community action.
+                          Please share photos and comments that are appropriate for all ages and connected to a cleanup or positive community action. Submitted photos may be processed for privacy and safety before public display.
                         </p>
+                        <ul className="mt-2 list-disc space-y-1 pl-5 leading-6">
+                          <li>Children's faces will be blurred before public display.</li>
+                          <li>Location and camera metadata will be removed.</li>
+                          <li>Publicly displayed images may be resized or compressed.</li>
+                          <li>The person submitting the photo confirms they have permission to submit it.</li>
+                          <li>If a photo intentionally features a child, the submitter confirms they are the parent or legal guardian.</li>
+                          <li>Children may participate in Pick It Up Seattle activities without agreeing to have an identifiable photo published.</li>
+                          <li>Do not include a child's full name with a photo unless separate permission has been obtained.</li>
+                        </ul>
                         <p className="mt-2 font-semibold text-[#0b6e85]">Do not submit:</p>
                         <ul className="mt-1 list-disc space-y-1 pl-5 leading-6">
                           <li>Nudity, sexually explicit, or sexually suggestive images.</li>
@@ -4407,8 +4332,17 @@ export default function Home() {
                                   {isOpen ? (
                                     <div className="border-t border-[#0f9aa1]/15 px-3 py-2 text-sm text-[#1f5f7a]">
                                       <p className="leading-6">
-                                        Please share photos and comments that are appropriate for all ages and connected to a cleanup or positive community action.
+                                        Please share photos and comments that are appropriate for all ages and connected to a cleanup or positive community action. Submitted photos may be processed for privacy and safety before public display.
                                       </p>
+                                      <ul className="mt-2 list-disc space-y-1 pl-5 leading-6">
+                                        <li>Children's faces will be blurred before public display.</li>
+                                        <li>Location and camera metadata will be removed.</li>
+                                        <li>Publicly displayed images may be resized or compressed.</li>
+                                        <li>The person submitting the photo confirms they have permission to submit it.</li>
+                                        <li>If a photo intentionally features a child, the submitter confirms they are the parent or legal guardian.</li>
+                                        <li>Children may participate in Pick It Up Seattle activities without agreeing to have an identifiable photo published.</li>
+                                        <li>Do not include a child's full name with a photo unless separate permission has been obtained.</li>
+                                      </ul>
                                       <p className="mt-2 font-semibold text-[#0b6e85]">Do not submit:</p>
                                       <ul className="mt-1 list-disc space-y-1 pl-5 leading-6">
                                         <li>Nudity, sexually explicit, or sexually suggestive images.</li>
@@ -4441,7 +4375,7 @@ export default function Home() {
                               className="mt-0.5 h-4 w-4 rounded border-[#002b49]/25"
                             />
                             <span>
-                              I confirm that my photo and comments follow the Community Photo Guidelines and that I have permission to share them.
+                              I confirm that my photo and comments follow the Community Photo Guidelines, that I have permission to submit them, and that I am the parent or legal guardian if the photo intentionally features a child.
                             </span>
                           </label>
                         ) : null}
@@ -4563,8 +4497,17 @@ export default function Home() {
                                   {isOpen ? (
                                     <div className="border-t border-[#0f9aa1]/15 px-3 py-2 text-sm text-[#1f5f7a]">
                                       <p className="leading-6">
-                                        Please share photos and comments that are appropriate for all ages and connected to a cleanup or positive community action.
+                                        Please share photos and comments that are appropriate for all ages and connected to a cleanup or positive community action. Submitted photos may be processed for privacy and safety before public display.
                                       </p>
+                                      <ul className="mt-2 list-disc space-y-1 pl-5 leading-6">
+                                        <li>Children's faces will be blurred before public display.</li>
+                                        <li>Location and camera metadata will be removed.</li>
+                                        <li>Publicly displayed images may be resized or compressed.</li>
+                                        <li>The person submitting the photo confirms they have permission to submit it.</li>
+                                        <li>If a photo intentionally features a child, the submitter confirms they are the parent or legal guardian.</li>
+                                        <li>Children may participate in Pick It Up Seattle activities without agreeing to have an identifiable photo published.</li>
+                                        <li>Do not include a child's full name with a photo unless separate permission has been obtained.</li>
+                                      </ul>
                                       <p className="mt-2 font-semibold text-[#0b6e85]">Do not submit:</p>
                                       <ul className="mt-1 list-disc space-y-1 pl-5 leading-6">
                                         <li>Nudity, sexually explicit, or sexually suggestive images.</li>
@@ -4597,7 +4540,7 @@ export default function Home() {
                               className="mt-0.5 h-4 w-4 rounded border-[#002b49]/25"
                             />
                             <span>
-                              I confirm that my photo and comments follow the Community Photo Guidelines and that I have permission to share them.
+                              I confirm that my photo and comments follow the Community Photo Guidelines, that I have permission to submit them, and that I am the parent or legal guardian if the photo intentionally features a child.
                             </span>
                           </label>
                         ) : null}

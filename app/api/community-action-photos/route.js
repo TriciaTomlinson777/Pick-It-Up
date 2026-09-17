@@ -155,6 +155,8 @@ export async function POST(request) {
       ok: true,
       id: createdRow.id,
       moderation_status: createdRow.moderation_status,
+      image_path: storagePath,
+      image_url: createdRow.moderation_status === 'approved' ? await createSignedPhotoUrl(storagePath) : null,
     });
   } catch (error) {
     await deleteFuturePhoto(storagePath);
