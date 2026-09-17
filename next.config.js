@@ -6,6 +6,9 @@ const nextConfig = {
     '@aws-sdk/client-rekognition',
     'sharp',
   ],
+  outputFileTracingIncludes: {
+    '/admin': ['./node_modules/@img/sharp-libvips-linux-x64/lib/**'],
+  },
   images: {
     remotePatterns: [
       {
