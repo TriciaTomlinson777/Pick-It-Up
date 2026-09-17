@@ -177,6 +177,14 @@ TEXT_MODERATION_REJECT_THRESHOLD=0.92
 
 The public Blog reads only published posts and sorts them newest first.
 
+### Private Community Photo Migration
+
+For an existing Supabase project, run the following file once in the Supabase SQL Editor before accepting private Community in Action uploads:
+
+- `scripts/sql/community_action_photos_private_paths_migration.sql`
+
+The migration preserves existing photos, permits new records to store a private `image_path`, and does not create or store a public or expiring signed URL.
+
 ### Story Workflow
 
 - Public visitors can submit stories from `/blog` using the Share Your Story form.
