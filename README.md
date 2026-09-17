@@ -185,6 +185,15 @@ For an existing Supabase project, run the following file once in the Supabase SQ
 
 The migration preserves existing photos, permits new records to store a private `image_path`, and does not create or store a public or expiring signed URL.
 
+### Street Challenge Pilot Accounts
+
+1. In Supabase Authentication, enable the Email provider.
+2. Update the email sign-in template to include `{{ .Token }}` so participants receive a code.
+3. Add each app origin to the Supabase redirect URL allow list; the app uses `/auth/callback`.
+4. In the Supabase SQL Editor, run `scripts/sql/participant_profiles.sql` once.
+
+The participant client uses only the public Supabase URL and publishable key. Do not expose the service-role key to participant pages.
+
 ### Story Workflow
 
 - Public visitors can submit stories from `/blog` using the Share Your Story form.
