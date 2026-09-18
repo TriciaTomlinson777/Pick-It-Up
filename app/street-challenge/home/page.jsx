@@ -64,8 +64,8 @@ export default async function StreetChallengeHomePage() {
           <p className="mt-3 leading-7 text-[#1f5f7a]">Ready to make Seattle a little cleaner?</p>
         </div>
 
-        <Link href="/events?view=organize#organize-cleanup" className="mt-7 block w-full rounded-lg bg-[#69be28] px-5 py-3 text-center font-semibold text-[#002244] hover:bg-[#79ca38]">
-          Start a Cleanup
+        <Link href="/street-challenge/join" className="mt-7 block w-full rounded-lg bg-[#69be28] px-5 py-3 text-center font-semibold text-[#002244] hover:bg-[#79ca38]">
+          Join a Street Challenge
         </Link>
         <div className="mt-5 flex items-center justify-center gap-4 border-t border-[#002244]/12 pt-5 text-sm font-semibold text-[#1f5f7a]">
           <Link href="/street-challenge/profile" className="underline underline-offset-4 hover:text-[#002244]">Edit Profile</Link>
