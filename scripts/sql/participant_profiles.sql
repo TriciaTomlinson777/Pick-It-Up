@@ -4,9 +4,26 @@
 create table if not exists public.participant_profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   display_name text not null default '' check (char_length(display_name) <= 80),
+  avatar_kind text not null default 'default' check (avatar_kind in ('default', 'preset', 'upload')),
+  avatar_preset text,
+  avatar_path text,
+  avatar_moderation_status text not null default 'approved' check (avatar_moderation_status in ('pending_review', 'approved', 'rejected')),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+alter table public.participant_profiles add column if not exists avatar_kind text not null default 'default';
+alter table public.participant_profiles add column if not exists avatar_preset text;
+alter table public.participant_profiles add column if not exists avatar_path text;
+alter table public.participant_profiles add column if not exists avatar_moderation_status text not null default 'approved';
+
+alter table public.participant_profiles drop constraint if exists participant_profiles_avatar_kind_check;
+alter table public.participant_profiles
+  add constraint participant_profiles_avatar_kind_check check (avatar_kind in ('default', 'preset', 'upload'));
+alter table public.participant_profiles drop constraint if exists participant_profiles_avatar_moderation_status_check;
+alter table public.participant_profiles
+  add constraint participant_profiles_avatar_moderation_status_check
+  check (avatar_moderation_status in ('pending_review', 'approved', 'rejected'));
 
 create or replace function public.create_participant_profile()
 returns trigger
@@ -51,7 +68,7 @@ alter table public.participant_profiles enable row level security;
 
 revoke all on table public.participant_profiles from anon, authenticated;
 grant select on table public.participant_profiles to authenticated;
-grant update (display_name) on table public.participant_profiles to authenticated;
+grant update (display_name, avatar_kind, avatar_preset, avatar_path, avatar_moderation_status) on table public.participant_profiles to authenticated;
 
 drop policy if exists participant_profiles_select_own on public.participant_profiles;
 create policy participant_profiles_select_own

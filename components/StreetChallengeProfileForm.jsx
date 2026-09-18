@@ -1,12 +1,133 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createParticipantBrowserClient } from '@/lib/supabase/participant-browser';
 
-export default function StreetChallengeProfileForm({ userId, email, initialDisplayName }) {
+const PRESET_AVATARS = [
+  { id: 'sunshine', label: 'Sunshine', background: '#f4c94c', face: '#002244', accent: '#f59a2d' },
+  { id: 'sprout', label: 'Sprout', background: '#b9e6a0', face: '#176b35', accent: '#69be28' },
+  { id: 'sky', label: 'Sky', background: '#bdeff0', face: '#075b75', accent: '#0f9aa1' },
+  { id: 'coral', label: 'Coral', background: '#ffd0b4', face: '#7d2f26', accent: '#ef7f2d' },
+];
+
+function AvatarMark({ avatar, size = 'large' }) {
+  const preset = PRESET_AVATARS.find((item) => item.id === avatar?.preset);
+  const className = size === 'small' ? 'h-14 w-14' : 'h-28 w-28';
+
+  if (avatar?.kind === 'upload' && (avatar.url || avatar.previewUrl)) {
+    return <img src={avatar.url || avatar.previewUrl} alt="Uploaded profile picture" className={`${className} rounded-full object-cover`} />;
+  }
+
+  return (
+    <div
+      className={`${className} relative flex items-center justify-center overflow-hidden rounded-full border-4 border-white shadow-[0_5px_0_rgba(0,34,68,0.12)]`}
+      style={{ backgroundColor: preset?.background || '#dff3f1' }}
+      aria-label={preset ? `${preset.label} avatar` : 'Default Pick It Up Seattle avatar'}
+    >
+      <span className="absolute -right-1 top-2 h-5 w-5 rounded-full" style={{ backgroundColor: preset?.accent || '#0f9aa1' }} />
+      <span className="relative mt-3 h-14 w-16 rounded-[50%]" style={{ backgroundColor: preset?.face || '#0f9aa1' }}>
+        <span className="absolute left-3 top-4 h-2 w-2 rounded-full bg-white" />
+        <span className="absolute right-3 top-4 h-2 w-2 rounded-full bg-white" />
+        <span className="absolute bottom-2 left-1/2 h-2 w-7 -translate-x-1/2 rounded-full bg-white/80" />
+      </span>
+    </div>
+  );
+}
+
+function CropEditor({ file, onCancel, onComplete }) {
+  const [imageUrl, setImageUrl] = useState('');
+  const [zoom, setZoom] = useState(1);
+  const [position, setPosition] = useState({ x: 50, y: 50 });
+  const imageRef = useRef(null);
+
+  useEffect(() => {
+    const url = URL.createObjectURL(file);
+    setImageUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [file]);
+
+  function createCroppedImage() {
+    const image = imageRef.current;
+    if (!image) return;
+    const canvas = document.createElement('canvas');
+    const outputSize = 512;
+    canvas.width = outputSize;
+    canvas.height = outputSize;
+    const context = canvas.getContext('2d');
+    const sourceSize = Math.min(image.naturalWidth, image.naturalHeight) / zoom;
+    const sourceX = (image.naturalWidth - sourceSize) * (position.x / 100);
+    const sourceY = (image.naturalHeight - sourceSize) * (position.y / 100);
+    context.drawImage(image, sourceX, sourceY, sourceSize, sourceSize, 0, 0, outputSize, outputSize);
+    canvas.toBlob((blob) => {
+      if (blob) onComplete(new File([blob], 'participant-avatar.jpg', { type: 'image/jpeg' }));
+    }, 'image/jpeg', 0.88);
+  }
+
+  return (
+    <div className="space-y-4 border-t border-[#002244]/10 pt-5">
+      <div className="relative mx-auto aspect-square w-full max-w-xs overflow-hidden rounded-full border-8 border-white bg-[#dff3f1] shadow-[0_10px_24px_rgba(0,43,73,0.16)]">
+        {imageUrl ? <img ref={imageRef} src={imageUrl} alt="Crop preview" className="h-full w-full object-cover" style={{ objectPosition: `${position.x}% ${position.y}%`, transform: `scale(${zoom})` }} /> : null}
+      </div>
+      <label className="block text-sm font-semibold text-[#002244]">
+        Zoom
+        <input className="mt-2 w-full accent-[#0f9aa1]" type="range" min="1" max="3" step="0.05" value={zoom} onChange={(event) => setZoom(Number(event.target.value))} />
+      </label>
+      <label className="block text-sm font-semibold text-[#002244]">
+        Horizontal position
+        <input className="mt-2 w-full accent-[#0f9aa1]" type="range" min="0" max="100" value={position.x} onChange={(event) => setPosition({ ...position, x: Number(event.target.value) })} />
+      </label>
+      <label className="block text-sm font-semibold text-[#002244]">
+        Vertical position
+        <input className="mt-2 w-full accent-[#0f9aa1]" type="range" min="0" max="100" value={position.y} onChange={(event) => setPosition({ ...position, y: Number(event.target.value) })} />
+      </label>
+      <div className="grid grid-cols-2 gap-3">
+        <button type="button" onClick={onCancel} className="rounded-lg border border-[#002244]/20 px-4 py-3 font-semibold text-[#1f5f7a]">Cancel</button>
+        <button type="button" onClick={createCroppedImage} className="rounded-lg bg-[#0f9aa1] px-4 py-3 font-semibold text-white">Use this picture</button>
+      </div>
+    </div>
+  );
+}
+
+export default function StreetChallengeProfileForm({ userId, email, initialDisplayName, initialAvatar }) {
   const [displayName, setDisplayName] = useState(initialDisplayName);
+  const [avatar, setAvatar] = useState(initialAvatar);
+  const [cropFile, setCropFile] = useState(null);
+  const [avatarMessage, setAvatarMessage] = useState('');
+  const [isSavingAvatar, setIsSavingAvatar] = useState(false);
   const [message, setMessage] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+
+  async function saveAvatar(nextAvatar, file = null) {
+    setAvatarMessage('');
+    setIsSavingAvatar(true);
+    try {
+      const formData = new FormData();
+      formData.set('kind', nextAvatar.kind);
+      if (nextAvatar.preset) formData.set('preset', nextAvatar.preset);
+      if (file) formData.set('file', file);
+      const response = await fetch('/api/street-challenge/profile/avatar', { method: 'POST', body: formData });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Unable to save your profile picture.');
+      setAvatar({
+        ...nextAvatar,
+        path: data.path || '',
+        moderationStatus: data.moderationStatus || 'approved',
+        previewUrl: file ? URL.createObjectURL(file) : '',
+      });
+      setCropFile(null);
+      setAvatarMessage(data.moderationStatus === 'pending_review' ? 'Your picture is saved and will appear after a safety review.' : 'Profile picture saved.');
+    } catch (error) {
+      setAvatarMessage(error.message);
+    } finally {
+      setIsSavingAvatar(false);
+    }
+  }
+
+  function chooseFile(event) {
+    const file = event.target.files?.[0];
+    if (file) setCropFile(file);
+    event.target.value = '';
+  }
 
   async function saveProfile(event) {
     event.preventDefault();
@@ -65,6 +186,42 @@ export default function StreetChallengeProfileForm({ userId, email, initialDispl
           {isSaving ? 'Saving...' : 'Save display name'}
         </button>
       </form>
+
+      <section className="space-y-4 border-t border-[#002244]/10 pt-6" aria-labelledby="avatar-heading">
+        <div>
+          <h2 id="avatar-heading" className="text-xl font-bold text-[#002244]">Your profile picture</h2>
+          <p className="mt-2 text-sm leading-6 text-[#1f5f7a]">Your avatar may appear publicly in Street Challenge rankings and activity.</p>
+        </div>
+        <div className="flex items-center gap-4">
+          <AvatarMark avatar={avatar} />
+          <p className="text-sm font-semibold text-[#1f5f7a]">Pick a cheerful avatar, or add a picture that feels like you.</p>
+        </div>
+        {cropFile ? <CropEditor file={cropFile} onCancel={() => setCropFile(null)} onComplete={(file) => saveAvatar({ kind: 'upload', preset: '' }, file)} /> : (
+          <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {PRESET_AVATARS.map((preset) => (
+                <button key={preset.id} type="button" disabled={isSavingAvatar} onClick={() => saveAvatar({ kind: 'preset', preset: preset.id })} className="flex flex-col items-center gap-2 rounded-lg border border-[#002244]/15 p-2 text-xs font-semibold text-[#002244] hover:border-[#0f9aa1] disabled:opacity-60">
+                  <AvatarMark avatar={{ kind: 'preset', preset: preset.id }} size="small" />
+                  {preset.label}
+                </button>
+              ))}
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <label className="cursor-pointer rounded-lg bg-[#f59a2d] px-4 py-3 text-center font-semibold text-white hover:bg-[#ea8718]">
+                Take a new picture
+                <input className="sr-only" type="file" accept="image/*" capture="user" onChange={chooseFile} />
+              </label>
+              <label className="cursor-pointer rounded-lg border-2 border-[#0f9aa1] px-4 py-3 text-center font-semibold text-[#0f7f85] hover:bg-[#eef9fc]">
+                Upload a picture
+                <input className="sr-only" type="file" accept="image/*" onChange={chooseFile} />
+              </label>
+            </div>
+            <button type="button" disabled={isSavingAvatar} onClick={() => saveAvatar({ kind: 'default', preset: '' })} className="w-full text-sm font-semibold text-[#1f5f7a] underline underline-offset-4">Skip for now</button>
+          </div>
+        )}
+        {isSavingAvatar ? <p className="text-sm font-semibold text-[#1f5f7a]">Saving profile picture...</p> : null}
+        {avatarMessage ? <p className="text-sm font-semibold text-[#1f5f7a]">{avatarMessage}</p> : null}
+      </section>
 
       <button
         type="button"

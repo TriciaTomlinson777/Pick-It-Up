@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import StreetChallengeProfileForm from '@/components/StreetChallengeProfileForm';
+import { createSignedPhotoUrl } from '@/lib/future-photo-moderation';
 import { createParticipantServerClient } from '@/lib/supabase/participant-server';
 
 export const dynamic = 'force-dynamic';
@@ -15,9 +16,14 @@ export default async function StreetChallengeProfilePage() {
 
   const { data: profile } = await supabase
     .from('participant_profiles')
-    .select('display_name')
+    .select('display_name, avatar_kind, avatar_preset, avatar_path, avatar_moderation_status')
     .eq('id', user.id)
     .maybeSingle();
+  const avatarUrl = profile?.avatar_kind === 'upload'
+    && profile?.avatar_path
+    && profile?.avatar_moderation_status === 'approved'
+    ? await createSignedPhotoUrl(profile.avatar_path)
+    : '';
 
   return (
     <main className="min-h-screen bg-[linear-gradient(180deg,#e7f6f4_0%,#f4efda_58%,#ffffff_100%)] px-4 py-12">
@@ -31,6 +37,13 @@ export default async function StreetChallengeProfilePage() {
           userId={user.id}
           email={user.email || ''}
           initialDisplayName={profile?.display_name || ''}
+          initialAvatar={{
+            kind: profile?.avatar_kind || 'default',
+            preset: profile?.avatar_preset || '',
+            path: profile?.avatar_path || '',
+            moderationStatus: profile?.avatar_moderation_status || 'approved',
+            url: avatarUrl,
+          }}
         />
       </section>
     </main>
