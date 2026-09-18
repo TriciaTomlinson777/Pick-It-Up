@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { createParticipantBrowserClient } from '@/lib/supabase/participant-browser';
 
 const PRESET_AVATARS = [
@@ -99,6 +100,7 @@ export default function StreetChallengeProfileForm({ userId, email, initialDispl
   const [isSavingAvatar, setIsSavingAvatar] = useState(false);
   const [message, setMessage] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const hasSavedAvatar = avatar.kind !== 'default' && Boolean(avatar.preset || avatar.path);
 
   async function saveAvatar(nextAvatar, file = null) {
     setAvatarMessage('');
@@ -111,14 +113,16 @@ export default function StreetChallengeProfileForm({ userId, email, initialDispl
       const response = await fetch('/api/street-challenge/profile/avatar', { method: 'POST', body: formData });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Unable to save your profile picture.');
+      if (!data.ok || !data.avatar) throw new Error('Your profile picture could not be verified after saving.');
       setAvatar({
-        ...nextAvatar,
-        path: data.path || '',
-        moderationStatus: data.moderationStatus || 'approved',
+        kind: data.avatar.kind,
+        preset: data.avatar.preset,
+        path: data.avatar.path,
+        moderationStatus: data.avatar.moderationStatus,
         previewUrl: file ? URL.createObjectURL(file) : '',
       });
       setCropFile(null);
-      setAvatarMessage(data.moderationStatus === 'pending_review' ? 'Your picture is saved and will appear after a safety review.' : 'Profile picture saved.');
+      setAvatarMessage(data.avatar.moderationStatus === 'pending_review' ? 'Your picture is saved and will appear after a safety review.' : 'Profile picture saved.');
     } catch (error) {
       setAvatarMessage(error.message);
     } finally {
@@ -218,7 +222,9 @@ export default function StreetChallengeProfileForm({ userId, email, initialDispl
                 <input className="sr-only" type="file" accept="image/*" onChange={chooseFile} />
               </label>
             </div>
-            <button type="button" disabled={isSavingAvatar} onClick={() => saveAvatar({ kind: 'default', preset: '' })} className="w-full text-sm font-semibold text-[#1f5f7a] underline underline-offset-4">Skip for now</button>
+            <Link href="/street-challenge/home" className="block w-full text-center text-sm font-semibold text-[#1f5f7a] underline underline-offset-4">
+              {hasSavedAvatar ? 'Continue to Street Challenge' : 'Skip for now'}
+            </Link>
           </div>
         )}
         {isSavingAvatar ? <p className="text-sm font-semibold text-[#1f5f7a]">Saving profile picture...</p> : null}
