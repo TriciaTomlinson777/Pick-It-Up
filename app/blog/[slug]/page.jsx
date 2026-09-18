@@ -17,7 +17,11 @@ const DAVID_SEDARIS_POST_SLUG = 'apparently-david-sedaris-picks-up-litter-too';
 const DAVID_SEDARIS_VIDEO_ID = '5A2yC0-xPvo';
 
 function getPublicImageSrc(post) {
-  const imageUrl = String(post?.featuredImageUrl || '').trim();
+  const imageUrl = String(
+    post?.featuredImageUrl
+      || (Array.isArray(post?.submissionPhotoUrls) ? post.submissionPhotoUrls[0] : '')
+      || ''
+  ).trim();
   if (!imageUrl) {
     return '';
   }
@@ -74,6 +78,7 @@ export default async function BlogPostPage({ params }) {
   const { previousPost, nextPost } = getAdjacentPosts(publishedPosts, post.slug);
   const isFirstPost = post.slug === FIRST_POST_SLUG;
   const hasDavidSedarisVideo = post.slug === DAVID_SEDARIS_POST_SLUG;
+  const publicImageUrl = getPublicImageSrc(post);
 
   return (
     <>
@@ -112,14 +117,14 @@ export default async function BlogPostPage({ params }) {
               <BlogShareMenu
                 url={`/blog/${post.slug}`}
                 title={`${post.title} | Pick It Up Seattle`}
-                imageUrl={getPublicImageSrc(post)}
+                imageUrl={publicImageUrl}
                 label="Share Story"
               />
             </div>
 
-            {post.featuredImageUrl ? (
+            {publicImageUrl ? (
               <img
-                src={getPublicImageSrc(post)}
+                src={publicImageUrl}
                 alt={post.title}
                 style={{
                   width: '100%',
