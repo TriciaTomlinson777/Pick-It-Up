@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { deleteFuturePhoto, storeAndModerateFutureImage } from '@/lib/future-photo-moderation';
 import { createParticipantServerClient } from '@/lib/supabase/participant-server';
 
-const PRESET_IDS = new Set(['maya', 'jordan', 'riley', 'sam', 'alex', 'taylor', 'casey', 'devon']);
+const PRESET_IDS = new Set(['purple-lady', 'blue-hat-boy', 'blonde-girl', 'captain-can', 'mess-monster', 'blue-boy', 'dog', 'mia']);
 
 export async function POST(request) {
   const supabase = await createParticipantServerClient();
