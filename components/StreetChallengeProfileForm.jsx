@@ -4,10 +4,14 @@ import { useEffect, useRef, useState } from 'react';
 import { createParticipantBrowserClient } from '@/lib/supabase/participant-browser';
 
 const PRESET_AVATARS = [
-  { id: 'sunshine', label: 'Sunshine', background: '#f4c94c', face: '#002244', accent: '#f59a2d' },
-  { id: 'sprout', label: 'Sprout', background: '#b9e6a0', face: '#176b35', accent: '#69be28' },
-  { id: 'sky', label: 'Sky', background: '#bdeff0', face: '#075b75', accent: '#0f9aa1' },
-  { id: 'coral', label: 'Coral', background: '#ffd0b4', face: '#7d2f26', accent: '#ef7f2d' },
+  { id: 'maya', label: 'Maya', background: '#f4c94c', skin: '#9a5b3b', hair: '#002244', hairStyle: 'curly', shirt: '#0f9aa1', glasses: true },
+  { id: 'jordan', label: 'Jordan', background: '#bdeff0', skin: '#d9956c', hair: '#6b3d2e', hairStyle: 'short', shirt: '#69be28', glasses: false },
+  { id: 'riley', label: 'Riley', background: '#ffd0b4', skin: '#f1bd91', hair: '#ef7f2d', hairStyle: 'bob', shirt: '#002244', glasses: true },
+  { id: 'sam', label: 'Sam', background: '#b9e6a0', skin: '#6e3f2c', hair: '#1a1715', hairStyle: 'locs', shirt: '#f4c94c', glasses: false },
+  { id: 'alex', label: 'Alex', background: '#dff3f1', skin: '#bd7650', hair: '#002244', hairStyle: 'wave', shirt: '#ef7f2d', glasses: false },
+  { id: 'taylor', label: 'Taylor', background: '#f4c94c', skin: '#f0c29b', hair: '#7b4b2a', hairStyle: 'ponytail', shirt: '#69be28', glasses: true },
+  { id: 'casey', label: 'Casey', background: '#bdeff0', skin: '#8a5037', hair: '#2b1b16', hairStyle: 'buzz', shirt: '#0f9aa1', glasses: false },
+  { id: 'devon', label: 'Devon', background: '#ffd0b4', skin: '#d18b62', hair: '#4c2a20', hairStyle: 'curly', shirt: '#002244', glasses: false },
 ];
 
 function AvatarMark({ avatar, size = 'large' }) {
@@ -18,18 +22,32 @@ function AvatarMark({ avatar, size = 'large' }) {
     return <img src={avatar.url || avatar.previewUrl} alt="Uploaded profile picture" className={`${className} rounded-full object-cover`} />;
   }
 
+  const isSmall = size === 'small';
   return (
     <div
-      className={`${className} relative flex items-center justify-center overflow-hidden rounded-full border-4 border-white shadow-[0_5px_0_rgba(0,34,68,0.12)]`}
+      className={`${className} overflow-hidden rounded-full border-4 border-white shadow-[0_5px_0_rgba(0,34,68,0.12)]`}
       style={{ backgroundColor: preset?.background || '#dff3f1' }}
-      aria-label={preset ? `${preset.label} avatar` : 'Default Pick It Up Seattle avatar'}
+      aria-label={preset ? `${preset.label} Litter Hero avatar` : 'Default Pick It Up Seattle avatar'}
     >
-      <span className="absolute -right-1 top-2 h-5 w-5 rounded-full" style={{ backgroundColor: preset?.accent || '#0f9aa1' }} />
-      <span className="relative mt-3 h-14 w-16 rounded-[50%]" style={{ backgroundColor: preset?.face || '#0f9aa1' }}>
-        <span className="absolute left-3 top-4 h-2 w-2 rounded-full bg-white" />
-        <span className="absolute right-3 top-4 h-2 w-2 rounded-full bg-white" />
-        <span className="absolute bottom-2 left-1/2 h-2 w-7 -translate-x-1/2 rounded-full bg-white/80" />
-      </span>
+      <svg viewBox="0 0 100 100" role="img" aria-hidden="true" className="h-full w-full">
+        <path d="M18 100c2-22 16-31 32-31s30 9 32 31" fill={preset?.shirt || '#0f9aa1'} />
+        <path d="M34 60c1-8 31-8 32 0v13c-8 7-24 7-32 0z" fill={preset?.skin || '#9a5b3b'} />
+        <ellipse cx="50" cy="44" rx="25" ry="27" fill={preset?.skin || '#9a5b3b'} />
+        {preset?.hairStyle === 'curly' ? <path d="M25 42c-7-23 14-35 29-27 17-7 27 13 20 29l-9-10c-7 6-22 7-34 1z" fill={preset.hair} /> : null}
+        {preset?.hairStyle === 'short' ? <path d="M25 42c-2-22 12-31 27-29 14 1 22 12 20 29l-8-9c-10 4-25 3-39 9z" fill={preset.hair} /> : null}
+        {preset?.hairStyle === 'bob' ? <path d="M24 51c-9-28 5-40 27-39 22 1 29 17 22 41l-9-8c-12 6-25 5-40 6z" fill={preset.hair} /> : null}
+        {preset?.hairStyle === 'locs' ? <path d="M23 49c-5-22 10-37 28-37 20 0 29 18 23 38l-8-8-4-16c-10 7-21 8-32 4z" fill={preset.hair} /> : null}
+        {preset?.hairStyle === 'wave' ? <path d="M25 44c-5-19 10-32 27-31 18 0 27 13 22 30l-9-9c-9 5-24 5-40 10z" fill={preset.hair} /> : null}
+        {preset?.hairStyle === 'ponytail' ? <path d="M27 47c-6-21 8-35 25-35 19 0 28 15 22 34l-8-9c-11 5-24 5-39 10z" fill={preset.hair} /> : null}
+        {preset?.hairStyle === 'buzz' ? <path d="M27 42c-1-17 10-27 24-27 15 0 23 10 22 27l-8-8c-10 4-23 4-38 8z" fill={preset.hair} /> : null}
+        <circle cx="40" cy="45" r="3" fill="#002244" />
+        <circle cx="60" cy="45" r="3" fill="#002244" />
+        <path d="M43 56c5 4 9 4 14 0" fill="none" stroke="#002244" strokeLinecap="round" strokeWidth="2.5" />
+        {preset?.glasses ? <path d="M32 44h15m6 0h15M47 44h6" fill="none" stroke="#002244" strokeWidth="2" /> : null}
+        <path d="M42 76h16l-8 9z" fill="#f4c94c" />
+        <path d="M40 84l10-7 10 7" fill="none" stroke="#fffaf0" strokeWidth="2" />
+        {isSmall ? null : <circle cx="86" cy="17" r="7" fill="#f59a2d" />}
+      </svg>
     </div>
   );
 }

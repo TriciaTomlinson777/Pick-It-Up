@@ -91,12 +91,20 @@ export default function Header() {
             </Link>
           </div>
 
-          <Link
-            href="/volunteer"
-            className="btn-green absolute bottom-6 right-0 hidden min-h-12 whitespace-nowrap px-4.5 text-[1.04rem] font-bold lg:inline-flex lg:bottom-7 lg:px-6 lg:text-[1.26rem] xl:bottom-8 xl:text-[1.38rem]"
-          >
-            Join the Movement
-          </Link>
+          <div className="absolute bottom-6 right-0 hidden items-center gap-2 lg:flex lg:bottom-7 xl:bottom-8">
+            <Link
+              href="/street-challenge"
+              className="btn-green min-h-12 whitespace-nowrap px-4.5 text-[1.04rem] font-bold lg:px-5 lg:text-[1.18rem] xl:text-[1.3rem]"
+            >
+              Join the Movement
+            </Link>
+            <Link
+              href="/volunteer"
+              className="btn-secondary min-h-12 whitespace-nowrap px-4.5 text-[1.04rem] font-bold lg:px-5 lg:text-[1.18rem] xl:text-[1.3rem]"
+            >
+              Make a Difference
+            </Link>
+          </div>
         </div>
 
         {/* Mobile menu */}
@@ -160,11 +168,18 @@ export default function Header() {
               Contact
             </Link>
             <Link
-              href="/volunteer"
+              href="/street-challenge"
               className="btn-green block w-full text-center"
               onClick={() => setIsOpen(false)}
             >
               Join the Movement
+            </Link>
+            <Link
+              href="/volunteer"
+              className="btn-secondary block w-full text-center"
+              onClick={() => setIsOpen(false)}
+            >
+              Make a Difference
             </Link>
           </div>
         )}
