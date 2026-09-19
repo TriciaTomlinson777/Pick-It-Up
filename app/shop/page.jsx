@@ -190,9 +190,13 @@ One person. One piece. One better city.`,
       {/* Hero */}
       <section className="bg-[linear-gradient(115deg,_#002244_0%,_#0f9aa1_54%,_#69be28_100%)] py-16 text-white sm:py-20">
         <div className="container-custom">
-          <h1 className={`${balooDisplay.className} mb-2 text-[2.8rem] font-extrabold leading-[0.92] tracking-[-0.015em] text-[#fffaf0] sm:text-[3.9rem]`}>
+          <h1 className={`${balooDisplay.className} mb-2 text-center text-[2.8rem] font-extrabold leading-[0.92] tracking-[-0.015em] text-[#fffaf0] sm:text-[3.9rem]`}>
             Wear the Movement!
           </h1>
+
+          <p className="mx-auto mb-5 mt-4 max-w-4xl text-center text-xl leading-[1.85] text-[#fff8e8] sm:text-2xl">
+            Pick It Up Seattle is a <span className="font-bold">501(c)(3) nonprofit</span>. Every purchase supports our mission to help create cleaner, more beautiful communities.
+          </p>
 
           <div className="mb-5 flex justify-center" aria-hidden="true">
             <svg viewBox="0 0 24 24" className="h-6 w-6 text-[#2ec4c7]" fill="currentColor">
