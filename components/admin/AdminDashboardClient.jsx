@@ -33,9 +33,10 @@ function imageSet(item) {
   return item.imageUrl ? [item.imageUrl] : [];
 }
 
-export default function AdminDashboardClient({ initialPendingEvents = [], initialContentSections = [] }) {
+export default function AdminDashboardClient({ initialPendingEvents = [], initialContentSections = [], initialCommunityActionPhotos = [] }) {
   const [pendingEvents, setPendingEvents] = useState(initialPendingEvents);
   const [contentSections, setContentSections] = useState(initialContentSections);
+  const [communityActionPhotos, setCommunityActionPhotos] = useState(initialCommunityActionPhotos);
   const [editingEventId, setEditingEventId] = useState('');
   const [eventDraft, setEventDraft] = useState(null);
   const [message, setMessage] = useState('');
@@ -163,6 +164,32 @@ export default function AdminDashboardClient({ initialPendingEvents = [], initia
       setMessage(action === 'approve' ? 'Submission approved and now public.' : 'Submission rejected.');
     } catch (moderationError) {
       setError(moderationError.message || 'Unable to moderate submission.');
+    } finally {
+      setBusyKey('');
+    }
+  }
+
+  async function moderateCommunityActionPhoto(item, action) {
+    setBusyKey(`community-action-${item.id}-${action}`);
+    setMessage('');
+    setError('');
+
+    try {
+      const response = await fetch(`/api/admin/community-content/communityAction/${item.id}`, {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Unable to update photo.');
+
+      setCommunityActionPhotos((current) => current.map((photo) => (
+        photo.id === item.id ? data.item : photo
+      )));
+      setMessage(action === 'remove' ? 'Photo removed from the website.' : 'Photo restored to the website.');
+    } catch (updateError) {
+      setError(updateError.message || 'Unable to update photo.');
     } finally {
       setBusyKey('');
     }
@@ -300,6 +327,37 @@ export default function AdminDashboardClient({ initialPendingEvents = [], initia
             })}
           </div>
           {pendingEvents.length === 0 ? <p className="mt-5 rounded-xl bg-[#f4fbfc] px-4 py-3 text-sm text-[#1f5f7a]">No pending event submissions.</p> : null}
+        </section>
+
+        <section className="rounded-2xl border border-[#0f9aa1]/20 bg-white p-5 shadow-sm sm:p-6">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h2 className="text-2xl font-bold text-[#002244]">Approved Community in Action Photos</h2>
+              <p className="mt-1 text-sm text-[#1f5f7a]">Manage photos currently on the website and restore previously removed photos.</p>
+            </div>
+            <p className="text-sm font-semibold text-[#1f5f7a]">{communityActionPhotos.filter((photo) => photo.status === 'approved').length} on website</p>
+          </div>
+
+          <div className="mt-5 grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+            {communityActionPhotos.map((photo) => (
+              <article key={photo.id} className="flex flex-col rounded-xl border border-[#002244]/10 bg-[#fbfefd] p-3">
+                {photo.imageUrl ? <img src={photo.imageUrl} alt={photo.caption || 'Community in Action photo'} className="aspect-square w-full rounded-lg bg-white object-contain" /> : null}
+                <p className="mt-2 line-clamp-2 min-h-10 text-sm text-[#516b7d]">{photo.caption || 'Community photo'}</p>
+                <p className="mt-1 text-xs font-semibold capitalize text-[#1f5f7a]">{statusLabel(photo.status)}</p>
+                <button
+                  disabled={Boolean(busyKey)}
+                  className={photo.status === 'approved'
+                    ? 'mt-3 rounded-full border border-[#c84d42]/40 px-3 py-2 text-sm font-semibold text-[#c84d42] disabled:opacity-50'
+                    : 'mt-3 rounded-full border border-[#1f8f3c]/35 px-3 py-2 text-sm font-semibold text-[#1f8f3c] disabled:opacity-50'}
+                  type="button"
+                  onClick={() => moderateCommunityActionPhoto(photo, photo.status === 'approved' ? 'remove' : 'restore')}
+                >
+                  {photo.status === 'approved' ? 'Remove from website' : 'Restore'}
+                </button>
+              </article>
+            ))}
+          </div>
+          {communityActionPhotos.length === 0 ? <p className="mt-5 rounded-xl bg-[#f4fbfc] px-4 py-3 text-sm text-[#1f5f7a]">No approved or removed photos.</p> : null}
         </section>
 
         {contentSections.map((section) => {
