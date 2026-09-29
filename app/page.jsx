@@ -3915,7 +3915,7 @@ export default function Home() {
                           setHasConfirmedPhotoGuidelines(event.target.checked);
                           setPhotoFormError('');
                         }}
-                        required
+                        aria-required="true"
                         className="mt-0.5 h-4 w-4 rounded border-[#002b49]/25"
                       />
                       <span>
@@ -3924,7 +3924,7 @@ export default function Home() {
                     </label>
 
                     {photoFormError && (
-                      <p className="mt-3 rounded-xl border border-[#D9665B]/25 bg-[#fff3f0] px-3 py-2 text-sm font-medium text-[#D9665B]">
+                      <p role="alert" className="mt-3 rounded-xl border border-[#D9665B]/25 bg-[#fff3f0] px-3 py-2 text-sm font-medium text-[#D9665B]">
                         {photoFormError}
                       </p>
                     )}
@@ -4101,7 +4101,7 @@ export default function Home() {
                     <button type="button" onClick={closePhotoModal} disabled={isUploadingCleanupPhotos} className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#002b49]/20 px-5 py-2 text-sm font-semibold text-[#002b49] transition hover:bg-[#f2f7fa] disabled:cursor-not-allowed disabled:opacity-70">
                       Cancel
                     </button>
-                    <button type="submit" disabled={!hasConfirmedPhotoGuidelines || isUploadingCleanupPhotos} className="btn-green min-h-11 rounded-full px-6 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-70">
+                    <button type="submit" disabled={isUploadingCleanupPhotos} className="btn-green min-h-11 rounded-full px-6 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-70">
                       {isUploadingCleanupPhotos ? 'Uploading...' : 'Submit Photos'}
                     </button>
                   </div>
