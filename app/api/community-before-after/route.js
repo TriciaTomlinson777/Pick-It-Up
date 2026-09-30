@@ -129,6 +129,7 @@ export async function GET() {
 
 export async function POST(request) {
   const storagePaths = [];
+  const diagnosticId = crypto.randomUUID();
   let stage = 'reading the submitted photos';
   try {
     const formData = await request.formData();
@@ -176,14 +177,14 @@ export async function POST(request) {
     if (!response.ok) {
       const supabaseMessage = await parseSupabaseError(response);
       console.error('Failed to create community before/after pair.', supabaseMessage || response.status);
-      throw new Error('Unable to submit before/after pair.');
+      throw new Error(supabaseMessage || `Database save failed (HTTP ${response.status}).`);
     }
 
     const rows = await response.json();
     const createdRow = Array.isArray(rows) ? rows[0] : null;
 
     if (!createdRow?.id) {
-      throw new Error('Unable to submit before/after pair.');
+      throw new Error('Database save returned no photo-pair ID.');
     }
 
     return Response.json({
@@ -198,10 +199,18 @@ export async function POST(request) {
   } catch (error) {
     await deletePartialPairRow(storagePaths[0], storagePaths[1]);
     await Promise.all(storagePaths.map(deleteFuturePhoto));
-    console.error('Unexpected error creating community before/after pair.', { stage, error });
+    const detail = String(error instanceof Error ? error.message : 'Unexpected server error')
+      .replace(/(bearer\s+)[^\s]+/gi, '$1[redacted]')
+      .replace(/(api[-_ ]?key|service[-_ ]?role[-_ ]?key)[=: ]+[^\s,;]+/gi, '$1=[redacted]')
+      .slice(0, 240);
+    console.error('Unexpected error creating community before/after pair.', { diagnosticId, stage, error });
     return Response.json(
-      { error: 'Your before-and-after photos could not be saved. Please check your connection and try again.' },
-      { status: 500 }
+      {
+        error: `Photo submission failed while ${stage}: ${detail}`,
+        stage,
+        diagnostic_id: diagnosticId,
+      },
+      { status: 500, headers: { 'x-request-id': diagnosticId } }
     );
   }
 }

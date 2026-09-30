@@ -2363,15 +2363,24 @@ export default function Home() {
       body: payload,
     });
 
+    const responseText = await response.text();
     let data = null;
     try {
-      data = await response.json();
+      data = JSON.parse(responseText);
     } catch {
       data = null;
     }
 
     if (!response.ok) {
-      throw new Error(data?.error || 'Unable to submit before/after pair.');
+      const requestId = data?.diagnostic_id || response.headers.get('x-request-id');
+      const message = data?.error || `Photo upload service returned HTTP ${response.status} without diagnostic details.`;
+      throw new Error(requestId ? `${message} Reference: ${requestId}.` : message);
+    }
+
+    if (!data?.id) {
+      const requestId = data?.diagnostic_id || response.headers.get('x-request-id');
+      const message = 'Photo upload service returned success without confirming a saved photo pair.';
+      throw new Error(requestId ? `${message} Reference: ${requestId}.` : message);
     }
 
     return {
