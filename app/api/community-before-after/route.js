@@ -149,8 +149,12 @@ export async function POST(request) {
       : statuses.includes('pending_review') ? 'pending_review' : 'approved';
 
     stage = 'preparing the saved photo links';
-    const beforeImageUrl = moderationStatus === 'approved' ? await createSignedPhotoUrl(before.storagePath) : null;
-    const afterImageUrl = moderationStatus === 'approved' ? await createSignedPhotoUrl(after.storagePath) : null;
+    const pairId = crypto.randomUUID();
+    const beforeImageUrl = new URL(`/api/community-before-after/${pairId}/image?side=before`, request.url).toString();
+    const afterImageUrl = new URL(`/api/community-before-after/${pairId}/image?side=after`, request.url).toString();
+    if (![beforeImageUrl, afterImageUrl].every((value) => /^https?:\/\//i.test(value))) {
+      throw new Error('Could not create valid URLs for both saved photos.');
+    }
 
     const query = createQueryString({
       select: 'id,moderation_status',
@@ -164,8 +168,9 @@ export async function POST(request) {
         Prefer: 'return=representation',
       },
       body: JSON.stringify({
-        before_image_url: null,
-        after_image_url: null,
+        id: pairId,
+        before_image_url: beforeImageUrl,
+        after_image_url: afterImageUrl,
         before_image_path: before.storagePath,
         after_image_path: after.storagePath,
         pair_caption: pairCaption,
