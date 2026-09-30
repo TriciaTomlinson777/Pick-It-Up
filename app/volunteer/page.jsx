@@ -637,7 +637,7 @@ export default function Volunteer() {
       {/* Hero */}
       <section className="bg-gradient-to-r from-seattle-green to-green-700 text-white py-16">
         <div className="container-custom">
-          <h1 className="heading-xl mb-4 text-[#0f9aa1]">Join the Movement</h1>
+          <h1 className="heading-xl mb-4 text-[#0f9aa1]">Make a Difference</h1>
           <div className="max-w-4xl space-y-4 text-[1.12rem] font-semibold leading-relaxed text-[#002244] sm:text-xl">
             <p>Pick It Up Seattle isn’t built by one organization. It’s built by thousands of people doing one small thing to make our city better.</p>
             <p>Whether you pick up litter, organize a cleanup, share a social media post, invite a friend, photograph an event, become a community partner, or simply encourage others, you’re helping build something much bigger than yourself.</p>
