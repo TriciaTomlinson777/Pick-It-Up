@@ -145,6 +145,7 @@ export default function Home() {
   const [hasConfirmedPhotoGuidelines, setHasConfirmedPhotoGuidelines] = useState(false);
   const [isPhotoGuidelinesPopupOpen, setIsPhotoGuidelinesPopupOpen] = useState(false);
   const [pendingTrackPhotoSubmission, setPendingTrackPhotoSubmission] = useState(null);
+  const [pendingSavedBeforeAfterPair, setPendingSavedBeforeAfterPair] = useState(null);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [shareModalStage, setShareModalStage] = useState('choose');
   const [shareSubmissionType, setShareSubmissionType] = useState('');
@@ -2461,39 +2462,54 @@ export default function Home() {
     const submissionId = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 
     try {
-      const newSubmission = await buildBeforeAfterSubmission(submissionId);
-      const createdPair = await submitBeforeAfterPairForReview(newSubmission);
-      const submittedImages = [
-        {
-          ...(newSubmission.images[0] || {}),
-          file: undefined,
-          storagePath: createdPair.beforeImagePath,
-          publicUrl: createdPair.beforeImageUrl,
-        },
-        {
-          ...(newSubmission.images[1] || {}),
-          file: undefined,
-          storagePath: createdPair.afterImagePath,
-          publicUrl: createdPair.afterImageUrl,
-        },
-      ];
-      const approvedSubmission = {
-        ...newSubmission,
-        id: createdPair?.id || newSubmission.id,
-        images: submittedImages,
-      };
+      let savedPair = pendingSavedBeforeAfterPair;
 
-      if (createdPair.moderationStatus === 'approved') {
-        setApprovedBeforeAfterSubmissions((current) => normalizePhotoSubmissions([
-          approvedSubmission,
-          ...current,
-        ]));
-        setPendingTrackPhotoSubmission(approvedSubmission);
-      } else {
-        setPendingTrackPhotoSubmission(null);
+      if (!savedPair) {
+        const newSubmission = await buildBeforeAfterSubmission(submissionId);
+        const createdPair = await submitBeforeAfterPairForReview(newSubmission);
+        const approvedSubmission = {
+          ...newSubmission,
+          id: createdPair.id || newSubmission.id,
+          images: [
+            {
+              ...newSubmission.images[0],
+              file: undefined,
+              storagePath: createdPair.beforeImagePath,
+              publicUrl: createdPair.beforeImageUrl,
+            },
+            {
+              ...newSubmission.images[1],
+              file: undefined,
+              storagePath: createdPair.afterImagePath,
+              publicUrl: createdPair.afterImageUrl,
+            },
+          ],
+        };
+
+        savedPair = { createdPair, approvedSubmission };
+        setPendingSavedBeforeAfterPair(savedPair);
+
+        if (createdPair.moderationStatus === 'approved') {
+          setApprovedBeforeAfterSubmissions((current) => normalizePhotoSubmissions([
+            approvedSubmission,
+            ...current,
+          ]));
+          setPendingTrackPhotoSubmission(approvedSubmission);
+        } else {
+          setPendingTrackPhotoSubmission(null);
+        }
       }
+
+      const savedCleanup = await finalizeTrackSubmission(
+        savedPair.createdPair.moderationStatus === 'approved' ? savedPair.approvedSubmission : null
+      );
+      if (!savedCleanup) {
+        setPhotoFormError('Your photos were saved, but Track It could not be saved. Tap Retry Save to finish without uploading the photos again.');
+        return;
+      }
+
+      setPendingSavedBeforeAfterPair(null);
       closePhotoModal();
-      finalizeTrackSubmission(createdPair.moderationStatus === 'approved' ? approvedSubmission : null);
     } catch (error) {
       setPhotoFormError(error instanceof Error ? error.message : 'Photo upload failed. Please try again.');
     } finally {
@@ -2560,7 +2576,7 @@ export default function Home() {
     setPhotoStorageWarning('');
   };
 
-  const finalizeTrackSubmission = (photoSubmissionOverride = pendingTrackPhotoSubmission) => {
+  const finalizeTrackSubmission = async (photoSubmissionOverride = pendingTrackPhotoSubmission) => {
     setIsSubmittingTrackEntry(true);
     setPhotoStorageWarning('');
 
@@ -2599,13 +2615,7 @@ export default function Home() {
     };
 
     try {
-      const parsedEntries = JSON.parse(localStorage.getItem(TRACK_SUBMISSIONS_KEY) || '[]');
-      const currentEntries = Array.isArray(parsedEntries) ? parsedEntries : [];
-      currentEntries.push(entry);
-      localStorage.setItem(TRACK_SUBMISSIONS_KEY, JSON.stringify(currentEntries));
-
-      // On success, re-fetch to rebuild shared counters and map from confirmed server rows.
-      fetch('/api/cleanup-submissions', {
+      const response = await fetch('/api/cleanup-submissions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -2621,8 +2631,22 @@ export default function Home() {
           location_description: String(trackForm.locationDescription || '').trim() || null,
           raw_payload: entry,
         }),
-      })
-        .then((res) => (res.ok ? fetch('/api/cleanup-submissions') : Promise.reject()))
+      });
+      const savedSubmission = await response.json().catch(() => ({}));
+      if (!response.ok || !savedSubmission.id) {
+        throw new Error(savedSubmission.error || 'We could not save your cleanup right now. Please try again.');
+      }
+
+      try {
+        const parsedEntries = JSON.parse(localStorage.getItem(TRACK_SUBMISSIONS_KEY) || '[]');
+        const currentEntries = Array.isArray(parsedEntries) ? parsedEntries : [];
+        currentEntries.push(entry);
+        localStorage.setItem(TRACK_SUBMISSIONS_KEY, JSON.stringify(currentEntries));
+      } catch {
+        setPhotoStorageWarning('Your cleanup was saved, but it could not be kept in this browser.');
+      }
+
+      fetch('/api/cleanup-submissions')
         .then((res) => (res.ok ? res.json() : Promise.reject()))
         .then(({ submissions }) => {
           const rows = Array.isArray(submissions) ? submissions : [];
@@ -2686,16 +2710,16 @@ export default function Home() {
       setIsGpsDetailsOpen(false);
       setIsTrackModalOpen(false);
       return true;
-    } catch {
+    } catch (error) {
       setIsSubmissionSuccess(false);
-      setLocationError('We could not save your cleanup right now. Please try again.');
+      setLocationError(error instanceof Error ? error.message : 'We could not save your cleanup right now. Please try again.');
       return false;
     } finally {
       setIsSubmittingTrackEntry(false);
     }
   };
 
-  const handleTrackSubmit = (event) => {
+  const handleTrackSubmit = async (event) => {
     event.preventDefault();
 
     if (isSubmittingTrackEntry) {
@@ -2712,7 +2736,8 @@ export default function Home() {
       return;
     }
 
-    finalizeTrackSubmission();
+    const saved = await finalizeTrackSubmission();
+    if (saved) setPendingSavedBeforeAfterPair(null);
   };
 
   useEffect(() => {
@@ -3847,7 +3872,7 @@ export default function Home() {
                       id="before-photo-input"
                       type="file"
                       accept="image/*"
-                      disabled={isUploadingCleanupPhotos || !isTrackBeforeAfterPhotoModal}
+                      disabled={isUploadingCleanupPhotos || Boolean(pendingSavedBeforeAfterPair) || !isTrackBeforeAfterPhotoModal}
                       onChange={(event) => handleBeforeAfterPhotoInputChange(0, event)}
                       className="sr-only"
                     />
@@ -3856,7 +3881,7 @@ export default function Home() {
                       type="file"
                       accept="image/*"
                       capture="environment"
-                      disabled={isUploadingCleanupPhotos || !isTrackBeforeAfterPhotoModal}
+                      disabled={isUploadingCleanupPhotos || Boolean(pendingSavedBeforeAfterPair) || !isTrackBeforeAfterPhotoModal}
                       onChange={(event) => handleBeforeAfterPhotoInputChange(0, event)}
                       className="sr-only"
                     />
@@ -3864,7 +3889,7 @@ export default function Home() {
                       id="after-photo-input"
                       type="file"
                       accept="image/*"
-                      disabled={isUploadingCleanupPhotos || !isTrackBeforeAfterPhotoModal}
+                      disabled={isUploadingCleanupPhotos || Boolean(pendingSavedBeforeAfterPair) || !isTrackBeforeAfterPhotoModal}
                       onChange={(event) => handleBeforeAfterPhotoInputChange(1, event)}
                       className="sr-only"
                     />
@@ -3873,7 +3898,7 @@ export default function Home() {
                       type="file"
                       accept="image/*"
                       capture="environment"
-                      disabled={isUploadingCleanupPhotos || !isTrackBeforeAfterPhotoModal}
+                      disabled={isUploadingCleanupPhotos || Boolean(pendingSavedBeforeAfterPair) || !isTrackBeforeAfterPhotoModal}
                       onChange={(event) => handleBeforeAfterPhotoInputChange(1, event)}
                       className="sr-only"
                     />
@@ -3923,11 +3948,6 @@ export default function Home() {
                       </span>
                     </label>
 
-                    {photoFormError && (
-                      <p role="alert" className="mt-3 rounded-xl border border-[#D9665B]/25 bg-[#fff3f0] px-3 py-2 text-sm font-medium text-[#D9665B]">
-                        {photoFormError}
-                      </p>
-                    )}
                   </div>
 
                   {isTrackBeforeAfterPhotoModal ? (
@@ -3958,24 +3978,25 @@ export default function Home() {
                             <div className="flex gap-2">
                               <label
                                 htmlFor="before-photo-input-camera"
-                                aria-disabled={isUploadingCleanupPhotos || !isTrackBeforeAfterPhotoModal}
-                                className="sm:hidden inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border border-[#D9665B]/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#D9665B] transition hover:bg-[#fff3f0]"
+                                aria-disabled={isUploadingCleanupPhotos || Boolean(pendingSavedBeforeAfterPair) || !isTrackBeforeAfterPhotoModal}
+                                className="sm:hidden inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border border-[#D9665B]/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#D9665B] transition hover:bg-[#fff3f0] aria-disabled:pointer-events-none aria-disabled:opacity-50"
                               >
                                 Take Photo
                               </label>
                               <label
                                 htmlFor="before-photo-input"
-                                aria-disabled={isUploadingCleanupPhotos || !isTrackBeforeAfterPhotoModal}
-                                className="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border border-[#D9665B]/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#D9665B] transition hover:bg-[#fff3f0]"
+                                aria-disabled={isUploadingCleanupPhotos || Boolean(pendingSavedBeforeAfterPair) || !isTrackBeforeAfterPhotoModal}
+                                className="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border border-[#D9665B]/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#D9665B] transition hover:bg-[#fff3f0] aria-disabled:pointer-events-none aria-disabled:opacity-50"
                               >
                                 Choose Photo
                               </label>
                             </div>
-                            {selectedimages[0] ? (
+                            {selectedimages[0] && !pendingSavedBeforeAfterPair ? (
                               <button
                                 type="button"
                                 onClick={() => handleRemoveSelectedPhoto(0)}
-                                className="inline-flex min-h-9 items-center justify-center rounded-full border border-[#D9665B]/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#D9665B] transition hover:bg-[#fff3f0]"
+                                disabled={Boolean(pendingSavedBeforeAfterPair)}
+                                className="inline-flex min-h-9 items-center justify-center rounded-full border border-[#D9665B]/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#D9665B] transition hover:bg-[#fff3f0] disabled:opacity-50"
                               >
                                 Remove
                               </button>
@@ -4008,24 +4029,25 @@ export default function Home() {
                             <div className="flex gap-2">
                               <label
                                 htmlFor="after-photo-input-camera"
-                                aria-disabled={isUploadingCleanupPhotos || !isTrackBeforeAfterPhotoModal}
-                                className="sm:hidden inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border border-[#D9665B]/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#D9665B] transition hover:bg-[#fff3f0]"
+                                aria-disabled={isUploadingCleanupPhotos || Boolean(pendingSavedBeforeAfterPair) || !isTrackBeforeAfterPhotoModal}
+                                className="sm:hidden inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border border-[#D9665B]/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#D9665B] transition hover:bg-[#fff3f0] aria-disabled:pointer-events-none aria-disabled:opacity-50"
                               >
                                 Take Photo
                               </label>
                               <label
                                 htmlFor="after-photo-input"
-                                aria-disabled={isUploadingCleanupPhotos || !isTrackBeforeAfterPhotoModal}
-                                className="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border border-[#D9665B]/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#D9665B] transition hover:bg-[#fff3f0]"
+                                aria-disabled={isUploadingCleanupPhotos || Boolean(pendingSavedBeforeAfterPair) || !isTrackBeforeAfterPhotoModal}
+                                className="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border border-[#D9665B]/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#D9665B] transition hover:bg-[#fff3f0] aria-disabled:pointer-events-none aria-disabled:opacity-50"
                               >
                                 Choose Photo
                               </label>
                             </div>
-                            {selectedimages[1] ? (
+                            {selectedimages[1] && !pendingSavedBeforeAfterPair ? (
                               <button
                                 type="button"
                                 onClick={() => handleRemoveSelectedPhoto(1)}
-                                className="inline-flex min-h-9 items-center justify-center rounded-full border border-[#D9665B]/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#D9665B] transition hover:bg-[#fff3f0]"
+                                disabled={Boolean(pendingSavedBeforeAfterPair)}
+                                className="inline-flex min-h-9 items-center justify-center rounded-full border border-[#D9665B]/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#D9665B] transition hover:bg-[#fff3f0] disabled:opacity-50"
                               >
                                 Remove
                               </button>
@@ -4041,6 +4063,7 @@ export default function Home() {
                         <p className="mt-1 text-sm text-[#1f5f7a]">This single caption applies to both your BEFORE and AFTER photos.</p>
                         <textarea
                           id="before-after-caption"
+                          readOnly={Boolean(pendingSavedBeforeAfterPair)}
                           value={beforeAfterCaption}
                           onChange={(event) => {
                             setBeforeAfterCaption(event.target.value);
@@ -4097,13 +4120,16 @@ export default function Home() {
                     </div>
                   )}
 
-                  <div className="mt-5 flex flex-col-reverse gap-2 border-t border-[#002b49]/10 pt-3 sm:flex-row sm:justify-end">
-                    <button type="button" onClick={closePhotoModal} disabled={isUploadingCleanupPhotos} className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#002b49]/20 px-5 py-2 text-sm font-semibold text-[#002b49] transition hover:bg-[#f2f7fa] disabled:cursor-not-allowed disabled:opacity-70">
-                      Cancel
-                    </button>
-                    <button type="submit" disabled={isUploadingCleanupPhotos} className="btn-green min-h-11 rounded-full px-6 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-70">
-                      {isUploadingCleanupPhotos ? 'Uploading...' : 'Submit Photos'}
-                    </button>
+                  <div className="mt-5 space-y-3 border-t border-[#002b49]/10 pt-3">
+                    {photoFormError ? <p role="alert" className="rounded-xl border border-[#D9665B]/25 bg-[#fff3f0] px-3 py-2 text-sm font-medium text-[#D9665B]">{photoFormError}</p> : null}
+                    <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                      <button type="button" onClick={closePhotoModal} disabled={isUploadingCleanupPhotos} className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#002b49]/20 px-5 py-2 text-sm font-semibold text-[#002b49] transition hover:bg-[#f2f7fa] disabled:cursor-not-allowed disabled:opacity-70">
+                        Cancel
+                      </button>
+                      <button type="submit" disabled={isUploadingCleanupPhotos} className="btn-green min-h-11 rounded-full px-6 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-70">
+                        {isUploadingCleanupPhotos ? 'Uploading...' : pendingSavedBeforeAfterPair ? 'Retry Save' : 'Submit Photos'}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </form>

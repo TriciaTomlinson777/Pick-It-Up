@@ -74,6 +74,24 @@ function validatePostBody(body) {
   };
 }
 
+async function deletePartialPairRow(beforeImagePath, afterImagePath) {
+  if (!beforeImagePath || !afterImagePath) return;
+
+  const query = createQueryString({
+    before_image_path: `eq.${beforeImagePath}`,
+    after_image_path: `eq.${afterImagePath}`,
+  });
+
+  try {
+    const response = await supabaseServerFetch(`/rest/v1/${TABLE_NAME}?${query}`, { method: 'DELETE' });
+    if (!response.ok) {
+      console.error('Unable to remove incomplete community before/after pair.', response.status);
+    }
+  } catch (error) {
+    console.error('Unable to remove incomplete community before/after pair.', error);
+  }
+}
+
 export async function GET() {
   try {
     const query = createQueryString({
@@ -111,14 +129,17 @@ export async function GET() {
 
 export async function POST(request) {
   const storagePaths = [];
+  let stage = 'reading the submitted photos';
   try {
     const formData = await request.formData();
     const beforeFile = formData.get('before_file');
     const afterFile = formData.get('after_file');
     const pairCaption = String(formData.get('pair_caption') || '').trim() || null;
     const submissionId = crypto.randomUUID();
+    stage = 'processing the BEFORE photo';
     const before = await storeAndModerateFutureImage(beforeFile, 'before-after', submissionId, 0);
     storagePaths.push(before.storagePath);
+    stage = 'processing the AFTER photo';
     const after = await storeAndModerateFutureImage(afterFile, 'before-after', submissionId, 1);
     storagePaths.push(after.storagePath);
     const statuses = [before.moderation, after.moderation].map(getFutureUploadStatus);
@@ -126,10 +147,15 @@ export async function POST(request) {
       ? 'rejected'
       : statuses.includes('pending_review') ? 'pending_review' : 'approved';
 
+    stage = 'preparing the saved photo links';
+    const beforeImageUrl = moderationStatus === 'approved' ? await createSignedPhotoUrl(before.storagePath) : null;
+    const afterImageUrl = moderationStatus === 'approved' ? await createSignedPhotoUrl(after.storagePath) : null;
+
     const query = createQueryString({
       select: 'id,moderation_status',
     });
 
+    stage = 'saving the photo pair';
     const response = await supabaseServerFetch(`/rest/v1/${TABLE_NAME}?${query}`, {
       method: 'POST',
       headers: {
@@ -166,14 +192,15 @@ export async function POST(request) {
       moderation_status: createdRow.moderation_status,
       before_image_path: before.storagePath,
       after_image_path: after.storagePath,
-      before_image_url: createdRow.moderation_status === 'approved' ? await createSignedPhotoUrl(before.storagePath) : null,
-      after_image_url: createdRow.moderation_status === 'approved' ? await createSignedPhotoUrl(after.storagePath) : null,
+      before_image_url: beforeImageUrl,
+      after_image_url: afterImageUrl,
     });
   } catch (error) {
+    await deletePartialPairRow(storagePaths[0], storagePaths[1]);
     await Promise.all(storagePaths.map(deleteFuturePhoto));
-    console.error('Unexpected error creating community before/after pair.', error);
+    console.error('Unexpected error creating community before/after pair.', { stage, error });
     return Response.json(
-      { error: 'Unable to submit before/after pair.' },
+      { error: 'Your before-and-after photos could not be saved. Please check your connection and try again.' },
       { status: 500 }
     );
   }
