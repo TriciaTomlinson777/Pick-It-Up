@@ -185,6 +185,19 @@ For an existing Supabase project, run the following file once in the Supabase SQ
 
 The migration preserves existing photos, permits new records to store a private `image_path`, and does not create or store a public or expiring signed URL.
 
+### Street Challenge Pilot Accounts
+
+1. In Supabase Authentication, enable the Email provider.
+2. Update the email sign-in template to include `{{ .Token }}` so participants receive a code.
+3. Add each app origin to the Supabase redirect URL allow list; the app uses `/auth/callback`.
+4. In the Supabase SQL Editor, run `scripts/sql/participant_profiles.sql`. Existing pilot projects must rerun this updated script before deploying the avatar route: it revokes the old avatar column grants while retaining participant rows and display-name editing.
+
+Avatar updates require the existing server-only `SUPABASE_SERVICE_ROLE_KEY`. Participants cannot directly change avatar paths or moderation results. Approved uploaded avatars are signed only when the private path belongs to the signed-in participant. Replacement uploads use unique paths and preserve prior files; failed/rejected uploads remain private as well. Any later storage cleanup must be reviewed separately.
+
+Before release, review existing uploaded-avatar records from the original pilot, whose avatar fields were participant-writable. Verify both public participant configuration and server configuration point to the same Supabase project. Test email codes/links, sign-out, display-name persistence, preset avatars, repeated photo replacement, pending/rejected moderation, and mobile navigation against a test project. The join page is a placeholder; competition enrollment and scoring are not implemented here.
+
+The participant client uses only the public Supabase URL and publishable key. Do not expose the service-role key to participant pages.
+
 ### Story Workflow
 
 - Public visitors can submit stories from `/blog` using the Share Your Story form.
