@@ -3697,9 +3697,6 @@ export default function Home() {
                   }`}
                 >
                   {link.label}
-                  {link.href === '/donate' ? (
-                    <span className="mt-1 block text-sm font-medium sm:hidden">Support our 501(c)(3) nonprofit</span>
-                  ) : null}
                 </Link>
               ))}
             </div>
