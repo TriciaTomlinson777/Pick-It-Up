@@ -34,6 +34,7 @@ export default function Donate() {
       <section className="bg-gradient-to-r from-seattle-green to-green-700 text-white py-16">
         <div className="container-custom">
           <h1 className="heading-xl mb-4">Support Our Mission</h1>
+          <p className="mb-4 text-lg font-semibold text-white">Pick It Up Seattle is a 501(c)(3) nonprofit.</p>
           <p className="text-lg text-green-100">
             Your donation helps inspire cleaner communities across Seattle
           </p>
@@ -142,7 +143,7 @@ export default function Donate() {
           <h3 className="font-bold text-seattle-blue mb-2">Tax-Deductible Donations</h3>
           <p className="text-gray-700">
             Pick It Up Seattle is a registered 501(c)(3) nonprofit organization. Your donations are
-            tax-deductible to the extent allowed by law. Tax ID: 12-3456789
+            tax-deductible to the extent allowed by law.
           </p>
         </div>
       </section>
