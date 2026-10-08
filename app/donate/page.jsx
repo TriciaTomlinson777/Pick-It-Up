@@ -51,13 +51,13 @@ export default function Donate() {
             </p>
             <ul className="space-y-4">
               {[
-                'Pick It Up Seattle is a 501(c)(3) nonprofit. Your donations are tax-deductible to the extent allowed by law.',
                 'Create volunteer T-shirts, promotional materials, and educational materials',
                 'Support community outreach and the Sponsor a Can program',
                 'Encourage individual action and community participation',
                 'Expand our reach to new neighborhoods and communities',
                 'Create educational materials about sustainability',
                 'Partner with local organizations and parks',
+                'Pick It Up Seattle is a 501(c)(3) nonprofit. Your donations are tax-deductible to the extent allowed by law.',
               ].map((item, idx) => (
                 <li key={idx} className="flex items-start">
                   <span className="text-seattle-green text-2xl mr-3 mt-1">✓</span>
