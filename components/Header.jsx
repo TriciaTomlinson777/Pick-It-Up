@@ -26,11 +26,11 @@ export default function Header() {
     <header className="sticky top-0 z-50 border-b border-[#0f9aa1]/20 bg-[#fffaf0]/95 shadow-[0_10px_24px_rgba(0,34,68,0.1)] backdrop-blur-sm">
       <nav className="container-custom py-1 sm:py-5 lg:py-0 xl:py-0">
         <div className="relative flex items-center justify-between">
-          <Logo href="/" className="mobile-header-logo inline-flex sm:ml-6 lg:ml-8 xl:ml-10 lg:relative lg:h-[17.4rem] lg:w-[24.3rem] lg:overflow-hidden xl:h-[18.75rem] xl:w-[26.1rem]" imgClassName="h-12 w-[11.25rem] max-w-[43vw] object-contain sm:max-w-none sm:h-[7.5rem] sm:w-auto lg:absolute lg:left-[-1rem] lg:top-[-4.3rem] lg:h-[26.5rem] lg:w-[26.5rem] lg:max-w-none xl:left-[-1.2rem] xl:top-[-4.7rem] xl:h-[28.65rem] xl:w-[28.65rem]" />
+          <Logo href="/" className="inline-flex sm:ml-6 lg:ml-8 xl:ml-10 lg:relative lg:h-[17.4rem] lg:w-[24.3rem] lg:overflow-hidden xl:h-[18.75rem] xl:w-[26.1rem]" imgClassName="h-8 w-[7.5rem] object-contain sm:h-[7.5rem] sm:w-auto lg:absolute lg:left-[-1rem] lg:top-[-4.3rem] lg:h-[26.5rem] lg:w-[26.5rem] lg:max-w-none xl:left-[-1.2rem] xl:top-[-4.7rem] xl:h-[28.65rem] xl:w-[28.65rem]" />
 
           {/* Mobile menu button */}
           <button
-            className="rounded-full border border-[#0f9aa1]/20 bg-white/80 p-2.5 text-[#002244] shadow-sm lg:hidden"
+            className="rounded-full border border-[#0f9aa1]/25 bg-white/90 p-2.5 text-[#002244] shadow-[0_8px_20px_rgba(0,34,68,0.08)] lg:hidden"
             onClick={toggleMenu}
             aria-label="Toggle menu"
           >
