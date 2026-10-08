@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CaptainCanStorybookReader from '@/components/CaptainCanStorybookReader';
@@ -49,6 +50,21 @@ export default function KidsCorner() {
               Small actions can make a big difference. Meet Mia, Captain Can, and the Mess
               Monster&mdash;and discover how one person and one piece can help make Seattle better.
             </p>
+          </div>
+        </section>
+
+
+        <section aria-labelledby="street-challenge-invitation" className="px-6 py-10 sm:py-14">
+          <div className="mx-auto max-w-3xl rounded-3xl border border-[#0f9aa1]/20 bg-[linear-gradient(135deg,_#e7f7f8_0%,_#fff1cf_100%)] px-6 py-10 text-center shadow-sm sm:px-10">
+            <h2 id="street-challenge-invitation" className="text-3xl font-extrabold text-[#0f9aa1] sm:text-4xl">
+              <span aria-hidden="true">🌟 </span>Ready to Be a Litter Hero?
+            </h2>
+            <p className="mx-auto mt-5 max-w-2xl text-lg font-medium leading-relaxed text-[#002244]">
+              Play Street Challenge! Pick up litter, earn points, and compete for prizes while making your neighborhood shine.
+            </p>
+            <Link href="/street-challenge" className="btn-green mt-7 inline-flex min-h-12 items-center justify-center px-6 py-3 text-lg font-bold">
+              Play Street Challenge!
+            </Link>
           </div>
         </section>
 
