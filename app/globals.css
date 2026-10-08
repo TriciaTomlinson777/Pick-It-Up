@@ -176,25 +176,3 @@
   }
 }
 
-/* Mobile preview: enlarge the artwork within a compact header. */
-@media (max-width: 639px) {
-  .mobile-header-logo {
-    position: relative;
-    flex-shrink: 0;
-    width: 180px;
-    height: 120px;
-    overflow: hidden;
-  }
-  .mobile-header-logo img {
-    position: absolute;
-    width: 220px !important;
-    height: 220px !important;
-    max-width: none !important;
-    left: -20px;
-    top: -50px;
-    object-fit: contain;
-  }
-  .mobile-header-menu {
-    top: calc(50% - 40px);
-  }
-}
