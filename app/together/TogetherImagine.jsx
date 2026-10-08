@@ -73,10 +73,10 @@ export default function TogetherImagine() {
 
               <div className="absolute inset-0 z-20 flex items-center justify-center px-4 text-center sm:container-custom sm:relative sm:min-h-[30rem] sm:px-0 sm:py-16 lg:min-h-[36rem] lg:py-20">
                 <div className="mx-auto max-w-4xl">
-                  <h2 className={`${poppinsHero.className} text-[2.6rem] font-normal tracking-[0.02em] text-[#fff9ea] [text-shadow:0_6px_20px_rgba(0,34,68,0.55)] sm:text-[4.1rem] lg:text-[5.3rem]`}>
+                  <h2 className={`${poppinsHero.className} mx-auto max-w-3xl text-left text-[2.6rem] font-normal tracking-[0.02em] text-[#fff9ea] [text-shadow:0_6px_20px_rgba(0,34,68,0.55)] sm:text-[4.1rem] lg:text-[5.3rem]`}>
                     Imagine...
                   </h2>
-                  <p className="mx-auto mt-3 max-w-3xl text-base leading-relaxed text-[#fff7ea] [text-shadow:0_4px_16px_rgba(0,34,68,0.5)] sm:mt-5 sm:text-2xl lg:text-[1.85rem]">
+                  <p className="mx-auto mt-3 max-w-3xl text-left text-base leading-relaxed text-[#fff7ea] [text-shadow:0_4px_16px_rgba(0,34,68,0.5)] sm:mt-5 sm:text-2xl lg:text-[1.85rem]">
                     A world where every person leaves every place a little better than they found it.
                   </p>
                 </div>
