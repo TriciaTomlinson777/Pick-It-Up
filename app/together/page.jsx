@@ -1,8 +1,9 @@
 import styles from './together.module.css';
+import TogetherImagine from './TogetherImagine';
 
 export const metadata = {
   title: 'Pick It Up Together | One better place',
-  description: 'One person. One piece. One better place. Small everyday acts make our communities cleaner and brighter. Find your local Pick It Up community.',
+  description: 'One person. One piece. One better place. Small everyday acts make our communities cleaner and brighter. Find your local Pick It Up community in Washington or Arizona.',
 };
 
 export default function TogetherPage() {
@@ -13,12 +14,10 @@ export default function TogetherPage() {
         <a href="/together" className={styles.brand} aria-label="Pick It Up Together home">Pick It Up <span>Together</span></a>
         <a href="#communities" className={styles.nav}>Find your community</a>
       </header>
-      <section className={styles.hero}>
-        <p className={styles.eyebrow}>Small acts. Shared pride.</p>
-        <h1>One person.<br />One piece.<br /><span>One better place.</span></h1>
-        <p className={styles.intro}>Imagine… if every person left every place better than they found it.</p>
-        <p className={styles.description}>Pick up a piece of litter. Celebrate someone who cares. Help children discover the difference they can make. A better place starts with each of us.</p>
-        <a href="#communities" className={styles.button}>Find your community</a>
+      <TogetherImagine />
+      <section className={styles.tagline}>
+        <h1>One person. One piece.<br /><span>One better place.</span></h1>
+        <p>Pick up a piece of litter. Celebrate someone who cares. Help children discover the difference they can make.</p>
       </section>
       <section id="communities" className={styles.communities} aria-labelledby="community-heading">
         <p className={styles.eyebrow}>Together, wherever we are</p>
