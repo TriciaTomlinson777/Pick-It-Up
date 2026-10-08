@@ -34,7 +34,6 @@ export default function Donate() {
       <section className="bg-gradient-to-r from-seattle-green to-green-700 text-white py-16">
         <div className="container-custom">
           <h1 className="heading-xl mb-4">Support Our Mission</h1>
-          <p className="mb-4 text-lg font-semibold text-white">Pick It Up Seattle is a 501(c)(3) nonprofit.</p>
           <p className="text-lg text-green-100">
             Your donation helps inspire cleaner communities across Seattle
           </p>
@@ -52,6 +51,7 @@ export default function Donate() {
             </p>
             <ul className="space-y-4">
               {[
+                'Pick It Up Seattle is a 501(c)(3) nonprofit. Your donations are tax-deductible to the extent allowed by law.',
                 'Create volunteer T-shirts, promotional materials, and educational materials',
                 'Support community outreach and the Sponsor a Can program',
                 'Encourage individual action and community participation',
