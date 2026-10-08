@@ -3085,7 +3085,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="day-one" className="bg-[linear-gradient(180deg,_#fff6e4_0%,_#fff9ee_100%)] pt-8 pb-20 sm:py-24 lg:py-28">
+        <section id="day-one" className="bg-[linear-gradient(180deg,_#fff6e4_0%,_#fff9ee_100%)] pt-8 pb-6 sm:py-24 lg:py-28">
           <div className="container-custom mx-auto">
             <div className="mx-auto w-full text-center">
               <p className="hidden text-sm font-semibold uppercase tracking-[0.3em] text-[#157a9a] sm:block">
@@ -3222,7 +3222,7 @@ export default function Home() {
                     <p className="mt-2 text-sm font-semibold text-[#002244] sm:text-base">Share Your Photos</p>
                   </button>
                 </div>
-                <p className="mx-auto mt-8 max-w-7xl px-4 text-center text-lg font-medium leading-relaxed text-[#002b49] sm:px-6 sm:text-xl lg:text-2xl">
+                <p className="hidden mx-auto mt-8 max-w-7xl px-4 text-center text-lg font-medium leading-relaxed text-[#002b49] sm:block sm:px-6 sm:text-xl lg:text-2xl">
                   Every transformation begins with someone who simply decided to help. Meet our community.
                 </p>
               </div>
