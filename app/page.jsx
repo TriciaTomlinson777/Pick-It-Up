@@ -3085,7 +3085,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="day-one" className="bg-[linear-gradient(180deg,_#fff6e4_0%,_#fff9ee_100%)] py-20 sm:py-24 lg:py-28">
+        <section id="day-one" className="bg-[linear-gradient(180deg,_#fff6e4_0%,_#fff9ee_100%)] pt-8 pb-6 sm:py-24 lg:py-28">
           <div className="container-custom mx-auto">
             <div className="mx-auto w-full text-center">
               <p className="hidden text-sm font-semibold uppercase tracking-[0.3em] text-[#157a9a] sm:block">
@@ -3093,7 +3093,7 @@ export default function Home() {
               </p>
               <p className="text-lg font-bold leading-relaxed text-[#157a9a] sm:hidden">
                 <span className="block">One person. One piece.</span>
-                <span className="block">One better Seattle.</span>
+                <span className="block">One better place.</span>
               </p>
 
               <div className="mt-9 grid gap-6 sm:grid-cols-2 sm:gap-8 lg:gap-10">
@@ -3222,7 +3222,7 @@ export default function Home() {
                     <p className="mt-2 text-sm font-semibold text-[#002244] sm:text-base">Share Your Photos</p>
                   </button>
                 </div>
-                <p className="mx-auto mt-8 max-w-7xl px-4 text-center text-lg font-medium leading-relaxed text-[#002b49] sm:px-6 sm:text-xl lg:text-2xl">
+                <p className="hidden mx-auto mt-8 max-w-7xl px-4 text-center text-lg font-medium leading-relaxed text-[#002b49] sm:block sm:px-6 sm:text-xl lg:text-2xl">
                   Every transformation begins with someone who simply decided to help. Meet our community.
                 </p>
               </div>
@@ -3672,6 +3672,14 @@ export default function Home() {
         <section className="bg-[linear-gradient(180deg,_#ffd993_0%,_#fff1cf_100%)] py-12 sm:py-16">
           <div className="container-custom">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
+              <Link href="/volunteer" className="btn-green rounded-[1.3rem] px-5 py-4 text-center text-lg font-semibold shadow-[0_12px_30px_rgba(0,43,73,0.16)] sm:hidden">
+                Join the Movement
+              </Link>
+              <Link href="/kids-corner" className="rounded-[1.3rem] bg-[linear-gradient(180deg,_#f2fdff_0%,_#d7f3d4_52%,_#baeaf1_100%)] px-5 py-4 text-center text-lg font-bold shadow-[0_12px_30px_rgba(0,43,73,0.16)] transition duration-200 hover:-translate-y-1 sm:hidden">
+                {'Kids Corner'.split('').map((letter, index) => (
+                  <span key={index} style={{ color: ['#0f9aa1', '#f59a2d', '#69be28', '#f4c94c', null, '#ef7f2d', '#2ec4c7', '#61b826', '#0fa5af', '#1fb8c2', '#d9665b'][index] }}>{letter}</span>
+                ))}
+              </Link>
               {quickLinks.map((link, index) => (
                 <Link
                   key={link.label}

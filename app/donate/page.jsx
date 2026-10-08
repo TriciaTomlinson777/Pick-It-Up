@@ -57,6 +57,7 @@ export default function Donate() {
                 'Expand our reach to new neighborhoods and communities',
                 'Create educational materials about sustainability',
                 'Partner with local organizations and parks',
+                'Pick It Up Seattle is a 501(c)(3) nonprofit. Your donations are tax-deductible to the extent allowed by law.',
               ].map((item, idx) => (
                 <li key={idx} className="flex items-start">
                   <span className="text-seattle-green text-2xl mr-3 mt-1">✓</span>
@@ -142,7 +143,7 @@ export default function Donate() {
           <h3 className="font-bold text-seattle-blue mb-2">Tax-Deductible Donations</h3>
           <p className="text-gray-700">
             Pick It Up Seattle is a registered 501(c)(3) nonprofit organization. Your donations are
-            tax-deductible to the extent allowed by law. Tax ID: 12-3456789
+            tax-deductible to the extent allowed by law.
           </p>
         </div>
       </section>
