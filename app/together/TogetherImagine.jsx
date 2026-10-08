@@ -3,11 +3,10 @@
 import { useEffect, useState } from 'react';
 import { Poppins } from 'next/font/google';
 const poppinsHero = Poppins({ subsets: ['latin'], weight: ['400'] });
-// Add approved Arizona photos here when supplied; these are the existing Washington photos.
+// One approved landscape photo per state for the Together landing page.
 const IMAGINE_SLIDES = [
-  { src: '/SS!.jpg', state: 'Washington' },
-  { src: '/Seattle2.jpeg', state: 'Washington' },
-  { src: '/0.jpg', state: 'Washington' },
+  { src: '/together/washington-sunset.jpg', state: 'Washington', objectPosition: '50% 48%' },
+  { src: '/together/arizona-sunset.jpg', state: 'Arizona', objectPosition: '50% 50%' },
 ];
 const IMAGINE_SLIDE_FADE_MS = 2500;
 
@@ -54,6 +53,7 @@ export default function TogetherImagine() {
                           alt=""
                           aria-hidden="true"
                           className="h-full w-full object-cover object-center"
+                          style={{ objectPosition: slide.objectPosition }}
                         />
                       ) : null}
                     </div>
