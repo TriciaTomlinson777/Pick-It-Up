@@ -29,25 +29,25 @@ export default function Header() {
           <Logo href="/" className="inline-flex sm:ml-6 lg:ml-8 xl:ml-10 lg:relative lg:h-[17.4rem] lg:w-[24.3rem] lg:overflow-hidden xl:h-[18.75rem] xl:w-[26.1rem]" imgClassName="h-12 w-[11.25rem] max-w-[43vw] object-contain sm:max-w-none sm:h-[7.5rem] sm:w-auto lg:absolute lg:left-[-1rem] lg:top-[-4.3rem] lg:h-[26.5rem] lg:w-[26.5rem] lg:max-w-none xl:left-[-1.2rem] xl:top-[-4.7rem] xl:h-[28.65rem] xl:w-[28.65rem]" />
 
           {/* Compact mobile shortcuts beside the existing logo. */}
-          <div className="ml-auto mr-2 flex flex-col items-center gap-0.5 lg:hidden">
-            <Link href="/kids-corner" onClick={() => setIsOpen(false)} className="flex min-h-8 items-center rounded-full px-2 text-sm font-bold whitespace-nowrap">
+          <div className="relative ml-auto flex flex-col items-end gap-0 pt-6 lg:hidden">
+            <Link href="/kids-corner" onClick={() => setIsOpen(false)} className="flex h-5 items-center rounded-full px-2 text-sm font-bold whitespace-nowrap">
               {kidsCornerLetters.map((char, index) => (
                 <span key={index} style={{ color: char === ' ' ? undefined : kidsCornerNavColors[(index > 4 ? index - 1 : index) % kidsCornerNavColors.length] }}>{char === ' ' ? '\u00a0' : char}</span>
               ))}
             </Link>
-            <Link href="/volunteer" onClick={() => setIsOpen(false)} className="btn-green min-h-7 whitespace-nowrap px-2 py-0.5 text-[11px] font-bold">
+            <Link href="/volunteer" onClick={() => setIsOpen(false)} className="btn-green h-5 min-h-0 whitespace-nowrap px-2 py-0 text-[10px] leading-none font-bold">
               Join the Movement
             </Link>
           </div>
 
           {/* Mobile menu button */}
           <button
-            className="rounded-full border border-[#0f9aa1]/25 bg-white/90 p-2.5 text-[#002244] shadow-[0_8px_20px_rgba(0,34,68,0.08)] lg:hidden"
+            className="absolute right-0 top-0 rounded-full p-0.5 text-[#002244] lg:hidden"
             onClick={toggleMenu}
             aria-label="Toggle menu"
           >
             <svg
-              className="w-6 h-6"
+              className="w-5 h-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
