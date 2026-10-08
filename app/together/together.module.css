@@ -1,0 +1,16 @@
+.page{background:#fff;color:#244957;font-family:Arial,Helvetica,sans-serif;min-height:100vh}
+.header{max-width:1120px;margin:auto;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{font-family:var(--font-baloo-2),sans-serif;font-size:1.65rem;font-weight:800;line-height:1.15;text-decoration:none;color:#244957}.brand span{display:block;color:#087e83}
+.nav{font-size:1rem;font-weight:700;color:#087e83;text-underline-offset:5px}
+.hero{max-width:1120px;margin:0 auto;padding:65px 32px 75px;background:linear-gradient(110deg,#e6f9f8 0%,#f4fffd 72%);border-radius:36px}
+.eyebrow{text-transform:uppercase;letter-spacing:.13em;font-size:.875rem;font-weight:700;color:#087177;margin:0 0 20px}
+.hero h1{font-family:var(--font-baloo-2),sans-serif;font-size:clamp(2.8rem,7vw,5.4rem);line-height:1.08;letter-spacing:-.025em;margin:0 0 26px;color:#244957}.hero h1 span{color:#087e83}
+.intro{max-width:670px;font-size:1.5rem;line-height:1.5;font-weight:600;margin:0 0 16px}.description{max-width:620px;font-size:1.125rem;line-height:1.75;margin:0 0 30px}
+.button{display:inline-flex;min-height:48px;align-items:center;justify-content:center;background:#087e83;color:white;padding:13px 24px;border-radius:14px;font-weight:700;font-size:1rem;text-decoration:none}.button:hover{background:#05666a}
+.communities{max-width:1120px;margin:auto;padding:70px 32px;scroll-margin-top:24px}.communities h2,.mission h2{font-family:var(--font-baloo-2),sans-serif;font-size:clamp(2rem,4vw,2.9rem);line-height:1.2;margin:0 0 32px;color:#244957}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.card{border:2px solid #bfe5e3;border-radius:24px;padding:32px;display:flex;flex-direction:column;align-items:flex-start;background:#f7fdfc}.card:nth-child(2){border-color:#f1d58d;background:#fffaf0}
+.label{font-size:.875rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5a5141;margin:0 0 14px}.card h3{font-family:var(--font-baloo-2),sans-serif;font-size:2.3rem;line-height:1.2;margin:0 0 16px;color:#244957}.card p{font-size:1.0625rem;line-height:1.7;margin-top:0}.card .label,.card .note{font-size:.875rem}.card .button{margin-top:auto}.card .note{margin:14px 0 0}.soon{font-weight:700;margin-top:auto!important;color:#735b1d}.anywhere{font-size:1.0625rem;line-height:1.75;max-width:800px;margin:30px 0 0}
+.mission{background:#ffdf82;padding:52px max(32px,calc((100vw - 1056px)/2));}.mission h2{margin-bottom:18px}.mission p{font-size:1.125rem;line-height:1.7;max-width:800px;margin:10px 0}
+.footer{max-width:1120px;margin:auto;padding:30px 32px 40px;font-size:.9375rem;line-height:1.6}.footer nav{display:flex;gap:24px;flex-wrap:wrap}.footer a{color:#087177;text-underline-offset:4px}
+.skip{position:absolute;left:16px;top:-100px;padding:12px;background:white;color:#244957;z-index:10}.skip:focus{top:16px}.page a:focus-visible{outline:3px solid #b36115;outline-offset:5px}
+@media(max-width:640px){.header{padding:22px 20px;align-items:flex-start}.brand{font-size:1.4rem}.nav{max-width:105px;line-height:1.5}.hero{padding:42px 24px;border-radius:0}.intro{font-size:1.25rem}.communities{padding:48px 20px}.cards{grid-template-columns:1fr}.card{padding:26px}.mission{padding:36px 24px}.footer{padding:26px 24px}}
