@@ -3085,7 +3085,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="day-one" className="bg-[linear-gradient(180deg,_#fff6e4_0%,_#fff9ee_100%)] py-20 sm:py-24 lg:py-28">
+        <section id="day-one" className="bg-[linear-gradient(180deg,_#fff6e4_0%,_#fff9ee_100%)] pt-8 pb-20 sm:py-24 lg:py-28">
           <div className="container-custom mx-auto">
             <div className="mx-auto w-full text-center">
               <p className="hidden text-sm font-semibold uppercase tracking-[0.3em] text-[#157a9a] sm:block">
@@ -3093,7 +3093,7 @@ export default function Home() {
               </p>
               <p className="text-lg font-bold leading-relaxed text-[#157a9a] sm:hidden">
                 <span className="block">One person. One piece.</span>
-                <span className="block">One better Seattle.</span>
+                <span className="block">One better place.</span>
               </p>
 
               <div className="mt-9 grid gap-6 sm:grid-cols-2 sm:gap-8 lg:gap-10">
