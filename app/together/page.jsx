@@ -11,7 +11,7 @@ export default function TogetherPage() {
     <main className={styles.page}>
       <a className={styles.skip} href="#communities">Choose your community</a>
       <header className={styles.header}>
-        <a href="/together" className={styles.brand} aria-label="Pick It Up Together home"><img src="/together/tree-logo.webp" alt="Pick It Up Together" width="1536" height="1024" className="block h-auto w-52 max-w-full object-contain sm:w-80 lg:w-96" /></a>
+        <a href="/together" className={styles.brand} aria-label="Pick It Up Together home"><span className={styles.logoCrop}><img src="/together/tree-logo.webp" alt="Pick It Up Together" width="1536" height="1024" /></span><span className={styles.logoTagline}>One person. One piece.<br /><span>One better place.</span></span></a>
         <a href="#communities" className={styles.nav}>Find <span className={styles.your}>your</span> community</a>
       </header>
       <TogetherImagine />
