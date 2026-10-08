@@ -32,7 +32,7 @@ export default function Footer({ showHomeShareButton = false }) {
               </li>
               <li>
                 <Link href="/volunteer" className="transition hover:text-[#0f9aa1]">
-                  Volunteer
+                  Make a Difference
                 </Link>
               </li>
               <li>
