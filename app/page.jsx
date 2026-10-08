@@ -3085,21 +3085,6 @@ export default function Home() {
           </div>
         </section>
 
-        <section aria-label="Kids Corner and Join the Movement" className="bg-[#fffaf0] px-4 py-8 lg:hidden">
-          <div className="container-custom grid gap-4">
-            <Link href="/kids-corner" className="rounded-[1.5rem] border border-[#0f9aa1]/25 bg-[linear-gradient(135deg,_#e5f8fa,_#edf7df)] p-6 text-center shadow-sm">
-              <h2 className="text-2xl font-bold"><span className="text-[#0f9aa1]">Kids</span> <span className="text-[#ef7f2d]">Corner</span></h2>
-              <p className="mt-2 text-base text-[#002244]">Stories, activities, and little ways to make a big difference.</p>
-              <span className="mt-4 inline-block font-bold text-[#0f9aa1]">Explore Kids Corner →</span>
-            </Link>
-            <Link href="/volunteer" className="rounded-[1.5rem] border border-[#61b826]/30 bg-[linear-gradient(135deg,_#f5fbe9,_#fff1cf)] p-6 text-center shadow-sm">
-              <h2 className="text-2xl font-bold text-[#002244]">Join the Movement</h2>
-              <p className="mt-2 text-base text-[#002244]">Help leave every place a little better than you found it.</p>
-              <span className="btn-green mt-4">Join the Movement →</span>
-            </Link>
-          </div>
-        </section>
-
         <section id="day-one" className="bg-[linear-gradient(180deg,_#fff6e4_0%,_#fff9ee_100%)] pt-8 pb-20 sm:py-24 lg:py-28">
           <div className="container-custom mx-auto">
             <div className="mx-auto w-full text-center">
