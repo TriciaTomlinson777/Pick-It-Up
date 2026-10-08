@@ -3675,7 +3675,7 @@ export default function Home() {
               <Link href="/volunteer" className="btn-green rounded-[1.3rem] px-5 py-4 text-center text-lg font-semibold shadow-[0_12px_30px_rgba(0,43,73,0.16)] sm:hidden">
                 Join the Movement
               </Link>
-              <Link href="/kids-corner" className="rounded-[1.3rem] bg-white px-5 py-4 text-center text-lg font-semibold shadow-[0_12px_30px_rgba(0,43,73,0.16)] transition duration-200 hover:-translate-y-1 sm:hidden">
+              <Link href="/kids-corner" className="rounded-[1.3rem] bg-[linear-gradient(180deg,_#f2fdff_0%,_#d7f3d4_52%,_#baeaf1_100%)] px-5 py-4 text-center text-lg font-bold shadow-[0_12px_30px_rgba(0,43,73,0.16)] transition duration-200 hover:-translate-y-1 sm:hidden">
                 {'Kids Corner'.split('').map((letter, index) => (
                   <span key={index} style={{ color: ['#0f9aa1', '#f59a2d', '#69be28', '#f4c94c', null, '#ef7f2d', '#2ec4c7', '#61b826', '#0fa5af', '#1fb8c2', '#d9665b'][index] }}>{letter}</span>
                 ))}
