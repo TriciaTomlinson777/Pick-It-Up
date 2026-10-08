@@ -26,7 +26,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 border-b border-[#0f9aa1]/20 bg-[#fffaf0]/95 shadow-[0_10px_24px_rgba(0,34,68,0.1)] backdrop-blur-sm">
       <nav className="container-custom py-1 sm:py-5 lg:py-0 xl:py-0">
         <div className="relative flex items-center justify-between">
-          <Logo href="/" className="inline-flex sm:ml-6 lg:ml-8 xl:ml-10 lg:relative lg:h-[17.4rem] lg:w-[24.3rem] lg:overflow-hidden xl:h-[18.75rem] xl:w-[26.1rem]" imgClassName="h-8 w-[7.5rem] object-contain sm:h-[7.5rem] sm:w-auto lg:absolute lg:left-[-1rem] lg:top-[-4.3rem] lg:h-[26.5rem] lg:w-[26.5rem] lg:max-w-none xl:left-[-1.2rem] xl:top-[-4.7rem] xl:h-[28.65rem] xl:w-[28.65rem]" />
+          <Logo href="/" className="inline-flex sm:ml-6 lg:ml-8 xl:ml-10 lg:relative lg:h-[17.4rem] lg:w-[24.3rem] lg:overflow-hidden xl:h-[18.75rem] xl:w-[26.1rem]" imgClassName="h-12 w-[11.25rem] max-w-[43vw] object-contain sm:max-w-none sm:h-[7.5rem] sm:w-auto lg:absolute lg:left-[-1rem] lg:top-[-4.3rem] lg:h-[26.5rem] lg:w-[26.5rem] lg:max-w-none xl:left-[-1.2rem] xl:top-[-4.7rem] xl:h-[28.65rem] xl:w-[28.65rem]" />
 
           {/* Compact mobile shortcuts beside the existing logo. */}
           <div className="ml-auto mr-2 flex flex-col items-center gap-0.5 lg:hidden">
@@ -35,7 +35,7 @@ export default function Header() {
                 <span key={index} style={{ color: char === ' ' ? undefined : kidsCornerNavColors[(index > 4 ? index - 1 : index) % kidsCornerNavColors.length] }}>{char === ' ' ? '\u00a0' : char}</span>
               ))}
             </Link>
-            <Link href="/volunteer" onClick={() => setIsOpen(false)} className="btn-green min-h-8 whitespace-nowrap px-3 py-1 text-xs font-bold">
+            <Link href="/volunteer" onClick={() => setIsOpen(false)} className="btn-green min-h-7 whitespace-nowrap px-2 py-0.5 text-[11px] font-bold">
               Join the Movement
             </Link>
           </div>
