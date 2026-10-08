@@ -187,11 +187,11 @@
   }
   .mobile-header-logo img {
     position: absolute;
-    width: 270px !important;
-    height: 270px !important;
+    width: 220px !important;
+    height: 220px !important;
     max-width: none !important;
-    left: -10px;
-    top: -65px;
+    left: -20px;
+    top: -50px;
     object-fit: contain;
   }
   .mobile-header-menu {
