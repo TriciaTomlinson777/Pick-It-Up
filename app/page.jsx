@@ -3672,6 +3672,14 @@ export default function Home() {
         <section className="bg-[linear-gradient(180deg,_#ffd993_0%,_#fff1cf_100%)] py-12 sm:py-16">
           <div className="container-custom">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
+              <Link href="/volunteer" className="btn-green rounded-[1.3rem] px-5 py-4 text-center text-lg font-semibold shadow-[0_12px_30px_rgba(0,43,73,0.16)] sm:hidden">
+                Join the Movement
+              </Link>
+              <Link href="/kids-corner" className="rounded-[1.3rem] bg-white px-5 py-4 text-center text-lg font-semibold shadow-[0_12px_30px_rgba(0,43,73,0.16)] transition duration-200 hover:-translate-y-1 sm:hidden">
+                {'Kids Corner'.split('').map((letter, index) => (
+                  <span key={index} style={{ color: ['#0f9aa1', '#f59a2d', '#69be28', '#f4c94c', null, '#ef7f2d', '#2ec4c7', '#61b826', '#0fa5af', '#1fb8c2', '#d9665b'][index] }}>{letter}</span>
+                ))}
+              </Link>
               {quickLinks.map((link, index) => (
                 <Link
                   key={link.label}
