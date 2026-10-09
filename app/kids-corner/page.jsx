@@ -97,16 +97,15 @@ export default function KidsCorner() {
           </div>
         </section>
 
-        <section className="py-12 sm:py-16">
-          <div className="container-custom px-6 py-10 sm:px-12 sm:py-12 lg:px-20 xl:px-[5.5rem]">
+        <section className="pb-12 pt-4 sm:pb-16 sm:pt-6">
+          <div className="container-custom px-6 sm:px-12 lg:px-20 xl:px-[5.5rem]">
             <div className="mx-auto max-w-3xl text-center">
               <h2 className="text-3xl font-extrabold text-[#0f9aa1] sm:text-4xl">Meet Our Litter Heroes!</h2>
-              <p className="mt-4 text-lg leading-relaxed">Discover stories about caring for our world, taking on challenges, and cheering each other on.</p>
-              <h3 className="mt-8 text-2xl font-bold text-[#002244]">Books &amp; Take-Home Activities</h3>
-              <p className="mt-3 text-base leading-relaxed">A growing collection of stories, learning tools, and real-world adventures for kids, families, and all Litter Heroes.</p>
+              <p className="mt-4 text-lg leading-relaxed">Stories, learning tools, and real-world adventures for kids, families, and all Litter Heroes.</p>
+              <p className="mt-2 text-base leading-relaxed">Read, explore, and cheer each other on!</p>
             </div>
 
-            <div className="mt-8 grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-4">
+            <div className="mx-auto mt-8 grid max-w-4xl grid-cols-1 items-center gap-6 rounded-2xl border border-[#0f9aa1]/15 p-6 sm:grid-cols-[220px_1fr] sm:gap-8 sm:p-8">
               <div className="mx-auto w-full max-w-[280px] overflow-hidden rounded-[1.5rem] shadow-[0_20px_45px_rgba(0,34,68,0.28)]">
                 <Image
                   src={CAPTAIN_CAN_COVER_SRC}
@@ -141,9 +140,9 @@ export default function KidsCorner() {
               </div>
             </div>
 
-            <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-8 flex flex-wrap justify-center gap-5">
               {UPCOMING_BOOKS.map((book, index) => (
-                <article key={book.number} className={`rounded-2xl border border-[#0f9aa1]/20 ${BOOK_CARD_GRADIENTS[index]} p-6 shadow-sm`}>
+                <article key={book.number} className={`w-full rounded-2xl border border-[#0f9aa1]/20 ${BOOK_CARD_GRADIENTS[index]} p-6 shadow-sm sm:w-[calc((100%-1.25rem)/2)] lg:w-[calc((100%-2.5rem)/3)]`}>
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <p className="text-sm font-bold text-[#0f9aa1]">Book {book.number}</p>
                     <span className="rounded-full bg-[#fff1cf] px-3 py-1 text-sm font-bold text-[#002244]">Coming Soon!</span>
