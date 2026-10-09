@@ -32,3 +32,11 @@ test('shared footer keeps volunteering separately accessible', () => {
   const volunteer = links(read('components/Footer.jsx')).find((link) => link.label === 'Make a Difference');
   assert.equal(volunteer?.href, '/volunteer');
 });
+
+test('Kids Corner invites children into the same Street Challenge game', () => {
+  const source = read('app/kids-corner/page.jsx');
+  assert.match(source, /Ready to Be a Litter Hero\?/);
+  const play = links(source).filter((link) => link.label === 'Play Street Challenge!');
+  assert.equal(play.length, 1);
+  assert.equal(play[0].href, '/street-challenge');
+});
