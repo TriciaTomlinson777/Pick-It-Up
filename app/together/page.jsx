@@ -48,7 +48,7 @@ export default function TogetherPage() {
       </section>
       <footer className={styles.footer}>
         <p>Pick It Up Together is an initiative of Pick It Up Seattle, a 501(c)(3) nonprofit.</p>
-        <nav aria-label="Footer"><a href="https://pickitupseattle.org/contact">Contact us</a><a href="https://pickitupseattle.org/privacy">Privacy</a></nav>
+        <nav aria-label="Footer"><a href="mailto:hello@pickituptogether.org">hello@pickituptogether.org</a><a href="https://pickitupseattle.org/privacy">Privacy</a></nav>
       </footer>
     </main>
   );
