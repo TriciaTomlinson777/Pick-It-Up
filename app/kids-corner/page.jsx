@@ -63,7 +63,7 @@ export default function KidsCorner() {
 
 
         <section aria-labelledby="street-challenge-invitation" className="px-6 py-10 sm:py-14">
-          <div className="mx-auto max-w-3xl rounded-3xl border border-[#0f9aa1]/20 bg-[linear-gradient(135deg,_#e7f7f8_0%,_#fff1cf_100%)] px-6 py-10 text-center shadow-sm sm:px-10">
+          <div className="mx-auto max-w-3xl rounded-3xl border border-[#0f9aa1]/20 bg-[linear-gradient(180deg,_#f2fdff_0%,_#d7f3d4_52%,_#baeaf1_100%)] px-6 py-10 text-center shadow-sm sm:px-10">
             <h2 id="street-challenge-invitation" className="text-3xl font-extrabold text-[#0f9aa1] sm:text-4xl">
               <span aria-hidden="true">🌟 </span>Ready to Be a Litter Hero?
             </h2>
@@ -82,7 +82,7 @@ export default function KidsCorner() {
               <h2 className="text-3xl font-extrabold text-[#0f9aa1] sm:text-4xl">Meet Our Litter Heroes!</h2>
               <p className="mt-4 text-lg leading-relaxed">Discover stories about caring for our world, taking on challenges, and cheering each other on.</p>
               <h3 className="mt-8 text-2xl font-bold text-[#002244]">Books &amp; Take-Home Activities</h3>
-              <p className="mt-3 text-base leading-relaxed">A growing collection of stories, learning tools, and real-world adventures for children, families, and educators.</p>
+              <p className="mt-3 text-base leading-relaxed">A growing collection of stories, learning tools, and real-world adventures for kids, families, and all Litter Heroes.</p>
             </div>
 
             <div className="mt-8 grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-4">
@@ -122,7 +122,7 @@ export default function KidsCorner() {
 
             <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {UPCOMING_BOOKS.map((book) => (
-                <article key={book.number} className="rounded-2xl border border-[#0f9aa1]/20 bg-white/80 p-6 shadow-sm">
+                <article key={book.number} className="rounded-2xl border border-[#0f9aa1]/20 bg-[linear-gradient(180deg,_#f2fdff_0%,_#d7f3d4_52%,_#baeaf1_100%)] p-6 shadow-sm">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <p className="text-sm font-bold text-[#0f9aa1]">Book {book.number}</p>
                     <span className="rounded-full bg-[#fff1cf] px-3 py-1 text-sm font-bold text-[#002244]">Coming Soon!</span>
@@ -147,7 +147,7 @@ export default function KidsCorner() {
             </p>
             <div className="mt-8 grid gap-4 sm:grid-cols-3">
               {['Litter Hero Coloring Pages', 'Recycling & Reuse Guides', 'Learning & Cleanup Activities'].map((title) => (
-                <div key={title} className="rounded-2xl bg-white/85 p-6">
+                <div key={title} className="rounded-2xl bg-[linear-gradient(180deg,_#f2fdff_0%,_#d7f3d4_52%,_#baeaf1_100%)] p-6">
                   <h3 className="text-lg font-bold">{title}</h3>
                   <p className="mt-3 text-sm font-semibold text-[#1a5570]">Coming Soon!</p>
                 </div>
