@@ -20,6 +20,8 @@ const MATERIAL_CARD_GRADIENTS = [
   "bg-[linear-gradient(145deg,_#fce2da_0%,_#f4c94c_100%)]"
 ];
 
+const BOOK_TITLE_COLORS = ['text-[#12536b]', 'text-[#883743]', 'text-[#923b0b]', 'text-[#075c65]', 'text-[#285619]'];
+
 const UPCOMING_BOOKS = [
   { number: 2, title: 'Recycling, Reuse & Where Litter Goes', note: 'Learning adventure • Title to be announced', description: 'Explore recycling and reuse, and discover what happens when litter reaches our roads, drains, and waterways.' },
   { number: 3, title: 'Mia & The Street Challenge', description: 'Follow Mia as she takes on a cleanup challenge and discovers how small actions add up.' },
@@ -133,16 +135,16 @@ export default function KidsCorner() {
             </div>
 
             <h3 className="mt-10 text-center text-3xl font-extrabold text-[#0f9aa1] sm:text-4xl">More Adventures Coming Soon!</h3>
-            <div className="mx-auto mt-6 flex max-w-5xl flex-wrap justify-center gap-4">
+            <div className="mx-auto mt-6 grid max-w-5xl auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-6">
               {UPCOMING_BOOKS.map((book, index) => (
-                <article key={book.number} className={`w-full rounded-2xl border border-[#0f9aa1]/20 ${BOOK_CARD_GRADIENTS[index]} p-4 shadow-sm sm:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-2rem)/3)]`}>
+                <article key={book.number} className={`h-full rounded-2xl border border-[#0f9aa1]/20 ${BOOK_CARD_GRADIENTS[index]} p-4 shadow-sm lg:col-span-2 ${index === 3 ? "lg:col-start-2" : ""}`}>
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <p className="text-sm font-bold text-[#0f9aa1]">Book {book.number}</p>
                     <span className="rounded-full bg-[#fff1cf] px-3 py-1 text-sm font-bold text-[#002244]">Coming Soon!</span>
                   </div>
-                  <h3 className="mt-3 text-3xl font-extrabold leading-tight text-[#0f9aa1] sm:text-4xl">{book.title}</h3>
-                  {book.note && <p className="mt-2 text-lg font-medium leading-relaxed text-[#002244]">{book.note}</p>}
-                  <p className="mt-2 text-lg font-medium leading-relaxed text-[#002244]">{book.description}</p>
+                  <h3 className={`mt-3 text-xl font-extrabold leading-tight ${BOOK_TITLE_COLORS[index]}`}>{book.title}</h3>
+                  {book.note && <p className="mt-2 text-sm font-medium leading-relaxed text-[#002244]">{book.note}</p>}
+                  <p className="mt-2 text-sm font-medium leading-relaxed text-[#002244]">{book.description}</p>
                 </article>
               ))}
             </div>
