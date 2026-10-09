@@ -99,9 +99,9 @@ export default function KidsCorner() {
 
         <section className="bg-[linear-gradient(180deg,_#fff6e4_0%,_#fff9ee_100%)] py-12 sm:py-16">
           <div className="container-custom px-6 sm:px-12 lg:px-20 xl:px-[5.5rem]">
-            <div className="mx-auto max-w-3xl text-center">
+            <div className="mx-auto max-w-5xl text-center">
               <h2 className="text-3xl font-extrabold text-[#0f9aa1] sm:text-4xl">Meet Our Litter Heroes!</h2>
-              <p className="mt-4 text-lg leading-relaxed">Stories, learning tools, and real-world adventures for kids, families, and all Litter Heroes.</p>
+              <p className="mx-auto mt-4 max-w-4xl text-left text-lg leading-relaxed [text-wrap:balance]">Stories, learning tools, and real-world adventures for kids, families, and <span className="whitespace-nowrap">all Litter Heroes.</span></p>
               <p className="mt-2 text-base leading-relaxed">Read, explore, and cheer each other on!</p>
             </div>
 
