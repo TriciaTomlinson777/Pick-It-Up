@@ -20,14 +20,6 @@ const MATERIAL_CARD_GRADIENTS = [
   "bg-[linear-gradient(145deg,_#fce2da_0%,_#f4c94c_100%)]"
 ];
 
-const BOOK_TITLE_COLORS = [
-  'text-[#12536b]',
-  'text-[#883743]',
-  'text-[#923b0b]',
-  'text-[#075c65]',
-  'text-[#285619]',
-];
-
 const UPCOMING_BOOKS = [
   { number: 2, title: 'Recycling, Reuse & Where Litter Goes', note: 'Learning adventure • Title to be announced', description: 'Explore recycling and reuse, and discover what happens when litter reaches our roads, drains, and waterways.' },
   { number: 3, title: 'Mia & The Street Challenge', description: 'Follow Mia as she takes on a cleanup challenge and discovers how small actions add up.' },
@@ -75,7 +67,7 @@ export default function KidsCorner() {
               </span>
             </h1>
 
-            <p className="mx-auto mt-6 max-w-2xl text-[1.1rem] font-medium leading-relaxed text-slate-800 sm:text-[1.2rem]">
+            <p className="mx-auto mt-6 max-w-2xl text-lg font-medium leading-relaxed text-[#002244]">
               Small actions can make a big difference. Meet Mia, Captain Can, the Mess Monster,
               and all our other Litter Heroes&mdash;and discover how one person and one piece can help make every place better.
             </p>
@@ -120,7 +112,7 @@ export default function KidsCorner() {
               {/* Description + actions */}
               <div className="text-center md:text-left">
                 <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#0f9aa1]">Book 1 • Read it now</p>
-                <h3 className="text-2xl font-extrabold leading-tight text-[#002b49] sm:text-3xl">Captain Can and the Messy Block</h3>
+                <h3 className="text-3xl font-extrabold leading-tight text-[#0f9aa1] sm:text-4xl">Captain Can and the Messy Block</h3>
                 <p className="mt-4 text-lg font-medium leading-relaxed text-[#002244]">
                   Join Mia and her super-powered sidekick, Captain Can, as they team up to take on
                   the mischievous Mess Monster and clean up their block&mdash;one piece of litter
@@ -148,9 +140,9 @@ export default function KidsCorner() {
                     <p className="text-sm font-bold text-[#0f9aa1]">Book {book.number}</p>
                     <span className="rounded-full bg-[#fff1cf] px-3 py-1 text-sm font-bold text-[#002244]">Coming Soon!</span>
                   </div>
-                  <h3 className={`mt-3 text-xl font-extrabold leading-tight ${BOOK_TITLE_COLORS[index]}`}>{book.title}</h3>
-                  {book.note && <p className="mt-2 text-sm font-medium text-[#1a5570]">{book.note}</p>}
-                  <p className="mt-2 text-sm leading-relaxed">{book.description}</p>
+                  <h3 className="mt-3 text-3xl font-extrabold leading-tight text-[#0f9aa1] sm:text-4xl">{book.title}</h3>
+                  {book.note && <p className="mt-2 text-lg font-medium leading-relaxed text-[#002244]">{book.note}</p>}
+                  <p className="mt-2 text-lg font-medium leading-relaxed text-[#002244]">{book.description}</p>
                 </article>
               ))}
             </div>
