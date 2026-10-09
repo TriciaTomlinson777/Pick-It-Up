@@ -8,16 +8,16 @@ const CAPTAIN_CAN_PDF_HREF = '/Captain_Can_and_the_Messy_Block_EMAIL_SMALL.pdf';
 const CAPTAIN_CAN_COVER_SRC = '/Captain Can VS3 Book Cover.jpg';
 
 const BOOK_CARD_GRADIENTS = [
-  "bg-[linear-gradient(145deg,_#d3f1f4_0%,_#8edee1_100%)]",
-  "bg-[linear-gradient(145deg,_#fff6ce_0%,_#f2d46f_100%)]",
-  "bg-[linear-gradient(145deg,_#e8f5e1_0%,_#b9e68d_100%)]",
-  "bg-[linear-gradient(145deg,_#fde8e4_0%,_#f7b9a6_100%)]",
-  "bg-[linear-gradient(145deg,_#e8f5fb_0%,_#a9dce9_100%)]"
+  "bg-[linear-gradient(145deg,_#0f9aa1_0%,_#2ec4c7_45%,_#69be28_100%)]",
+  "bg-[linear-gradient(145deg,_#f4c94c_0%,_#f59a2d_100%)]",
+  "bg-[linear-gradient(145deg,_#69be28_0%,_#7cd157_50%,_#2ec4c7_100%)]",
+  "bg-[linear-gradient(145deg,_#ef7f2d_0%,_#f59a2d_55%,_#f4c94c_100%)]",
+  "bg-[linear-gradient(145deg,_#2ec4c7_0%,_#0f9aa1_100%)]"
 ];
 const MATERIAL_CARD_GRADIENTS = [
-  "bg-[linear-gradient(145deg,_#fff1cf_0%,_#ffc98b_100%)]",
-  "bg-[linear-gradient(145deg,_#d7f3d4_0%,_#83d7be_100%)]",
-  "bg-[linear-gradient(145deg,_#fce2da_0%,_#f4c94c_100%)]"
+  "bg-[linear-gradient(145deg,_#f4c94c_0%,_#ef7f2d_100%)]",
+  "bg-[linear-gradient(145deg,_#2ec4c7_0%,_#7cd157_62%,_#69be28_100%)]",
+  "bg-[linear-gradient(145deg,_#f59a2d_0%,_#f4c94c_55%,_#69be28_100%)]"
 ];
 
 const UPCOMING_BOOKS = [
@@ -76,7 +76,7 @@ export default function KidsCorner() {
 
 
         <section aria-labelledby="street-challenge-invitation" className="px-6 py-10 sm:py-14">
-          <div className="mx-auto max-w-3xl rounded-3xl border border-[#0f9aa1]/20 bg-[linear-gradient(180deg,_#f2fdff_0%,_#d7f3d4_52%,_#baeaf1_100%)] px-6 py-10 text-center shadow-sm sm:px-10">
+          <div className="mx-auto max-w-3xl px-6 py-10 text-center sm:px-10">
             <h2 id="street-challenge-invitation" className="text-3xl font-extrabold text-[#0f9aa1] sm:text-4xl">
               <span aria-hidden="true">🌟 </span>Ready to Be a Litter Hero?
             </h2>
@@ -90,7 +90,7 @@ export default function KidsCorner() {
         </section>
 
         <section className="py-12 sm:py-16">
-          <div className="container-custom px-6 py-10 sm:px-12 sm:py-12">
+          <div className="container-custom px-6 py-10 sm:px-12 sm:py-12 lg:px-20 xl:px-[5.5rem]">
             <div className="mx-auto max-w-3xl text-center">
               <h2 className="text-3xl font-extrabold text-[#0f9aa1] sm:text-4xl">Meet Our Litter Heroes!</h2>
               <p className="mt-4 text-lg leading-relaxed">Discover stories about caring for our world, taking on challenges, and cheering each other on.</p>
