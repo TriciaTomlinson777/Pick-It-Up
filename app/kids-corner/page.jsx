@@ -21,11 +21,11 @@ const MATERIAL_CARD_GRADIENTS = [
 ];
 
 const BOOK_TITLE_COLORS = [
-  'text-[#075c65]',
-  'text-[#923b0b]',
-  'text-[#285619]',
-  'text-[#883743]',
   'text-[#12536b]',
+  'text-[#883743]',
+  'text-[#923b0b]',
+  'text-[#075c65]',
+  'text-[#285619]',
 ];
 
 const UPCOMING_BOOKS = [
