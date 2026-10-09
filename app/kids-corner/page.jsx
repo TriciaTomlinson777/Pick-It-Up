@@ -101,8 +101,8 @@ export default function KidsCorner() {
           <div className="container-custom px-6 sm:px-12 lg:px-20 xl:px-[5.5rem]">
             <div className="mx-auto max-w-5xl text-center">
               <h2 className="text-3xl font-extrabold text-[#0f9aa1] sm:text-4xl">Meet Our Litter Heroes!</h2>
-              <p className="mx-auto mt-4 max-w-4xl text-left text-lg leading-relaxed [text-wrap:balance]">Stories, learning tools, and real-world adventures for kids, families, and <span className="whitespace-nowrap">all Litter Heroes.</span></p>
-              <p className="mt-2 text-base leading-relaxed">Read, explore, and cheer each other on!</p>
+              <p className="mx-auto mt-4 max-w-4xl text-left text-lg font-medium leading-relaxed text-[#002244] [text-wrap:balance]">Stories, learning tools, and real-world adventures for kids, families, and <span className="whitespace-nowrap">all Litter Heroes.</span></p>
+              <p className="mt-2 text-lg font-medium leading-relaxed text-[#002244]">Read, explore, and cheer each other on!</p>
             </div>
 
             <div className="mx-auto mt-8 grid max-w-5xl grid-cols-1 items-center gap-8 rounded-2xl border border-[#0f9aa1]/15 p-6 md:grid-cols-[minmax(280px,360px)_1fr] md:gap-10 sm:p-8">
@@ -121,7 +121,7 @@ export default function KidsCorner() {
               <div className="text-center md:text-left">
                 <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#0f9aa1]">Book 1 • Read it now</p>
                 <h3 className="text-2xl font-extrabold leading-tight text-[#002b49] sm:text-3xl">Captain Can and the Messy Block</h3>
-                <p className="mt-4 text-base leading-relaxed text-[#002244] sm:text-lg">
+                <p className="mt-4 text-lg font-medium leading-relaxed text-[#002244]">
                   Join Mia and her super-powered sidekick, Captain Can, as they team up to take on
                   the mischievous Mess Monster and clean up their block&mdash;one piece of litter
                   at a time.
@@ -154,7 +154,7 @@ export default function KidsCorner() {
                 </article>
               ))}
             </div>
-            <p className="mx-auto mt-8 max-w-3xl text-center text-lg leading-relaxed">
+            <p className="mx-auto mt-8 max-w-3xl text-center text-lg font-medium leading-relaxed text-[#002244]">
               More heroes are joining the adventures: Brave Beau, Bravo Belle, Outwit Oliver, Ocean Olivia, and Mess Master!
             </p>
           </div>
@@ -163,18 +163,18 @@ export default function KidsCorner() {
         <section aria-labelledby="take-home-materials" className="border-t border-[#0f9aa1]/20 bg-[linear-gradient(180deg,_#ffd993_0%,_#fff1cf_100%)] py-12 sm:py-16">
           <div className="container-custom text-center">
             <h2 id="take-home-materials" className="text-3xl font-extrabold text-[#0f9aa1] sm:text-4xl">Take-Home Materials</h2>
-            <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed">
+            <p className="mx-auto mt-4 max-w-2xl text-lg font-medium leading-relaxed text-[#002244]">
               Keep the learning going at home or in the classroom. We are building printable tools that connect our stories with everyday ways to care for our world.
             </p>
             <div className="mt-8 grid gap-4 sm:grid-cols-3">
               {['Litter Hero Coloring Pages', 'Recycling & Reuse Guides', 'Learning & Cleanup Activities'].map((title, index) => (
                 <div key={title} className={`rounded-2xl ${MATERIAL_CARD_GRADIENTS[index]} p-6`}>
                   <h3 className="text-3xl font-extrabold leading-tight text-[#0f9aa1] sm:text-4xl">{title}</h3>
-                  <p className="mt-3 text-sm font-semibold text-[#1a5570]">Coming Soon!</p>
+                  <p className="mt-3 text-lg font-medium leading-relaxed text-[#002244]">Coming Soon!</p>
                 </div>
               ))}
             </div>
-            <p className="mt-6 text-base leading-relaxed">For now, download and print Captain Can and the Messy Block using the button above.</p>
+            <p className="mt-6 text-lg font-medium leading-relaxed text-[#002244]">For now, download and print Captain Can and the Messy Block using the button above.</p>
           </div>
         </section>
       </main>
