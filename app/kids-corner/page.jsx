@@ -7,6 +7,19 @@ import CaptainCanStorybookReader from '@/components/CaptainCanStorybookReader';
 const CAPTAIN_CAN_PDF_HREF = '/Captain_Can_and_the_Messy_Block_EMAIL_SMALL.pdf';
 const CAPTAIN_CAN_COVER_SRC = '/Captain Can VS3 Book Cover.jpg';
 
+const BOOK_CARD_GRADIENTS = [
+  "bg-[linear-gradient(145deg,_#d3f1f4_0%,_#8edee1_100%)]",
+  "bg-[linear-gradient(145deg,_#fff6ce_0%,_#f2d46f_100%)]",
+  "bg-[linear-gradient(145deg,_#e8f5e1_0%,_#b9e68d_100%)]",
+  "bg-[linear-gradient(145deg,_#fde8e4_0%,_#f7b9a6_100%)]",
+  "bg-[linear-gradient(145deg,_#e8f5fb_0%,_#a9dce9_100%)]"
+];
+const MATERIAL_CARD_GRADIENTS = [
+  "bg-[linear-gradient(145deg,_#fff1cf_0%,_#ffc98b_100%)]",
+  "bg-[linear-gradient(145deg,_#d7f3d4_0%,_#83d7be_100%)]",
+  "bg-[linear-gradient(145deg,_#fce2da_0%,_#f4c94c_100%)]"
+];
+
 const UPCOMING_BOOKS = [
   { number: 2, title: 'Recycling, Reuse & Where Litter Goes', note: 'Learning adventure • Title to be announced', description: 'Explore recycling and reuse, and discover what happens when litter reaches our roads, drains, and waterways.' },
   { number: 3, title: 'Mia & The Street Challenge', description: 'Follow Mia as she takes on a cleanup challenge and discovers how small actions add up.' },
@@ -121,8 +134,8 @@ export default function KidsCorner() {
             </div>
 
             <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {UPCOMING_BOOKS.map((book) => (
-                <article key={book.number} className="rounded-2xl border border-[#0f9aa1]/20 bg-[linear-gradient(180deg,_#f2fdff_0%,_#d7f3d4_52%,_#baeaf1_100%)] p-6 shadow-sm">
+              {UPCOMING_BOOKS.map((book, index) => (
+                <article key={book.number} className={`rounded-2xl border border-[#0f9aa1]/20 ${BOOK_CARD_GRADIENTS[index]} p-6 shadow-sm`}>
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <p className="text-sm font-bold text-[#0f9aa1]">Book {book.number}</p>
                     <span className="rounded-full bg-[#fff1cf] px-3 py-1 text-sm font-bold text-[#002244]">Coming Soon!</span>
@@ -146,8 +159,8 @@ export default function KidsCorner() {
               Keep the learning going at home or in the classroom. We are building printable tools that connect our stories with everyday ways to care for our world.
             </p>
             <div className="mt-8 grid gap-4 sm:grid-cols-3">
-              {['Litter Hero Coloring Pages', 'Recycling & Reuse Guides', 'Learning & Cleanup Activities'].map((title) => (
-                <div key={title} className="rounded-2xl bg-[linear-gradient(180deg,_#f2fdff_0%,_#d7f3d4_52%,_#baeaf1_100%)] p-6">
+              {['Litter Hero Coloring Pages', 'Recycling & Reuse Guides', 'Learning & Cleanup Activities'].map((title, index) => (
+                <div key={title} className={`rounded-2xl ${MATERIAL_CARD_GRADIENTS[index]} p-6`}>
                   <h3 className="text-lg font-bold">{title}</h3>
                   <p className="mt-3 text-sm font-semibold text-[#1a5570]">Coming Soon!</p>
                 </div>
