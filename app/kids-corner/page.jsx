@@ -141,16 +141,16 @@ export default function KidsCorner() {
             </div>
 
             <h3 className="mt-10 text-center text-2xl font-extrabold text-[#0f9aa1] sm:text-3xl">More Adventures Coming Soon!</h3>
-            <div className="mt-6 flex flex-wrap justify-center gap-5">
+            <div className="mx-auto mt-6 flex max-w-5xl flex-wrap justify-center gap-4">
               {UPCOMING_BOOKS.map((book, index) => (
-                <article key={book.number} className={`w-full rounded-2xl border border-[#0f9aa1]/20 ${BOOK_CARD_GRADIENTS[index]} p-6 shadow-sm sm:w-[calc((100%-1.25rem)/2)] lg:w-[calc((100%-2.5rem)/3)]`}>
+                <article key={book.number} className={`w-full rounded-2xl border border-[#0f9aa1]/20 ${BOOK_CARD_GRADIENTS[index]} p-4 shadow-sm sm:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-2rem)/3)]`}>
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <p className="text-sm font-bold text-[#0f9aa1]">Book {book.number}</p>
                     <span className="rounded-full bg-[#fff1cf] px-3 py-1 text-sm font-bold text-[#002244]">Coming Soon!</span>
                   </div>
-                  <h3 className={`mt-4 text-2xl font-extrabold leading-tight ${BOOK_TITLE_COLORS[index]}`}>{book.title}</h3>
+                  <h3 className={`mt-3 text-xl font-extrabold leading-tight ${BOOK_TITLE_COLORS[index]}`}>{book.title}</h3>
                   {book.note && <p className="mt-2 text-sm font-medium text-[#1a5570]">{book.note}</p>}
-                  <p className="mt-3 text-base leading-relaxed">{book.description}</p>
+                  <p className="mt-2 text-sm leading-relaxed">{book.description}</p>
                 </article>
               ))}
             </div>
