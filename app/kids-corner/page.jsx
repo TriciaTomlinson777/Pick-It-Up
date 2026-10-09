@@ -105,8 +105,8 @@ export default function KidsCorner() {
               <p className="mt-2 text-base leading-relaxed">Read, explore, and cheer each other on!</p>
             </div>
 
-            <div className="mx-auto mt-8 grid max-w-4xl grid-cols-1 items-center gap-6 rounded-2xl border border-[#0f9aa1]/15 p-6 sm:grid-cols-[220px_1fr] sm:gap-8 sm:p-8">
-              <div className="mx-auto w-full max-w-[280px] overflow-hidden rounded-[1.5rem] shadow-[0_20px_45px_rgba(0,34,68,0.28)]">
+            <div className="mx-auto mt-8 grid max-w-5xl grid-cols-1 items-center gap-8 rounded-2xl border border-[#0f9aa1]/15 p-6 md:grid-cols-[minmax(280px,360px)_1fr] md:gap-10 sm:p-8">
+              <div className="mx-auto w-full max-w-[360px] overflow-hidden rounded-[1.5rem] shadow-[0_20px_45px_rgba(0,34,68,0.28)]">
                 <Image
                   src={CAPTAIN_CAN_COVER_SRC}
                   alt="Captain Can and the Messy Block book cover"
@@ -118,16 +118,16 @@ export default function KidsCorner() {
               </div>
 
               {/* Description + actions */}
-              <div className="text-center lg:text-left">
+              <div className="text-center md:text-left">
                 <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#0f9aa1]">Book 1 • Read it now</p>
-                <h3 className="heading-md text-[#002b49]">Captain Can and the Messy Block</h3>
-                <p className="mt-4 text-[1.05rem] font-medium leading-relaxed text-slate-800">
+                <h3 className="text-2xl font-extrabold leading-tight text-[#002b49] sm:text-3xl">Captain Can and the Messy Block</h3>
+                <p className="mt-4 text-base leading-relaxed text-[#002244] sm:text-lg">
                   Join Mia and her super-powered sidekick, Captain Can, as they team up to take on
                   the mischievous Mess Monster and clean up their block&mdash;one piece of litter
                   at a time.
                 </p>
 
-                <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center lg:justify-start">
+                <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center md:justify-start">
                   <CaptainCanStorybookReader />
                   <a
                     href={CAPTAIN_CAN_PDF_HREF}
@@ -140,16 +140,17 @@ export default function KidsCorner() {
               </div>
             </div>
 
-            <div className="mt-8 flex flex-wrap justify-center gap-5">
+            <h3 className="mt-10 text-center text-2xl font-extrabold text-[#0f9aa1] sm:text-3xl">More Adventures Coming Soon!</h3>
+            <div className="mt-6 flex flex-wrap justify-center gap-5">
               {UPCOMING_BOOKS.map((book, index) => (
                 <article key={book.number} className={`w-full rounded-2xl border border-[#0f9aa1]/20 ${BOOK_CARD_GRADIENTS[index]} p-6 shadow-sm sm:w-[calc((100%-1.25rem)/2)] lg:w-[calc((100%-2.5rem)/3)]`}>
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <p className="text-sm font-bold text-[#0f9aa1]">Book {book.number}</p>
                     <span className="rounded-full bg-[#fff1cf] px-3 py-1 text-sm font-bold text-[#002244]">Coming Soon!</span>
                   </div>
-                  <h3 className={`mt-4 text-xl font-extrabold ${BOOK_TITLE_COLORS[index]}`}>{book.title}</h3>
+                  <h3 className={`mt-4 text-2xl font-extrabold leading-tight ${BOOK_TITLE_COLORS[index]}`}>{book.title}</h3>
                   {book.note && <p className="mt-2 text-sm font-medium text-[#1a5570]">{book.note}</p>}
-                  <p className="mt-3 leading-relaxed">{book.description}</p>
+                  <p className="mt-3 text-base leading-relaxed">{book.description}</p>
                 </article>
               ))}
             </div>
@@ -161,14 +162,14 @@ export default function KidsCorner() {
 
         <section aria-labelledby="take-home-materials" className="border-t border-[#0f9aa1]/20 bg-[#e7f7f8]/60 px-6 py-12 sm:py-16">
           <div className="mx-auto max-w-4xl text-center">
-            <h2 id="take-home-materials" className="text-3xl font-extrabold text-[#0f9aa1]">Take-Home Materials</h2>
+            <h2 id="take-home-materials" className="text-3xl font-extrabold text-[#0f9aa1] sm:text-4xl">Take-Home Materials</h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed">
               Keep the learning going at home or in the classroom. We are building printable tools that connect our stories with everyday ways to care for our world.
             </p>
             <div className="mt-8 grid gap-4 sm:grid-cols-3">
               {['Litter Hero Coloring Pages', 'Recycling & Reuse Guides', 'Learning & Cleanup Activities'].map((title, index) => (
                 <div key={title} className={`rounded-2xl ${MATERIAL_CARD_GRADIENTS[index]} p-6`}>
-                  <h3 className="text-lg font-bold">{title}</h3>
+                  <h3 className="text-xl font-extrabold leading-tight">{title}</h3>
                   <p className="mt-3 text-sm font-semibold text-[#1a5570]">Coming Soon!</p>
                 </div>
               ))}
