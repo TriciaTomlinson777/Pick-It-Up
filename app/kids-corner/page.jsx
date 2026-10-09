@@ -60,7 +60,7 @@ export default function KidsCorner() {
         <section className="hero-surface border-b border-[#0f9aa1]/20 py-14 sm:py-20">
           <div className="container-custom text-center">
             <h1 className="flex flex-col items-center gap-1">
-              <span className="text-2xl font-semibold text-[#002244] sm:text-3xl">Welcome to</span>
+              <span className="text-2xl font-semibold text-[#0f9aa1] sm:text-3xl">Welcome to</span>
               <span className="flex flex-wrap justify-center text-5xl font-extrabold sm:text-6xl lg:text-7xl">
                 {KIDS_CORNER_TITLE_LETTERS.map((letter, index) =>
                   letter.char === ' ' ? (
@@ -169,7 +169,7 @@ export default function KidsCorner() {
             <div className="mt-8 grid gap-4 sm:grid-cols-3">
               {['Litter Hero Coloring Pages', 'Recycling & Reuse Guides', 'Learning & Cleanup Activities'].map((title, index) => (
                 <div key={title} className={`rounded-2xl ${MATERIAL_CARD_GRADIENTS[index]} p-6`}>
-                  <h3 className="text-xl font-extrabold leading-tight">{title}</h3>
+                  <h3 className="text-xl font-extrabold leading-tight text-[#0f9aa1]">{title}</h3>
                   <p className="mt-3 text-sm font-semibold text-[#1a5570]">Coming Soon!</p>
                 </div>
               ))}
