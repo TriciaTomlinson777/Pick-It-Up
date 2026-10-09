@@ -137,7 +137,7 @@ export default function KidsCorner() {
           </div>
         </section>
 
-        <section aria-labelledby="coming-soon-adventures" className="border-y border-[#0f9aa1]/20 bg-[linear-gradient(180deg,_#e5f7fa_0%,_#cceef1_100%)] py-12 sm:py-16">
+        <section aria-labelledby="coming-soon-adventures" className="border-y border-[#0f9aa1]/20 bg-[linear-gradient(180deg,_#edf8e3_0%,_#d7efc5_100%)] py-12 sm:py-16">
           <div className="container-custom px-6 sm:px-12 lg:px-20 xl:px-[5.5rem]">
             <h2 id="coming-soon-adventures" className="text-center text-3xl font-extrabold text-[#0f9aa1] sm:text-4xl">More Adventures Coming Soon!</h2>
             <div className="mx-auto mt-6 grid max-w-5xl auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-6">
