@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import ShareButton from '@/components/ShareButton';
 
-export default function Footer({ showHomeShareButton = false }) {
+export default function Footer({ showHomeShareButton = false, alignWithPageContent = false }) {
   const currentYear = new Date().getFullYear();
 
   return (
     <footer className="mt-0 border-t border-[#0f9aa1]/35 bg-[linear-gradient(155deg,_#fff8eb_0%,_#eefbfb_38%,_#f0f8e7_72%,_#fff0cc_100%)] text-[#002244]">
-      <div className="container-custom py-10 sm:py-12 lg:py-14">
+      <div className={`container-custom py-10 sm:py-12 lg:py-14 ${alignWithPageContent ? "px-6 sm:px-12 lg:px-20 xl:px-[5.5rem]" : ""}`}>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-10 xl:gap-12 mb-10 lg:mb-12">
           {/* Brand */}
           <div>
@@ -32,7 +32,7 @@ export default function Footer({ showHomeShareButton = false }) {
               </li>
               <li>
                 <Link href="/volunteer" className="transition hover:text-[#0f9aa1]">
-                  Volunteer
+                  Make a Difference
                 </Link>
               </li>
               <li>

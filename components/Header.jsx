@@ -92,7 +92,7 @@ export default function Header() {
           </div>
 
           <Link
-            href="/volunteer"
+            href="/street-challenge"
             className="btn-green absolute bottom-6 right-0 hidden min-h-12 whitespace-nowrap px-4.5 text-[1.04rem] font-bold lg:inline-flex lg:bottom-7 lg:px-6 lg:text-[1.26rem] xl:bottom-8 xl:text-[1.38rem]"
           >
             Join the Movement
@@ -160,7 +160,7 @@ export default function Header() {
               Contact
             </Link>
             <Link
-              href="/volunteer"
+              href="/street-challenge"
               className="btn-green block w-full text-center"
               onClick={() => setIsOpen(false)}
             >
