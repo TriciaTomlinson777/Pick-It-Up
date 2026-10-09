@@ -47,8 +47,8 @@ export default function KidsCorner() {
             </h1>
 
             <p className="mx-auto mt-6 max-w-2xl text-[1.1rem] font-medium leading-relaxed text-slate-800 sm:text-[1.2rem]">
-              Small actions can make a big difference. Meet Mia, Captain Can, and the Mess
-              Monster&mdash;and discover how one person and one piece can help make Seattle better.
+              Small actions can make a big difference. Meet Mia, Captain Can, the Mess Monster,
+              and all our other Litter Heroes&mdash;and discover how one person and one piece can help make every place better.
             </p>
           </div>
         </section>
