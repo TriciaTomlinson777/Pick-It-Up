@@ -65,7 +65,7 @@ export default function KidsCorner() {
                     </span>
                   )
                 )}
-                <span className="text-[#002244]">!</span>
+                <span className="text-[#0f9aa1]">!</span>
               </span>
             </h1>
 
