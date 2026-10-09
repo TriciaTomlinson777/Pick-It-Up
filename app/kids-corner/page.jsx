@@ -134,7 +134,12 @@ export default function KidsCorner() {
               </div>
             </div>
 
-            <h3 className="mt-10 text-center text-3xl font-extrabold text-[#0f9aa1] sm:text-4xl">More Adventures Coming Soon!</h3>
+          </div>
+        </section>
+
+        <section aria-labelledby="coming-soon-adventures" className="border-y border-[#0f9aa1]/20 bg-[linear-gradient(180deg,_#e5f7fa_0%,_#cceef1_100%)] py-12 sm:py-16">
+          <div className="container-custom px-6 sm:px-12 lg:px-20 xl:px-[5.5rem]">
+            <h2 id="coming-soon-adventures" className="text-center text-3xl font-extrabold text-[#0f9aa1] sm:text-4xl">More Adventures Coming Soon!</h2>
             <div className="mx-auto mt-6 grid max-w-5xl auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-6">
               {UPCOMING_BOOKS.map((book, index) => (
                 <article key={book.number} className={`h-full rounded-2xl border border-[#0f9aa1]/20 ${BOOK_CARD_GRADIENTS[index]} p-4 shadow-sm lg:col-span-2 ${index === 3 ? "lg:col-start-2" : ""}`}>
