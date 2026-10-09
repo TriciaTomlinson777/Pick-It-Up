@@ -17,7 +17,7 @@ export default function StreetChallengeComingSoon() {
             <h1 className="text-5xl font-extrabold leading-tight text-[#0f9aa1] sm:text-6xl lg:text-7xl">Coming Soon!</h1>
             <div className="mt-5 flex items-center justify-center gap-2 sm:gap-4">
               <svg aria-hidden="true" viewBox="0 0 48 64" className="h-12 w-8 shrink-0 text-[#d9665b] sm:h-16 sm:w-12" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round"><path d="M35 20 C29 17 14 6 10 8 C5 11 22 22 31 25 Z M31 29 C23 27 4 27 4 32 C4 37 23 36 31 34 Z M31 40 C23 42 6 53 10 57 C14 61 29 47 35 44 Z" fill="#0f9aa1" stroke="none" /></svg>
-              <p className="text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl"><span className="text-[#0f9aa1]">Street</span>{' '}<span className="text-[#5b8f16]">Challenge</span><span className="text-[#d9665b]">!</span></p>
+              <p className="text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl"><span className="text-[#e53446]">Street Challenge!</span></p>
               <span className="-scale-x-100"><svg aria-hidden="true" viewBox="0 0 48 64" className="h-12 w-8 shrink-0 text-[#d9665b] sm:h-16 sm:w-12" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round"><path d="M35 20 C29 17 14 6 10 8 C5 11 22 22 31 25 Z M31 29 C23 27 4 27 4 32 C4 37 23 36 31 34 Z M31 40 C23 42 6 53 10 57 C14 61 29 47 35 44 Z" fill="#0f9aa1" stroke="none" /></svg></span>
             </div>
             <p className="mx-auto mt-6 max-w-2xl text-lg font-medium leading-relaxed">
