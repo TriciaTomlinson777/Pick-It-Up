@@ -15,7 +15,7 @@ export default function StreetChallengeComingSoon() {
         <section className="hero-surface border-b border-[#0f9aa1]/20 py-16 sm:py-24">
           <div className="container-custom text-center">
             <h1 className="text-5xl font-extrabold leading-tight text-[#0f9aa1] sm:text-6xl lg:text-7xl">Coming Soon!</h1>
-            <p className="mt-4 text-2xl font-bold text-[#0f9aa1] sm:text-3xl">Street Challenge</p>
+            <p className="mt-5 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl"><span className="text-[#0f9aa1]">Street</span>{' '}<span className="text-[#5b8f16]">Challenge</span><span className="text-[#d9665b]">!</span></p>
             <p className="mx-auto mt-6 max-w-2xl text-lg font-medium leading-relaxed">
               Get ready to pick up litter, earn points, and cheer each other on while making your neighborhood shine.
             </p>
