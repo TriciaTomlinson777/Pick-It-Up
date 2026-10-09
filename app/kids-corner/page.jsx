@@ -155,12 +155,12 @@ export default function KidsCorner() {
         </section>
 
         <section aria-labelledby="take-home-materials" className="border-t border-[#0f9aa1]/20 bg-[linear-gradient(180deg,_#ffd993_0%,_#fff1cf_100%)] py-12 sm:py-16">
-          <div className="container-custom text-center">
+          <div className="container-custom px-6 text-center sm:px-12 lg:px-20 xl:px-[5.5rem]">
             <h2 id="take-home-materials" className="text-3xl font-extrabold text-[#0f9aa1] sm:text-4xl">Take-Home Materials</h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg font-medium leading-relaxed text-[#002244]">
               Keep the learning going at home or in the classroom. We are building printable tools that connect our stories with everyday ways to care for our world.
             </p>
-            <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            <div className="mx-auto mt-8 grid max-w-5xl gap-4 sm:grid-cols-3">
               {['Litter Hero Coloring Pages', 'Recycling & Reuse Guides', 'Learning & Cleanup Activities'].map((title, index) => (
                 <div key={title} className={`rounded-2xl ${MATERIAL_CARD_GRADIENTS[index]} p-6`}>
                   <h3 className="text-3xl font-extrabold leading-tight text-[#0f9aa1] sm:text-4xl">{title}</h3>
