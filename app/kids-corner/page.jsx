@@ -169,7 +169,7 @@ export default function KidsCorner() {
         </section>
       </main>
 
-      <Footer />
+      <Footer alignWithPageContent />
     </>
   );
 }
