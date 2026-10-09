@@ -7,6 +7,14 @@ import CaptainCanStorybookReader from '@/components/CaptainCanStorybookReader';
 const CAPTAIN_CAN_PDF_HREF = '/Captain_Can_and_the_Messy_Block_EMAIL_SMALL.pdf';
 const CAPTAIN_CAN_COVER_SRC = '/Captain Can VS3 Book Cover.jpg';
 
+const UPCOMING_BOOKS = [
+  { number: 2, title: 'Recycling, Reuse & Where Litter Goes', note: 'Learning adventure • Title to be announced', description: 'Explore recycling and reuse, and discover what happens when litter reaches our roads, drains, and waterways.' },
+  { number: 3, title: 'Mia & The Street Challenge', description: 'Follow Mia as she takes on a cleanup challenge and discovers how small actions add up.' },
+  { number: 4, title: 'Neighborhood Challenge', note: 'Working title', description: 'Meet new Litter Heroes, celebrate new winners, and discover what it means to be a great sport.' },
+  { number: 5, title: 'City Challenge', note: 'Working title', description: 'The adventure grows as Litter Heroes help make their city shine.' },
+  { number: 6, title: 'State Challenge', note: 'Working title', description: 'Bring community pride to a bigger stage while cheering each other on.' },
+];
+
 // Each letter gets its own bright brand color to keep the heading playful.
 const KIDS_CORNER_TITLE_LETTERS = [
   { char: 'K', color: '#0f9aa1' },
@@ -70,9 +78,12 @@ export default function KidsCorner() {
 
         <section className="py-12 sm:py-16">
           <div className="container-custom px-6 py-10 sm:px-12 sm:py-12">
-            <p className="text-center text-sm font-bold uppercase tracking-[0.18em] text-[#0f9aa1]">
-              Our First Children&apos;s Book
-            </p>
+            <div className="mx-auto max-w-3xl text-center">
+              <h2 className="text-3xl font-extrabold text-[#0f9aa1] sm:text-4xl">Meet Our Litter Heroes!</h2>
+              <p className="mt-4 text-lg leading-relaxed">Discover stories about caring for our world, taking on challenges, and cheering each other on.</p>
+              <h3 className="mt-8 text-2xl font-bold text-[#002244]">Books &amp; Take-Home Activities</h3>
+              <p className="mt-3 text-base leading-relaxed">A growing collection of stories, learning tools, and real-world adventures for children, families, and educators.</p>
+            </div>
 
             <div className="mt-8 grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-4">
               <div className="mx-auto w-full max-w-[280px] overflow-hidden rounded-[1.5rem] shadow-[0_20px_45px_rgba(0,34,68,0.28)]">
@@ -88,7 +99,8 @@ export default function KidsCorner() {
 
               {/* Description + actions */}
               <div className="text-center lg:text-left">
-                <h2 className="heading-md text-[#002b49]">Captain Can and the Messy Block</h2>
+                <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#0f9aa1]">Book 1 • Read it now</p>
+                <h3 className="heading-md text-[#002b49]">Captain Can and the Messy Block</h3>
                 <p className="mt-4 text-[1.05rem] font-medium leading-relaxed text-slate-800">
                   Join Mia and her super-powered sidekick, Captain Can, as they team up to take on
                   the mischievous Mess Monster and clean up their block&mdash;one piece of litter
@@ -107,6 +119,41 @@ export default function KidsCorner() {
                 </div>
               </div>
             </div>
+
+            <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {UPCOMING_BOOKS.map((book) => (
+                <article key={book.number} className="rounded-2xl border border-[#0f9aa1]/20 bg-white/80 p-6 shadow-sm">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <p className="text-sm font-bold text-[#0f9aa1]">Book {book.number}</p>
+                    <span className="rounded-full bg-[#fff1cf] px-3 py-1 text-sm font-bold text-[#002244]">Coming Soon!</span>
+                  </div>
+                  <h3 className="mt-4 text-xl font-extrabold">{book.title}</h3>
+                  {book.note && <p className="mt-2 text-sm font-medium text-[#1a5570]">{book.note}</p>}
+                  <p className="mt-3 leading-relaxed">{book.description}</p>
+                </article>
+              ))}
+            </div>
+            <p className="mx-auto mt-8 max-w-3xl text-center text-lg leading-relaxed">
+              More heroes are joining the adventures: Brave Beau, Bravo Belle, Outwit Oliver, Ocean Olivia, and Mess Master!
+            </p>
+          </div>
+        </section>
+
+        <section aria-labelledby="take-home-materials" className="border-t border-[#0f9aa1]/20 bg-[#e7f7f8]/60 px-6 py-12 sm:py-16">
+          <div className="mx-auto max-w-4xl text-center">
+            <h2 id="take-home-materials" className="text-3xl font-extrabold text-[#0f9aa1]">Take-Home Materials</h2>
+            <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed">
+              Keep the learning going at home or in the classroom. We are building printable tools that connect our stories with everyday ways to care for our world.
+            </p>
+            <div className="mt-8 grid gap-4 sm:grid-cols-3">
+              {['Litter Hero Coloring Pages', 'Recycling & Reuse Guides', 'Learning & Cleanup Activities'].map((title) => (
+                <div key={title} className="rounded-2xl bg-white/85 p-6">
+                  <h3 className="text-lg font-bold">{title}</h3>
+                  <p className="mt-3 text-sm font-semibold text-[#1a5570]">Coming Soon!</p>
+                </div>
+              ))}
+            </div>
+            <p className="mt-6 text-base leading-relaxed">For now, download and print Captain Can and the Messy Block using the button above.</p>
           </div>
         </section>
       </main>
