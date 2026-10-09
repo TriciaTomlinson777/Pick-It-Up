@@ -95,7 +95,7 @@ export default function KidsCorner() {
           <div className="container-custom px-6 sm:px-12 lg:px-20 xl:px-[5.5rem]">
             <div className="mx-auto max-w-5xl text-center">
               <h2 className="text-3xl font-extrabold text-[#0f9aa1] sm:text-4xl">Meet Our Litter Heroes!</h2>
-              <p className="mx-auto mt-4 max-w-4xl text-left text-lg font-medium leading-relaxed text-[#002244] [text-wrap:balance]">Stories, learning tools, and real-world adventures for kids, families, and <span className="whitespace-nowrap">all Litter Heroes.</span></p>
+              <p className="mx-auto mt-4 max-w-4xl text-center text-lg font-medium leading-relaxed text-[#002244] [text-wrap:balance]">Stories, learning tools, and real-world adventures for kids, families, and <span className="whitespace-nowrap">all Litter Heroes.</span></p>
               <p className="mt-2 text-lg font-medium leading-relaxed text-[#002244]">Read, explore, and cheer each other on!</p>
             </div>
 
