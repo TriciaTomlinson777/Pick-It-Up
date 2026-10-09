@@ -83,8 +83,8 @@ export default function KidsCorner() {
         </section>
 
 
-        <section aria-labelledby="street-challenge-invitation" className="px-6 py-10 sm:py-14">
-          <div className="mx-auto max-w-3xl rounded-3xl border border-[#0f9aa1]/20 bg-[linear-gradient(180deg,_#f2fdff_0%,_#d7f3d4_52%,_#baeaf1_100%)] px-6 py-10 text-center shadow-sm sm:px-10">
+        <section aria-labelledby="street-challenge-invitation" className="border-y border-[#0f9aa1]/20 bg-[linear-gradient(180deg,_#f2fdff_0%,_#d7f3d4_52%,_#baeaf1_100%)] py-12 sm:py-16">
+          <div className="container-custom text-center">
             <h2 id="street-challenge-invitation" className="text-3xl font-extrabold text-[#0f9aa1] sm:text-4xl">
               <span aria-hidden="true">🌟 </span>Ready to Be a Litter Hero?
             </h2>
@@ -97,7 +97,7 @@ export default function KidsCorner() {
           </div>
         </section>
 
-        <section className="pb-12 pt-4 sm:pb-16 sm:pt-6">
+        <section className="bg-[linear-gradient(180deg,_#fff6e4_0%,_#fff9ee_100%)] py-12 sm:py-16">
           <div className="container-custom px-6 sm:px-12 lg:px-20 xl:px-[5.5rem]">
             <div className="mx-auto max-w-3xl text-center">
               <h2 className="text-3xl font-extrabold text-[#0f9aa1] sm:text-4xl">Meet Our Litter Heroes!</h2>
@@ -160,8 +160,8 @@ export default function KidsCorner() {
           </div>
         </section>
 
-        <section aria-labelledby="take-home-materials" className="border-t border-[#0f9aa1]/20 bg-[#e7f7f8]/60 px-6 py-12 sm:py-16">
-          <div className="mx-auto max-w-4xl text-center">
+        <section aria-labelledby="take-home-materials" className="border-t border-[#0f9aa1]/20 bg-[linear-gradient(180deg,_#ffd993_0%,_#fff1cf_100%)] py-12 sm:py-16">
+          <div className="container-custom text-center">
             <h2 id="take-home-materials" className="text-3xl font-extrabold text-[#0f9aa1] sm:text-4xl">Take-Home Materials</h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed">
               Keep the learning going at home or in the classroom. We are building printable tools that connect our stories with everyday ways to care for our world.
