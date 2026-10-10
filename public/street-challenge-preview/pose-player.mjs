@@ -60,6 +60,49 @@ export function createPosePlayer(hero, reduced=false, asset="blonde-motion-v1.pn
   }else actor.style.transform=transform;
   if(disposed)return;legPhase=null;draw(11);actor.classList.add('at-table');
  }
+
+ // A tap owns one full reach/contact/lift cycle. Reuse the drawn reaching
+ // pose, and keep the prop at its grip while the actor returns to standing.
+ async function pickup(key,prop,onHeld){
+  if(!await ready||disposed)return;
+  const side=key==='grabber'?1:0;
+  const standing={x:side===0?-.10:.11,y:.53};
+  const reaching={x:side===0?-.16:.22,y:.88};
+  const rect=hero.getBoundingClientRect();
+  const floorY=rect.bottom-rect.height*.03;
+  const floorX=rect.left+rect.width/2+(side===0?-.26:.28)*rect.height;
+  const actorDX=floorX-(rect.left+rect.width/2+reaching.x*rect.height);
+  const actorDY=floorY-(rect.top+reaching.y*rect.height);
+  const gripOffset=key==='bag'?.06:key==='bottle'?.20:.10;
+  function place(x,y){prop.style.left=(x-prop.offsetWidth/2)+'px';prop.style.top=(y-prop.offsetHeight*gripOffset)+'px'}
+  place(floorX,floorY);
+  if(reduced){draw(11);onHeld();return}
+  const approach=actor.animate([{transform:'translate(0,0)'},{transform:'translate('+actorDX+'px,'+actorDY+'px)'}],{duration:500,easing:'ease-in-out',fill:'forwards'});
+  activeAnimations.add(approach);
+  draw(5);try{await approach.finished}catch{}
+  if(disposed)return;
+  await pause(250);if(disposed)return;
+  // Contact occurs before the item moves; it now follows the hand.
+  actor.style.transform='translate('+actorDX+'px,'+actorDY+'px)';
+  approach.cancel();activeAnimations.delete(approach);
+  const lift=actor.animate([{transform:actor.style.transform},{transform:'translate(0,0)'}],{duration:650,easing:'ease-in-out',fill:'forwards'});
+  activeAnimations.add(lift);
+  const startTime=performance.now();
+  await new Promise(resolve=>{
+   function tick(now){
+    if(disposed){resolve();return}
+    const progress=Math.min(1,(now-startTime)/650),t=progress*progress*(3-2*progress);
+    const x=(1-t)*(reaching.x*rect.height+actorDX)+t*standing.x*rect.height;
+    const y=(1-t)*(reaching.y*rect.height+actorDY)+t*standing.y*rect.height;
+    place(rect.left+rect.width/2+x,rect.top+y);
+    if(progress>=.55)draw(11);
+    if(progress<1)requestAnimationFrame(tick);else resolve();
+   }
+   requestAnimationFrame(tick);
+  });
+  lift.cancel();activeAnimations.delete(lift);actor.style.transform='';
+  if(disposed)return;draw(11);onHeld();
+ }
  function dispose(){disposed=true;actor.style.transform='';actor.classList.remove('at-table');observer.disconnect();activeAnimations.forEach(a=>a.cancel());canvas.remove();hero.classList.remove('pose-active');actor.classList.remove('pose-motion')}
- return {ready,jump,gloves,walkToTable,dispose};
+ return {ready,jump,gloves,walkToTable,pickup,dispose};
 }
