@@ -29,6 +29,8 @@ form{width:100%;display:none;flex:1;flex-direction:column;justify-content:center
 <button class="avatar" aria-label="Choose the blue-cap avatar" aria-pressed="false" data-index="1"><span class="sprite" style="background-position:33.333% 0"></span></button>
 <button class="avatar" aria-label="Choose the blonde avatar" aria-pressed="false" data-index="2"><span class="sprite" style="background-position:66.667% 0"></span></button>
 <button class="avatar" aria-label="Choose the blue-hoodie avatar" aria-pressed="false" data-index="3"><span class="sprite" style="background-position:100% 0"></span></button>
+<button class="avatar" aria-label="Choose the coral-hoodie avatar" aria-pressed="false" data-index="4"><span class="sprite" style="background-image:url(coral-avatar.webp);background-size:contain;background-position:center"></span></button>
+<button class="avatar" aria-label="Choose the orange-jacket avatar" aria-pressed="false" data-index="5"><span class="sprite" style="background-image:url(orange-avatar.webp);background-size:contain;background-position:center"></span></button>
 </div><div class="hand" id="hand" aria-hidden="true">👆</div>
 <div class="controls" id="controls"><button class="arrow" id="previous" aria-label="Previous avatar">‹</button><button class="confirm" id="choose" disabled aria-label="Confirm avatar">✓</button><button class="arrow" id="next" aria-label="Next avatar">›</button></div>
 <form id="nameForm"><label for="firstName">First name</label><input id="firstName" name="firstName" autocomplete="given-name" maxlength="30" required><button class="confirm" type="submit" aria-label="Confirm first name">✓</button><button class="arrow" type="button" id="back" aria-label="Back to avatars">←</button></form>
@@ -39,7 +41,7 @@ import {createGameAudio} from './audio.mjs';
 const audio=createGameAudio(), $=id=>document.getElementById(id), avatars=[...document.querySelectorAll('.avatar')];
 let selected=null, muted=false, browsing=0;
 const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-function browse(index){browsing=Math.max(0,Math.min(3,index));const card=avatars[browsing],rail=$('carousel');rail.scrollTo({left:card.offsetLeft-rail.offsetLeft-(rail.clientWidth-card.clientWidth)/2,behavior:reduce?'instant':'smooth'});$('hand').style.visibility='hidden'}
+function browse(index){browsing=Math.max(0,Math.min(avatars.length-1,index));const card=avatars[browsing],rail=$('carousel');rail.scrollTo({left:card.offsetLeft-rail.offsetLeft-(rail.clientWidth-card.clientWidth)/2,behavior:reduce?'instant':'smooth'});$('hand').style.visibility='hidden'}
 function select(index){selected=index;browsing=index;avatars.forEach((a,i)=>{a.setAttribute('aria-pressed',String(i===index));a.classList.remove('chosen')});void avatars[index].offsetWidth;avatars[index].classList.add('chosen');$('choose').disabled=false;audio.play('select');browse(index)}
 avatars.forEach((a,i)=>a.addEventListener('click',()=>select(i)));
 $('carousel').addEventListener('pointerdown',()=>{$('hand').style.visibility='hidden'});
@@ -47,7 +49,7 @@ $('previous').onclick=()=>browse(browsing-1);$('next').onclick=()=>browse(browsi
 $('sound').onclick=()=>{muted=!muted;audio.setMuted(muted);$('sound').textContent=muted?'🔇':'🔊';$('sound').setAttribute('aria-pressed',String(muted));$('sound').setAttribute('aria-label',muted?'Turn sound on':'Mute sound');if(!muted)audio.play('select')};
 $('choose').onclick=()=>{if(selected===null)return;audio.play('equip');$('carousel').style.display='none';$('controls').style.display='none';$('hand').style.display='none';$('nameForm').style.display='flex';$('firstName').focus()};
 $('back').onclick=()=>{$('nameForm').style.display='none';$('carousel').style.display='flex';$('controls').style.display='flex'};
-$('nameForm').onsubmit=e=>{e.preventDefault();const name=$('firstName').value.trim();if(!name){$('firstName').value='';$('firstName').reportValidity();return}audio.play('celebrate');$('hello').textContent='Hi, '+name+'!';$('hero').style.backgroundPosition=(selected*100/3)+'% 0';$('nameForm').style.display='none';$('final').style.display='flex';$('hero').style.animation=reduce?'none':'happy .7s ease'};
+$('nameForm').onsubmit=e=>{e.preventDefault();const name=$('firstName').value.trim();if(!name){$('firstName').value='';$('firstName').reportValidity();return}audio.play('celebrate');$('hello').textContent='Hi, '+name+'!';$('hero').style.cssText=avatars[selected].querySelector('.sprite').style.cssText;$('nameForm').style.display='none';$('final').style.display='flex';$('hero').style.animation=reduce?'none':'happy .7s ease'};
 function reset(){$('nameForm').style.display='none';$('final').style.display='none';$('carousel').style.display='flex';$('controls').style.display='flex';$('hand').style.display='block';$('hand').style.visibility='visible';$('firstName').value='';selected=null;avatars.forEach(a=>{a.setAttribute('aria-pressed','false');a.classList.remove('chosen')});$('choose').disabled=true;browsing=0;$('carousel').scrollLeft=0}
 $('reset').onclick=reset;$('again').onclick=reset;window.addEventListener('pagehide',()=>audio.dispose());
 </script></body></html>
