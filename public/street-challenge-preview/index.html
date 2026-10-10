@@ -28,6 +28,16 @@ form{width:100%;display:none;flex:1;flex-direction:column;justify-content:center
 .bag-art{background:url(recycle-bag.png) center/contain no-repeat}.attached[data-gear=bag]{background:url(recycle-bag.png) center/contain no-repeat;z-index:3}.room.equipping .gear-row{z-index:3}.room.equipping .gear-actions{z-index:3}
 .table-front{position:absolute;z-index:2;pointer-events:none;background:url(cottage-table.webp) center/100% 100% no-repeat;clip-path:inset(67.6% 0 0)}.room.equipping .gear-status{z-index:4}.attached[data-portal=true]{z-index:5}.final:has(.actor.at-table) .floor-shadow{visibility:hidden}
 .final:has(.actor.at-table) .gear-status{top:5%}
+
+/* Floor equipment scene: keep the existing four tap controls. */
+.room.equipping{background-image:url(room.webp)}
+.table-front{display:none}
+.room.equipping .actor{top:23%;height:42%;z-index:2}
+.room.equipping .actor .sprite{max-height:none;max-width:300px}
+.room.equipping .gear-row{top:76%}
+.room.equipping .gear-status,.final:has(.actor.at-table) .gear-status{top:8%}
+.floor-item{position:fixed;z-index:8;pointer-events:none;background:url(held-gear.webp) no-repeat;background-size:400% 100%;filter:drop-shadow(0 3px 2px #53472b44);transform-origin:center}
+.floor-item[data-gear=bag]{background:url(recycle-bag.png) center/contain no-repeat}
 </style></head><body>
 <main class="room">
 <div class="toolbar"><button class="round" id="reset" aria-label="Start again">↺</button><button class="round" id="sound" aria-label="Mute sound" aria-pressed="false">🔊</button></div>
@@ -72,9 +82,9 @@ $('sound').onclick=()=>{muted=!muted;if(muted&&'speechSynthesis' in window)windo
 $('choose').onclick=()=>{if(selected===null)return;audio.play('equip');$('carousel').style.display='none';$('controls').style.display='none';$('hand').style.display='none';$('nameForm').style.display='flex';$('firstName').focus()};
 $('back').onclick=()=>{$('nameForm').style.display='none';$('carousel').style.display='flex';$('controls').style.display='flex'};
 $('nameForm').onsubmit=async e=>{e.preventDefault();const name=$('firstName').value.trim();if(!name){$('firstName').value='';$('firstName').reportValidity();return}audio.play('celebrate');$('hello').textContent='Hi, '+name+'!';$('hero').replaceChildren(avatars[selected].querySelector('.sprite img').cloneNode(true));$('nameForm').style.display='none';$('final').style.display='flex';$('hero').style.animation='none';room.classList.add('equipping');title.textContent='Are you ready?';title.style.animation=reduce?'none':'happy .5s ease';speakReady();scene++;positionTable();const current=scene;$('actor').style.visibility='hidden';busy=true;refreshGear();{posePlayer=createPosePlayer($('hero'),reduce,motionAssets[selected]);if(!await posePlayer.ready){posePlayer.dispose();posePlayer=null;}if(scene!==current)return;$('actor').style.visibility='visible';await posePlayer?.jump();}if(scene!==current)return;busy=false;refreshGear()};
-function reset(){$('actor').style.visibility='visible';posePlayer?.dispose();posePlayer=null;busy=false;if('speechSynthesis' in window)window.speechSynthesis.cancel();title.style.animation='none';scene++;equipped.clear();room.classList.remove('equipping');title.innerHTML='Street<br>Challenge';document.querySelectorAll('.attached').forEach(a=>a.remove());document.querySelectorAll('.flying,.gear-pointer').forEach(a=>a.remove());gearButtons.forEach(b=>{b.disabled=false;b.setAttribute('aria-pressed','false');b.querySelector('.gear-check').textContent=''});$('gearDone').disabled=true;$('gearDone').hidden=false;$('gearRow').hidden=false;$('gearStatus').textContent='';$('nameForm').style.display='none';$('final').style.display='none';$('carousel').style.display='flex';$('controls').style.display='flex';$('hand').style.display='block';$('hand').style.visibility='visible';$('firstName').value='';selected=null;avatars.forEach(a=>{a.setAttribute('aria-pressed','false');a.classList.remove('chosen')});$('choose').disabled=true;browsing=0;$('carousel').scrollLeft=0}
+function reset(){$('actor').style.visibility='visible';posePlayer?.dispose();posePlayer=null;busy=false;if('speechSynthesis' in window)window.speechSynthesis.cancel();title.style.animation='none';scene++;equipped.clear();room.classList.remove('equipping');title.innerHTML='Street<br>Challenge';document.querySelectorAll('.attached').forEach(a=>a.remove());document.querySelectorAll('.flying,.floor-item,.gear-pointer').forEach(a=>a.remove());gearButtons.forEach(b=>{b.disabled=false;b.setAttribute('aria-pressed','false');b.querySelector('.gear-check').textContent=''});$('gearDone').disabled=true;$('gearDone').hidden=false;$('gearRow').hidden=false;$('gearStatus').textContent='';$('nameForm').style.display='none';$('final').style.display='none';$('carousel').style.display='flex';$('controls').style.display='flex';$('hand').style.display='block';$('hand').style.visibility='visible';$('firstName').value='';selected=null;avatars.forEach(a=>{a.setAttribute('aria-pressed','false');a.classList.remove('chosen')});$('choose').disabled=true;browsing=0;$('carousel').scrollLeft=0}
 
-function refreshGear(){document.querySelectorAll('.gear-pointer').forEach(p=>p.remove());gearButtons.forEach(b=>b.disabled=busy||(b.dataset.gear!=='gloves'&&!equipped.has('gloves')));const next=gearButtons.find(b=>!equipped.has(b.dataset.gear));if(next){const p=document.createElement('span');p.className='gear-pointer';p.textContent='👆';p.setAttribute('aria-hidden','true');next.append(p)}$('gearDone').disabled=equipped.size!==4;$('gearStatus').textContent=equipped.size===4?'All set!':equipped.size?equipped.size+' / 4':''}
+function refreshGear(){document.querySelectorAll('.gear-pointer').forEach(p=>p.remove());gearButtons.forEach(b=>b.disabled=busy||(b.dataset.gear!=='gloves'&&!equipped.has('gloves')));const next=gearButtons.find(b=>!equipped.has(b.dataset.gear));if(next){const p=document.createElement('span');p.className='gear-pointer';p.textContent='👆';p.setAttribute('aria-hidden','true');next.append(p)}$('gearDone').disabled=busy||equipped.size!==4;$('gearStatus').textContent=equipped.size===4?'All set!':equipped.size?equipped.size+' / 4':''}
 const hands=[[[.22,.26],[.57,.54]],[[.30,.64],[.75,.36]],[[.24,.22],[.72,.62]],[[.26,.30],[.73,.64]],[[.22,.26],[.76,.62]],[[.27,.35],[.66,.60]],[[.22,.29],[.70,.64]],[[.22,.29],[.72,.66]],[[.22,.66],[.77,.24]]];
 function attachGear(key){const image=$('hero').querySelector('img'),scale=parseFloat(image.style.height)/100,top=parseFloat(image.style.top)/100,center=parseFloat(image.style.transform.match(/-([\d.]+)%/)[1])/100,ratio=image.naturalWidth/image.naturalHeight||.75;const make=(side,cell,w,h,grip)=>{const [x,y]=hands[selected][side],node=document.createElement('span');node.className='attached'+(key==='gloves'?' hand-glove':'');node.dataset.gear=key;node.dataset.side=side;node.dataset.x=(x-center)*ratio*scale;node.style.cssText='background-position:'+(cell*100/3)+'% 0;top:'+((top+y*scale)*100)+'%;height:'+(h*100)+'%;transform:translate(-50%,-'+grip+'%)';if(posePlayer){node.dataset.x=side===0?-.10:.11;node.style.top='53%';}node.dataset.w=w;node.dataset.h=h;if(posePlayer&&$('actor').classList.contains('at-table'))node.dataset.portal='true';node.setAttribute('aria-hidden','true');(node.dataset.portal?$('final'):$('hero')).append(node);return node};const nodes=key==='gloves'?[make(0,0,.13,.13,50),make(1,1,.13,.13,50)]:key==='bottle'?[make(0,2,.19,.25,20)]:key==='bag'?[make(0,0,.38,.44,6)]:[make(1,3,.23,.65,10)];positionHeld();return nodes}
 function positionHeld(){const h=$('hero').clientHeight,rect=$('hero').getBoundingClientRect(),parent=$('final').getBoundingClientRect();document.querySelectorAll('.attached').forEach(n=>{
@@ -88,17 +98,29 @@ gearButtons.forEach((button,index)=>button.onclick=async()=>{
  const key=button.dataset.gear;if(equipped.has(key)||button.disabled||busy)return;
  const current=scene;busy=true;refreshGear();audio.play('equip');
  if(posePlayer&&key==='gloves'){
-   await posePlayer.gloves();if(scene!==current)return;await posePlayer.walkToTable();if(scene!==current)return;
+   await posePlayer.gloves();if(scene!==current)return;
  }else{
    const nodes=attachGear(key);
-   if(!reduce){
-     nodes.forEach(n=>n.style.visibility='hidden');
-     // Tools move to the hand; the glove sequence uses drawn body poses instead.
-     const start=button.querySelector('.gear-art').getBoundingClientRect(),end=nodes[0].getBoundingClientRect(),fly=document.createElement('span');
-     fly.className='flying'+(key==='bag'?' bag-art':'');fly.style.cssText='left:'+start.left+'px;top:'+start.top+'px;width:'+start.width+'px;height:'+start.height+'px;background-position:'+(index*50)+'% 0';if(key==='bag'){fly.style.backgroundImage='url(recycle-bag.png)';fly.style.backgroundSize='contain';fly.style.backgroundPosition='center';}document.body.append(fly);
-     try{await fly.animate([{transform:'translate(0,0) scale(1)',opacity:1},{transform:'translate('+(end.left-start.left)+'px,'+(end.top-start.top)+'px) scale('+(end.width/start.width)+')',opacity:1}],{duration:650,easing:'ease-in-out',fill:'forwards'}).finished;}catch{}finally{fly.remove()}
-     if(scene!==current)return;nodes.forEach(n=>n.style.visibility='visible');
+   nodes.forEach(n=>n.style.visibility='hidden');
+   if(posePlayer){
+     const prop=document.createElement('span');prop.className='floor-item';prop.dataset.gear=key;
+     const h=$('hero').clientHeight;
+     prop.style.width=(Number(nodes[0].dataset.w)*h)+'px';
+     prop.style.height=(Number(nodes[0].dataset.h)*h)+'px';
+     prop.style.backgroundPosition=(key==='bottle'?200/3: key==='grabber'?100:0)+'% 0';
+     document.body.append(prop);
+     try{
+       await posePlayer.pickup(key,prop,()=>{
+         if(scene!==current)return;
+         nodes.forEach(n=>n.style.visibility='visible');
+       });
+     }finally{prop.remove()}
+   }else{
+     // Keep a usable equipment selector if pose art cannot load.
+     nodes.forEach(n=>n.style.visibility='visible');
    }
+   if(scene!==current)return;
+
  }
  if(scene!==current)return;equipped.add(key);button.setAttribute('aria-pressed','true');button.querySelector('.gear-check').textContent='✓';busy=false;refreshGear();
 });
