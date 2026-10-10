@@ -211,3 +211,11 @@ https://pick-it-up-ijjl-2e9gc2iiv-pick-it-up-seattle.vercel.app/street-challenge
 Game commit: 27208ee6728deff6fffbf225273226d91bfc1b39
 Deployment reported READY; JavaScript syntax check passed. Phone appearance/audio review remains pending.
 Tricia asked that the design record be kept in Library and project files for continuity between breaks. A backup was added to the preview branch under docs/street-challenge-design-conversation-2026-10-10.txt. Update both as decisions evolve.
+
+COTTAGE SCENE UPDATE — OCTOBER 10
+Tricia reported cut-off bodies and proposed tools on a table inside the cottage, with the chosen avatar looking at them to get ready. She then proposed the chosen avatar stepping out of the wall background into the scene.
+Implemented: a new warm storybook cottage background, foreground wooden table, avatar positioned fully above the table, and three equipment controls over the table surface. Selection-row sprites now scale with the available carousel height to address clipping. Equipment layout uses explicit positions to preserve character space. The selected avatar has a short stepping-forward entrance using translation, scaling and gentle alternating rotation; it uses the existing sprite, not a newly drawn walking cycle. Reduced-motion users skip it. Avatar gaze is still the sprite's original forward gaze; a dedicated look-at-tools pose remains a possible enhancement.
+Latest preview:
+https://pick-it-up-ijjl-fwysbkfjk-pick-it-up-seattle.vercel.app/street-challenge-preview/index.html
+Commit: 816fb2ec37e73f32b49ee1f1be1fc2034631b3ed
+Deployment READY, syntax check passed. Actual phone layout/voice/entrance review remains pending.
