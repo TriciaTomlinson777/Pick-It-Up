@@ -201,3 +201,13 @@ TRICIA'S KEY DIRECTIONS, PRESERVED AS QUOTES
 “We should save all of our design conversation so we don’t lose any of it.”
 
 END OF RECORD — update this same record as the design evolves.
+
+BUILD UPDATE — OCTOBER 10, AFTER RESUMING
+Tricia approved continuing with the equipment scene and asked: “Can it say ‘Are you ready?’ As the text pops up?”
+Implemented in preview: after avatar/name selection, the “Are you ready?” heading pops up and browser speech says the phrase. The sound toggle also cancels/mutes speech. Voice availability and sound depend on the phone/browser and still need phone review; this is not a recorded character voice.
+Book-style yellow gloves, teal/yellow grabber and reusable teal/yellow bottle now appear as tappable items. Each moves onto an accessory position around the chosen avatar, gains a checkmark, and the pointer moves to the next item. Confirmation stays disabled until all three are equipped. Confirmation celebrates “Ready for the street!” The overlay placement is a prototype, not individually fitted hand/clothing art for each character. Street/camera/cleanup scenes remain to build.
+Latest equipment preview:
+https://pick-it-up-ijjl-2e9gc2iiv-pick-it-up-seattle.vercel.app/street-challenge-preview/index.html
+Game commit: 27208ee6728deff6fffbf225273226d91bfc1b39
+Deployment reported READY; JavaScript syntax check passed. Phone appearance/audio review remains pending.
+Tricia asked that the design record be kept in Library and project files for continuity between breaks. A backup was added to the preview branch under docs/street-challenge-design-conversation-2026-10-10.txt. Update both as decisions evolve.
