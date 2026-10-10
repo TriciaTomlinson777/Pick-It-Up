@@ -45,7 +45,7 @@ form{width:100%;display:none;flex:1;flex-direction:column;justify-content:center
 .room.entering .floor-shadow{visibility:hidden}
 .room.equipping .floor-shadow{width:100px;height:12px}
 .floor-item{position:fixed;z-index:8;pointer-events:none;background:url(held-gear.webp) no-repeat;background-size:400% 100%;filter:drop-shadow(0 3px 2px #53472b44);transform-origin:center}
-.attached[data-gear=grabber]{/* Let the drawn glove show over the middle of the handle. */clip-path:polygon(0 0,100% 0,100% 7%,0 7%,0 13%,100% 13%,100% 100%,0 100%)}
+.attached[data-gear=grabber]{/* Hide the handle top behind the drawn gripping hand and glove. */clip-path:inset(13% 0 0)}
 .floor-item[data-gear=bag]{background:url(recycle-bag.png) center/contain no-repeat}
 </style></head><body>
 <main class="room">
