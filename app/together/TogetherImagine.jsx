@@ -12,13 +12,12 @@ const IMAGINE_SLIDE_FADE_MS = 2500;
 
 export default function TogetherImagine() {
   const [imagineSlideIndex, setImagineSlideIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
   useEffect(() => {
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (paused || motion.matches) return;
+    if (motion.matches) return;
     const timer = window.setInterval(() => setImagineSlideIndex((index) => (index + 1) % IMAGINE_SLIDES.length), 6000);
     return () => window.clearInterval(timer);
-  }, [paused]);
+  }, []);
   return <div className="relative">
         <section className="relative overflow-hidden border-b border-[#0f9aa1]/30 bg-[linear-gradient(135deg,_#fdf7e8_0%,_#d3f1f4_38%,_#d7f0c7_100%)] pb-0 pt-0 sm:pb-10 sm:pt-7">
           <div className="pointer-events-none absolute inset-x-0 top-0 h-12 bg-[radial-gradient(circle_at_15%_0%,rgba(183,225,237,0.34),transparent_42%),radial-gradient(circle_at_88%_0%,rgba(106,190,224,0.28),transparent_46%)] sm:h-28 sm:bg-[radial-gradient(circle_at_15%_0%,rgba(229,111,90,0.22),transparent_38%),radial-gradient(circle_at_88%_0%,rgba(15,154,161,0.2),transparent_42%)]" aria-hidden="true" />
@@ -97,6 +96,5 @@ export default function TogetherImagine() {
           </div>
         </section>
 
-    <button type="button" onClick={() => setPaused((value) => !value)} aria-pressed={paused} className="absolute bottom-4 right-4 z-30 rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#002244] shadow-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0f9aa1]">{paused ? 'Play photos' : 'Pause photos'}</button>
   </div>;
 }
