@@ -26,10 +26,12 @@ export function createPosePlayer(hero, reduced=false, asset="blonde-motion-v1.pn
  function pause(ms){return new Promise(resolve=>setTimeout(resolve,ms))}
  async function play(sequence){for(const [index,ms] of sequence){if(disposed)return;draw(index);await pause(ms)}}
  async function jump(){if(!await ready||disposed)return;if(reduced){draw(4);return}
+  const roomRect=hero.closest('.room').getBoundingClientRect(),rect=hero.getBoundingClientRect();
+  const wallY=Math.min(-55,roomRect.top+roomRect.height*.65-rect.bottom);
   const animation=actor.animate([
-   {transform:'translateY(-55px) scale(.73)',offset:0},
-   {transform:'translateY(-55px) scale(.73)',offset:.2},
-   {transform:'translateY(-95px) scale(.85)',offset:.42},
+   {transform:'translateY('+wallY+'px) scale(.73)',offset:0},
+   {transform:'translateY('+wallY+'px) scale(.73)',offset:.2},
+   {transform:'translateY('+(wallY-45)+'px) scale(.85)',offset:.42},
    {transform:'translateY(0) scale(1)',offset:.72},
    {transform:'translateY(0) scale(1)',offset:1}
   ],{duration:1500,easing:'linear'});activeAnimations.add(animation);
