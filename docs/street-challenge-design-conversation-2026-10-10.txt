@@ -219,3 +219,9 @@ Latest preview:
 https://pick-it-up-ijjl-fwysbkfjk-pick-it-up-seattle.vercel.app/street-challenge-preview/index.html
 Commit: 816fb2ec37e73f32b49ee1f1be1fc2034631b3ed
 Deployment READY, syntax check passed. Actual phone layout/voice/entrance review remains pending.
+
+HAND-EQUIPMENT UPDATE — OCTOBER 10
+Tricia requested clearer stepping from wall onto floor, gloves onto hands, and bottle in one hand with grabber in the other. Entrance now lasts 1.7 seconds with a longer forward movement and floor shadow. Separate generated left/right glove sprites are placed at per-avatar hand anchors. Bottle uses one hand anchor, grabber the other. Gear scaling follows avatar height. Gloves must be equipped before the tools. These are accessory overlays on the existing forward-facing/waving sprites, not fully redrawn grasping poses or skeletal walking animation; visual fit still needs phone review.
+Preview READY:
+https://pick-it-up-ijjl-j1uh9bq7k-pick-it-up-seattle.vercel.app/street-challenge-preview/index.html
+Commit: 54c8e4150f68a2cce9d6a1506138ad3cfb26fec2
