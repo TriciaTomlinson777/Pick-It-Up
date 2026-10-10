@@ -68,7 +68,7 @@ export function createPosePlayer(hero, reduced=false, asset="blonde-motion-v1.pn
  async function pickup(key,prop,onHeld){
   if(!await ready||disposed)return;
   const side=key==='grabber'?1:0;
-  const standing={x:side===0?-.10:.075,y:.53};
+  const standing={x:side===0?-.10:.105,y:.53};
   const reaching={x:side===0?-.16:.22,y:.88};
   const rect=hero.getBoundingClientRect();
   const floorY=rect.bottom-rect.height*.03;
