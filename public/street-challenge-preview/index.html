@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Street Challenge · Avatar preview</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#543521;color:#087d83;font-family:ui-rounded,"Arial Rounded MT Bold","Trebuchet MS",sans-serif}button,input{font:inherit}button{cursor:pointer;touch-action:manipulation}button:focus-visible,input:focus-visible{outline:4px solid #e85870;outline-offset:4px}
+.room{position:relative;min-height:100svh;max-width:600px;margin:auto;background:url(room.webp) center center/100% 100% no-repeat;overflow:hidden}
+.panel{position:absolute;inset:19% 16% 24%;display:flex;flex-direction:column;align-items:center;text-align:center}
+.mission{font-family:Georgia,serif;font-size:clamp(12px,3.3vw,19px);line-height:1.35;margin:0 0 12px}.mission strong{display:block;font-size:1.4em}
+h1{font-size:clamp(29px,8vw,48px);line-height:.95;margin:0 0 12px;font-weight:1000;color:#ee6471;text-shadow:1px 2px 0 #fff}
+.toolbar{position:absolute;top:12px;right:14px;display:flex;gap:8px}.round{width:46px;height:46px;border:2px solid #fff9;background:#fff3cf;border-radius:50%;font-size:24px;box-shadow:0 3px 0 #66412355}
+.carousel{width:100%;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;gap:4px;align-items:center;padding:14px 0 8px;flex:1;min-height:100px;touch-action:pan-x pan-y}.carousel::-webkit-scrollbar{display:none}.carousel:before,.carousel:after{content:"";flex:0 0 12%}
+.avatar{position:relative;flex:0 0 70%;scroll-snap-align:center;background:none;border:3px solid transparent;border-radius:40%;height:100%;min-height:120px;max-height:270px;padding:0;transition:transform .25s,background .25s}
+.avatar[aria-pressed=true]{background:radial-gradient(ellipse,#ffda7170,transparent 70%);transform:translateY(-5px)}
+.sprite{display:block;margin:auto;width:min(100%, 170px);height:auto;aspect-ratio:3/4;max-height:100%;background-image:url(player-avatars.webp);background-size:400% 100%;background-repeat:no-repeat;filter:drop-shadow(0 7px 3px #705e2328)}.carousel .sprite.original{width:min(100%,190px);aspect-ratio:3/4}.chosen .sprite{animation:happy .6s ease}
+@keyframes happy{0%,100%{transform:translateY(0) rotate(0)}35%{transform:translateY(-15px) rotate(-5deg)}70%{transform:translateY(-5px) rotate(5deg)}}
+.hand{font-size:30px;height:38px;animation:swipe 1.8s ease-in-out infinite;pointer-events:none}@keyframes swipe{0%,100%{transform:translateX(-30px)}50%{transform:translateX(30px)}}
+.controls{display:flex;align-items:center;justify-content:center;gap:18px}.arrow{background:none;border:none;font-size:29px;color:#07878d;width:44px;height:44px}
+.confirm{border:3px solid #fff9;background:#fbd353;color:#067780;border-radius:50%;width:62px;height:62px;font-size:36px;font-weight:bold;box-shadow:0 5px 0 #c79332}.confirm:disabled{opacity:.4;cursor:default}
+form{width:100%;display:none;flex:1;flex-direction:column;justify-content:center;align-items:center;gap:15px}label{font-size:21px;font-weight:bold}input{width:100%;border:3px solid #0b9295;border-radius:16px;background:#fff9e8;padding:12px;text-align:center;font-size:24px;color:#07575b;min-width:0}
+.final{display:none;flex:1;flex-direction:column;align-items:center;justify-content:center;width:100%}.final .sprite{width:150px;height:200px;max-height:35svh}.hello{font-size:25px;color:#07858b;font-weight:bold;margin:8px 0}.note{font-size:13px;color:#665f50;margin:8px 0}
+.preview{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-size:12px;color:#fff6da;text-shadow:0 1px 3px #000}
+@media(min-width:600px){.room{min-height:900px;height:100svh}.panel{inset:19% 16% 24%}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style></head><body>
+<main class="room">
+<div class="toolbar"><button class="round" id="reset" aria-label="Start again">↺</button><button class="round" id="sound" aria-label="Mute sound" aria-pressed="false">🔊</button></div>
+<section class="panel"><p class="mission"><strong>Imagine…</strong>If every person left every place<br>better than they found it.</p><h1>Street<br>Challenge</h1>
+<div class="carousel" id="carousel" aria-label="Choose your avatar">
+<button class="avatar" aria-label="Choose the purple-jacket avatar" aria-pressed="false" data-index="0"><span class="sprite original" style="background-position:0% 0"></span></button>
+<button class="avatar" aria-label="Choose the blue-cap avatar" aria-pressed="false" data-index="1"><span class="sprite original" style="background-position:33.333% 0"></span></button>
+<button class="avatar" aria-label="Choose the blonde avatar" aria-pressed="false" data-index="2"><span class="sprite original" style="background-position:66.667% 0"></span></button>
+<button class="avatar" aria-label="Choose the blue-hoodie avatar" aria-pressed="false" data-index="3"><span class="sprite original" style="background-position:100% 0"></span></button>
+<button class="avatar" aria-label="Choose the coral-hoodie avatar" aria-pressed="false" data-index="4"><span class="sprite" style="background-image:url(coral-avatar.webp);background-size:contain;background-position:center"></span></button>
+<button class="avatar" aria-label="Choose the orange-jacket avatar" aria-pressed="false" data-index="5"><span class="sprite" style="background-image:url(orange-avatar.webp);background-size:contain;background-position:center"></span></button>
+<button class="avatar" aria-label="Choose the teal-jacket avatar" aria-pressed="false" data-index="6"><span class="sprite" style="background-image:url(teal-glasses-avatar.webp);background-size:contain;background-position:center"></span></button>
+<button class="avatar" aria-label="Choose the yellow-jacket avatar" aria-pressed="false" data-index="7"><span class="sprite" style="background-image:url(yellow-avatar.webp);background-size:contain;background-position:center"></span></button>
+<button class="avatar" aria-label="Choose Mia" aria-pressed="false" data-index="8"><span class="sprite" style="background-image:url(mia-avatar.webp);background-size:contain;background-position:center"></span></button>
+</div><div class="hand" id="hand" aria-hidden="true">👆</div>
+<div class="controls" id="controls"><button class="arrow" id="previous" aria-label="Previous avatar">‹</button><button class="confirm" id="choose" disabled aria-label="Confirm avatar">✓</button><button class="arrow" id="next" aria-label="Next avatar">›</button></div>
+<form id="nameForm"><label for="firstName">First name</label><input id="firstName" name="firstName" autocomplete="given-name" maxlength="30" required><button class="confirm" type="submit" aria-label="Confirm first name">✓</button><button class="arrow" type="button" id="back" aria-label="Back to avatars">←</button></form>
+<div class="final" id="final"><div class="hello" id="hello"></div><span class="sprite" id="hero"></span><p class="note">Your hero is ready!</p><button class="round" id="again" aria-label="Choose again">↺</button></div>
+</section><div class="preview">Opening scene preview · No account created</div></main>
+<script type="module">
+import {createGameAudio} from './audio.mjs';
+const audio=createGameAudio(), $=id=>document.getElementById(id), avatars=[...document.querySelectorAll('.avatar')];
+let selected=null, muted=false, browsing=0;
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function browse(index){browsing=Math.max(0,Math.min(avatars.length-1,index));const card=avatars[browsing],rail=$('carousel');rail.scrollTo({left:card.offsetLeft-rail.offsetLeft-(rail.clientWidth-card.clientWidth)/2,behavior:reduce?'instant':'smooth'});$('hand').style.visibility='hidden'}
+function select(index){selected=index;browsing=index;avatars.forEach((a,i)=>{a.setAttribute('aria-pressed',String(i===index));a.classList.remove('chosen')});void avatars[index].offsetWidth;avatars[index].classList.add('chosen');$('choose').disabled=false;audio.play('select');browse(index)}
+avatars.forEach((a,i)=>a.addEventListener('click',()=>select(i)));
+$('carousel').addEventListener('pointerdown',()=>{$('hand').style.visibility='hidden'});
+$('previous').onclick=()=>browse(browsing-1);$('next').onclick=()=>browse(browsing+1);
+$('sound').onclick=()=>{muted=!muted;audio.setMuted(muted);$('sound').textContent=muted?'🔇':'🔊';$('sound').setAttribute('aria-pressed',String(muted));$('sound').setAttribute('aria-label',muted?'Turn sound on':'Mute sound');if(!muted)audio.play('select')};
+$('choose').onclick=()=>{if(selected===null)return;audio.play('equip');$('carousel').style.display='none';$('controls').style.display='none';$('hand').style.display='none';$('nameForm').style.display='flex';$('firstName').focus()};
+$('back').onclick=()=>{$('nameForm').style.display='none';$('carousel').style.display='flex';$('controls').style.display='flex'};
+$('nameForm').onsubmit=e=>{e.preventDefault();const name=$('firstName').value.trim();if(!name){$('firstName').value='';$('firstName').reportValidity();return}audio.play('celebrate');$('hello').textContent='Hi, '+name+'!';$('hero').className=avatars[selected].querySelector('.sprite').className;$('hero').style.cssText=avatars[selected].querySelector('.sprite').style.cssText;$('nameForm').style.display='none';$('final').style.display='flex';$('hero').style.animation=reduce?'none':'happy .7s ease'};
+function reset(){$('nameForm').style.display='none';$('final').style.display='none';$('carousel').style.display='flex';$('controls').style.display='flex';$('hand').style.display='block';$('hand').style.visibility='visible';$('firstName').value='';selected=null;avatars.forEach(a=>{a.setAttribute('aria-pressed','false');a.classList.remove('chosen')});$('choose').disabled=true;browsing=0;$('carousel').scrollLeft=0}
+$('reset').onclick=reset;$('again').onclick=reset;window.addEventListener('pagehide',()=>audio.dispose());
+</script></body></html>
