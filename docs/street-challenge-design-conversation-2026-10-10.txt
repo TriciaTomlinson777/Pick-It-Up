@@ -1,0 +1,203 @@
+STREET CHALLENGE — DESIGN CONVERSATION AND BUILD RECORD
+Tricia and Coach | October 10, 2026 | America/Phoenix
+
+PURPOSE AND SCOPE
+This record preserves the design discussion available in this session, its decisions, brainstorms, changes, and current implementation. It is a detailed conversation-derived record, not a verbatim export of every chat message. Ideas remain open to rearrangement and enhancement. Do not mistake planned scenes for completed game features.
+
+OUR APPROACH
+We are designing this together. Tricia wants the assistant to contribute ideas as well as follow hers. The game should evolve as we build and preview. We may discuss scenes out of order and arrange a better sequence later. Book and game ideas should reinforce each other, teaching contribution, kindness, and making a difference through play.
+
+Build for phones first: people will carry phones to cleanups. Desktop can later support setup, reviewing results, and possibly uploading before-and-after photos. Keep the design consistent across devices. First version should be simple and easy to catch on. A helper option, where a parent cleans up for a disabled or injured child, is deferred; it might have a separate competition to keep things fair.
+
+Preview the ACTUAL interactive game via links on Tricia's phone. She explicitly prefers playable previews over mockup images. Desktop is also available for Vercel access and testing. We will review and improve as we go.
+
+LOOK, FEEL, AND CORE MESSAGES
+Use the colorful, inviting painterly children's-book world of Captain Can. Very few words; strong pictures, playful fonts, simple tapping and swiping. Add animation, movement, and sounds. First-time motion cues can teach interactions without paragraphs. Touchscreens are the primary interaction.
+
+Opening message, subtle at top:
+“Imagine… If every person left every place better than they found it.”
+
+After each cleanup, subtle at top:
+“One person. One piece. One better place.”
+
+Repeat these two messages gently throughout the games. Tricia wants adults helping children to appreciate the lesson too. For Seattle backgrounds, keep the Space Needle; for Arizona, use a cactus/local setting.
+
+BOOK ART AND SCENE COLLECTION
+Tricia confirmed ownership and permission to use the art from her books. Use different stored book pages so the game does not always show the same scene. Adapt artwork for interactive layouts and remove printed page text where the game needs new content. Photos of pages are references; source-quality art is preferable when available.
+
+Scenes supplied in this conversation:
+• Indoor room/title-credit page: cozy wood, foliage, warm lights, window showing Seattle, a cream panel. Remove the written content and use it for “Street Challenge” and the avatar row.
+• Indoor “Imagine…” mission page: visual reference for subtle opening lesson.
+• Street page “The city sparkled. Well… almost.”: Mia walking down a colorful flower-filled sidewalk, litter visible. Useful for entry into cleanup/photo guidance.
+• Page 46: Mia and Captain Can inviting the reader, “Be a Litter Hero Today!” Useful invitation into the game.
+• Page 48: Mia and Captain Can walking together with Seattle waterfront. Tricia proposed this after Done for now, followed by rewards popping up.
+• Page 47: Mia and Captain Can standing proudly on a clean block. Alternate success scene.
+• Page 45: Mia disposing of a wrapper, “See it. Pick it up. Spot a can. Toss it in.” Useful disposal reminder/empty-bag scene.
+• Page 42: Mia's “Leave the place a little better than I found it” speech bubble. Alternate encouragement scene.
+
+Uploaded reference filenames:
+IMG_E456EE96-BCE8-437C-ABBA-A6BB88B5C730.jpeg
+IMG_8FE17BD4-51A6-48B0-B15C-E92C5B1D8A7E.jpeg
+IMG_B54AC723-08AA-4F4D-9938-EA8ACC936C72.jpeg
+IMG_935BCA2B-319B-4D7A-8F69-0CB27328EC07.jpeg
+IMG_E8AD9ADA-ABFC-4F6D-B803-1D2C31D8FD27.jpeg
+IMG_3BBE766C-DE5D-4D13-B665-2A8D37395B1F.jpeg
+IMG_3729777E-E0A2-4B70-BB4F-E44A98B8829B.jpeg
+IMG_DCB9C9C7-FDC6-48F3-95F2-CA7B6E738EFD.jpeg
+
+PLAYER AVATARS AND LITTER HERO GUIDES
+These are two different roles. Players select their own avatars. Captain Can, Mess Master, Bravo Belle, Ocean Olivia, Outwit Oliver, Brave Beau and other heroes can guide and cheer them on. The grandchildren's hero characters were mistakenly used in an early preview; Tricia corrected this, and the player choices were restored from the website collection.
+
+Original website selector had eight presets:
+Purple Lady, Blue Hat Boy, Blonde Girl, Captain Can, Mess Monster, Blue Boy, Dog, Mia.
+Tricia initially remembered nine. Captain Can and Mess Master are NOT to be offered as player choices in the new design; they remain guides. The old selector used Mess Monster, not Mess Master. The new player collection excludes both the can hero and monster, and excludes the dog as a player.
+
+Evolution in this session:
+1. First playable selection scene used four original human choices.
+2. Tricia asked for two new human choices, replacing hero choices.
+3. Six appeared; Tricia clarified we wanted eight.
+4. She requested two MORE humans.
+5. While those were being created, she also approved including Mia.
+CURRENT TOTAL: NINE HUMAN PLAYER AVATARS.
+
+Current lineup:
+1. Purple jacket, cream shirt, jeans, brown shoulder bag and boots; curly reddish-brown hair.
+2. Backward blue cap, green hoodie, jeans and blue sneakers.
+3. Blonde wavy hair, yellow hoodie, jeans and burgundy sneakers.
+4. Brown hair, blue hoodie, tan shorts and blue sneakers.
+5. Braided pigtails, coral hoodie, teal trousers and yellow sneakers.
+6. Black hair, teal glasses, orange jacket, cream shirt, navy trousers and teal sneakers.
+7. Ponytail, purple glasses, teal jacket, yellow shirt, purple trousers and coral sneakers.
+8. Short curly black hair, yellow jacket, teal trousers and red sneakers.
+9. Mia: puff buns with coral beads, teal jacket, coral/cream striped shirt, navy pants and yellow rain boots.
+
+All should have bodies and match as a collection. Tricia noticed the first four appeared larger than the newer characters. The assistant initially enlarged them in error, then tried reducing them. Tricia said they remained larger and asked to remake them for an exact match. The latest version remakes the first four as individual transparent sprites using a newer avatar as style/proportion reference. It also matches all nine using visible head-to-foot image bounds, rather than merely file dimensions or sprite-sheet cells. Latest phone review is still pending as of this save.
+
+JOINING AND SELECTING AN AVATAR
+Tap “Street Challenge.” A row of avatars appears in the indoor book room. Swipe left/right to browse. A moving finger cue demonstrates swiping/tapping on first entry. Tap a character; it reacts with a small happy motion and sound. A large checkmark confirms the selection.
+
+Type FIRST NAME for a personal connection. Do not assign a random name at joining. At a won challenge level, offer three litter-hero name add-ons beginning with the same letter as the first name. Example: Sofie gets S choices, like Bravo Belle uses B. At later wins, keep the existing name or choose a new/bigger option. We need three ideas for every letter; the full list has not been created.
+
+Keep entry easy with minimal words. Chosen player avatar should be the one who enters the street and receives gear. How to transition from the room to the street remains a scene to build, with walking/movement planned.
+
+GET READY / EQUIPMENT
+Book-style images of gloves, grabber, and reusable water bottle.
+Message: “Are you ready?”
+Tap EACH item to put it onto the chosen avatar. A pointer demonstrates the first time. Motion makes the equipment feel like it is moving onto the character. Equipment selection is planned, not yet functional in the preview.
+
+LOCATION AND START
+Captain Can looks at a map; player taps to confirm before starting. Tricia asked whether the app needs to identify where they are and whether they can confirm. Exact implementation and permission wording are not settled. Keep private location confirmation separate from public displays.
+
+A street with litter appears along with a camera. Captain Can demonstrates taking a BEFORE photo. Other heroes may replace Captain Can as players travel through different games.
+
+Mess Monster can announce the litter count: “Oh no! 5 pieces!!!”
+Add a big “GO!!!” button before they begin the actual cleanup.
+The exact ordering of location, gear, before photo, count and GO remains adjustable; brainstorming order was deliberately flexible.
+
+COUNTS AND BIG MESSES
+Photo litter counts will not always be exact, especially if taken far away. Players can learn to take better pictures through use. A cleanup might be just one piece; it still counts as contribution.
+
+For piles that cannot sensibly be counted, discover a different category instead of pretending there is an exact piece count. Tricia's playful examples:
+“a bigger mess!” — 15 points
+“bbigger mmess!!” — 20 points
+“bbbigger mmmess!!!” — 30 points
+These are brainstorming examples, not final scoring rules. Avoid a long explanation upfront; discovery is part of the fun. Need consistent, fair scoring before actual competition. The current preview does not analyze photos or award real points.
+
+AFTER PHOTO AND CELEBRATION
+Guide player to stand where the original photo was taken. Snap the AFTER photo and show the actual player's photograph. The litter hero says “YOU DID IT!!!!” Then a celebratory count appears.
+
+The count can rapidly run 1, 2, 3, 4, 5, 6, 7, 8, 9, 10… to feel rewarding.
+“Congratulations! Look at the difference you made so far!”
+Show actual BEFORE and AFTER photos side by side. Tricia preferred side by side because it is simpler. Illustrated book scenes frame/celebrate the real photographs; they must not replace proof of the player's cleanup.
+
+BAG PROGRESS AND CONTINUING
+Ideally fill an entire bag and empty it properly. Show a bag getting fuller across cleanups. We might estimate fullness or ask for a bag picture. Tricia proposed the bag picture not be recorded; final method undecided. When full, show the avatar emptying the bag.
+
+Do not force emptying immediately: they may not be home yet. They can empty it when ready. Continuing/finish buttons brainstormed:
+“Next Cleanup!”
+“Empty My Bag!”
+“Keep Going!”
+“Done for now!”
+Need distinguish the purpose of Next Cleanup and Keep Going when finalizing flow.
+
+DONE / RESULTS / REWARDS
+Done for now transitions to a book-style closing scene, then rewards pop up. Use page 48 as one possible ending; rotate alternative book scenes so it is not always identical.
+
+Show cleanup results, accumulated progress, earned rewards, and weekly standing against other players if player data is available. Do not invent other competitors when none exist. Keep emphasis on contribution and making a difference.
+
+Fun reward openings proposed/approved in discussion:
+• A closet: tap to reveal clothes, hats, gloves, outfits and equipment.
+• A treasure chest: coins toward bigger prizes.
+• Badges and stars revealed through something fun to open.
+• Upgraded grabbers and other avatar accessories.
+• Pets: puppy, kitten, bird or lizard that becomes their companion.
+• Gift giving: players can send gifts; details and protections remain future design work.
+Ideas carried forward from earlier discussion in this session: closet/mirror, pet house, surprise pet entrance, pet helping open rewards. These are concepts, not shipped features or a fixed reward economy.
+
+Use sparkle, movement, surprise and sound for reveals. Keep the reward scene colorful, tactile and easy to understand. Rewards should support kindness and returning to contribute. No final earning thresholds, redemption rules, pet progression or gift system have been established.
+
+SOUND AND MOTION
+Requested: sounds, moving pointers, avatar reactions, gear moving onto the character, walking into the street, camera interaction, fast rewarding count, celebrations and reward opening.
+Current implementation includes small happy selection/celebration animations, a swiping finger hint and synthesized selection/equip/celebration cues. Sound begins after interaction and has a mute button. Reduced-motion preference is respected. These are an initial sound foundation, not finished character voice recordings.
+
+CURRENT PLAYABLE PREVIEW — WHAT IS BUILT
+• Colorful indoor book-inspired opening scene and mission statement.
+• Nine human avatars in a swipe carousel with arrow controls.
+• Tap selection, checkmark confirmation, happy motion and sound.
+• First-name entry and personalized greeting with selected avatar.
+• Start-over controls, sound toggle and reduced-motion handling.
+• Remade first four avatar assets and shared visible-height sizing.
+
+This is an OPENING SCENE prototype. It does not yet create accounts, save enrollment, capture cleanup photos, confirm location, score cleanups, run a real leaderboard or deliver rewards. Do not describe these planned features as completed.
+
+LATEST PREVIEW AT THIS SAVE
+https://pick-it-up-ijjl-2j7nx3p9c-pick-it-up-seattle.vercel.app/street-challenge-preview/index.html
+Published preview deployment reported READY. Protected preview may require Vercel sign-in. Tricia had approved the general opening and was about to review the latest remade sizes.
+
+BUILD CONTINUITY
+Repository: TriciaTomlinson777/Pick-It-Up
+Working branch: street-challenge-storybook
+Draft PR: https://github.com/TriciaTomlinson777/Pick-It-Up/pull/9
+Latest saved game commit: 68b2b6bd7333e9b8d35275ae644bb35b3f6db942
+Preview files: public/street-challenge-preview/
+Sound foundation: lib/street-challenge-audio.mjs
+Original Street Challenge preservation PR: https://github.com/TriciaTomlinson777/Pick-It-Up/pull/1
+This work is a preview branch; no merge to main was performed in this conversation.
+
+Technical checks: JavaScript syntax check passed after the latest sizing/render change. Earlier four Street Challenge navigation tests passed. Latest mobile appearance awaits Tricia's review. Do not claim full device/browser testing of the complete game.
+
+NEXT BUILD STEPS
+1. Review the remade nine-avatar selection on Tricia's phone; correct any remaining appearance issue.
+2. Build the gear scene using the selected avatar and tappable gloves/grabber/bottle.
+3. Build the room-to-street transition, guide/camera, location confirmation and GO scene.
+4. Implement actual before/after photo flow and side-by-side celebration.
+5. Add bag progression, continuing/finish options, results and reward openings.
+6. Establish real scoring, participant authentication, photo protections and competition rules before launch.
+These are a proposed implementation order, subject to our ongoing co-design.
+
+OPEN QUESTIONS TO PRESERVE
+• Exact scene order; timing and wording of location confirmation.
+• Three hero-name add-ons for each letter and how later wins expand options.
+• Reliable counting versus pile categories and finalized points.
+• Bag fullness method and whether a temporary bag photo is needed.
+• Differentiation of Next Cleanup and Keep Going.
+• Reward thresholds, pet selection/progression, coin use and gifting rules.
+• Arizona room/street variants and rotating book scene selection.
+• Desktop adaptation and separate helper option/competition later.
+
+TRICIA'S KEY DIRECTIONS, PRESERVED AS QUOTES
+“We are doing this together. We accomplish more together.”
+“Right now we are just brainstorming possible scenes.”
+“They can learn as they go. That makes it more fun with new game discoveries along the way.”
+“Keeping it as easy as possible without words.”
+“I do think they should type in their first name instead of choosing a name. That keeps it personal.”
+“We need to show their actual before and afters on the screens.”
+“I think showing them side by side might be simpler.”
+“We already own this art from our books so we already have permission.”
+“For now, let’s focus on the phone, then adapt it to desktop afterwards.”
+“Instead of mockups I would rather see the actual game preview.”
+“We can include Mia too actually.”
+“Do you want to remake them so they are an exact match?”
+“We should save all of our design conversation so we don’t lose any of it.”
+
+END OF RECORD — update this same record as the design evolves.
