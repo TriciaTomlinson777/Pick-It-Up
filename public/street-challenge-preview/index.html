@@ -140,7 +140,7 @@ gearButtons.forEach((button,index)=>button.onclick=async()=>{
  }
  if(scene!==current)return;equipped.add(key);button.setAttribute('aria-pressed','true');button.querySelector('.gear-check').textContent='✓';busy=false;refreshGear();
 });
-$('gearDone').onclick=()=>{if(equipped.size!==4)return;document.querySelectorAll('.gear-pointer').forEach(p=>p.remove());$('gearStatus').textContent='Ready for the street!';$('gearDone').hidden=true;audio.play('celebrate');$('hero').style.animation='none';void $('hero').offsetWidth;$('hero').style.animation=reduce?'none':'happy .7s ease'};
+$('gearDone').onclick=()=>{if(equipped.size!==4)return;document.querySelectorAll('.gear-pointer').forEach(p=>p.remove());$('gearStatus').textContent='Ready for the challenge!';$('gearDone').hidden=true;audio.play('celebrate');$('hero').style.animation='none';void $('hero').offsetWidth;$('hero').style.animation=reduce?'none':'happy .7s ease'};
 
 let signedIn=false, savedHero=null, savedHeroes=[], activeHeroId=null;
 const picker=document.createElement('div');picker.className='hero-picker';picker.hidden=true;$('signinCard').prepend(picker);
