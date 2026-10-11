@@ -6,12 +6,13 @@ import vm from 'node:vm';
 const source = readFileSync(new URL('../app/auth/game-callback/route.js', import.meta.url), 'utf8')
   .replace(/^import .*;\n/gm, '').replace(/export /g, '');
 
-async function callback(query, failure = false) {
+async function callback(query, failure = false, origin = 'https://preview.vercel.app') {
   const jar = new Map();
   const context = vm.createContext({
     URL, URLSearchParams, process: { env: { NODE_ENV: 'production' } },
     getParticipantSupabaseConfig: () => ({ url: 'https://test.supabase.co', publishableKey: 'public-test-key' }),
     readGameSigninDraft: () => null,
+    getGameOrigin: () => 'https://preview.vercel.app',
     NextResponse: { redirect(url) { return {
       headers: new Map([['Location', url.href]]),
       cookies: { set(name, value, options) { jar.set(name, { value, options }); } },
@@ -31,7 +32,7 @@ async function callback(query, failure = false) {
   });
   vm.runInContext(source, context);
   const response = await context.GET({
-    url: 'https://preview.vercel.app/auth/game-callback' + query,
+    url: origin + '/auth/game-callback' + query,
     cookies: { getAll: () => [] },
   });
   return { response, jar };
@@ -63,4 +64,23 @@ test('missing or rejected credentials never produce a saved sign-in', async () =
     assert.equal(new URL(response.headers.get('Location')).searchParams.get('signin'), 'expired');
     assert.equal(jar.size, 0);
   }
+});
+
+test('a token link on a different deployment moves to the saved game host before verification', async () => {
+  const { response, jar } = await callback('?token_hash=test&draft=test-draft', false, 'https://older.vercel.app');
+  const target = new URL(response.headers.get('Location'));
+  assert.equal(target.origin, 'https://preview.vercel.app');
+  assert.equal(target.pathname, '/auth/game-callback');
+  assert.equal(target.searchParams.get('token_hash'), 'test');
+  assert.equal(target.searchParams.get('draft'), 'test-draft');
+  assert.equal(jar.size, 0);
+});
+test('production and local sign-ins stay on their requested host', () => {
+  const emailSource = readFileSync(new URL('../lib/game-signin-email.js', import.meta.url), 'utf8');
+  const context = vm.createContext({ URL, process: { env: {} } });
+  vm.runInContext(emailSource.slice(emailSource.indexOf('export function getGameOrigin')).replace('export ', ''), context);
+  const request = { url: 'https://pickitupseattle.org/auth/game-callback' };
+  assert.equal(context.getGameOrigin(request, { VERCEL_ENV: 'production', VERCEL_BRANCH_URL: 'pick-it-up-ijjl-git-test.vercel.app' }), 'https://pickitupseattle.org');
+  assert.equal(context.getGameOrigin(request, { VERCEL_ENV: 'preview', VERCEL_BRANCH_URL: 'pick-it-up-ijjl-git-test.vercel.app' }), 'https://pick-it-up-ijjl-git-test.vercel.app');
+  assert.equal(context.getGameOrigin(request, { VERCEL_ENV: 'preview', VERCEL_BRANCH_URL: 'attacker.example' }), 'https://pickitupseattle.org');
 });
