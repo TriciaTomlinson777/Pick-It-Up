@@ -30,7 +30,7 @@ export async function POST(request) {
     if (body.action === 'send') {
       const email = String(body.email || '').trim().toLowerCase();
       if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return reply({ error: 'Check your email address.' }, 400);
-      try { await sendGameSigninEmail(email, request); } catch (error) { return reply({ error: error.status === 429 ? 'Wait a minute, then try again.' : 'We couldn’t send the email. Please try again.' }, error.status === 429 ? 429 : 503); }
+      try { await sendGameSigninEmail(email, request, body.hero); } catch (error) { return reply({ error: error.status === 429 ? 'Wait a minute, then try again.' : 'We couldn’t send the email. Please try again.' }, error.status === 429 ? 429 : 503); }
       return reply({ ok: true });
     }
     const { data: { user }, error } = await client.auth.getUser();
