@@ -60,7 +60,11 @@ export async function POST(request) {
       if (readError) return reply({ error: 'Your heroes couldn’t be loaded. Try again.' }, 503);
       return reply({ ok: true, hero: saved, heroes });
     }
-    if (body.action === 'logout') { await client.auth.signOut(); return reply({ ok: true }); }
+    if (body.action === 'logout') {
+      const { error: logoutError } = await client.auth.signOut({ scope: 'local' });
+      if (logoutError) return reply({ error: 'We couldn’t sign you out. Please try again.' }, 503);
+      return reply({ ok: true });
+    }
     return reply({ error: 'Unknown action.' }, 400);
   } catch { return reply({ error: 'Sign-in is unavailable right now. Please try again.' }, 503); }
 }
