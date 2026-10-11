@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { createParticipantServerClient } from '@/lib/supabase/participant-server';
-import { sendGameSigninEmail } from '@/lib/game-signin-email';
+import { sendGameSigninEmail, getGameOrigin } from '@/lib/game-signin-email';
 export const dynamic = 'force-dynamic';
 const reply = (data, status = 200) => NextResponse.json(data, { status, headers: { 'Cache-Control': 'no-store' } });
 export async function GET(request) {
@@ -14,6 +14,7 @@ export async function GET(request) {
       return reply({
         signedIn: Boolean(user) && !error,
         sessionCookiePresent,
+        gameOrigin: getGameOrigin(request),
         reason: !sessionCookiePresent ? 'missing_cookie' : error ? 'session_rejected' : user ? 'recognized' : 'no_user',
       });
     }
