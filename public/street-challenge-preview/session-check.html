@@ -17,6 +17,6 @@ if(!expected){
  try{line('Saved browser data shared: '+(localStorage.getItem(key)===value?'YES':'NO'))}catch{line('Saved browser data shared: NO')}
  document.getElementById('open').hidden=true;
 }
-fetch('/api/street-challenge/account',{credentials:'same-origin',cache:'no-store'}).then(r=>r.json()).then(r=>line('Game sign-in recognized here: '+(r.signedIn?'YES':'NO'))).catch(()=>line('Game sign-in check: unavailable'));
+fetch('/api/street-challenge/account?diagnostics=1',{credentials:'same-origin',cache:'no-store'}).then(r=>r.json()).then(r=>{line('Game sign-in recognized here: '+(r.signedIn?'YES':'NO'));line('Saved sign-in cookie: '+(r.sessionCookiePresent?'PRESENT':'MISSING'));line('Sign-in status: '+(r.reason||'unavailable'))}).catch(()=>line('Game sign-in check: unavailable'));
 document.getElementById('open').onclick=()=>{const u=new URL(location.href);u.search='';u.searchParams.set('check',value);window.open(u.href,'_blank')};
 </script></html>
