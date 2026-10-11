@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createParticipantServerClient } from '@/lib/supabase/participant-server';
+import { sendGameSigninEmail } from '@/lib/game-signin-email';
 export const dynamic = 'force-dynamic';
 const reply = (data, status = 200) => NextResponse.json(data, { status, headers: { 'Cache-Control': 'no-store' } });
 export async function GET() {
@@ -17,8 +18,7 @@ export async function POST(request) {
     if (body.action === 'send') {
       const email = String(body.email || '').trim().toLowerCase();
       if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return reply({ error: 'Check your email address.' }, 400);
-      const { error } = await client.auth.signInWithOtp({ email, options: { emailRedirectTo: new URL('/auth/game-callback', request.url).href } });
-      if (error) return reply({ error: error.status === 429 ? 'Wait a minute, then try again.' : 'We couldn’t send the email. Please try again.' }, error.status === 429 ? 429 : 503);
+      try { await sendGameSigninEmail(email, request); } catch (error) { return reply({ error: error.status === 429 ? 'Wait a minute, then try again.' : 'We couldn’t send the email. Please try again.' }, error.status === 429 ? 429 : 503); }
       return reply({ ok: true });
     }
     const { data: { user }, error } = await client.auth.getUser();
