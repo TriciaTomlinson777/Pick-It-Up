@@ -4,10 +4,19 @@ import { createParticipantServerClient } from '@/lib/supabase/participant-server
 import { sendGameSigninEmail } from '@/lib/game-signin-email';
 export const dynamic = 'force-dynamic';
 const reply = (data, status = 200) => NextResponse.json(data, { status, headers: { 'Cache-Control': 'no-store' } });
-export async function GET() {
+export async function GET(request) {
   try {
     const client = await createParticipantServerClient();
     const { data: { user }, error } = await client.auth.getUser();
+    if (new URL(request.url).searchParams.get('diagnostics') === '1') {
+      // Report presence only; never expose cookie values, tokens, or player data.
+      const sessionCookiePresent = request.cookies.getAll().some(({ name }) => /^sb-.+-auth-token(?:\.\d+)?$/.test(name));
+      return reply({
+        signedIn: Boolean(user) && !error,
+        sessionCookiePresent,
+        reason: !sessionCookiePresent ? 'missing_cookie' : error ? 'session_rejected' : user ? 'recognized' : 'no_user',
+      });
+    }
     if (!user || error) return reply({ signedIn: false, hero: null, heroes: [] });
     let { data: heroes, error: readError } = await client.from('game_player_profiles').select('id,name,avatar').eq('user_id', user.id).order('created_at');
     if (readError) return reply({ error: 'Your heroes couldn’t be loaded. Try again.' }, 503);
