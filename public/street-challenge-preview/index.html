@@ -227,7 +227,7 @@ async function showHub(h,view='home'){
  if(c){const b=document.createElement('button');b.className='game-button';b.textContent=state.entry?'Return to Challenge ⭐':'Join Challenge 🌟';
  b.onclick=async()=>{
  b.disabled=true;message('');
- try{const latest=await challengeRequest(h.id,'join',{challengeId:c.id});setChallengeState(latest);await resumeHero(h,latest.entry)}
+ try{const latest=await challengeRequest(h.id,'join',{challengeId:c.id});setChallengeState(latest);await resumeHero(h,state.entry?latest.entry:null)}
  catch(e){message(e.message);if(e.ended)showHub(h);else b.disabled=false}
  };picker.append(b);
  }else{const note=document.createElement('p');note.textContent='The next challenge is coming soon!';picker.append(note)}
