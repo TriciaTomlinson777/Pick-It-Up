@@ -86,7 +86,7 @@ import {createPosePlayer} from './pose-player.mjs';
 const audio=createGameAudio(), $=id=>document.getElementById(id), avatars=[...document.querySelectorAll('.avatar')];
 let posePlayer=null, busy=false;
 let selected=null, muted=false, browsing=0;const equipped=new Set();let scene=0;const gearButtons=[...document.querySelectorAll(".gear-button")];const room=document.querySelector(".room"),title=document.querySelector("h1");
-function speakReady(){if(muted||!('speechSynthesis' in window))return;window.speechSynthesis.cancel();const voice=new SpeechSynthesisUtterance('Are you ready?');voice.lang='en-US';voice.rate=.95;voice.pitch=1.15;try{window.speechSynthesis.speak(voice)}catch{}}
+function speakReady(){if(muted||!('speechSynthesis' in window))return;window.speechSynthesis.cancel();const voice=new SpeechSynthesisUtterance('Are you ready?');voice.lang='en-US';voice.rate=1.08;voice.pitch=1.3;voice.volume=1;try{window.speechSynthesis.speak(voice)}catch{}}
 const motionAssets=['purple-motion-v1.png','blue-cap-motion-v1.png','blonde-motion-v1.png','blue-hoodie-motion-v1.png','coral-motion-v1.png','orange-motion-v1.png','teal-glasses-motion-v1.png','yellow-motion-v1.png','mia-motion-v1.png'];
 const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 function browse(index){browsing=Math.max(0,Math.min(avatars.length-1,index));const card=avatars[browsing],rail=$('carousel');rail.scrollTo({left:card.offsetLeft-rail.offsetLeft-(rail.clientWidth-card.clientWidth)/2,behavior:reduce?'instant':'smooth'});$('hand').style.visibility='hidden'}
@@ -154,8 +154,20 @@ async function challengeRequest(heroId,action,data={}){
  const state=await response.json();if(!response.ok){const e=Error(state.error||'Please try again.');e.ended=state.ended;throw e}return state;
 }
 function setChallengeState(state){challengeState=state;clockAnchor=Date.parse(state.serverNow);clockStarted=performance.now();tickClock()}
-let deadlineOpen=false;
-$('deadlineToggle').onclick=()=>{deadlineOpen=!deadlineOpen;tickClock();layoutHeader()};
+let deadlineOpen=false,activeHubView='home';
+function closeDeadline(){deadlineOpen=false;tickClock();layoutHeader()}
+room.addEventListener('click',event=>{
+ const button=event.target.closest('button');
+ if(button&&button.id!=='deadlineToggle')closeDeadline();
+},true);
+$('deadlineToggle').onclick=async()=>{
+ if(deadlineOpen){closeDeadline();return}
+ if(activeHubView==='profile'||activeHubView==='rewards'){
+ const h=savedHeroes.find(h=>h.id===activeHeroId)||savedHero;
+ if(validHero(h))await showHub(h,'home');
+ }
+ deadlineOpen=true;tickClock();layoutHeader();
+};
 function tickClock(){
  const c=challengeState?.challenge,node=$('challengeClock'),toggle=$('deadlineToggle');const available=!!c&&signedIn;toggle.hidden=!available;node.hidden=!available||!deadlineOpen;toggle.setAttribute('aria-expanded',String(available&&deadlineOpen));toggle.setAttribute('aria-label',deadlineOpen?'Hide challenge deadline':'Show challenge deadline');
  if(!c)return;
@@ -214,6 +226,7 @@ $('signinBack').onclick=()=>{reset()};
 $('continueHero').onclick=saveAndContinue;
 $('checkSignin').onclick=async()=>{try{const state=await account();signedIn=state.signedIn;$('signout').hidden=!signedIn;savedHeroes=state.heroes||[];if(signedIn&&savedHeroes.length){const p=loadProgress();const h=savedHeroes.find(h=>h.id===p?.heroId)||savedHeroes.find(h=>h.id===activeHeroId);if(h||savedHeroes.length===1)showHub(h||savedHeroes[0]);else showPlayers();return}if(!signedIn){message('Open the link in your email, then come back here.');return}const h=loadDraft()||state.hero;if(validHero(h)){select(h.avatar);$('firstName').value=h.name;await saveAndContinue()}else reset()}catch(e){message(e.message)}};
 async function showHub(h,view='home'){
+ activeHubView=view;closeDeadline();
  const requestId=++hubRequest;
  await storeProgress();await progressQueue;
  if(requestId!==hubRequest)return;
