@@ -8,6 +8,21 @@ export async function GET(request) {
   try {
     const client = await createParticipantServerClient();
     const { data: { user }, error } = await client.auth.getUser();
+    if (error) {
+      const status = Number(error.status) || 0;
+      console.warn('street-challenge auth', {
+        code: typeof error.code === 'string' ? error.code : 'unknown',
+        status,
+      });
+      // Only definite missing/invalid sessions should ask for a new link.
+      const invalidSession = status === 401 || status === 403
+        || error.name === 'AuthSessionMissingError'
+        || ['session_not_found', 'refresh_token_not_found', 'refresh_token_already_used',
+            'bad_jwt', 'user_not_found'].includes(error.code);
+      if (!invalidSession) {
+        return reply({ unavailable: true, error: 'Your sign-in could not be checked. Try again in a moment.' }, 503);
+      }
+    }
     if (new URL(request.url).searchParams.get('diagnostics') === '1') {
       // Report presence only; never expose cookie values, tokens, or player data.
       const sessionCookiePresent = request.cookies.getAll().some(({ name }) => /^sb-.+-auth-token(?:\.\d+)?$/.test(name));
