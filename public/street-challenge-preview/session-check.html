@@ -1,0 +1,22 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Street Challenge browser check</title><style>body{font:20px system-ui;background:#fff6dc;color:#087c83;margin:0;padding:25px}main{max-width:480px;margin:30px auto}button{font:inherit;background:#ffd45a;border:0;border-radius:18px;padding:16px;color:#087c83;font-weight:700}p{line-height:1.5}small{overflow-wrap:anywhere}li{margin:15px 0}</style><main><h1>Saved sign-in check</h1><p id="intro"></p><ul id="results"></ul><button id="open">Check a new Safari tab</button><p>No email needed. This checks only this browser.</p><small id="address"></small></main><script>
+const key='street-challenge-browser-check-v1',cookieName='street_challenge_browser_check';
+const expected=new URLSearchParams(location.search).get('check');
+const value=expected||crypto.randomUUID();
+const results=document.getElementById('results');
+function line(text){const li=document.createElement('li');li.textContent=text;results.append(li)}
+function savedCookie(){return document.cookie.split('; ').find(v=>v.startsWith(cookieName+'='))?.slice(cookieName.length+1)}
+document.getElementById('address').textContent=location.hostname;
+if(!expected){
+ document.getElementById('intro').textContent='Tap the button once. The new tab will show whether Safari remembers this tab.';
+ try{localStorage.setItem(key,value)}catch{line('Saved browser data is blocked.')}
+ document.cookie=cookieName+'='+value+'; Path=/; Max-Age=3600; SameSite=Lax; Secure';
+ if(savedCookie()!==value)line('Browser cookies are blocked.');
+}else{
+ document.getElementById('intro').textContent='Please send these results to Tricia’s game helper.';
+ line('Cookies shared with the first tab: '+(savedCookie()===value?'YES':'NO'));
+ try{line('Saved browser data shared: '+(localStorage.getItem(key)===value?'YES':'NO'))}catch{line('Saved browser data shared: NO')}
+ document.getElementById('open').hidden=true;
+}
+fetch('/api/street-challenge/account',{credentials:'same-origin',cache:'no-store'}).then(r=>r.json()).then(r=>line('Game sign-in recognized here: '+(r.signedIn?'YES':'NO'))).catch(()=>line('Game sign-in check: unavailable'));
+document.getElementById('open').onclick=()=>{const u=new URL(location.href);u.search='';u.searchParams.set('check',value);window.open(u.href,'_blank')};
+</script></html>
