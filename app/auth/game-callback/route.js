@@ -1,25 +1,53 @@
 import { readGameSigninDraft } from '@/lib/game-signin-email';
 import { NextResponse } from 'next/server';
-import { createParticipantServerClient } from '@/lib/supabase/participant-server';
+import { createServerClient } from '@supabase/ssr';
+import { getParticipantSupabaseConfig } from '@/lib/supabase/participant-config';
+
+export const dynamic = 'force-dynamic';
+
 export async function GET(request) {
   const url = new URL(request.url);
+  const target = new URL('/street-challenge-preview/index.html?signin=expired', url.origin);
+  const response = NextResponse.redirect(target);
+  response.headers.set('Cache-Control', 'private, no-store');
+  response.headers.set('Referrer-Policy', 'no-referrer');
+
   let ok = false;
   try {
     const code = url.searchParams.get('code');
     const tokenHash = url.searchParams.get('token_hash');
-    if (tokenHash) { const client = await createParticipantServerClient(); const { error } = await client.auth.verifyOtp({ token_hash: tokenHash, type: 'email' }); ok = !error; }
-    else if (code) { const client = await createParticipantServerClient(); const { error } = await client.auth.exchangeCodeForSession(code); ok = !error; }
-  } catch {}
-  const response = NextResponse.redirect(new URL('/street-challenge-preview/index.html?signin=' + (ok ? 'success' : 'expired'), url.origin));
-  if (ok) {
-    const hero = readGameSigninDraft(url.searchParams.get('draft'), url.searchParams.get('token_hash'));
-    if (hero) {
-      const target = new URL(response.headers.get('Location'));
-      target.hash = new URLSearchParams({ hero: JSON.stringify(hero) }).toString();
-      response.headers.set('Location', target.href);
+    if (tokenHash || code) {
+      const { url: supabaseUrl, publishableKey } = getParticipantSupabaseConfig();
+      // Write every session-cookie chunk directly onto the redirect we return.
+      // Host-only cookies keep the game session on the preview used to request the link.
+      const client = createServerClient(supabaseUrl, publishableKey, {
+        cookies: {
+          getAll() { return request.cookies.getAll(); },
+          setAll(cookiesToSet) {
+            for (const { name, value, options } of cookiesToSet) {
+              response.cookies.set(name, value, {
+                ...options,
+                path: '/',
+                httpOnly: true,
+                sameSite: 'lax',
+                secure: process.env.NODE_ENV === 'production',
+                maxAge: options?.maxAge === 0 ? 0 : 60 * 60 * 24 * 30,
+              });
+            }
+          },
+        },
+      });
+      const { error } = tokenHash
+        ? await client.auth.verifyOtp({ token_hash: tokenHash, type: 'email' })
+        : await client.auth.exchangeCodeForSession(code);
+      ok = !error;
     }
+  } catch {}
+  if (ok) {
+    target.searchParams.set('signin', 'success');
+    const hero = readGameSigninDraft(url.searchParams.get('draft'), url.searchParams.get('token_hash'));
+    if (hero) target.hash = new URLSearchParams({ hero: JSON.stringify(hero) }).toString();
   }
-  response.headers.set('Cache-Control', 'no-store');
-  response.headers.set('Referrer-Policy', 'no-referrer');
+  response.headers.set('Location', target.href);
   return response;
 }
