@@ -1,4 +1,4 @@
-import { readGameSigninDraft } from '@/lib/game-signin-email';
+import { readGameSigninDraft, getGameOrigin } from '@/lib/game-signin-email';
 import { NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { getParticipantSupabaseConfig } from '@/lib/supabase/participant-config';
@@ -7,6 +7,16 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request) {
   const url = new URL(request.url);
+  const gameOrigin = getGameOrigin(request);
+  // Verify the email token on the same host used by the saved game link.
+  // This must happen before cookies are written: one host cannot set another's cookies.
+  if (url.searchParams.get('token_hash') && url.origin !== gameOrigin) {
+    const canonical = new URL(url.pathname + url.search, gameOrigin);
+    const redirect = NextResponse.redirect(canonical);
+    redirect.headers.set('Cache-Control', 'private, no-store');
+    redirect.headers.set('Referrer-Policy', 'no-referrer');
+    return redirect;
+  }
   const target = new URL('/street-challenge-preview/index.html?signin=expired', url.origin);
   const response = NextResponse.redirect(target);
   response.headers.set('Cache-Control', 'private, no-store');
