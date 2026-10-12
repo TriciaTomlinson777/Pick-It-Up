@@ -63,8 +63,17 @@ export async function POST(request) {
       try { await sendGameSigninEmail(email, request, body.hero); } catch (error) { return reply({ error: error.status === 429 ? 'Wait a minute, then try again.' : 'We couldn’t send the email. Please try again.' }, error.status === 429 ? 429 : 503); }
       return reply({ ok: true });
     }
+    if (body.action === 'verify') {
+      const email = String(body.email || '').trim().toLowerCase();
+      const token = String(body.code || '').trim();
+      if (email.length > 254 || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email) || !/^\\d{6,8}$/.test(token))
+        return reply({ error: 'Enter the verification code from your email.' }, 400);
+      const { data, error: verifyError } = await client.auth.verifyOtp({ email, token, type: 'email' });
+      if (verifyError || !data?.user) return reply({ error: 'That code is invalid or expired. Please request a new code.' }, 401);
+      return reply({ ok: true });
+    }
     const { data: { user }, error } = await client.auth.getUser();
-    if (!user || error) return reply({ error: 'Open your email sign-in link first.' }, 401);
+    if (!user || error) return reply({ error: 'Please verify your email code first.' }, 401);
     if (body.action === 'save') {
       const name = String(body.name || '').trim();
       const avatar = body.avatar;
