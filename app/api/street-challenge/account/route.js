@@ -39,13 +39,13 @@ export async function GET(request) {
       });
     }
     if (!user || error) return reply({ signedIn: false, hero: null, heroes: [] });
-    let { data: heroes, error: readError } = await client.from('game_player_profiles').select('id,name,avatar').eq('user_id', user.id).order('created_at');
+    let { data: heroes, error: readError } = await client.from('game_player_profiles').select('id,name,avatar,hero_level,hero_title,total_items,cleanup_count').eq('user_id', user.id).order('created_at');
     if (readError) return reply({ error: 'Your heroes couldn’t be loaded. Try again.' }, 503);
     const legacy = user.user_metadata?.game_hero;
     if (!heroes.length && legacy && typeof legacy.name === 'string' && legacy.name.length <= 30 && Number.isInteger(legacy.avatar) && legacy.avatar >= 0 && legacy.avatar <= 8) {
       const { error: migrateError } = await client.from('game_player_profiles').upsert({ id: user.id, user_id: user.id, name: legacy.name, avatar: legacy.avatar }, { onConflict: 'id', ignoreDuplicates: true });
       if (migrateError) return reply({ error: 'Your hero couldn’t be loaded. Try again.' }, 503);
-      const result = await client.from('game_player_profiles').select('id,name,avatar').eq('user_id', user.id).order('created_at');
+      const result = await client.from('game_player_profiles').select('id,name,avatar,hero_level,hero_title,total_items,cleanup_count').eq('user_id', user.id).order('created_at');
       if (result.error) return reply({ error: 'Your heroes couldn’t be loaded. Try again.' }, 503);
       heroes = result.data;
     }
@@ -74,11 +74,28 @@ export async function POST(request) {
       const query = body.heroId
         ? client.from('game_player_profiles').update({ name, avatar }).eq('id', body.heroId).eq('user_id', user.id)
         : client.from('game_player_profiles').insert({ ...hero, user_id: user.id });
-      const { data: saved, error: saveError } = await query.select('id,name,avatar').single();
+      const { data: saved, error: saveError } = await query.select('id,name,avatar,hero_level,hero_title,total_items,cleanup_count').single();
       if (saveError || !saved) return reply({ error: 'Your hero couldn’t be saved. Try again.' }, 503);
-      const { data: heroes, error: readError } = await client.from('game_player_profiles').select('id,name,avatar').eq('user_id', user.id).order('created_at');
+      const { data: heroes, error: readError } = await client.from('game_player_profiles').select('id,name,avatar,hero_level,hero_title,total_items,cleanup_count').eq('user_id', user.id).order('created_at');
       if (readError) return reply({ error: 'Your heroes couldn’t be loaded. Try again.' }, 503);
       return reply({ ok: true, hero: saved, heroes });
+    }
+    if (body.action === 'resume') {
+      const heroId = String(body.heroId || '');
+      if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(heroId)) return reply({ error: 'Choose one of your saved heroes.' }, 400);
+      const { data: hero, error: heroError } = await client.from('game_player_profiles')
+        .select('id,name,avatar,hero_level,hero_title,total_items,cleanup_count')
+        .eq('id', heroId).eq('user_id', user.id).maybeSingle();
+      if (heroError) return reply({ error: 'Your hero couldn’t be loaded. Try again.' }, 503);
+      if (!hero) return reply({ error: 'Choose one of your saved heroes.' }, 404);
+      const { error: historyError } = await client.rpc('record_game_player_login', { p_hero_id: heroId });
+      if (historyError) return reply({ error: 'Your saved progress couldn’t be recorded. Try again.' }, 503);
+      const { data: latestHistory, error: latestError } = await client.from('game_player_history')
+        .select('event_type,hero_level,hero_title,total_items,cleanup_count,challenge_id,screen,gear,done,star_color,recorded_at')
+        .eq('hero_id', heroId).eq('user_id', user.id)
+        .order('recorded_at', { ascending: false }).limit(1).maybeSingle();
+      if (latestError) return reply({ error: 'Your saved progress couldn’t be loaded. Try again.' }, 503);
+      return reply({ ok: true, hero, latestHistory });
     }
     if (body.action === 'logout') {
       const { error: logoutError } = await client.auth.signOut({ scope: 'local' });
