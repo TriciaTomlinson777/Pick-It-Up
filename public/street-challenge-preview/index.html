@@ -59,6 +59,10 @@ form{width:100%;display:none;flex:1;flex-direction:column;justify-content:center
 .room.booting > :not(.boot-message){visibility:hidden!important}
 .boot-message{display:none;position:absolute;inset:0;z-index:100;align-items:center;justify-content:center;text-align:center;background:#fff3d8;color:#087c83;font-weight:800;font-size:21px;padding:20px}
 .room.booting .boot-message{display:flex}
+/* Welcome-back hub: lower the text/button group and give the avatar more presence. */
+.room.signing.hub .panel{inset:25% 14% 16%}
+.room.signing.hub #signinHero{height:150px;width:160px;max-width:100%}
+.room.signing.hub #signinGreeting{margin-top:18px}
 /* Lower completed-stage copy only; preserve the saved character and equipment position. */
 .room.equipping:has(#gearDone[hidden]) h1,
 .room.equipping:has(#gearDone[hidden]) .hello{position:relative;top:42px}
