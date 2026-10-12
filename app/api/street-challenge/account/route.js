@@ -70,6 +70,14 @@ export async function POST(request) {
       const avatar = body.avatar;
       if (!name || name.length > 30 || !Number.isInteger(avatar) || avatar < 0 || avatar > 8) return reply({ error: 'Choose your hero and first name.' }, 400);
       if (body.heroId && !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(body.heroId)) return reply({ error: 'Choose one of your saved heroes.' }, 400);
+      // An email account may have several family players, but never duplicate player names.
+      const { data: existingNames, error: nameError } = await client.from('game_player_profiles')
+        .select('id,name').eq('user_id', user.id);
+      if (nameError) return reply({ error: 'Your family players couldn’t be checked. Try again.' }, 503);
+      const duplicate = (existingNames || []).some(player =>
+        player.id !== body.heroId && player.name.trim().toLocaleLowerCase() === name.toLocaleLowerCase()
+      );
+      if (duplicate) return reply({ error: 'That player already exists. Choose their profile or use a different name.' }, 409);
       const hero = { id: body.heroId || randomUUID(), name, avatar };
       const query = body.heroId
         ? client.from('game_player_profiles').update({ name, avatar }).eq('id', body.heroId).eq('user_id', user.id)
