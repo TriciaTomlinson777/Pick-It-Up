@@ -6,6 +6,7 @@ export const dynamic = 'force-dynamic';
 const reply = (data, status = 200) => NextResponse.json(data, { status, headers: { 'Cache-Control': 'no-store' } });
 export async function GET(request) {
   try {
+    const sessionCookiePresent = request.cookies.getAll().some(({ name }) => /^sb-.+-auth-token(?:\.\d+)?$/.test(name));
     const client = await createParticipantServerClient();
     const { data: { user }, error } = await client.auth.getUser();
     if (error) {
@@ -13,6 +14,11 @@ export async function GET(request) {
       console.warn('street-challenge auth', {
         code: typeof error.code === 'string' ? error.code : 'unknown',
         status,
+        name: typeof error.name === 'string' ? error.name : 'unknown',
+        sessionCookiePresent,
+        reason: !sessionCookiePresent ? 'missing_cookie' : 'session_rejected',
+        requestHost: new URL(request.url).hostname,
+        gameHost: new URL(getGameOrigin(request)).hostname,
       });
       // Only definite missing/invalid sessions should ask for a new link.
       const invalidSession = status === 401 || status === 403
@@ -25,7 +31,6 @@ export async function GET(request) {
     }
     if (new URL(request.url).searchParams.get('diagnostics') === '1') {
       // Report presence only; never expose cookie values, tokens, or player data.
-      const sessionCookiePresent = request.cookies.getAll().some(({ name }) => /^sb-.+-auth-token(?:\.\d+)?$/.test(name));
       return reply({
         signedIn: Boolean(user) && !error,
         sessionCookiePresent,
