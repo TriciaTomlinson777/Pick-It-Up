@@ -2,6 +2,7 @@ import { readGameSigninDraft, getGameOrigin } from '@/lib/game-signin-email';
 import { NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { getParticipantSupabaseConfig } from '@/lib/supabase/participant-config';
+import { randomUUID } from 'node:crypto';
 
 export const dynamic = 'force-dynamic';
 
@@ -60,6 +61,15 @@ export async function GET(request) {
     }
   } catch {}
   if (ok) {
+    // Check the browser's first return before claiming the sign-in was saved.
+    // The probe is not an authentication credential and grants no access.
+    const check = randomUUID();
+    response.cookies.set('game_cookie_delivery_check', check, {
+      path: '/auth/game-session-check', httpOnly: true, sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production', maxAge: 300,
+    });
+    target.pathname = '/auth/game-session-check';
+    target.searchParams.set('check', check);
     target.searchParams.set('signin', 'success');
     const hero = readGameSigninDraft(url.searchParams.get('draft'), url.searchParams.get('token_hash'));
     if (hero) target.hash = new URLSearchParams({ hero: JSON.stringify(hero) }).toString();

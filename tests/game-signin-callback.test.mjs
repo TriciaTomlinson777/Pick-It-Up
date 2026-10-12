@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
+import { randomUUID } from 'node:crypto';
 
 const source = readFileSync(new URL('../app/auth/game-callback/route.js', import.meta.url), 'utf8')
   .replace(/^import .*;\n/gm, '').replace(/export /g, '');
@@ -9,7 +10,7 @@ const source = readFileSync(new URL('../app/auth/game-callback/route.js', import
 async function callback(query, failure = false, origin = 'https://preview.vercel.app', existingSession = false) {
   const jar = new Map();
   const context = vm.createContext({
-    URL, URLSearchParams, process: { env: { NODE_ENV: 'production' } },
+    URL, URLSearchParams, randomUUID, process: { env: { NODE_ENV: 'production' } },
     getParticipantSupabaseConfig: () => ({ url: 'https://test.supabase.co', publishableKey: 'public-test-key' }),
     readGameSigninDraft: () => null,
     getGameOrigin: () => 'https://preview.vercel.app',
@@ -44,6 +45,8 @@ test('email and code callbacks persist secure cookie chunks on the returned redi
     const target = new URL(response.headers.get('Location'));
     assert.equal(target.host, 'preview.vercel.app');
     assert.equal(target.searchParams.get('signin'), 'success');
+    assert.equal(target.pathname, '/auth/game-session-check');
+    assert.equal(target.searchParams.get('check'), jar.get('game_cookie_delivery_check').value);
     assert.equal(response.headers.get('Cache-Control'), 'private, no-store');
     for (const name of ['sb-session.0', 'sb-session.1']) {
       const { options } = jar.get(name);
