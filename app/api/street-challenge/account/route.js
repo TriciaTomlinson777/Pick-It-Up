@@ -66,7 +66,7 @@ export async function POST(request) {
     if (body.action === 'verify') {
       const email = String(body.email || '').trim().toLowerCase();
       const token = String(body.code || '').trim();
-      if (email.length > 254 || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email) || !/^\\d{6,8}$/.test(token))
+      if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !/^\d{6,8}$/.test(token))
         return reply({ error: 'Enter the verification code from your email.' }, 400);
       const { data, error: verifyError } = await client.auth.verifyOtp({ email, token, type: 'email' });
       if (verifyError || !data?.user) return reply({ error: 'That code is invalid or expired. Please request a new code.' }, 401);
