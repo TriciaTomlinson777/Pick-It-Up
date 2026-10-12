@@ -24,6 +24,8 @@ export async function GET(request) {
   response.headers.set('Referrer-Policy', 'no-referrer');
 
   let ok = false;
+  let cookiesWritten = 0;
+  let verification = 'not_attempted';
   try {
     const code = url.searchParams.get('code');
     const tokenHash = url.searchParams.get('token_hash');
@@ -36,6 +38,7 @@ export async function GET(request) {
           getAll() { return request.cookies.getAll(); },
           setAll(cookiesToSet) {
             for (const { name, value, options } of cookiesToSet) {
+              cookiesWritten += 1;
               response.cookies.set(name, value, {
                 ...options,
                 path: '/',
@@ -52,6 +55,7 @@ export async function GET(request) {
         ? await client.auth.verifyOtp({ token_hash: tokenHash, type: 'email' })
         : await client.auth.exchangeCodeForSession(code);
       ok = !error;
+      verification = error ? `rejected:${String(error.code || error.name || 'unknown').slice(0, 64)}` : 'verified';
       // A used email link must not send a still-signed-in player back to sign-in.
       // Validate the existing session with Auth; never trust cookie presence alone.
       if (error) {
@@ -59,7 +63,14 @@ export async function GET(request) {
         if (user && !sessionError) target.searchParams.set('signin', 'success');
       }
     }
-  } catch {}
+  } catch (error) {
+    verification = `exception:${String(error?.name || 'unknown').slice(0, 64)}`;
+  }
+  // Log only delivery metadata. Never log email addresses, tokens, cookie names or values.
+  console.info('street-challenge callback delivery', {
+    verification, cookiesWritten, callbackHost: url.hostname,
+    gameHost: new URL(gameOrigin).hostname, redirectToCheck: ok,
+  });
   if (ok) {
     // Check the browser's first return before claiming the sign-in was saved.
     // The probe is not an authentication credential and grants no access.
