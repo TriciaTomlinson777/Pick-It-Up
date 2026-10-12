@@ -388,7 +388,7 @@ const toolbar=document.querySelector('.toolbar'),clock=$('challengeClock');
 function layoutHeader(){room.style.setProperty('--clock-top',(toolbar.offsetTop+toolbar.offsetHeight+10)+'px');room.style.setProperty('--header-bottom',(clock.offsetTop+clock.offsetHeight+16)+'px')}
 const headerObserver=new ResizeObserver(layoutHeader);headerObserver.observe(toolbar);headerObserver.observe(clock);layoutHeader();
 restoreAccount().then(()=>{if(new URLSearchParams(location.search).has('session_check'))showSessionCheck()});
-window.addEventListener('pageshow',event=>{if(event.persisted)restoreAccount()});
+window.addEventListener('pageshow',event=>{if(event.persisted&&!room.classList.contains('equipping'))restoreAccount()});
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&!$('emailSent').hidden)restoreAccount()});
-$('reset').onclick=reset;$('again').onclick=reset;window.addEventListener('pagehide',()=>{storeProgress();posePlayer?.dispose();audio.dispose();if('speechSynthesis' in window)window.speechSynthesis.cancel()});
+$('reset').onclick=reset;$('again').onclick=reset;window.addEventListener('pagehide',()=>{storeProgress();if('speechSynthesis' in window)window.speechSynthesis.cancel()});
 </script></body></html>
