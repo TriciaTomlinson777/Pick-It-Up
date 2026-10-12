@@ -2,7 +2,7 @@
 <html lang="en"><head><base href="/street-challenge-preview/"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Street Challenge · Get ready</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&display=swap');
-*{box-sizing:border-box}body{margin:0;background:#543521;color:#087d83;font-family:ui-rounded,"Arial Rounded MT Bold","Trebuchet MS",sans-serif}button,input{font:inherit}button{cursor:pointer;touch-action:manipulation}button:focus-visible,input:focus-visible{outline:4px solid #e85870;outline-offset:4px}
+*{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;background:#543521;color:#087d83;font-family:ui-rounded,"Arial Rounded MT Bold","Trebuchet MS",sans-serif}button,input{font:inherit}button{cursor:pointer;touch-action:manipulation}button:focus-visible,input:focus-visible{outline:4px solid #e85870;outline-offset:4px}
 .room{position:relative;min-height:100svh;max-width:600px;margin:auto;background:url(room.webp) center center/100% 100% no-repeat;overflow:hidden}
 .panel{position:absolute;inset:19% 16% 24%;display:flex;flex-direction:column;align-items:center;text-align:center}
 @font-face{font-family:Storybook;src:local("Chalkboard SE"),local("Comic Sans MS"),local("Chalkboard")}h1{font-family:"Baloo 2",Storybook,"Arial Rounded MT Bold",ui-rounded,sans-serif;font-weight:900;letter-spacing:.01em;-webkit-text-stroke:.5px currentColor}
@@ -71,7 +71,7 @@ form{width:100%;display:none;flex:1;flex-direction:column;justify-content:center
 </div><div class="hand" id="hand" aria-hidden="true">👆</div>
 <div class="controls" id="controls"><button class="arrow" id="previous" aria-label="Previous avatar">‹</button><button class="confirm" id="choose" disabled aria-label="Confirm avatar">✓</button><button class="arrow" id="next" aria-label="Next avatar">›</button></div>
 <form id="nameForm"><label for="firstName">First name</label><input id="firstName" name="firstName" autocomplete="given-name" maxlength="30" required><button class="confirm" type="submit" aria-label="Confirm first name">✓</button><button class="arrow" type="button" id="back" aria-label="Back to avatars">←</button></form>
-<div class="signin-card" id="signinCard"><span class="sprite" id="signinHero"></span><p id="signinGreeting" class="hello"></p><form id="emailForm"><label for="email">Email</label><input id="email" type="email" autocomplete="email" maxlength="254" required><button class="game-button" id="sendLink" type="submit">Send sign-in link ✨</button></form><div id="emailSent" hidden><div class="envelope" aria-hidden="true">💌</div><p class="hello">Check your email!</p><p>Tap your link to jump back in.</p><button class="game-button" id="checkSignin">I’m back! ⭐</button><button class="text-button" id="changeEmail">Change email</button></div><p class="signin-message" id="signinMessage" role="status" aria-live="polite" hidden></p><button class="game-button" id="continueHero" hidden>Let’s go! 🌟</button><button class="text-button" id="signinBack">← Back</button></div><div class="final" id="final"><div class="hello" id="hello"></div><div class="table-front" aria-hidden="true"></div><div class="floor-shadow" aria-hidden="true"></div><div class="actor" id="actor"><span class="sprite" id="hero"></span></div>
+<div class="signin-card" id="signinCard"><span class="sprite" id="signinHero"></span><p id="signinGreeting" class="hello"></p><form id="emailForm"><label for="email">Email</label><input id="email" type="email" autocomplete="email" maxlength="254" required><button class="game-button" id="sendLink" type="submit">Send sign-in link ✨</button></form><div id="emailSent" hidden><div class="envelope" aria-hidden="true">💌</div><p class="hello">Check your email!</p><p>Tap your link to jump back in.</p><button class="game-button" id="checkSignin">I’m back! ⭐</button><button class="text-button" id="changeEmail">Change email</button></div><p class="signin-message" id="signinMessage" role="status" aria-live="polite" hidden></p><button class="game-button" id="continueHero" hidden>Let’s go! 🌟</button><button class="text-button" id="signinCheck" hidden>Check saved sign-in</button><button class="text-button" id="signinBack">← Back</button></div><div class="final" id="final"><div class="hello" id="hello"></div><div class="table-front" aria-hidden="true"></div><div class="floor-shadow" aria-hidden="true"></div><div class="actor" id="actor"><span class="sprite" id="hero"></span></div>
 <div class="gear-row" id="gearRow">
 <button class="gear-button" data-gear="gloves" aria-label="Equip cleanup gloves" aria-pressed="false"><span class="gear-art" style="background-position:0% 0"></span><span class="gear-check" aria-hidden="true"></span></button>
 <button class="gear-button" data-gear="grabber" aria-label="Equip litter grabber" aria-pressed="false"><span class="gear-art" style="background-position:50% 0"></span><span class="gear-check" aria-hidden="true"></span></button>
@@ -140,7 +140,8 @@ gearButtons.forEach((button,index)=>button.onclick=async()=>{
  }
  if(scene!==current)return;equipped.add(key);button.setAttribute('aria-pressed','true');button.querySelector('.gear-check').textContent='✓';busy=false;refreshGear();storeProgress();
 });
-$('gearDone').onclick=()=>{if(equipped.size!==4)return;document.querySelectorAll('.gear-pointer').forEach(p=>p.remove());$('gearStatus').textContent='Ready for the challenge!';$('gearDone').hidden=true;storeProgress();audio.play('celebrate');$('hero').style.animation='none';void $('hero').offsetWidth;$('hero').style.animation=reduce?'none':'happy .7s ease'};
+function showReady(){document.querySelectorAll('.gear-pointer').forEach(p=>p.remove());$('gearRow').hidden=true;$('gearDone').hidden=true;title.textContent='Ready for the challenge!';$('gearStatus').textContent='All set!'}
+$('gearDone').onclick=()=>{if(equipped.size!==4)return;showReady();storeProgress();audio.play('celebrate');$('hero').style.animation='none';void $('hero').offsetWidth;$('hero').style.animation=reduce?'none':'happy .7s ease'};
 
 let signedIn=false, savedHero=null, savedHeroes=[], activeHeroId=null;
 const switchUser=document.createElement('button');switchUser.id='switchUser';switchUser.className='text-button';switchUser.textContent='Switch user';switchUser.hidden=true;switchUser.onclick=showPlayers;$('signinCard').append(switchUser);
@@ -192,7 +193,7 @@ function loadProgress(){try{return JSON.parse(localStorage.getItem(progressKey))
 async function resumeHero(h,p){
  restoringProgress=true;equipped.clear();document.querySelectorAll('.attached').forEach(n=>n.remove());
  gearButtons.forEach(b=>{b.disabled=false;b.setAttribute('aria-pressed','false');b.querySelector('.gear-check').textContent=''});
- $('gearDone').hidden=false;posePlayer?.dispose();posePlayer=null;activeHeroId=h.id;select(h.avatar);$('firstName').value=h.name;
+ $('gearDone').hidden=false;$('gearRow').hidden=false;posePlayer?.dispose();posePlayer=null;activeHeroId=h.id;select(h.avatar);$('firstName').value=h.name;
  $('carousel').style.display='none';$('controls').style.display='none';$('hand').style.display='none';$('welcomeBack').hidden=true;
  $('signinCard').style.display='none';room.classList.remove('signing');
  try{
@@ -204,7 +205,7 @@ async function resumeHero(h,p){
  if(key==='gloves'&&posePlayer)await posePlayer.gloves();else attachGear(key);
  equipped.add(key);const btn=gearButtons.find(b=>b.dataset.gear===key);btn.setAttribute('aria-pressed','true');btn.querySelector('.gear-check').textContent='✓';
  }
- refreshGear();if(p.done&&equipped.size===4){$('gearDone').hidden=true;$('gearStatus').textContent='Ready for the challenge!'}
+ refreshGear();if(p.done&&equipped.size===4)showReady();
  }
  }finally{restoringProgress=false}tickClock();storeProgress();
 }
@@ -235,7 +236,7 @@ async function showSessionCheck(){
  const response=await fetch('/api/street-challenge/account?diagnostics=1',{credentials:'same-origin',cache:'no-store'});
  const data=await response.json();
  if(!response.ok||data.unavailable)throw Error('The check is unavailable. Please try again.');
- result.textContent='This game tab: '+(data.signedIn?'SIGNED IN':'NOT SIGNED IN')+'\nSaved sign-in cookie: '+(data.sessionCookiePresent?'PRESENT':'MISSING');
+ result.textContent='This game tab: '+(data.signedIn?'SIGNED IN':'NOT SIGNED IN')+'\nSaved sign-in cookie: '+(data.sessionCookiePresent?'PRESENT':'MISSING')+'\nStatus: '+data.reason+'\nGame address: '+location.hostname;
  }catch(e){result.textContent=e.message}
 }
 
@@ -273,13 +274,14 @@ function showAccountRetry(text){
 }
 
 async function account(action,data={}){const response=await fetch('/api/street-challenge/account',{method:action?'POST':'GET',credentials:'same-origin',headers:action?{'Content-Type':'application/json'}:undefined,body:action?JSON.stringify({action,...data}):undefined,cache:'no-store'});const result=await response.json();if(!response.ok||result.unavailable)throw Error(result.error||'Your saved game couldn’t be loaded. Tap I’m back to try again.');return result}
-function showSignin(){room.classList.remove('hub');$('switchUser').hidden=true;picker.hidden=true;room.classList.remove('equipping');room.classList.add('signing');$('welcomeBack').hidden=true;$('carousel').style.display='none';$('controls').style.display='none';$('hand').style.display='none';$('nameForm').style.display='none';$('final').style.display='none';$('signinCard').style.display='flex';$('signinBack').hidden=false;title.textContent=signedIn?'Your hero is saved!':'Save your hero!';$('signinHero').replaceChildren();if(selected!==null)$('signinHero').append(avatars[selected].querySelector('img').cloneNode(true));$('signinGreeting').textContent=$('firstName').value.trim()?'Hi, '+$('firstName').value.trim()+'!':'';$('emailForm').hidden=signedIn;$('emailSent').hidden=true;$('continueHero').hidden=!signedIn;message('')}
+function showSignin(){room.classList.remove('hub');$('switchUser').hidden=true;picker.hidden=true;room.classList.remove('equipping');room.classList.add('signing');$('welcomeBack').hidden=true;$('carousel').style.display='none';$('controls').style.display='none';$('hand').style.display='none';$('nameForm').style.display='none';$('final').style.display='none';$('signinCard').style.display='flex';$('signinBack').hidden=false;title.textContent=signedIn?'Your hero is saved!':'Save your hero!';$('signinHero').replaceChildren();if(selected!==null)$('signinHero').append(avatars[selected].querySelector('img').cloneNode(true));$('signinGreeting').textContent=$('firstName').value.trim()?'Hi, '+$('firstName').value.trim()+'!':'';$('emailForm').hidden=signedIn;$('signinCheck').hidden=signedIn;$('emailSent').hidden=true;$('continueHero').hidden=!signedIn;message('')}
 let savingHero=false;
 async function saveAndContinue(){if(selected===null||savingHero)return;savingHero=true;try{const result=await account('save',{name:$('firstName').value.trim(),avatar:selected,heroId:activeHeroId});savedHero=result.hero;savedHeroes=result.heroes;activeHeroId=savedHero.id;try{localStorage.removeItem(draftKey)}catch{}$('signinCard').style.display='none';room.classList.remove('signing');showHub(savedHero)}catch(e){showSignin();message(e.message)}finally{savingHero=false}}
 $('nameForm').onsubmit=async e=>{e.preventDefault();activeHeroId=null;if(!$('firstName').value.trim())return;storeDraft();showSignin();if(signedIn)await saveAndContinue()};
 $('emailForm').onsubmit=async e=>{e.preventDefault();$('sendLink').disabled=true;message('');storeDraft();try{await account('send',{email:$('email').value.trim(),hero:{name:$('firstName').value.trim(),avatar:selected}});$('emailForm').hidden=true;$('emailSent').hidden=false;audio.play('select')}catch(e){message(e.message)}finally{$('sendLink').disabled=false}};
 $('changeEmail').onclick=()=>{$('emailSent').hidden=true;$('emailForm').hidden=false;message('');$('email').focus()};
 $('signinBack').onclick=()=>{reset()};
+$('signinCheck').onclick=showSessionCheck;
 $('continueHero').onclick=saveAndContinue;
 $('checkSignin').onclick=async()=>{try{const state=await account();signedIn=state.signedIn;$('signout').hidden=!signedIn;savedHeroes=state.heroes||[];if(signedIn&&savedHeroes.length){const p=loadProgress();const h=savedHeroes.find(h=>h.id===p?.heroId)||savedHeroes.find(h=>h.id===activeHeroId);if(h||savedHeroes.length===1)showHub(h||savedHeroes[0]);else showPlayers();return}if(!signedIn){message('Open the link in your email, then come back here.');return}const h=loadDraft()||state.hero;if(validHero(h)){select(h.avatar);$('firstName').value=h.name;await saveAndContinue()}else reset()}catch(e){message(e.message)}};
 async function showHub(h,view='home'){
@@ -325,5 +327,7 @@ const toolbar=document.querySelector('.toolbar'),clock=$('challengeClock');
 function layoutHeader(){room.style.setProperty('--clock-top',(toolbar.offsetTop+toolbar.offsetHeight+10)+'px');room.style.setProperty('--header-bottom',(clock.offsetTop+clock.offsetHeight+16)+'px')}
 const headerObserver=new ResizeObserver(layoutHeader);headerObserver.observe(toolbar);headerObserver.observe(clock);layoutHeader();
 restoreAccount().then(()=>{if(new URLSearchParams(location.search).has('session_check'))showSessionCheck()});
+window.addEventListener('pageshow',event=>{if(event.persisted)restoreAccount()});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&!$('emailSent').hidden)restoreAccount()});
 $('reset').onclick=reset;$('again').onclick=reset;window.addEventListener('pagehide',()=>{storeProgress();posePlayer?.dispose();audio.dispose();if('speechSynthesis' in window)window.speechSynthesis.cancel()});
 </script></body></html>
