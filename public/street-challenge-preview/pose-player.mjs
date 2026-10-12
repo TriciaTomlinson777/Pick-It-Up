@@ -37,6 +37,7 @@ export function createPosePlayer(hero, reduced=false, asset="blonde-motion-v1.pn
   ],{duration:1500,easing:'linear'});activeAnimations.add(animation);
   await play([[0,200],[1,170],[2,620],[3,330],[4,180]]);activeAnimations.delete(animation);
  }
+ async function restoreGloves(){if(!await ready||disposed)return;draw(11)}
  async function gloves(){if(!await ready||disposed)return;if(reduced){draw(11);return}
   await play([[5,650],[6,480],[7,650],[8,550],[9,650],[10,550],[11,250]]);
  }
@@ -81,5 +82,5 @@ export function createPosePlayer(hero, reduced=false, asset="blonde-motion-v1.pn
   }
  }
  function dispose(){disposed=true;actor.style.transform='';actor.classList.remove('at-table');observer.disconnect();activeAnimations.forEach(a=>a.cancel());canvas.remove();hero.classList.remove('pose-active');actor.classList.remove('pose-motion')}
- return {ready,jump,gloves,walkToTable,pickup,dispose};
+ return {ready,jump,gloves,restoreGloves,walkToTable,pickup,dispose};
 }
