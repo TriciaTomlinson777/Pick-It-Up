@@ -381,9 +381,33 @@ async function showHub(h,view='home',autoResume=false){
  }else{const note=document.createElement('p');note.textContent='The next challenge is coming soon!';picker.append(note)}
 
  }catch(e){if(requestId!==hubRequest)return;picker.replaceChildren();message(e.message);const retry=document.createElement('button');retry.className='game-button';retry.textContent='Try again';retry.onclick=()=>showHub(h);picker.append(retry)}
+ }else if(view==='profile'){
+ const heading=document.createElement('p');heading.className='hello';heading.textContent='Family Players';picker.append(heading);
+ const note=document.createElement('p');note.textContent='Each player has their own avatar and Challenge progress under this email.';picker.append(note);
+ const cards=document.createElement('div');cards.className='hero-picker';cards.style.maxHeight='32svh';
+ for(const player of savedHeroes){
+  if(!validHero(player))continue;
+  const card=document.createElement('button');card.type='button';card.className='hero-card';
+  if(player.id===h.id)card.style.borderColor='#e85870';
+  const img=avatars[player.avatar].querySelector('img').cloneNode(true);img.removeAttribute('style');
+  const name=document.createElement('span');name.textContent=player.name+(player.id===h.id?' · Playing':'');
+  card.append(img,name);card.onclick=()=>showHub(player,'home',true);cards.append(card);
+ }
+ picker.append(cards);
+ const add=document.createElement('button');add.className='game-button';add.type='button';add.textContent='＋ Add Family Member';
+ add.onclick=async()=>{
+  add.disabled=true;
+  try{
+   await storeProgress();await progressQueue;
+   activeHeroId=null;reset();
+   $('welcomeBack').hidden=true;
+   title.textContent='Choose a new hero!';
+  }catch(e){add.disabled=false;message(e.message)}
+ };picker.append(add);
+ const back=document.createElement('button');back.className='text-button';back.type='button';back.textContent='Return to Challenge';
+ back.onclick=()=>showHub(h,'home',true);picker.append(back);
  }else{
- const text=document.createElement('p');text.textContent=view==='profile'?h.name:'Your rewards will appear here as you earn them!';picker.append(text);
-
+ const text=document.createElement('p');text.textContent='Your rewards will appear here as you earn them!';picker.append(text);
  }
 
 }
