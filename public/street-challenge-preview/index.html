@@ -227,7 +227,6 @@ $('gearDone').onclick=()=>{if(equipped.size!==4)return;showReady();storeProgress
 
 let signedIn=false, savedHero=null, savedHeroes=[], activeHeroId=null;
 const loginRecordedHeroes=new Set();
-const switchUser=document.createElement('button');switchUser.id='switchUser';switchUser.className='text-button';switchUser.textContent='Switch user';switchUser.hidden=true;switchUser.onclick=showPlayers;$('signinCard').append(switchUser);
 const picker=document.createElement('div');picker.className='hero-picker';picker.hidden=true;$('signinCard').prepend(picker);
 
 const progressKey='street-challenge-progress-v1';
