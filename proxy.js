@@ -11,7 +11,8 @@ export function proxy(request) {
   if (process.env.VERCEL_ENV === 'preview'
       && request.nextUrl.pathname.startsWith('/street-challenge-preview/')
       && hostname !== gamePreviewHost
-      && /^pick-it-up-ijjl-[a-z0-9-]+-pick-it-up-seattle\\.vercel\\.app$/.test(hostname)) {
+      && hostname.startsWith('pick-it-up-ijjl-')
+      && hostname.endsWith('-pick-it-up-seattle.vercel.app')) {
     const url = request.nextUrl.clone();
     url.protocol = 'https:';
     url.host = gamePreviewHost;
