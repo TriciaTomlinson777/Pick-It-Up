@@ -206,8 +206,8 @@ async function resumeHero(h,p){
  // Restore the equipment directly, without replaying pickups or overwriting the save.
  for(const key of ['gloves','grabber','bottle','bag']){
  if(!p.gear.includes(key))continue;
- // Saved gear must appear immediately, never replay the glove or pickup motion.
- attachGear(key);
+ // Use the glove-wearing character pose; separate glove sprites float over equipment.
+ if(key==='gloves'&&posePlayer)await posePlayer.restoreGloves();else attachGear(key);
  equipped.add(key);const btn=gearButtons.find(b=>b.dataset.gear===key);btn.setAttribute('aria-pressed','true');btn.querySelector('.gear-check').textContent='✓';
  }
  refreshGear();if(p.done&&equipped.size===4)showReady();
