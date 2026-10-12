@@ -82,6 +82,13 @@ export function createPosePlayer(hero, reduced=false, asset="blonde-motion-v1.pn
    if(!disposed)held.forEach(n=>n.style.visibility='visible');
   }
  }
+ async function walkInPlace(duration=1800){
+  if(!await ready||disposed)return;
+  const start=performance.now();
+  while(!disposed&&performance.now()-start<duration){legPhase=(performance.now()-start)/110;draw(11);await pause(80)}
+  legPhase=null;if(!disposed)draw(11);
+ }
  function dispose(){disposed=true;actor.style.transform='';actor.classList.remove('at-table');observer.disconnect();activeAnimations.forEach(a=>a.cancel());canvas.remove();hero.classList.remove('pose-active');actor.classList.remove('pose-motion')}
- return {ready,jump,gloves,restoreGloves,restoreReadyPose,walkToTable,pickup,dispose};
+ return {ready,jump,gloves,restoreGloves,restoreReadyPose,walkToTable,pickup,walkInPlace,dispose};
 }
+

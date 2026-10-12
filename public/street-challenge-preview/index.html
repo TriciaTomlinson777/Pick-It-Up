@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><base href="/street-challenge-preview/"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Street Challenge · Get ready</title>
-<style>
+<link rel="stylesheet" href="outdoor.css"><style>
 @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&display=swap');
 *{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;background:#543521;color:#087d83;font-family:ui-rounded,"Arial Rounded MT Bold","Trebuchet MS",sans-serif}button,input{font:inherit}button{cursor:pointer;touch-action:manipulation}button:focus-visible,input:focus-visible{outline:4px solid #e85870;outline-offset:4px}
 .room{position:relative;min-height:100svh;max-width:600px;margin:auto;background:url(room.webp) center center/100% 100% no-repeat;overflow:hidden}
@@ -126,6 +126,9 @@ form{width:100%;display:none;flex:1;flex-direction:column;justify-content:center
 <script type="module">
 import {createGameAudio} from './audio.mjs';
 import {createPosePlayer} from './pose-player.mjs';
+import {createOutdoor} from './outdoor.mjs';
+let outdoorScene=null;
+function closeOutdoor(){outdoorScene?.dispose();outdoorScene=null}
 const audio=createGameAudio(), $=id=>document.getElementById(id), avatars=[...document.querySelectorAll('.avatar')];
 let posePlayer=null, busy=false;
 let selected=null, muted=false, browsing=0;const equipped=new Set();let scene=0;const gearButtons=[...document.querySelectorAll(".gear-button")];const room=document.querySelector(".room"),title=document.querySelector("h1");
@@ -174,7 +177,7 @@ $('sound').onclick=()=>{muted=!muted;if(muted&&'speechSynthesis' in window)windo
 $('choose').onclick=()=>{if(selected===null)return;audio.play('equip');$('carousel').style.display='none';$('controls').style.display='none';$('hand').style.display='none';$('nameForm').style.display='flex';$('firstName').focus()};
 $('back').onclick=()=>{$('nameForm').style.display='none';$('carousel').style.display='flex';$('controls').style.display='flex'};
 async function enterEquipment(restoring=false){const name=$('firstName').value.trim();if(!name){$('firstName').value='';$('firstName').reportValidity();return}if(!restoring)audio.play('celebrate');$('hello').textContent='Hi, '+name+'!';$('hero').replaceChildren(avatars[selected].querySelector('.sprite img').cloneNode(true));$('nameForm').style.display='none';$('final').style.display='flex';$('hero').style.animation='none';room.classList.add('equipping','entering');title.textContent='Let’s Get Ready!';title.style.animation=reduce?'none':'happy .5s ease';scene++;positionTable();const current=scene;$('actor').style.visibility='hidden';busy=true;refreshGear();{posePlayer=createPosePlayer($('hero'),reduce,motionAssets[selected]);if(!await posePlayer.ready){posePlayer.dispose();posePlayer=null;}if(scene!==current)return;$('actor').style.visibility='visible';if(posePlayer&&!restoring)await posePlayer.jump();else if(!posePlayer&&!reduce&&!restoring){const a=$('actor').animate([{transform:'translateY(-180px) scale(.73)'},{transform:'translateY(-220px) scale(.85)',offset:.4},{transform:'translateY(0) scale(1)'}],{duration:1500,easing:'ease-in-out'});try{await a.finished}catch{}}}if(scene!==current)return;room.classList.remove('entering');positionTable();busy=false;refreshGear();storeProgress()};
-function reset(){storeProgress();hubRequest++;clearProgress();$('signinCard').style.display='none';room.classList.remove('signing');$('welcomeBack').hidden=false;$('actor').style.visibility='visible';posePlayer?.dispose();posePlayer=null;busy=false;if('speechSynthesis' in window)window.speechSynthesis.cancel();title.style.animation='none';scene++;equipped.clear();room.classList.remove('equipping','entering');title.innerHTML='Street<br>Challenge';document.querySelectorAll('.attached').forEach(a=>a.remove());document.querySelectorAll('.flying,.floor-item,.gear-pointer').forEach(a=>a.remove());gearButtons.forEach(b=>{b.disabled=false;b.setAttribute('aria-pressed','false');b.querySelector('.gear-check').textContent=''});$('gearDone').disabled=true;$('gearDone').hidden=false;$('gearRow').hidden=false;$('gearStatus').textContent='';$('nameForm').style.display='none';$('final').style.display='none';$('carousel').style.display='flex';$('controls').style.display='flex';$('hand').style.display='block';$('hand').style.visibility='visible';$('firstName').value='';selected=null;avatars.forEach(a=>{a.setAttribute('aria-pressed','false');a.classList.remove('chosen')});$('choose').disabled=true;browsing=0;$('carousel').scrollLeft=0}
+function reset(){closeOutdoor();storeProgress();hubRequest++;clearProgress();$('signinCard').style.display='none';room.classList.remove('signing');$('welcomeBack').hidden=false;$('actor').style.visibility='visible';posePlayer?.dispose();posePlayer=null;busy=false;if('speechSynthesis' in window)window.speechSynthesis.cancel();title.style.animation='none';scene++;equipped.clear();room.classList.remove('equipping','entering');title.innerHTML='Street<br>Challenge';document.querySelectorAll('.attached').forEach(a=>a.remove());document.querySelectorAll('.flying,.floor-item,.gear-pointer').forEach(a=>a.remove());gearButtons.forEach(b=>{b.disabled=false;b.setAttribute('aria-pressed','false');b.querySelector('.gear-check').textContent=''});$('gearDone').disabled=true;$('gearDone').hidden=false;$('gearRow').hidden=false;$('gearStatus').textContent='';$('nameForm').style.display='none';$('final').style.display='none';$('carousel').style.display='flex';$('controls').style.display='flex';$('hand').style.display='block';$('hand').style.visibility='visible';$('firstName').value='';selected=null;avatars.forEach(a=>{a.setAttribute('aria-pressed','false');a.classList.remove('chosen')});$('choose').disabled=true;browsing=0;$('carousel').scrollLeft=0}
 
 function refreshGear(){document.querySelectorAll('.gear-pointer').forEach(p=>p.remove());gearButtons.forEach(b=>b.disabled=busy||(b.dataset.gear!=='gloves'&&!equipped.has('gloves')));const next=gearButtons.find(b=>!equipped.has(b.dataset.gear));if(next){const p=document.createElement('span');p.className='gear-pointer';p.textContent='👆';p.setAttribute('aria-hidden','true');next.append(p)}$('gearDone').disabled=busy||equipped.size!==4;$('gearDone').hidden=equipped.size!==4||$('gearRow').hidden;$('gearStatus').textContent=equipped.size===4?'':equipped.size?equipped.size+' / 4':''}
 const hands=[[[.22,.26],[.57,.54]],[[.30,.64],[.75,.36]],[[.24,.22],[.72,.62]],[[.26,.30],[.73,.64]],[[.22,.26],[.76,.62]],[[.27,.35],[.66,.60]],[[.22,.29],[.70,.64]],[[.22,.29],[.72,.66]],[[.22,.66],[.77,.24]]];
@@ -217,7 +220,12 @@ gearButtons.forEach((button,index)=>button.onclick=async()=>{
  if(scene!==current)return;equipped.add(key);button.setAttribute('aria-pressed','true');button.querySelector('.gear-check').textContent='✓';busy=false;refreshGear();storeProgress();
 });
 function showReady(){document.querySelectorAll('.gear-pointer').forEach(p=>p.remove());$('gearRow').hidden=true;$('gearDone').hidden=true;title.innerHTML='Ready<span class="ready-line">For the Challenge!</span>';$('gearStatus').textContent=''}
-$('gearDone').onclick=()=>{if(busy||equipped.size!==4||$('gearDone').hidden)return;showReady();storeProgress();audio.play('celebrate');$('hero').style.animation='none';void $('hero').offsetWidth;$('hero').style.animation=reduce?'none':'happy .7s ease'};
+function openOutdoor(){
+ if(!activeHeroId||!challengeState?.challenge?.id)return;
+ closeOutdoor();
+ outdoorScene=createOutdoor({room,avatar:avatars[selected].querySelector('.sprite img'),motionAsset:motionAssets[selected],playerId:activeHeroId,challengeId:challengeState.challenge.id,name:$('firstName').value.trim(),gear:[...document.querySelectorAll('.attached')],audio,reduced:reduce,onExit:()=>{closeOutdoor();$('gearRow').hidden=false;refreshGear()}});
+}
+$('gearDone').onclick=()=>{if(busy||equipped.size!==4||$('gearDone').hidden)return;storeProgress();audio.play('celebrate');openOutdoor()};
 
 let signedIn=false, savedHero=null, savedHeroes=[], activeHeroId=null;
 const loginRecordedHeroes=new Set();
@@ -289,7 +297,7 @@ async function resumeHero(h,p){
  refreshGear();if(p.done&&equipped.size===4){
  // Reapply the completed standing pose after gear is attached, without replaying motion.
  await posePlayer?.restoreReadyPose();
- showReady();
+ $('gearRow').hidden=false;refreshGear();
  }
  }
  }finally{restoringProgress=false}tickClock();storeProgress();
@@ -366,7 +374,7 @@ async function recordPlayerLogin(h){
  if(result.hero){savedHeroes=savedHeroes.map(player=>player.id===h.id?{...player,...result.hero}:player);if(savedHero?.id===h.id)savedHero={...savedHero,...result.hero}}
  return result.latestHistory||null;
 }
-function showSignin(){room.classList.remove('hub');picker.hidden=true;room.classList.remove('equipping');room.classList.add('signing');$('welcomeBack').hidden=true;$('carousel').style.display='none';$('controls').style.display='none';$('hand').style.display='none';$('nameForm').style.display='none';$('final').style.display='none';$('signinCard').style.display='flex';$('signinBack').hidden=false;title.textContent=signedIn?'Your hero is saved!':'Save your hero!';$('signinHero').replaceChildren();if(selected!==null)$('signinHero').append(avatars[selected].querySelector('img').cloneNode(true));$('signinGreeting').textContent=$('firstName').value.trim()?'Hi, '+$('firstName').value.trim()+'!':'';$('emailForm').hidden=signedIn;$('emailSent').hidden=true;$('continueHero').hidden=!signedIn;message('')}
+function showSignin(){closeOutdoor();room.classList.remove('hub');picker.hidden=true;room.classList.remove('equipping');room.classList.add('signing');$('welcomeBack').hidden=true;$('carousel').style.display='none';$('controls').style.display='none';$('hand').style.display='none';$('nameForm').style.display='none';$('final').style.display='none';$('signinCard').style.display='flex';$('signinBack').hidden=false;title.textContent=signedIn?'Your hero is saved!':'Save your hero!';$('signinHero').replaceChildren();if(selected!==null)$('signinHero').append(avatars[selected].querySelector('img').cloneNode(true));$('signinGreeting').textContent=$('firstName').value.trim()?'Hi, '+$('firstName').value.trim()+'!':'';$('emailForm').hidden=signedIn;$('emailSent').hidden=true;$('continueHero').hidden=!signedIn;message('')}
 let savingHero=false;
 async function saveAndContinue(){if(selected===null||savingHero)return;savingHero=true;try{const result=await account('save',{name:$('firstName').value.trim(),avatar:selected,heroId:activeHeroId});savedHero=result.hero;savedHeroes=result.heroes;activeHeroId=savedHero.id;try{localStorage.removeItem(draftKey)}catch{}$('signinCard').style.display='none';room.classList.remove('signing');showHub(savedHero)}catch(e){showSignin();message(e.message)}finally{savingHero=false}}
 $('nameForm').onsubmit=async e=>{e.preventDefault();activeHeroId=null;if(!$('firstName').value.trim())return;storeDraft();showSignin();if(signedIn)await saveAndContinue()};
@@ -427,3 +435,4 @@ window.addEventListener('pageshow',event=>{if(event.persisted&&!room.classList.c
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&!$('emailSent').hidden)restoreAccount()});
 window.addEventListener('pagehide',()=>{storeProgress();if('speechSynthesis' in window)window.speechSynthesis.cancel()});
 </script></body></html>
+
