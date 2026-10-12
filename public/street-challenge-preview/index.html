@@ -96,6 +96,13 @@ form{width:100%;display:none;flex:1;flex-direction:column;justify-content:center
   width:auto;
   max-width:none;
 }
+
+/* Keep saved player's avatar below the greeting; don't inherit inline carousel image offsets. */
+.room.signing.hub #signinGreeting{order:1;flex:none;margin:10px 0 0;min-height:1.3em;position:relative;z-index:2}
+.room.signing.hub #signinHero{order:3;flex:0 0 94px;width:90px;height:94px;min-height:0;margin:4px auto 0;position:relative;transform:none;overflow:visible}
+.room.signing.hub #signinHero img{position:static!important;display:block;max-width:100%!important;max-height:100%!important;width:auto!important;height:100%!important;object-fit:contain;transform:none!important;margin:auto}
+@media(min-width:600px){.room.signing.hub #signinHero{transform:none;height:110px;flex-basis:110px;width:104px}}
+.room.signing.hub .hero-picker{max-height:min(32svh,240px)}
 </style></head><body>
 <main class="room booting"><div class="boot-message" role="status">Opening Street Challenge…</div>
 <div class="toolbar"><button class="round signout" id="signout" hidden>Sign out</button><button class="round" id="homeNav" aria-label="Game home" hidden>🏠</button><button class="round" id="profileNav" aria-label="Profile" hidden>👤</button><button class="round" id="rewardsNav" aria-label="Rewards" hidden>🏆</button><button class="round" id="reset" aria-label="Start again">↺</button><button class="round hourglass-button" id="deadlineToggle" aria-label="Show challenge deadline" aria-controls="challengeClock" aria-expanded="false" hidden><svg viewBox="0 0 40 48" aria-hidden="true"><path d="M8 5h24v5c0 6-5 10-10 14 5 4 10 8 10 14v5H8v-5c0-6 5-10 10-14C13 20 8 16 8 10Z" fill="#fffdf1" stroke="#b47c25" stroke-width="2.5"/><path d="M11 11h18c-1 5-5 7-9 10-4-3-8-5-9-10Z" fill="#eab83f"/><path d="M20 24v12" class="sand-stream" stroke="#eab83f" stroke-width="2.5" stroke-dasharray="2 2"/><path d="m11 40 9-7 9 7Z" fill="#eab83f"/><path d="M6 4h28M6 44h28" stroke="#835429" stroke-width="4" stroke-linecap="round"/></svg></button><button class="round" id="sound" aria-label="Mute sound" aria-pressed="false">🔊</button></div>
@@ -165,7 +172,7 @@ function speakReady(){if(window.matchMedia('(min-width:600px)').matches||muted||
 const motionAssets=['purple-motion-v1.png','blue-cap-motion-v1.png','blonde-motion-v1.png','blue-hoodie-motion-v1.png','coral-motion-v1.png','orange-motion-v1.png','teal-glasses-motion-v1.png','yellow-motion-v1.png','mia-motion-v1.png'];
 const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 function browse(index){browsing=Math.max(0,Math.min(avatars.length-1,index));const card=avatars[browsing],rail=$('carousel');rail.scrollTo({left:card.offsetLeft-rail.offsetLeft-(rail.clientWidth-card.clientWidth)/2,behavior:reduce?'instant':'smooth'});$('hand').style.visibility='hidden'}
-function select(index){selected=index;browsing=index;avatars.forEach((a,i)=>{a.setAttribute('aria-pressed',String(i===index));a.classList.remove('chosen')});void avatars[index].offsetWidth;avatars[index].classList.add('chosen');$('choose').disabled=false;audio.play('select');browse(index)}
+function select(index,quiet=false){selected=index;browsing=index;avatars.forEach((a,i)=>{a.setAttribute('aria-pressed',String(i===index));a.classList.remove('chosen')});if(!quiet){void avatars[index].offsetWidth;avatars[index].classList.add('chosen')}$('choose').disabled=false;if(!quiet)audio.play('select');if(quiet){const rail=$('carousel'),card=avatars[index];rail.scrollLeft=card.offsetLeft-rail.offsetLeft-(rail.clientWidth-card.clientWidth)/2;$('hand').style.visibility='hidden'}else browse(index)}
 avatars.forEach((a,i)=>a.addEventListener('click',()=>select(i)));
 $('carousel').addEventListener('pointerdown',()=>{$('hand').style.visibility='hidden'});
 $('previous').onclick=()=>browse(browsing-1);$('next').onclick=()=>browse(browsing+1);
@@ -273,7 +280,7 @@ function loadProgress(){try{return JSON.parse(localStorage.getItem(progressKey))
 async function resumeHero(h,p){
  restoringProgress=true;equipped.clear();document.querySelectorAll('.attached').forEach(n=>n.remove());
  gearButtons.forEach(b=>{b.disabled=false;b.setAttribute('aria-pressed','false');b.querySelector('.gear-check').textContent=''});
- $('gearDone').hidden=false;$('gearRow').hidden=false;posePlayer?.dispose();posePlayer=null;activeHeroId=h.id;rememberPlayer(h.id);select(h.avatar);$('firstName').value=h.name;
+ $('gearDone').hidden=false;$('gearRow').hidden=false;posePlayer?.dispose();posePlayer=null;activeHeroId=h.id;rememberPlayer(h.id);select(h.avatar,true);$('firstName').value=h.name;
  $('carousel').style.display='none';$('controls').style.display='none';$('hand').style.display='none';$('welcomeBack').hidden=true;
  $('signinCard').style.display='none';room.classList.remove('signing');
  try{
@@ -382,7 +389,7 @@ async function showHub(h,view='home',autoResume=false){
  const requestId=++hubRequest;
  await storeProgress();await progressQueue;
  if(requestId!==hubRequest)return;
- activeHeroId=h.id;rememberPlayer(h.id);select(h.avatar);$('firstName').value=h.name;
+ activeHeroId=h.id;rememberPlayer(h.id);select(h.avatar,true);$('firstName').value=h.name;
  try{await recordPlayerLogin(h)}catch(e){message(e.message)}
  showSignin();room.classList.add('hub');$('switchUser').hidden=false;
  for(const id of ['homeNav','profileNav','rewardsNav'])$(id).hidden=false;
