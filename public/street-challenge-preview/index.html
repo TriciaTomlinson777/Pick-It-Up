@@ -210,7 +210,11 @@ async function resumeHero(h,p){
  if(key==='gloves'&&posePlayer)await posePlayer.restoreGloves();else attachGear(key);
  equipped.add(key);const btn=gearButtons.find(b=>b.dataset.gear===key);btn.setAttribute('aria-pressed','true');btn.querySelector('.gear-check').textContent='✓';
  }
- refreshGear();if(p.done&&equipped.size===4)showReady();
+ refreshGear();if(p.done&&equipped.size===4){
+ // Reapply the completed standing pose after gear is attached, without replaying motion.
+ await posePlayer?.restoreReadyPose();
+ showReady();
+ }
  }
  }finally{restoringProgress=false}tickClock();storeProgress();
 }
