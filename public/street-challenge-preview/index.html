@@ -63,6 +63,9 @@ form{width:100%;display:none;flex:1;flex-direction:column;justify-content:center
 .room.signing.hub .panel{inset:25% 14% 16%}
 .room.signing.hub #signinHero{height:170px;width:180px;max-width:100%;transform:translateY(-94px)}
 .room.signing.hub #signinGreeting{margin-top:18px}
+/* Two-line ready heading stays within the illustrated page border. */
+.room.equipping:has(#gearDone[hidden]) h1{font-size:clamp(27px,6.2vw,39px);white-space:normal;line-height:1.06;text-align:center;width:100%;max-width:100%}
+.room.equipping:has(#gearDone[hidden]) h1 .ready-line{display:block;font-size:.83em;margin-top:5px;white-space:nowrap}
 /* Lower completed-stage copy only; preserve the saved character and equipment position. */
 .room.equipping:has(#gearDone[hidden]) h1,
 .room.equipping:has(#gearDone[hidden]) .hello{position:relative;top:42px}
@@ -153,7 +156,7 @@ gearButtons.forEach((button,index)=>button.onclick=async()=>{
  }
  if(scene!==current)return;equipped.add(key);button.setAttribute('aria-pressed','true');button.querySelector('.gear-check').textContent='✓';busy=false;refreshGear();storeProgress();
 });
-function showReady(){document.querySelectorAll('.gear-pointer').forEach(p=>p.remove());$('gearRow').hidden=true;$('gearDone').hidden=true;title.textContent='Ready for the challenge!';$('gearStatus').textContent='All set!'}
+function showReady(){document.querySelectorAll('.gear-pointer').forEach(p=>p.remove());$('gearRow').hidden=true;$('gearDone').hidden=true;title.innerHTML='Ready<span class="ready-line">For the Challenge!</span>';$('gearStatus').textContent='All set!'}
 $('gearDone').onclick=()=>{if(equipped.size!==4)return;showReady();storeProgress();audio.play('celebrate');$('hero').style.animation='none';void $('hero').offsetWidth;$('hero').style.animation=reduce?'none':'happy .7s ease'};
 
 let signedIn=false, savedHero=null, savedHeroes=[], activeHeroId=null;
