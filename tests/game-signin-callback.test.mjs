@@ -6,7 +6,7 @@ import vm from 'node:vm';
 const source = readFileSync(new URL('../app/auth/game-callback/route.js', import.meta.url), 'utf8')
   .replace(/^import .*;\n/gm, '').replace(/export /g, '');
 
-async function callback(query, failure = false, origin = 'https://preview.vercel.app') {
+async function callback(query, failure = false, origin = 'https://preview.vercel.app', existingSession = false) {
   const jar = new Map();
   const context = vm.createContext({
     URL, URLSearchParams, process: { env: { NODE_ENV: 'production' } },
@@ -27,7 +27,7 @@ async function callback(query, failure = false, origin = 'https://preview.vercel
         ]);
         return { error: null };
       };
-      return { auth: { verifyOtp: verify, exchangeCodeForSession: verify } };
+      return { auth: { verifyOtp: verify, exchangeCodeForSession: verify, getUser: async () => ({ data: { user: existingSession ? { id: 'saved-player' } : null }, error: null }) } };
     },
   });
   vm.runInContext(source, context);
@@ -83,4 +83,13 @@ test('production and local sign-ins stay on their requested host', () => {
   assert.equal(context.getGameOrigin(request, { VERCEL_ENV: 'production', VERCEL_BRANCH_URL: 'pick-it-up-ijjl-git-test.vercel.app' }), 'https://pickitupseattle.org');
   assert.equal(context.getGameOrigin(request, { VERCEL_ENV: 'preview', VERCEL_BRANCH_URL: 'pick-it-up-ijjl-git-test.vercel.app' }), 'https://pick-it-up-ijjl-git-test.vercel.app');
   assert.equal(context.getGameOrigin(request, { VERCEL_ENV: 'preview', VERCEL_BRANCH_URL: 'attacker.example' }), 'https://pickitupseattle.org');
+});
+
+
+test('reopening a used email link keeps an independently validated existing session', async () => {
+  const { response, jar } = await callback('?token_hash=used&draft=old-draft', true, 'https://preview.vercel.app', true);
+  const target = new URL(response.headers.get('Location'));
+  assert.equal(target.searchParams.get('signin'), 'success');
+  assert.equal(target.hash, '');
+  assert.equal(jar.size, 0);
 });

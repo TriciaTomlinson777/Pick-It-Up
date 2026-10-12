@@ -51,6 +51,12 @@ export async function GET(request) {
         ? await client.auth.verifyOtp({ token_hash: tokenHash, type: 'email' })
         : await client.auth.exchangeCodeForSession(code);
       ok = !error;
+      // A used email link must not send a still-signed-in player back to sign-in.
+      // Validate the existing session with Auth; never trust cookie presence alone.
+      if (error) {
+        const { data: { user }, error: sessionError } = await client.auth.getUser();
+        if (user && !sessionError) target.searchParams.set('signin', 'success');
+      }
     }
   } catch {}
   if (ok) {
