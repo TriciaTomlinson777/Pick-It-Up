@@ -102,6 +102,39 @@ import {createPosePlayer} from './pose-player.mjs';
 const audio=createGameAudio(), $=id=>document.getElementById(id), avatars=[...document.querySelectorAll('.avatar')];
 let posePlayer=null, busy=false;
 let selected=null, muted=false, browsing=0;const equipped=new Set();let scene=0;const gearButtons=[...document.querySelectorAll(".gear-button")];const room=document.querySelector(".room"),title=document.querySelector("h1");
+function openVoicePreview(){
+ let dialog=$('voicePreviewDialog');
+ if(!dialog){
+  dialog=document.createElement('dialog');dialog.id='voicePreviewDialog';
+  dialog.style.cssText='max-width:min(92vw,440px);border:3px solid #17a5a8;border-radius:20px;background:#fff8e5;color:#087c83;padding:20px;font:17px system-ui';
+  const heading=document.createElement('h2');heading.textContent='Hear a storyteller voice';heading.style.margin='0 0 10px';
+  const note=document.createElement('p');note.textContent='These samples use voices installed in your browser or computer. We will not change the game voice until you approve one.';
+  const choose=document.createElement('select');choose.id='voicePreviewChoice';choose.setAttribute('aria-label','Choose sample voice');choose.style.cssText='width:100%;padding:10px;margin:10px 0;background:#fff;border-radius:10px;color:#087c83';
+  const play=document.createElement('button');play.textContent='▶ Hear sample';play.className='game-button';play.type='button';
+  const close=document.createElement('button');close.textContent='Close';close.className='text-button';close.type='button';close.style.marginLeft='12px';
+  const msg=document.createElement('p');msg.id='voicePreviewMessage';msg.style.fontSize='13px';msg.textContent='';
+  play.onclick=()=>{if(!('speechSynthesis' in window)){msg.textContent='Voice preview is unavailable in this browser.';return}
+    const available=window.speechSynthesis.getVoices().filter(v=>v.lang.toLowerCase().startsWith('en'));
+    const choice=available[Number(choose.value)];if(!choice){msg.textContent='No English voices are available yet.';return}
+    window.speechSynthesis.cancel();
+    const utterance=new SpeechSynthesisUtterance('Are you ready? Your Street Challenge adventure begins now! Let’s make our neighborhood shine!');
+    utterance.voice=choice;utterance.lang=choice.lang;utterance.rate=1.04;utterance.pitch=1.12;
+    window.speechSynthesis.speak(utterance);
+    msg.textContent='Preview only — game voice unchanged.';
+  };
+  close.onclick=()=>{window.speechSynthesis?.cancel();dialog.close()};
+  dialog.addEventListener('close',()=>window.speechSynthesis?.cancel());
+  dialog.append(heading,note,choose,play,close,msg);document.body.append(dialog);
+ }
+ const choose=$('voicePreviewChoice');const populate=()=>{
+  const voices=('speechSynthesis' in window?window.speechSynthesis.getVoices():[]).filter(v=>v.lang.toLowerCase().startsWith('en'));
+  choose.replaceChildren();voices.forEach((v,i)=>{const option=document.createElement('option');option.value=String(i);option.textContent=v.name+' ('+v.lang+')';choose.append(option)});
+  if(!voices.length){const option=document.createElement('option');option.textContent='No voices available';choose.append(option)}
+  else{const preferred=voices.findIndex(v=>/zira|aria|jenny|samantha|ava|allison|female|natural/i.test(v.name));choose.value=String(Math.max(preferred,0))}
+ };
+ populate();if('speechSynthesis' in window)window.speechSynthesis.onvoiceschanged=populate;
+ dialog.showModal();
+}
 function speakReady(){if(muted||!('speechSynthesis' in window))return;window.speechSynthesis.cancel();const voice=new SpeechSynthesisUtterance('Are you ready?');voice.lang='en-US';voice.rate=1.08;voice.pitch=1.3;voice.volume=1;try{window.speechSynthesis.speak(voice)}catch{}}
 const motionAssets=['purple-motion-v1.png','blue-cap-motion-v1.png','blonde-motion-v1.png','blue-hoodie-motion-v1.png','coral-motion-v1.png','orange-motion-v1.png','teal-glasses-motion-v1.png','yellow-motion-v1.png','mia-motion-v1.png'];
 const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -332,6 +365,8 @@ async function showHub(h,view='home'){
  catch(e){message(e.message);if(e.ended)showHub(h);else b.disabled=false}
  };picker.append(b);
  }else{const note=document.createElement('p');note.textContent='The next challenge is coming soon!';picker.append(note)}
+ const voicePreviewButton=document.createElement('button');voicePreviewButton.type='button';voicePreviewButton.className='text-button';voicePreviewButton.textContent='🔊 Preview a new voice';voicePreviewButton.onclick=openVoicePreview;picker.append(voicePreviewButton);
+
  }catch(e){if(requestId!==hubRequest)return;picker.replaceChildren();message(e.message);const retry=document.createElement('button');retry.className='game-button';retry.textContent='Try again';retry.onclick=()=>showHub(h);picker.append(retry)}
  }else{
  const text=document.createElement('p');text.textContent=view==='profile'?h.name:'Your rewards will appear here as you earn them!';picker.append(text);
