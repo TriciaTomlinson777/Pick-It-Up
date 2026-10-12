@@ -134,7 +134,7 @@ function openVoicePreview(){
  populate();if('speechSynthesis' in window)window.speechSynthesis.onvoiceschanged=populate;
  dialog.showModal();
 }
-function speakReady(){if(muted||!('speechSynthesis' in window))return;window.speechSynthesis.cancel();const voice=new SpeechSynthesisUtterance('Are you ready?');voice.lang='en-US';voice.rate=1.08;voice.pitch=1.3;voice.volume=1;try{window.speechSynthesis.speak(voice)}catch{}}
+function speakReady(){if(window.matchMedia('(min-width:600px)').matches||muted||!('speechSynthesis' in window))return;window.speechSynthesis.cancel();const voice=new SpeechSynthesisUtterance('Are you ready?');voice.lang='en-US';voice.rate=1.08;voice.pitch=1.3;voice.volume=1;try{window.speechSynthesis.speak(voice)}catch{}}
 const motionAssets=['purple-motion-v1.png','blue-cap-motion-v1.png','blonde-motion-v1.png','blue-hoodie-motion-v1.png','coral-motion-v1.png','orange-motion-v1.png','teal-glasses-motion-v1.png','yellow-motion-v1.png','mia-motion-v1.png'];
 const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 function browse(index){browsing=Math.max(0,Math.min(avatars.length-1,index));const card=avatars[browsing],rail=$('carousel');rail.scrollTo({left:card.offsetLeft-rail.offsetLeft-(rail.clientWidth-card.clientWidth)/2,behavior:reduce?'instant':'smooth'});$('hand').style.visibility='hidden'}
