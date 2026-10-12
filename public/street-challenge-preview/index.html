@@ -89,7 +89,7 @@ form{width:100%;display:none;flex:1;flex-direction:column;justify-content:center
 </div><div class="hand" id="hand" aria-hidden="true">👆</div>
 <div class="controls" id="controls"><button class="arrow" id="previous" aria-label="Previous avatar">‹</button><button class="confirm" id="choose" disabled aria-label="Confirm avatar">✓</button><button class="arrow" id="next" aria-label="Next avatar">›</button></div>
 <form id="nameForm"><label for="firstName">First name</label><input id="firstName" name="firstName" autocomplete="given-name" maxlength="30" required><button class="confirm" type="submit" aria-label="Confirm first name">✓</button><button class="arrow" type="button" id="back" aria-label="Back to avatars">←</button></form>
-<div class="signin-card" id="signinCard"><span class="sprite" id="signinHero"></span><p id="signinGreeting" class="hello"></p><form id="emailForm"><label for="email">Email</label><input id="email" type="email" autocomplete="email" maxlength="254" required><button class="game-button" id="sendLink" type="submit">Send sign-in link ✨</button></form><div id="emailSent" hidden><div class="envelope" aria-hidden="true">💌</div><p class="hello">Check your email!</p><p>Tap your email link, then keep playing in the game page it opens.</p><button class="game-button" id="checkSignin">I’m back! ⭐</button><button class="text-button" id="changeEmail">Change email</button></div><p class="signin-message" id="signinMessage" role="status" aria-live="polite" hidden></p><button class="game-button" id="continueHero" hidden>Let’s go! 🌟</button><button class="text-button" id="signinCheck" hidden>Check saved sign-in</button><button class="text-button" id="signinBack">← Back</button></div><div class="final" id="final"><div class="hello" id="hello"></div><div class="table-front" aria-hidden="true"></div><div class="floor-shadow" aria-hidden="true"></div><div class="actor" id="actor"><span class="sprite" id="hero"></span></div>
+<div class="signin-card" id="signinCard"><span class="sprite" id="signinHero"></span><p id="signinGreeting" class="hello"></p><form id="emailForm"><label for="email">Email</label><input id="email" type="email" autocomplete="email" maxlength="254" required><button class="game-button" id="sendLink" type="submit">Send sign-in link ✨</button></form><div id="emailSent" hidden><div class="envelope" aria-hidden="true">💌</div><p class="hello">Check your email!</p><p>Tap your email link, then keep playing in the game page it opens.</p><button class="game-button" id="checkSignin">I’m back! ⭐</button><button class="text-button" id="changeEmail">Change email</button></div><p class="signin-message" id="signinMessage" role="status" aria-live="polite" hidden></p><button class="game-button" id="continueHero" hidden>Let’s go! 🌟</button><button class="text-button" id="signinBack">← Back</button></div><div class="final" id="final"><div class="hello" id="hello"></div><div class="table-front" aria-hidden="true"></div><div class="floor-shadow" aria-hidden="true"></div><div class="actor" id="actor"><span class="sprite" id="hero"></span></div>
 <div class="gear-row" id="gearRow">
 <button class="gear-button" data-gear="gloves" aria-label="Equip cleanup gloves" aria-pressed="false"><span class="gear-art" style="background-position:0% 0"></span><span class="gear-check" aria-hidden="true"></span></button>
 <button class="gear-button" data-gear="grabber" aria-label="Equip litter grabber" aria-pressed="false"><span class="gear-art" style="background-position:50% 0"></span><span class="gear-check" aria-hidden="true"></span></button>
@@ -342,14 +342,14 @@ async function recordPlayerLogin(h){
  if(result.hero){savedHeroes=savedHeroes.map(player=>player.id===h.id?{...player,...result.hero}:player);if(savedHero?.id===h.id)savedHero={...savedHero,...result.hero}}
  return result.latestHistory||null;
 }
-function showSignin(){room.classList.remove('hub');$('switchUser').hidden=true;picker.hidden=true;room.classList.remove('equipping');room.classList.add('signing');$('welcomeBack').hidden=true;$('carousel').style.display='none';$('controls').style.display='none';$('hand').style.display='none';$('nameForm').style.display='none';$('final').style.display='none';$('signinCard').style.display='flex';$('signinBack').hidden=false;title.textContent=signedIn?'Your hero is saved!':'Save your hero!';$('signinHero').replaceChildren();if(selected!==null)$('signinHero').append(avatars[selected].querySelector('img').cloneNode(true));$('signinGreeting').textContent=$('firstName').value.trim()?'Hi, '+$('firstName').value.trim()+'!':'';$('emailForm').hidden=signedIn;$('signinCheck').hidden=signedIn;$('emailSent').hidden=true;$('continueHero').hidden=!signedIn;message('')}
+function showSignin(){room.classList.remove('hub');$('switchUser').hidden=true;picker.hidden=true;room.classList.remove('equipping');room.classList.add('signing');$('welcomeBack').hidden=true;$('carousel').style.display='none';$('controls').style.display='none';$('hand').style.display='none';$('nameForm').style.display='none';$('final').style.display='none';$('signinCard').style.display='flex';$('signinBack').hidden=false;title.textContent=signedIn?'Your hero is saved!':'Save your hero!';$('signinHero').replaceChildren();if(selected!==null)$('signinHero').append(avatars[selected].querySelector('img').cloneNode(true));$('signinGreeting').textContent=$('firstName').value.trim()?'Hi, '+$('firstName').value.trim()+'!':'';$('emailForm').hidden=signedIn;$('emailSent').hidden=true;$('continueHero').hidden=!signedIn;message('')}
 let savingHero=false;
 async function saveAndContinue(){if(selected===null||savingHero)return;savingHero=true;try{const result=await account('save',{name:$('firstName').value.trim(),avatar:selected,heroId:activeHeroId});savedHero=result.hero;savedHeroes=result.heroes;activeHeroId=savedHero.id;try{localStorage.removeItem(draftKey)}catch{}$('signinCard').style.display='none';room.classList.remove('signing');showHub(savedHero)}catch(e){showSignin();message(e.message)}finally{savingHero=false}}
 $('nameForm').onsubmit=async e=>{e.preventDefault();activeHeroId=null;if(!$('firstName').value.trim())return;storeDraft();showSignin();if(signedIn)await saveAndContinue()};
 $('emailForm').onsubmit=async e=>{e.preventDefault();$('sendLink').disabled=true;message('');storeDraft();try{await account('send',{email:$('email').value.trim(),hero:{name:$('firstName').value.trim(),avatar:selected}});$('emailForm').hidden=true;$('emailSent').hidden=false;audio.play('select')}catch(e){message(e.message)}finally{$('sendLink').disabled=false}};
 $('changeEmail').onclick=()=>{$('emailSent').hidden=true;$('emailForm').hidden=false;message('');$('email').focus()};
 $('signinBack').onclick=()=>{reset()};
-$('signinCheck').onclick=showSessionCheck;
+
 $('continueHero').onclick=saveAndContinue;
 $('checkSignin').onclick=async()=>{try{const state=await account();signedIn=state.signedIn;$('signout').hidden=!signedIn;savedHeroes=state.heroes||[];if(signedIn&&savedHeroes.length){const p=loadProgress();const h=savedHeroes.find(h=>h.id===p?.heroId)||savedHeroes.find(h=>h.id===activeHeroId);if(h||savedHeroes.length===1)showHub(h||savedHeroes[0],'home',true);else showPlayers();return}if(!signedIn){message('Open the link in your email, then come back here.');return}const h=loadDraft()||state.hero;if(validHero(h)){select(h.avatar);$('firstName').value=h.name;await saveAndContinue()}else reset()}catch(e){message(e.message)}};
 async function showHub(h,view='home',autoResume=false){
@@ -370,7 +370,7 @@ async function showHub(h,view='home',autoResume=false){
  const c=state.challenge;
  if(autoResume&&state.entry){await resumeHero(h,state.entry);return}
  if(state.previous){const results=document.createElement('p');results.textContent='Your previous challenge ended! '+(state.previous.challenge.results_status==='published'?'Results are ready.':'Winners will be announced after final checks.');picker.append(results)}
- if(c){const b=document.createElement('button');b.className='game-button';b.textContent=state.entry?'Return to the game ⭐':'Begin the challenge 🌟';
+ if(c){const b=document.createElement('button');b.className='game-button';b.textContent=state.entry?'Return to Challenge ⭐':'Begin the Challenge 🌟';
  b.onclick=async()=>{
  speakReady();
  b.disabled=true;message('');
@@ -382,9 +382,7 @@ async function showHub(h,view='home',autoResume=false){
  }catch(e){if(requestId!==hubRequest)return;picker.replaceChildren();message(e.message);const retry=document.createElement('button');retry.className='game-button';retry.textContent='Try again';retry.onclick=()=>showHub(h);picker.append(retry)}
  }else{
  const text=document.createElement('p');text.textContent=view==='profile'?h.name:'Your rewards will appear here as you earn them!';picker.append(text);
- if(view==='profile'){
- const check=document.createElement('button');check.className='text-button';check.textContent='Check saved sign-in';check.onclick=showSessionCheck;picker.append(check);
- }
+
  }
 
 }
@@ -398,7 +396,7 @@ async function restoreAccount(){try{const state=await account();signedIn=state.s
 const toolbar=document.querySelector('.toolbar'),clock=$('challengeClock');
 function layoutHeader(){room.style.setProperty('--clock-top',(toolbar.offsetTop+toolbar.offsetHeight+10)+'px');room.style.setProperty('--header-bottom',(clock.offsetTop+clock.offsetHeight+16)+'px')}
 const headerObserver=new ResizeObserver(layoutHeader);headerObserver.observe(toolbar);headerObserver.observe(clock);layoutHeader();
-restoreAccount().then(()=>{if(new URLSearchParams(location.search).has('session_check'))showSessionCheck()});
+restoreAccount();
 window.addEventListener('pageshow',event=>{if(event.persisted&&!room.classList.contains('equipping'))restoreAccount()});
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&!$('emailSent').hidden)restoreAccount()});
 $('reset').onclick=reset;$('again').onclick=reset;window.addEventListener('pagehide',()=>{storeProgress();if('speechSynthesis' in window)window.speechSynthesis.cancel()});
