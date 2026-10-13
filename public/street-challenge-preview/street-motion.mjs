@@ -59,6 +59,17 @@ export async function createStreetMotion(section,reduced=false){
   ctx.save();ctx.translate(pivotX,pivotY);ctx.rotate(22*Math.PI/180);ctx.translate(-pivotX,-pivotY);
   ctx.beginPath();outline();ctx.clip();ctx.drawImage(frame.im,frame.x,frame.y,frame.w,frame.h,x,y,w,h);ctx.restore();
  }
+ // A small cylindrical perspective turn brings Captain's face and shield
+ // toward Ann, while keeping the silhouette and both boots on their marks.
+ function paintCaptain(frame,x,y,w,h,amount){
+  if(!amount){paintCharacter(frame,x,y,w,h);return}
+  const project=u=>u-.065*amount*Math.sin(Math.PI*u);
+  for(let sx=0;sx<frame.w;sx++){
+   const left=project(sx/frame.w),right=project((sx+1)/frame.w);
+   ctx.drawImage(frame.im,frame.x+sx,frame.y,1,frame.h,
+    x+left*w,y,(right-left)*w+.35,h);
+  }
+ }
  function drawFrame(frame,x,ground,height,index,standing=false,carry=1){
   const reference=standing?Math.max(...turn[index].map(f=>f.h)):heights[index];
   const scale=height/reference,half=frame.w*scale/2;
@@ -95,7 +106,10 @@ export async function createStreetMotion(section,reduced=false){
     ctx.restore();
    }
   }
-  if(index===1||standing)paintCharacter(frame,x-half,ground-frame.h*scale,frame.w*scale,frame.h*scale,standing&&index===0&&frame===turn[0][5]);
+  if(index===1){
+   const turnIndex=standing?turn[1].indexOf(frame):0;
+   paintCaptain(frame,x-half,ground-frame.h*scale,frame.w*scale,frame.h*scale,standing?Math.min(1,Math.max(0,turnIndex)/5):0);
+  }else if(standing)paintCharacter(frame,x-half,ground-frame.h*scale,frame.w*scale,frame.h*scale,frame===turn[0][5]);
   if(index===1){
    // Captain holds the grip; the jaws point down beside his boot.
    const gripX=x+height*.21,gripY=ground-height*.49;
