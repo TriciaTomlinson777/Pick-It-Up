@@ -1,5 +1,5 @@
 import {createPosePlayer} from './pose-player.mjs';
-import {createStreetMotion} from './street-motion.mjs';
+import {createStreetMotion} from './street-motion.mjs?v=ground-camera-20261013';
 
 // Photos remain private to this browser during development.
 function photoStore(mode,work){
@@ -66,10 +66,10 @@ export function createOutdoor({room,avatar,motionAsset,playerId,challengeId,name
  input.onchange=()=>{
   const file=input.files?.[0];if(!file)return;
   if(!file.type.startsWith('image/')){say('Please take or choose a photo.');return}
-  clearURL();photo=file;url=URL.createObjectURL(file);preview.src=url;review.hidden=false;review.querySelector('.use-photo').focus();
+  clearURL();photo=file;url=URL.createObjectURL(file);preview.src=url;section.classList.remove('camera-ready');review.hidden=false;review.querySelector('.use-photo').focus();
  };
  review.querySelector('.retake-photo').onclick=()=>{resetPhoto();input.click()};
- review.querySelector('.cancel-photo').onclick=()=>{resetPhoto();button.focus()};
+ review.querySelector('.cancel-photo').onclick=()=>{resetPhoto();section.classList.add('camera-ready');button.focus()};
  review.querySelector('.use-photo').onclick=async()=>{
   if(!photo||busy)return;busy=true;const use=review.querySelector('.use-photo');use.disabled=true;
   try{
