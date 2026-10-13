@@ -1,5 +1,5 @@
 import {createPosePlayer} from './pose-player.mjs';
-import {createStreetMotion} from './street-motion.mjs?v=carry-set-down-20261013';
+import {createStreetMotion} from './street-motion.mjs?v=glove-grip-20261013';
 
 // Photos remain private to this browser during development.
 function photoStore(mode,work){
