@@ -67,7 +67,7 @@ export async function createStreetMotion(section,reduced=false){
   const shadow=ctx.createRadialGradient(0,0,0,0,0,1);shadow.addColorStop(0,'rgba(66,39,23,.32)');shadow.addColorStop(1,'rgba(66,39,23,0)');
   ctx.fillStyle=shadow;ctx.beginPath();ctx.arc(0,0,1,0,Math.PI*2);ctx.fill();ctx.restore();
   // Paint Ann first so her bag cannot disappear behind her legs.
-  if(index===0)ctx.drawImage(frame.im,frame.x,frame.y,frame.w,frame.h,x-half,ground-frame.h*scale,frame.w*scale,frame.h*scale);
+  if(index===0&&!standing)ctx.drawImage(frame.im,frame.x,frame.y,frame.w,frame.h,x-half,ground-frame.h*scale,frame.w*scale,frame.h*scale);
   // Carry props travel and scale with the same grounded character.
   if(index===0){
    const bw=height*.24,bh=height*.28;
