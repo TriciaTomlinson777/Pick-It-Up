@@ -48,6 +48,17 @@ export async function createStreetMotion(section,reduced=false){
  // Glove grip coordinates measured in each 384×512 walking cell.
  const bagGrips=[[166,255],[96,289],[85,280],[85,292],[160,258],[128,273],[87,290],[145,253]];
  const heights=[0,1].map(i=>Math.max(...walk[i].map(f=>f.h)));
+ function paintCharacter(frame,x,y,w,h,tilt=false){
+  if(!tilt){ctx.drawImage(frame.im,frame.x,frame.y,frame.w,frame.h,x,y,w,h);return}
+  // Move the phone and both gripping hands together around the shoulder.
+  const mask=[[173,59],[270,59],[283,137],[242,189],[192,232],[155,211],[154,171],[166,147],[163,122]];
+  const outline=()=>{ctx.beginPath();mask.forEach(([px,py],i)=>{const dx=x+(px-frame.x)*w/frame.w,dy=y+(py-frame.y)*h/frame.h;i?ctx.lineTo(dx,dy):ctx.moveTo(dx,dy)});ctx.closePath()};
+  ctx.save();ctx.beginPath();ctx.rect(x,y,w,h);outline();ctx.clip('evenodd');
+  ctx.drawImage(frame.im,frame.x,frame.y,frame.w,frame.h,x,y,w,h);ctx.restore();
+  const pivotX=x+(160-frame.x)*w/frame.w,pivotY=y+(214-frame.y)*h/frame.h;
+  ctx.save();ctx.translate(pivotX,pivotY);ctx.rotate(22*Math.PI/180);ctx.translate(-pivotX,-pivotY);
+  outline();ctx.clip();ctx.drawImage(frame.im,frame.x,frame.y,frame.w,frame.h,x,y,w,h);ctx.restore();
+ }
  function drawFrame(frame,x,ground,height,index,standing=false,carry=1){
   const reference=standing?Math.max(...turn[index].map(f=>f.h)):heights[index];
   const scale=height/reference,half=frame.w*scale/2;
@@ -84,7 +95,7 @@ export async function createStreetMotion(section,reduced=false){
     ctx.restore();
    }
   }
-  if(index===1||standing)ctx.drawImage(frame.im,frame.x,frame.y,frame.w,frame.h,x-half,ground-frame.h*scale,frame.w*scale,frame.h*scale);
+  if(index===1||standing)paintCharacter(frame,x-half,ground-frame.h*scale,frame.w*scale,frame.h*scale,standing&&index===0&&frame===turn[0][5]);
   if(index===1){
    // Captain holds the grip; the jaws point down beside his boot.
    const gripX=x+height*.21,gripY=ground-height*.49;
@@ -112,7 +123,7 @@ export async function createStreetMotion(section,reduced=false){
  }
  const play=(duration,paint)=>new Promise((resolve,reject)=>{const start=performance.now();function tick(now){if(!alive){resolve();return}const elapsed=Math.max(0,now-start),p=reduced?1:Math.min(1,elapsed/duration);try{paint(p,elapsed)}catch(error){reject(error);return}if(p<1)raf=requestAnimationFrame(tick);else resolve()}raf=requestAnimationFrame(tick)});
  return {
-  async demonstrate(){section.classList.add('drawn-motion');
+  async demonstrate(){draw('walk',0,0);section.classList.add('drawn-motion');section.classList.remove('motion-loading');
    // Move from the last step into the turn without a frontal idle pose.
    await play(3840,(p,t)=>draw('walk',Math.floor(Math.min(t,3839)/160)%8,p));if(!alive)return;
    const durations=[0,160,180,220,360,900];
