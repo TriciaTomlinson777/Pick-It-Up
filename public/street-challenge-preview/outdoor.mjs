@@ -1,6 +1,6 @@
 import {holdScene} from './scene-transition.mjs';
 import {createPosePlayer} from './pose-player.mjs';
-import {createStreetMotion} from './street-motion.mjs?v=bag-start-camera-tilt-20261013';
+import {createStreetMotion} from './street-motion.mjs?v=smooth-scenes-20261013';
 
 // Photos remain private to this browser during development.
 function photoStore(mode,work){
