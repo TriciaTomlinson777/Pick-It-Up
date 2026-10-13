@@ -1,4 +1,5 @@
 import {createPosePlayer} from './pose-player.mjs';
+import {createStreetMotion} from './street-motion.mjs';
 
 // Photos remain private to this browser during development.
 function photoStore(mode,work){
@@ -29,10 +30,21 @@ export function createOutdoor({room,avatar,motionAsset,playerId,challengeId,name
  const cue=document.createElement('div');cue.className='visual-cue';cue.setAttribute('aria-hidden','true');section.append(cue);
  const phone=document.createElement('div');phone.className='demo-phone';phone.setAttribute('aria-hidden','true');phone.innerHTML='<span>📷</span>';actor.append(phone);
  const captain=find('.street-captain');
- let introAnimation=null,captainAnimation=null;
+ let introAnimation=null,captainAnimation=null,drawnMotion=null;
+ const useAnnFrames=motionAsset==='teal-glasses-motion-v1.png';
  const wait=ms=>new Promise(resolve=>setTimeout(resolve,reduced?0:ms));
  async function demonstrate(){
-  busy=true;button.disabled=true;button.hidden=true;actor.style.left='-28%';captain.style.left='-48%';
+  busy=true;button.disabled=true;button.hidden=true;
+  if(useAnnFrames){
+   try{
+    drawnMotion=await createStreetMotion(section,reduced);
+    if(!alive){drawnMotion.dispose();return}
+    await drawnMotion.demonstrate();if(!alive)return;
+    section.classList.add('camera-ready');button.hidden=false;button.disabled=false;busy=false;
+    say('Take your before photo of the litter.');return;
+   }catch{drawnMotion?.dispose();drawnMotion=null;}
+  }
+  actor.style.left='-28%';captain.style.left='-48%';
   await pose.ready;if(!alive)return;await pose.restoreGloves();
   introAnimation=actor.animate([{left:'-28%'},{left:'16%'}],{duration:reduced?0:2400,fill:'forwards',easing:'linear'});
   captainAnimation=captain.animate([{left:'-48%'},{left:'45%'}],{duration:reduced?0:2400,fill:'forwards',easing:'linear'});
@@ -68,6 +80,7 @@ export function createOutdoor({room,avatar,motionAsset,playerId,challengeId,name
  };
  async function collect(){
   if(busy||!alive)return;busy=true;section.classList.remove('camera-ready');button.disabled=true;find('.street-back').disabled=true;step='walking';
+  drawnMotion?.hide();
   find('.street-world').classList.add('walking');
   say(name+' is walking along the sidewalk and picking up litter.');
   try{
@@ -94,5 +107,5 @@ export function createOutdoor({room,avatar,motionAsset,playerId,challengeId,name
   if(step==='collected'){section.querySelectorAll('.street-litter').forEach(n=>n.hidden=true);actor.style.left='74%';button.hidden=true;say('Great work, '+name+'! Your before photo is saved on this device.');}
   else{button.textContent='▶';button.setAttribute('aria-label','Continue the Challenge');say('Your before photo is saved on this device. Ready to pick up the litter?')}
  }).catch(()=>{if(alive)demonstrate()});
- return {dispose(){alive=false;clearURL();introAnimation?.cancel();captainAnimation?.cancel();walkAnimation?.cancel();pose.dispose();section.remove();room.classList.remove('outside')}};
+ return {dispose(){alive=false;drawnMotion?.dispose();clearURL();introAnimation?.cancel();captainAnimation?.cancel();walkAnimation?.cancel();pose.dispose();section.remove();room.classList.remove('outside')}};
 }
