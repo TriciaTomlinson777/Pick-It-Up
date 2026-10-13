@@ -1,5 +1,5 @@
 import {createPosePlayer} from './pose-player.mjs';
-import {createStreetMotion} from './street-motion.mjs?v=ground-camera-20261013';
+import {createStreetMotion} from './street-motion.mjs?v=level-cutouts-20261013';
 
 // Photos remain private to this browser during development.
 function photoStore(mode,work){
