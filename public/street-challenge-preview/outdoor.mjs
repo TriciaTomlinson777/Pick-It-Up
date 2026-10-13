@@ -22,7 +22,7 @@ export function createOutdoor({room,avatar,motionAsset,playerId,challengeId,name
  const key=playerId+':'+challengeId;
  const section=document.createElement('section');section.className='outdoor';
  section.setAttribute('aria-label','Your sidewalk Challenge');
- section.innerHTML=`<div class="street-world"><div class="street-player"><span class="sprite street-sprite"></span></div><img class="street-captain" src="captain-outdoor.webp" alt="Captain Can waving"><button class="street-litter" data-piece="0" aria-label="Paper wrapper" disabled></button><button class="street-litter" data-piece="1" aria-label="Empty bottle" disabled></button><button class="street-litter" data-piece="2" aria-label="Paper receipt" disabled></button></div><div class="street-dialogue" role="status" aria-live="polite"></div><div class="street-actions"><button class="game-button camera-button" type="button" aria-label="Take before photo">📷</button><button class="text-button street-back" type="button" aria-label="Return to equipment">↩</button></div><input class="before-camera" type="file" accept="image/*" capture="environment" hidden><div class="photo-review" hidden role="dialog" aria-modal="true" aria-label="Review your before photo"><img alt="Your before photo"><button class="game-button use-photo" type="button" aria-label="Use this before photo">✓</button><button class="text-button retake-photo" type="button" aria-label="Retake before photo">📷</button><button class="text-button cancel-photo" type="button" aria-label="Cancel photo">✕</button></div>`;
+ section.innerHTML=`<div class="street-world"><div class="street-player"><span class="sprite street-sprite"></span></div><img class="street-captain" src="captain-outdoor.webp" alt="Captain Can waving"><button class="street-litter" data-piece="0" aria-label="Paper wrapper" disabled></button><button class="street-litter" data-piece="1" aria-label="Empty bottle" disabled></button><button class="street-litter" data-piece="2" aria-label="Paper receipt" disabled></button></div><div class="street-dialogue" role="status" aria-live="polite"></div><div class="street-actions"><button class="game-button camera-button" type="button" aria-label="Take before photo">📷</button></div><input class="before-camera" type="file" accept="image/*" capture="environment" hidden><div class="photo-review" hidden role="dialog" aria-modal="true" aria-label="Review your before photo"><img alt="Your before photo"><button class="game-button use-photo" type="button" aria-label="Use this before photo">✓</button><button class="text-button retake-photo" type="button" aria-label="Retake before photo">📷</button><button class="text-button cancel-photo" type="button" aria-label="Cancel photo">✕</button></div>`;
  room.append(section);room.classList.add('outside');
  const find=s=>section.querySelector(s),message=find('.street-dialogue'),button=find('.camera-button'),input=find('.before-camera'),review=find('.photo-review'),preview=review.querySelector('img'),sprite=find('.street-sprite'),actor=find('.street-player');
  sprite.append(avatar.cloneNode(true));
@@ -86,7 +86,7 @@ export function createOutdoor({room,avatar,motionAsset,playerId,challengeId,name
   finally{busy=false;use.disabled=false}
  };
  async function collect(){
-  if(busy||!alive)return;busy=true;section.classList.remove('camera-ready');button.disabled=true;find('.street-back').disabled=true;step='walking';
+  if(busy||!alive)return;busy=true;section.classList.remove('camera-ready');button.disabled=true;step='walking';
   drawnMotion?.hide();actor.style.visibility='';captain.style.visibility='';
   find('.street-world').classList.add('walking');
   say(name+' is walking along the sidewalk and picking up litter.');
@@ -104,9 +104,8 @@ export function createOutdoor({room,avatar,motionAsset,playerId,challengeId,name
    if(record)await photoStore('readwrite',store=>store.put({...record,stage:'collected'},key));
    if(!alive)return;say('Great work, '+name+'! Your before photo is saved. We’ll build the after-photo step next.');button.hidden=true;audio.play('celebrate');
   }catch{if(alive){step='saved';say('Let’s try that walk again.');section.querySelectorAll('.street-litter').forEach(n=>n.hidden=false);actor.style.left='16%'}}
-  finally{if(alive){busy=false;button.disabled=false;find('.street-back').disabled=false}}
+  finally{if(alive){busy=false;button.disabled=false}}
  }
- find('.street-back').onclick=()=>{if(!busy)onExit()};
  pose.ready.then(ok=>{if(alive&&ok)pose.restoreGloves()});
  photoStore('readonly',store=>store.get(key)).then(async record=>{
   if(!alive)return;if(!record){demonstrate();return;}
