@@ -46,7 +46,7 @@ export async function createStreetMotion(section,reduced=false){
  ];
  const turn=[0,1].map(side=>Array.from({length:6},(_,i)=>bounds(images[2],(i%3)*512,Math.floor(i/3)*512,512,512,dividers[i],side)));
  const heights=[0,1].map(i=>Math.max(...walk[i].map(f=>f.h)));
- function drawFrame(frame,x,ground,height,index,standing=false){
+ function drawFrame(frame,x,ground,height,index,standing=false,carry=1){
   const reference=standing?Math.max(...turn[index].map(f=>f.h)):heights[index];
   const scale=height/reference,half=frame.w*scale/2;
   x=Math.max(half+6,Math.min(section.clientWidth-half-6,x));
@@ -56,7 +56,14 @@ export async function createStreetMotion(section,reduced=false){
   // Carry props travel and scale with the same grounded character.
   if(index===0){
    const bw=height*.24,bh=height*.28;
-   const bx=x-height*.31,by=ground-height*.32;
+   // The handle meets Ann's lowered glove while walking. During the
+   // first turn poses she lowers the bag to the sidewalk before using the phone.
+   const swing=standing?0:Math.sin((index===0?walk[0].indexOf(frame):0)*Math.PI/4)*height*.018;
+   const bx=x-height*.31+swing,by=ground-bh-height*.19*carry;
+   if(carry<.1){
+    ctx.save();ctx.fillStyle='rgba(66,39,23,.16)';ctx.beginPath();
+    ctx.ellipse(bx+bw/2,ground-1,bw*.55,height*.012,0,0,Math.PI*2);ctx.fill();ctx.restore();
+   }
    ctx.drawImage(bag,bx,by,bw,bh);
   }
   ctx.drawImage(frame.im,frame.x,frame.y,frame.w,frame.h,x-half,ground-frame.h*scale,frame.w*scale,frame.h*scale);
@@ -68,21 +75,21 @@ export async function createStreetMotion(section,reduced=false){
     gripX-gw*.50,gripY-gh*.12,gw,gh);
   }
  }
- function draw(kind,frame,progress=1){
+ function draw(kind,frame,progress=1,carry=1){
   const W=section.clientWidth,H=section.clientHeight,dpr=Math.min(devicePixelRatio||1,2);canvas.width=W*dpr;canvas.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
   // The litter lies at 79–80% of the sidewalk height. Start behind it,
   // then pass it before turning at the original, approved photo position.
   // Keep the same perspective for the body, feet, and contact shadow.
   const travel=kind==='walk'?Math.max(0,Math.min(1,progress)):1;
   const height=Math.min(H*.42,W*.90)*(.70+.30*travel);
-  const ground=H*(.705+.15*travel);
+  const ground=H*(.705+.18*travel);
   for(let i=0;i<2;i++){
    const start=i===0?.38:.65,end=i===0?.30:.72;
    // Open space beside the litter before crossing its ground plane, then
    // ease back to the approved photo marks without stopping the steps.
    const bend=Math.sin(Math.PI*travel)*(.055)*(i===0?-1:1);
    drawFrame((kind==='walk'?walk:turn)[i][Math.max(0,frame)],
-    W*(start+(end-start)*travel+bend),ground,height,i,kind!=='walk');
+    W*(start+(end-start)*travel+bend),ground,height,i,kind!=='walk',carry);
   }
  }
  const play=(duration,paint)=>new Promise((resolve,reject)=>{const start=performance.now();function tick(now){if(!alive){resolve();return}const elapsed=Math.max(0,now-start),p=reduced?1:Math.min(1,elapsed/duration);try{paint(p,elapsed)}catch(error){reject(error);return}if(p<1)raf=requestAnimationFrame(tick);else resolve()}raf=requestAnimationFrame(tick)});
@@ -91,9 +98,9 @@ export async function createStreetMotion(section,reduced=false){
    // Move from the last step into the turn without a frontal idle pose.
    await play(3840,(p,t)=>draw('walk',Math.floor(Math.min(t,3839)/160)%8,p));if(!alive)return;
    const durations=[0,160,180,220,360,900];
-   for(let i=1;i<6&&alive;i++)await play(durations[i],()=>draw('turn',i));
+   for(let i=1;i<6&&alive;i++)await play(durations[i],p=>draw('turn',i,1,i===1?1-p:i===2?0:0));
   },
-  showReady(){section.classList.add('drawn-motion');draw('turn',5)},
+  showReady(){section.classList.add('drawn-motion');draw('turn',5,1,0)},
   hide(){section.classList.remove('drawn-motion')},
   dispose(){alive=false;cancelAnimationFrame(raf);canvas.remove();section.classList.remove('drawn-motion')}
  };
