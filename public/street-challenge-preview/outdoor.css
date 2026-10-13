@@ -52,3 +52,8 @@
 .drawn-motion .camera-button{width:76px;height:70px;padding:8px;font-size:38px;border-radius:24px}
 .drawn-motion .street-actions{bottom:1%;gap:3px}
 .drawn-motion .street-back{font-size:23px;min-height:34px;min-width:44px}
+
+/* Invite a tap without covering the camera or intercepting it. */
+.camera-ready .street-actions:before{content:"👇";position:absolute;bottom:100%;left:50%;margin-left:-24px;font-size:48px;line-height:1.1;pointer-events:none;animation:camera-point 1.2s ease-in-out infinite}
+@keyframes camera-point{50%{transform:translateY(8px)}}
+@media(prefers-reduced-motion:reduce){.camera-ready .street-actions:before{animation:none}}
