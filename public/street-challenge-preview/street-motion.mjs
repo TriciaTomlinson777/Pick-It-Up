@@ -45,6 +45,8 @@ export async function createStreetMotion(section,reduced=false){
  [[0,270],[180,271],[260,270],[350,267],[512,270]]
  ];
  const turn=[0,1].map(side=>Array.from({length:6},(_,i)=>bounds(images[2],(i%3)*512,Math.floor(i/3)*512,512,512,dividers[i],side)));
+ // Glove grip coordinates measured in each 384×512 walking cell.
+ const bagGrips=[[166,255],[96,289],[85,280],[85,292],[160,258],[128,273],[87,290],[145,253]];
  const heights=[0,1].map(i=>Math.max(...walk[i].map(f=>f.h)));
  function drawFrame(frame,x,ground,height,index,standing=false,carry=1){
   const reference=standing?Math.max(...turn[index].map(f=>f.h)):heights[index];
@@ -58,8 +60,15 @@ export async function createStreetMotion(section,reduced=false){
    const bw=height*.24,bh=height*.28;
    // The handle meets Ann's lowered glove while walking. During the
    // first turn poses she lowers the bag to the sidewalk before using the phone.
-   const swing=standing?0:Math.sin((index===0?walk[0].indexOf(frame):0)*Math.PI/4)*height*.018;
-   const bx=x-height*.31+swing,by=ground-bh-height*.19*carry;
+   const poseIndex=walk[0].indexOf(frame);
+   const grip=bagGrips[Math.max(0,poseIndex)];
+   const handX=x-half+(grip[0]-frame.x)*scale;
+   const handY=ground-frame.h*scale+(grip[1]-frame.y)*scale;
+   // Anchor the top handle under the glove, using the character's exact scale
+   // and crop. A generic sine wave cannot follow separately drawn arm poses.
+   const restingX=x-height*.31,restingY=ground-bh;
+   const bx=standing?restingX:handX-bw*.46;
+   const by=standing?restingY-height*.19*carry:handY-bh*.05;
    if(carry<.1){
     ctx.save();ctx.fillStyle='rgba(66,39,23,.16)';ctx.beginPath();
     ctx.ellipse(bx+bw/2,ground-1,bw*.55,height*.012,0,0,Math.PI*2);ctx.fill();ctx.restore();
