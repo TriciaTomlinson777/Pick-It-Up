@@ -52,12 +52,12 @@ export async function createStreetMotion(section,reduced=false){
   if(!tilt){ctx.drawImage(frame.im,frame.x,frame.y,frame.w,frame.h,x,y,w,h);return}
   // Move the phone and both gripping hands together around the shoulder.
   const mask=[[173,59],[270,59],[283,137],[242,189],[192,232],[155,211],[154,171],[166,147],[163,122]];
-  const outline=()=>{ctx.beginPath();mask.forEach(([px,py],i)=>{const dx=x+(px-frame.x)*w/frame.w,dy=y+(py-frame.y)*h/frame.h;i?ctx.lineTo(dx,dy):ctx.moveTo(dx,dy)});ctx.closePath()};
+  const outline=()=>{mask.forEach(([px,py],i)=>{const dx=x+(px-frame.x)*w/frame.w,dy=y+(py-frame.y)*h/frame.h;i?ctx.lineTo(dx,dy):ctx.moveTo(dx,dy)});ctx.closePath()};
   ctx.save();ctx.beginPath();ctx.rect(x,y,w,h);outline();ctx.clip('evenodd');
   ctx.drawImage(frame.im,frame.x,frame.y,frame.w,frame.h,x,y,w,h);ctx.restore();
   const pivotX=x+(160-frame.x)*w/frame.w,pivotY=y+(214-frame.y)*h/frame.h;
   ctx.save();ctx.translate(pivotX,pivotY);ctx.rotate(22*Math.PI/180);ctx.translate(-pivotX,-pivotY);
-  outline();ctx.clip();ctx.drawImage(frame.im,frame.x,frame.y,frame.w,frame.h,x,y,w,h);ctx.restore();
+  ctx.beginPath();outline();ctx.clip();ctx.drawImage(frame.im,frame.x,frame.y,frame.w,frame.h,x,y,w,h);ctx.restore();
  }
  function drawFrame(frame,x,ground,height,index,standing=false,carry=1){
   const reference=standing?Math.max(...turn[index].map(f=>f.h)):heights[index];
