@@ -16,7 +16,7 @@ export async function createStreetMotion(section,reduced=false){
  function drawFrame(frame,x,ground,height,index){const scale=height/heights[index],half=frame.w*scale/2;x=Math.max(half+6,Math.min(section.clientWidth-half-6,x));ctx.drawImage(frame.im,frame.x,frame.y,frame.w,frame.h,x-frame.w*scale/2,ground-frame.h*scale,frame.w*scale,frame.h*scale)}
  function draw(kind,frame,progress=1){
   const W=section.clientWidth,H=section.clientHeight,dpr=Math.min(devicePixelRatio||1,2);canvas.width=W*dpr;canvas.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
-  const height=Math.min(H*.42,W*.90)*(kind==='walk'?.78+.22*progress:1),ground=H*(kind==='walk'?.59+.27*progress:.86);
+  const height=Math.min(H*.42,W*.90)*(kind==='walk'?.78+.22*progress:1),ground=H*.86;
   for(let i=0;i<2;i++)drawFrame((kind==='walk'?walk:turn)[i][Math.max(0,frame)],W*(i===0?.30:.72),ground,height,i);
  }
  const play=(duration,paint)=>new Promise((resolve,reject)=>{const start=performance.now();function tick(now){if(!alive){resolve();return}const elapsed=Math.max(0,now-start),p=reduced?1:Math.min(1,elapsed/duration);try{paint(p,elapsed)}catch(error){reject(error);return}if(p<1)raf=requestAnimationFrame(tick);else resolve()}raf=requestAnimationFrame(tick)});
