@@ -1,3 +1,4 @@
+import {holdScene} from './scene-transition.mjs';
 import {createPosePlayer} from './pose-player.mjs';
 import {createStreetMotion} from './street-motion.mjs?v=bag-start-camera-tilt-20261013';
 
@@ -16,6 +17,8 @@ function photoStore(mode,work){
  });
 }
 export function createOutdoor({room,avatar,motionAsset,playerId,challengeId,name,gear,onExit,audio,reduced}){
+ const reveal=holdScene(room,reduced);
+ const backgroundReady=new Promise(resolve=>{const image=new Image();image.onload=image.onerror=resolve;image.src='street-clean.webp'});
  const key=playerId+':'+challengeId;
  const section=document.createElement('section');section.className='outdoor';
  section.setAttribute('aria-label','Your sidewalk Challenge');
@@ -40,6 +43,8 @@ export function createOutdoor({room,avatar,motionAsset,playerId,challengeId,name
    try{
     drawnMotion=await createStreetMotion(section,reduced);
     if(!alive){drawnMotion.dispose();return}
+    await backgroundReady;if(!alive)return;
+    drawnMotion.showStart();await reveal();if(!alive)return;
     await drawnMotion.demonstrate();if(!alive)return;
     section.classList.add('camera-ready');button.hidden=false;button.disabled=false;busy=false;
     say('Take your before photo of the litter.');return;
@@ -47,6 +52,7 @@ export function createOutdoor({room,avatar,motionAsset,playerId,challengeId,name
   }
   actor.style.left='-28%';captain.style.left='-48%';
   await pose.ready;if(!alive)return;await pose.restoreGloves();
+  await backgroundReady;await reveal();if(!alive)return;
   introAnimation=actor.animate([{left:'-28%'},{left:'16%'}],{duration:reduced?0:2400,fill:'forwards',easing:'linear'});
   captainAnimation=captain.animate([{left:'-48%'},{left:'45%'}],{duration:reduced?0:2400,fill:'forwards',easing:'linear'});
   await Promise.all([introAnimation.finished,captainAnimation.finished,pose.walkInPlace(reduced?0:2400)]).catch(()=>{});
@@ -102,11 +108,12 @@ export function createOutdoor({room,avatar,motionAsset,playerId,challengeId,name
  }
  find('.street-back').onclick=()=>{if(!busy)onExit()};
  pose.ready.then(ok=>{if(alive&&ok)pose.restoreGloves()});
- photoStore('readonly',store=>store.get(key)).then(record=>{
+ photoStore('readonly',store=>store.get(key)).then(async record=>{
   if(!alive)return;if(!record){demonstrate();return;}
+  await backgroundReady;await reveal();if(!alive)return;
   button.hidden=false;step=record.stage==='collected'?'collected':'saved';
   if(step==='collected'){section.querySelectorAll('.street-litter').forEach(n=>n.hidden=true);actor.style.left='74%';button.hidden=true;say('Great work, '+name+'! Your before photo is saved on this device.');}
   else{button.textContent='▶';button.setAttribute('aria-label','Continue the Challenge');say('Your before photo is saved on this device. Ready to pick up the litter?')}
  }).catch(()=>{if(alive)demonstrate()});
- return {dispose(){alive=false;drawnMotion?.dispose();clearURL();introAnimation?.cancel();captainAnimation?.cancel();walkAnimation?.cancel();pose.dispose();section.remove();room.classList.remove('outside')}};
+ return {dispose(){alive=false;reveal();drawnMotion?.dispose();clearURL();introAnimation?.cancel();captainAnimation?.cancel();walkAnimation?.cancel();pose.dispose();section.remove();room.classList.remove('outside')}};
 }
