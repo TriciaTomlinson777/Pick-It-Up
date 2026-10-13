@@ -143,6 +143,7 @@ export async function createStreetMotion(section,reduced=false){
    const durations=[0,160,180,220,360,900];
    for(let i=1;i<6&&alive;i++)await play(durations[i],p=>draw('turn',i,1,i===1?1-p:i===2?0:0));
   },
+  showStart(){section.classList.add('drawn-motion');section.classList.remove('motion-loading');draw('walk',0,0)},
   showReady(){section.classList.add('drawn-motion');draw('turn',5,1,0)},
   hide(){section.classList.remove('drawn-motion')},
   dispose(){alive=false;cancelAnimationFrame(raf);canvas.remove();section.classList.remove('drawn-motion')}
