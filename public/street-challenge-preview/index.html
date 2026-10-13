@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><base href="/street-challenge-preview/"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Street Challenge · Get ready</title>
-<link rel="stylesheet" href="outdoor.css?v=ground-camera-20261013"><style>
+<link rel="stylesheet" href="outdoor.css?v=level-cutouts-20261013"><style>
 @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&display=swap');
 *{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;background:#543521;color:#087d83;font-family:ui-rounded,"Arial Rounded MT Bold","Trebuchet MS",sans-serif}button,input{font:inherit}button{cursor:pointer;touch-action:manipulation}button:focus-visible,input:focus-visible{outline:4px solid #e85870;outline-offset:4px}
 .room{position:relative;min-height:100svh;max-width:600px;margin:auto;background:url(room.webp) center center/100% 100% no-repeat;overflow:hidden}
@@ -126,7 +126,7 @@ form{width:100%;display:none;flex:1;flex-direction:column;justify-content:center
 <script type="module">
 import {createGameAudio} from './audio.mjs';
 import {createPosePlayer} from './pose-player.mjs';
-import {createOutdoor} from './outdoor.mjs?v=ground-camera-20261013';
+import {createOutdoor} from './outdoor.mjs?v=level-cutouts-20261013';
 let outdoorScene=null;
 function closeOutdoor(){outdoorScene?.dispose();outdoorScene=null}
 const audio=createGameAudio(), $=id=>document.getElementById(id), avatars=[...document.querySelectorAll('.avatar')];
