@@ -55,6 +55,8 @@ export async function createStreetMotion(section,reduced=false){
   ctx.save();ctx.translate(x,ground-2);ctx.scale(height*.20,height*.023);
   const shadow=ctx.createRadialGradient(0,0,0,0,0,1);shadow.addColorStop(0,'rgba(66,39,23,.32)');shadow.addColorStop(1,'rgba(66,39,23,0)');
   ctx.fillStyle=shadow;ctx.beginPath();ctx.arc(0,0,1,0,Math.PI*2);ctx.fill();ctx.restore();
+  // Paint Ann first so her bag cannot disappear behind her legs.
+  if(index===0)ctx.drawImage(frame.im,frame.x,frame.y,frame.w,frame.h,x-half,ground-frame.h*scale,frame.w*scale,frame.h*scale);
   // Carry props travel and scale with the same grounded character.
   if(index===0){
    const bw=height*.24,bh=height*.28;
@@ -74,8 +76,14 @@ export async function createStreetMotion(section,reduced=false){
     ctx.ellipse(bx+bw/2,ground-1,bw*.55,height*.012,0,0,Math.PI*2);ctx.fill();ctx.restore();
    }
    ctx.drawImage(bag,bx,by,bw,bh);
+   if(!standing){
+    // Keep the gripping glove above the handle while the bag follows each pose.
+    ctx.save();ctx.beginPath();ctx.arc(handX,handY,22*scale,0,Math.PI*2);ctx.clip();
+    ctx.drawImage(frame.im,frame.x,frame.y,frame.w,frame.h,x-half,ground-frame.h*scale,frame.w*scale,frame.h*scale);
+    ctx.restore();
+   }
   }
-  ctx.drawImage(frame.im,frame.x,frame.y,frame.w,frame.h,x-half,ground-frame.h*scale,frame.w*scale,frame.h*scale);
+  if(index===1||standing)ctx.drawImage(frame.im,frame.x,frame.y,frame.w,frame.h,x-half,ground-frame.h*scale,frame.w*scale,frame.h*scale);
   if(index===1){
    // Captain holds the grip; the jaws point down beside his boot.
    const gripX=x+height*.21,gripY=ground-height*.49;
