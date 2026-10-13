@@ -66,11 +66,12 @@ export async function createStreetMotion(section,reduced=false){
    const grip=bagGrips[Math.max(0,poseIndex)];
    const handX=x-half+(grip[0]-frame.x)*scale;
    const handY=ground-frame.h*scale+(grip[1]-frame.y)*scale;
-   // Anchor the top handle under the glove, using the character's exact scale
+   // Anchor the front handle's crown under the glove (55% across, 10.5% down).
+   // Use the character's exact scale
    // and crop. A generic sine wave cannot follow separately drawn arm poses.
    const restingX=x-height*.31,restingY=ground-bh;
-   const bx=standing?restingX:handX-bw*.46;
-   const by=standing?restingY-height*.19*carry:handY-bh*.05;
+   const bx=standing?restingX:handX-bw*.55;
+   const by=standing?restingY-height*.19*carry:handY-bh*.105;
    if(carry<.1){
     ctx.save();ctx.fillStyle='rgba(66,39,23,.16)';ctx.beginPath();
     ctx.ellipse(bx+bw/2,ground-1,bw*.55,height*.012,0,0,Math.PI*2);ctx.fill();ctx.restore();
