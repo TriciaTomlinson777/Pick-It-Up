@@ -17,9 +17,9 @@ export async function createStreetMotion(section,reduced=false){
  function draw(kind,frame,progress=1){
   const W=section.clientWidth,H=section.clientHeight,dpr=Math.min(devicePixelRatio||1,2);canvas.width=W*dpr;canvas.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
   const height=Math.min(H*.32,W*.57)*(kind==='walk'?.70+.30*progress:1),ground=H*(kind==='walk'?.66+.25*progress:.91);
-  for(let i=0;i<2;i++)drawFrame((kind==='walk'?walk:turn)[i][frame],W*(i===0?.30:.72),ground,height,i);
+  for(let i=0;i<2;i++)drawFrame((kind==='walk'?walk:turn)[i][Math.max(0,frame)],W*(i===0?.30:.72),ground,height,i);
  }
- const play=(duration,paint)=>new Promise(resolve=>{const start=performance.now();function tick(now){if(!alive){resolve();return}const p=reduced?1:Math.min(1,(now-start)/duration);paint(p,now-start);if(p<1)raf=requestAnimationFrame(tick);else resolve()}raf=requestAnimationFrame(tick)});
+ const play=(duration,paint)=>new Promise((resolve,reject)=>{const start=performance.now();function tick(now){if(!alive){resolve();return}const elapsed=Math.max(0,now-start),p=reduced?1:Math.min(1,elapsed/duration);try{paint(p,elapsed)}catch(error){reject(error);return}if(p<1)raf=requestAnimationFrame(tick);else resolve()}raf=requestAnimationFrame(tick)});
  return {
   async demonstrate(){section.classList.add('drawn-motion');
    await play(4200,(p,t)=>draw('walk',Math.floor(t/180)%8,p));if(!alive)return;
