@@ -38,6 +38,16 @@ const cardStyles = [
 
 const kidsCornerColors = ['#0f9aa1', '#f59a2d', '#69be28', '#f4c94c', null, '#ef7f2d', '#2ec4c7', '#61b826', '#0fa5af', '#1fb8c2', '#d9665b'];
 
+function KidsCornerName() {
+  return (
+    <span style={{ fontFamily: "var(--font-baloo-2), 'Trebuchet MS', 'Segoe UI', sans-serif" }} className="font-extrabold">
+      {'Kids Corner'.split('').map((letter, index) => (
+        <span key={index} style={{ color: kidsCornerColors[index] }}>{letter === ' ' ? '\u00a0' : letter}</span>
+      ))}
+    </span>
+  );
+}
+
 const actions = [
   { title: 'Every cleanup counts.', text: 'Pick up litter wherever you are, then add your cleanup to our community map. No photo required.', label: 'Log My Cleanup', href: '/#participate-track' },
   { title: 'Inspire Others', text: 'Share before-and-after photos and let others see what a little care can accomplish.', label: 'Share My Before & After', href: '/#participate-before-after' },
@@ -84,16 +94,12 @@ export default function HowToParticipate() {
         <section aria-labelledby="kids-purpose-title" className="px-4 py-12 sm:py-16">
           <div className={`mx-auto max-w-4xl rounded-3xl border border-white/20 p-6 text-center shadow-sm sm:p-8 ${cardStyles[0].className} ${cardStyles[0].descriptionClassName}`}>
             <h2 id="kids-purpose-title" className="inline-block rounded-2xl bg-[#fdf7e8] px-4 py-3 text-[1.62rem] font-extrabold">
-              {'Kids Corner'.split('').map((letter, index) => letter === ' ' ? (
-                <wbr key={index} />
-              ) : (
-                <span key={index} style={{ color: kidsCornerColors[index] }}>{letter}</span>
-              ))}
+              <KidsCornerName />
             </h2>
-            <h3 className="mt-4 text-[1.62rem] font-extrabold">Little actions. Lifelong habits.</h3>
-            <p className="mt-6 text-[1.44rem] font-medium leading-9">Children can make a difference right now. Kids Corner helps them discover the joy of contributing, taking responsibility, and showing kindness—all while having fun.</p>
-            <p className="mt-4 text-[1.44rem] font-medium leading-9">Through stories and simple activities, children can practice caring for their communities: picking up a piece of litter with a grown-up, thanking someone who helps, or leaving a place better than they found it.</p>
-            <Link href="/kids-corner" className={`mt-7 inline-flex h-[4.5rem] w-60 max-w-full items-center justify-center rounded-full px-3 py-1 text-center text-[1.3125rem] font-bold leading-[1.875rem] shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[3].className} ${cardStyles[3].titleClassName}`}>Explore Kids Corner</Link>
+            <h3 className="mt-4 text-[1.62rem] font-extrabold" style={{ color: kidsCornerColors[5] }}>Little actions. Lifelong habits.</h3>
+            <p className="mt-6 text-left text-[1.44rem] font-medium leading-9">Children can make a difference right now. <KidsCornerName /> helps them discover the joy of contributing, taking responsibility, and showing kindness—all while having fun.</p>
+            <p className="mt-4 text-left text-[1.44rem] font-medium leading-9">Through stories and simple activities, children can practice caring for their communities: picking up a piece of litter with a grown-up, thanking someone who helps, or leaving a place better than they found it.</p>
+            <Link href="/kids-corner" className={`mt-7 inline-flex h-[4.5rem] w-60 max-w-full items-center justify-center rounded-full px-3 py-1 text-center text-[1.3125rem] font-bold leading-[1.875rem] shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[3].className} ${cardStyles[3].titleClassName}`}><span>Explore <KidsCornerName /></span></Link>
           </div>
         </section>
 
