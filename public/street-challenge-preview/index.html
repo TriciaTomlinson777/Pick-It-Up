@@ -134,9 +134,13 @@ form{width:100%;display:none;flex:1;flex-direction:column;justify-content:center
 @media(max-height:700px){.profile-avatar{min-height:125px}.profile-avatar img{height:115px!important}.profile-book{gap:8px}.profile-chest{min-height:95px}.profile-chest svg{height:60px}}
 
 .profile-level{display:grid;gap:2px;text-align:center;color:#002244;background:#2ec4c7;border-radius:18px;padding:10px}.profile-level span{font-size:14px}.profile-level strong{font-family:'Baloo 2',sans-serif;font-size:22px;line-height:1.15}
+
+#gameNav{background:#f2d9ff;color:#ad00ed}#gameNav svg{width:32px;height:28px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+#gameNav[aria-current=page],#rewardsNav[aria-current=page]{outline:3px solid #f5bd32;outline-offset:1px}
+.race-card{display:grid;gap:10px;width:100%}.race-map{position:relative;width:100%;aspect-ratio:320/360;background:#c9f1d5;border:3px solid #2ec4c7;border-radius:24px;overflow:hidden}.race-map>svg{width:100%;height:100%;display:block}.race-avatar{position:absolute;left:18%;top:76%;transform:translate(-50%,-50%);background:#ffdc52;border:3px solid white;border-radius:50%;width:54px;height:64px;padding:3px;box-shadow:0 0 0 3px #0b9295}.race-avatar img{height:100%;width:100%;object-fit:contain}.race-caption{position:absolute;top:90%;left:4%;max-width:48%;font-weight:bold;font-size:14px;overflow-wrap:anywhere}.race-help{background:#e0f6f4;border-radius:16px;padding:10px;font-size:14px;line-height:1.4;margin:0}.race-preview{color:#7b4985;font-size:13px;margin:0}
 </style></head><body>
 <main class="room booting"><div class="boot-message" role="status">Opening Street Challenge…</div>
-<div class="toolbar"><button class="round signout" id="signout" type="button" aria-label="Exit game" title="Exit game"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M3 4.8a2 2 0 0 1 1.5-1.9l9-2.3A2 2 0 0 1 16 2.5v27a2 2 0 0 1-2.5 1.9l-9-2.3A2 2 0 0 1 3 27.2Zm9 11.2c0 1.1.4 2 1 2s1-.9 1-2-.4-2-1-2-1 .9-1 2Z"/><path d="M17.5 3H21a3 3 0 0 1 3 3v6h-2V6a1 1 0 0 0-1-1h-3.5Zm0 24H21a1 1 0 0 0 1-1v-6h2v6a3 3 0 0 1-3 3h-3.5Zm6.5-14v-2a1 1 0 0 1 1.6-.8l5.6 4.8a1.3 1.3 0 0 1 0 2l-5.6 4.8A1 1 0 0 1 24 21v-2h-5a1.5 1.5 0 0 1-1.5-1.5v-3A1.5 1.5 0 0 1 19 13Z"/></svg></button><button class="round" id="homeNav" aria-label="Game home">🏠</button><nav class="player-nav" id="playerNav" aria-label="Player navigation"><button id="singlePlayerNav" type="button" aria-label="My profile" title="My profile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7.5" r="4"/><path d="M4.5 21v-2.2c0-4.1 3.1-6.4 7.5-6.4s7.5 2.3 7.5 6.4V21"/></svg></button><button id="familyPlayersNav" type="button" aria-label="Add or switch players" title="Add or switch players"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.1"/><path d="M2.5 20v-1.5c0-3.6 2.4-5.6 6.5-5.6s6.5 2 6.5 5.6V20"/><path d="M16 5.2a3.1 3.1 0 0 1 0 6.1M17.4 13.2c2.8.5 4.1 2.3 4.1 5.3V20"/></svg></button></nav><button class="round" id="rewardsNav" aria-label="Rewards">🏆</button><button class="round hourglass-button" id="deadlineToggle" aria-label="Show challenge deadline" aria-controls="challengeClock" aria-expanded="false" disabled><svg viewBox="0 0 40 48" aria-hidden="true"><path d="M8 5h24v5c0 6-5 10-10 14 5 4 10 8 10 14v5H8v-5c0-6 5-10 10-14C13 20 8 16 8 10Z" fill="#fffdf1" stroke="#b47c25" stroke-width="2.5"/><path d="M11 11h18c-1 5-5 7-9 10-4-3-8-5-9-10Z" fill="#eab83f"/><path d="M20 24v12" class="sand-stream" stroke="#eab83f" stroke-width="2.5" stroke-dasharray="2 2"/><path d="m11 40 9-7 9 7Z" fill="#eab83f"/><path d="M6 4h28M6 44h28" stroke="#835429" stroke-width="4" stroke-linecap="round"/></svg></button><button class="round" id="sound" aria-label="Mute sound" aria-pressed="false"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M4 12h6l8-7v22l-8-7H4Z"/><path d="M22 13q3 3 0 6M25 9q7 7 0 14M28 5q11 11 0 22"/><path class="mute-slash" d="M3 3 29 29"/></svg></button></div>
+<div class="toolbar"><button class="round signout" id="signout" type="button" aria-label="Exit game" title="Exit game"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M3 4.8a2 2 0 0 1 1.5-1.9l9-2.3A2 2 0 0 1 16 2.5v27a2 2 0 0 1-2.5 1.9l-9-2.3A2 2 0 0 1 3 27.2Zm9 11.2c0 1.1.4 2 1 2s1-.9 1-2-.4-2-1-2-1 .9-1 2Z"/><path d="M17.5 3H21a3 3 0 0 1 3 3v6h-2V6a1 1 0 0 0-1-1h-3.5Zm0 24H21a1 1 0 0 0 1-1v-6h2v6a3 3 0 0 1-3 3h-3.5Zm6.5-14v-2a1 1 0 0 1 1.6-.8l5.6 4.8a1.3 1.3 0 0 1 0 2l-5.6 4.8A1 1 0 0 1 24 21v-2h-5a1.5 1.5 0 0 1-1.5-1.5v-3A1.5 1.5 0 0 1 19 13Z"/></svg></button><button class="round" id="homeNav" aria-label="Game home">🏠</button><nav class="player-nav" id="playerNav" aria-label="Player navigation"><button id="singlePlayerNav" type="button" aria-label="My profile" title="My profile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7.5" r="4"/><path d="M4.5 21v-2.2c0-4.1 3.1-6.4 7.5-6.4s7.5 2.3 7.5 6.4V21"/></svg></button><button id="familyPlayersNav" type="button" aria-label="Add or switch players" title="Add or switch players"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.1"/><path d="M2.5 20v-1.5c0-3.6 2.4-5.6 6.5-5.6s6.5 2 6.5 5.6V20"/><path d="M16 5.2a3.1 3.1 0 0 1 0 6.1M17.4 13.2c2.8.5 4.1 2.3 4.1 5.3V20"/></svg></button></nav><button class="round" id="gameNav" aria-label="Game progress" title="Game progress"><svg viewBox="0 0 40 32" aria-hidden="true"><path d="M12 5c5 0 5 2 8 2s4-2 8-2c6 0 10 10 10 19 0 7-6 7-11 2l-4-4h-6l-4 4C8 31 2 31 2 24 2 15 6 5 12 5Z"/><path d="M9 13v8m-4-4h8"/><circle cx="28" cy="12" r="1.5"/><circle cx="24" cy="17" r="1.5"/><circle cx="32" cy="17" r="1.5"/><circle cx="28" cy="22" r="1.5"/></svg></button><button class="round" id="rewardsNav" aria-label="Rewards">🏆</button><button class="round hourglass-button" id="deadlineToggle" aria-label="Show challenge deadline" aria-controls="challengeClock" aria-expanded="false" disabled><svg viewBox="0 0 40 48" aria-hidden="true"><path d="M8 5h24v5c0 6-5 10-10 14 5 4 10 8 10 14v5H8v-5c0-6 5-10 10-14C13 20 8 16 8 10Z" fill="#fffdf1" stroke="#b47c25" stroke-width="2.5"/><path d="M11 11h18c-1 5-5 7-9 10-4-3-8-5-9-10Z" fill="#eab83f"/><path d="M20 24v12" class="sand-stream" stroke="#eab83f" stroke-width="2.5" stroke-dasharray="2 2"/><path d="m11 40 9-7 9 7Z" fill="#eab83f"/><path d="M6 4h28M6 44h28" stroke="#835429" stroke-width="4" stroke-linecap="round"/></svg></button><button class="round" id="sound" aria-label="Mute sound" aria-pressed="false"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M4 12h6l8-7v22l-8-7H4Z"/><path d="M22 13q3 3 0 6M25 9q7 7 0 14M28 5q11 11 0 22"/><path class="mute-slash" d="M3 3 29 29"/></svg></button></div>
 
 
 <div class="challenge-clock" id="challengeClock" hidden role="timer"></div><section class="panel"><p class="mission"><strong>Imagine…</strong>If every person left every place<br>better than they found it.</p><h1>Street<br>Challenge</h1>
@@ -291,7 +295,7 @@ room.addEventListener('click',event=>{
 },true);
 $('deadlineToggle').onclick=async()=>{
  if(deadlineOpen){closeDeadline();return}
- if(activeHubView==='profile'||activeHubView==='rewards'){
+ if(activeHubView==='profile'||activeHubView==='rewards'||activeHubView==='game'){
  const h=savedHeroes.find(h=>h.id===activeHeroId)||savedHero;
  if(validHero(h))await showHub(h,'home');
  }
@@ -437,21 +441,55 @@ function renderProfile(h){
  const img=avatars[h.avatar].querySelector('img').cloneNode(true);img.removeAttribute('style');img.alt=h.name+'’s character';
  const edit=document.createElement('span');edit.className='edit-badge';edit.textContent='✎';edit.setAttribute('aria-hidden','true');portrait.append(img,edit);
  portrait.onclick=()=>renderAvatarPicker(h);
- const points=document.createElement('div');points.className='profile-points';
- // Scoring will be connected with the Before/After submission flow.
- points.innerHTML='<span aria-hidden="true">⭐</span><strong>0</strong><span>Points</span>';
- const chest=document.createElement('button');chest.type='button';chest.className='profile-chest';chest.setAttribute('aria-expanded','false');
- chest.innerHTML='<svg viewBox="0 0 140 95" aria-hidden="true"><path d="m15 42 9-22q45-24 92 0l9 22v39q-55 19-110 0Z" fill="#b66b35" stroke="#724426" stroke-width="4"/><path d="M15 42q55-19 110 0v13q-55-14-110 0Z" fill="#f4c552" stroke="#724426" stroke-width="4"/><path d="M34 20v63M105 20v63" stroke="#f4c552" stroke-width="10"/><rect x="59" y="44" width="23" height="27" rx="5" fill="#ffe393" stroke="#724426" stroke-width="3"/><path d="m70 49 3 6 6 1-5 5 1 6-5-3-5 3 1-6-5-5 6-1Z" fill="#cf8934"/><path d="m11 7 2 6 6 2-6 2-2 6-2-6-6-2 6-2Zm116-3 2 6 6 2-6 2-2 6-2-6-6-2 6-2Z" fill="#edb73a"/></svg><span>Treasure chest</span>';
- const note=document.createElement('p');note.className='profile-note';note.hidden=true;note.textContent='Your first treasure is waiting to be earned!';note.setAttribute('role','status');
- chest.onclick=()=>{note.hidden=!note.hidden;chest.setAttribute('aria-expanded',String(!note.hidden));};
- const level=document.createElement('div');level.className='profile-level';const label=document.createElement('span');label.textContent='Level';const value=document.createElement('strong');value.textContent='Street Challenge';level.append(label,value);
  const accountSection=document.createElement('section');accountSection.className='profile-account';accountSection.setAttribute('aria-label','Private account');accountSection.hidden=!signedIn||!accountEmail;
  const accountHeading=document.createElement('h3');accountHeading.textContent='Account';
  const email=document.createElement('p');email.className='profile-email';email.textContent=accountEmail;
  const privacy=document.createElement('small');privacy.textContent='Private · Visible only to your signed-in family';
  accountSection.append(accountHeading,email,privacy);
- book.append(name,level,portrait,points,chest,note,accountSection);picker.replaceChildren(book);
+ book.append(name,portrait,accountSection);picker.replaceChildren(book);
 }
+function openProgressPanel(){
+ room.classList.add('profile-open');
+ room.style.setProperty('--profile-top',(toolbar.offsetTop+toolbar.offsetHeight+14)+'px');
+ $('signinGreeting').textContent='';
+}
+function renderRewards(){
+ openProgressPanel();
+ const book=document.createElement('section');book.className='profile-book';book.setAttribute('aria-label','Earned rewards');
+ const chest=document.createElement('button');chest.type='button';chest.className='profile-chest';chest.setAttribute('aria-expanded','false');
+ chest.innerHTML='<svg viewBox="0 0 140 95" aria-hidden="true"><path d="m15 42 9-22q45-24 92 0l9 22v39q-55 19-110 0Z" fill="#b66b35" stroke="#724426" stroke-width="4"/><path d="M15 42q55-19 110 0v13q-55-14-110 0Z" fill="#f4c552" stroke="#724426" stroke-width="4"/><path d="M34 20v63M105 20v63" stroke="#f4c552" stroke-width="10"/><rect x="59" y="44" width="23" height="27" rx="5" fill="#ffe393" stroke="#724426" stroke-width="3"/><path d="m70 49 3 6 6 1-5 5 1 6-5-3-5 3 1-6-5-5 6-1Z" fill="#cf8934"/><path d="m11 7 2 6 6 2-6 2-2 6-2-6-6-2 6-2Zm116-3 2 6 6 2-6 2-2 6-2-6-6-2 6-2Z" fill="#edb73a"/></svg><span>Treasure chest</span>';
+ const note=document.createElement('p');note.className='profile-note';note.hidden=true;note.textContent='Your first treasure is waiting to be earned!';note.setAttribute('role','status');
+ chest.onclick=()=>{note.hidden=!note.hidden;chest.setAttribute('aria-expanded',String(!note.hidden));};
+ const heading=document.createElement('h2');heading.className='profile-name';heading.textContent='Your treasures';
+ const empty=document.createElement('p');empty.className='profile-note';empty.textContent='Your earned treasures will live here. Your first before-and-after cleanup will earn your first prize!';
+ book.append(heading,chest,note,empty);picker.replaceChildren(book);
+}
+function renderGame(h){
+ openProgressPanel();
+ const book=document.createElement('section');book.className='race-card';book.setAttribute('aria-label','Game progress');
+ const name=document.createElement('h2');name.className='profile-name';name.textContent=h.name+'’s challenge';
+ const level=document.createElement('div');level.className='profile-level';level.innerHTML='<span>Level</span><strong>Street Challenge</strong>';
+ const points=document.createElement('div');points.className='profile-points';points.innerHTML='<span aria-hidden="true">⭐</span><strong>0</strong><span>Points</span>';
+ const track=document.createElement('div');track.className='race-map';
+ track.innerHTML=`<svg viewBox="0 0 320 360" role="img" aria-label="Winding street race track from Start at the bottom to Finish at the top. Your avatar is at Start.">
+ <defs><pattern id="raceChecks" width="16" height="16" patternUnits="userSpaceOnUse"><rect width="16" height="16" fill="white"/><path d="M0 0h8v8H0ZM8 8h8v8H8Z" fill="#183c51"/></pattern></defs>
+ <path d="M58 297V266Q58 235 96 235H237Q275 235 275 197T237 159H84Q46 159 46 121T84 83H250" fill="none" stroke="#fff9d8" stroke-width="57" stroke-linecap="round"/>
+ <path d="M58 297V266Q58 235 96 235H237Q275 235 275 197T237 159H84Q46 159 46 121T84 83H250" fill="none" stroke="#639aab" stroke-width="44" stroke-linecap="round"/>
+ <path d="M58 297V266Q58 235 96 235H237Q275 235 275 197T237 159H84Q46 159 46 121T84 83H250" fill="none" stroke="#fff4bd" stroke-width="3" stroke-dasharray="10 10"/>
+ <rect x="35" y="285" width="46" height="10" fill="white"/><rect x="237" y="61" width="16" height="44" fill="url(#raceChecks)"/>
+ <g font-family="Trebuchet MS,sans-serif" font-weight="bold" fill="#075e64"><text x="98" y="309" font-size="19">START</text><text x="205" y="41" font-size="19">FINISH 🏁</text></g>
+ <g fill="#ffc947"><path d="m160 109 4 9 10 1-8 7 2 10-8-5-9 5 2-10-7-7 10-1Z"/><path d="m153 268 4 9 10 1-8 7 2 10-8-5-9 5 2-10-7-7 10-1Z"/></g>
+ <g fill="#28b59f"><circle cx="25" cy="204" r="15"/><circle cx="291" cy="130" r="14"/></g><g fill="#bc7943"><rect x="22" y="212" width="6" height="14"/><rect x="288" y="140" width="6" height="13"/></g>
+ </svg>`;
+ const marker=document.createElement('button');marker.type='button';marker.className='race-avatar';marker.setAttribute('aria-label',h.name+' — 0 points, at Start');
+ const img=avatars[h.avatar].querySelector('img').cloneNode(true);img.removeAttribute('style');img.alt='';marker.append(img);
+ const caption=document.createElement('span');caption.className='race-caption';caption.textContent=h.name;
+ const status=document.createElement('p');status.className='race-help';status.setAttribute('role','status');status.textContent='Pick up litter, earn points, and move toward the finish! Nearby competitors will appear when challenge scoring is connected.';
+ marker.onclick=()=>{status.textContent=h.name+' · Street Challenge · 0 points. Ready at the start!'};
+ const preview=document.createElement('p');preview.className='race-preview';preview.textContent='Track preview · Live scoring and finish goal coming next.';
+ track.append(marker,caption);book.append(name,level,points,track,status,preview);picker.replaceChildren(book);
+}
+
 function renderAvatarPicker(h){
  title.textContent='Choose your look!';
  const grid=document.createElement('div');grid.className='profile-avatars';
@@ -474,7 +512,7 @@ function renderAvatarPicker(h){
 }
 
 async function showHub(h,view='home',autoResume=false){
- activeHubView=view;closeDeadline();
+ activeHubView=view;for(const [id,key] of [['gameNav','game'],['rewardsNav','rewards']]){if(view===key)$(id).setAttribute('aria-current','page');else $(id).removeAttribute('aria-current')}closeDeadline();
  const requestId=++hubRequest;
  await storeProgress();await progressQueue;
  if(requestId!==hubRequest)return;
@@ -482,7 +520,7 @@ async function showHub(h,view='home',autoResume=false){
  try{await recordPlayerLogin(h)}catch(e){message(e.message)}
  showSignin();room.classList.add('hub');
  for(const id of ['homeNav','rewardsNav'])$(id).hidden=false;$('playerNav').hidden=false;
- title.textContent=view==='profile'?'Your profile':view==='rewards'?'Your rewards':'Welcome back!';
+ title.textContent=view==='profile'?'Your profile':view==='rewards'?'Your rewards':view==='game'?'Your game':'Welcome back!';
  $('continueHero').hidden=true;$('signinBack').hidden=true;picker.hidden=false;picker.replaceChildren();
  if(view==='home'){
  const loading=document.createElement('p');loading.textContent='Finding your challenge…';picker.append(loading);
@@ -502,12 +540,12 @@ async function showHub(h,view='home',autoResume=false){
 
  }catch(e){if(requestId!==hubRequest)return;picker.replaceChildren();message(e.message);const retry=document.createElement('button');retry.className='game-button';retry.textContent='Try again';retry.onclick=()=>showHub(h);picker.append(retry)}
  }else{
- if(view==='profile')renderProfile(savedHeroes.find(player=>player.id===h.id)||h);else{const text=document.createElement('p');text.textContent='Your rewards will appear here as you earn them!';picker.append(text);}
+ if(view==='profile')renderProfile(savedHeroes.find(player=>player.id===h.id)||h);else if(view==='game')renderGame(h);else renderRewards();
 
  }
 
 }
-for(const [id,view] of [['homeNav','home'],['rewardsNav','rewards']]){
+for(const [id,view] of [['homeNav','home'],['gameNav','game'],['rewardsNav','rewards']]){
  $(id).onclick=()=>{const h=savedHeroes.find(h=>h.id===activeHeroId)||savedHero;if(validHero(h))showHub(h,view);else if(signedIn)showPlayers();else if(view==='home')reset();else showSignin()};
 }
 $('singlePlayerNav').onclick=()=>{const h=savedHeroes.find(h=>h.id===activeHeroId)||savedHero;if(validHero(h))showHub(h,'profile');else if(signedIn)showPlayers();else showSignin()};
