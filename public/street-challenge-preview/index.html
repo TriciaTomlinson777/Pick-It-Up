@@ -113,7 +113,8 @@ form{width:100%;display:none;flex:1;flex-direction:column;justify-content:center
 /* Player's storybook profile. */
 .room.profile-open .panel{inset:var(--profile-top,125px) 6% 18px;background:#fff6d9;border:4px solid #13999c;border-radius:30px;box-shadow:0 7px 0 #74503155;padding:12px;overflow-y:auto}
 .room.profile-open h1{font-family:'Baloo 2',sans-serif;font-size:30px;margin:0 0 4px;line-height:1.1}
-.room.profile-open #signinHero,.room.profile-open #signinGreeting{display:none}
+.room.signing.hub.profile-open #signinHero,.room.signing.hub.profile-open #signinGreeting{display:none!important}
+.profile-email{margin:0;font-size:14px;line-height:1.35;color:#526e6c;overflow-wrap:anywhere}
 .room.profile-open #signinCard{flex:none;width:100%}
 .room.profile-open .hero-picker{max-height:none;overflow:visible;display:block}
 .profile-book{width:100%;display:grid;gap:12px}
@@ -406,7 +407,8 @@ function showAccountRetry(text){
  message(text||'Your saved game couldn’t be checked. Please try again.');
 }
 
-async function account(action,data={}){const response=await fetch('/api/street-challenge/account',{method:action?'POST':'GET',credentials:'same-origin',headers:action?{'Content-Type':'application/json'}:undefined,body:action?JSON.stringify({action,...data}):undefined,cache:'no-store'});const result=await response.json();if(!response.ok||result.unavailable)throw Error(result.error||'Your saved game couldn’t be loaded. Tap I’m back to try again.');return result}
+let accountEmail='';
+async function account(action,data={}){const response=await fetch('/api/street-challenge/account',{method:action?'POST':'GET',credentials:'same-origin',headers:action?{'Content-Type':'application/json'}:undefined,body:action?JSON.stringify({action,...data}):undefined,cache:'no-store'});const result=await response.json();if(!response.ok||result.unavailable)throw Error(result.error||'Your saved game couldn’t be loaded. Tap I’m back to try again.');if(typeof result.email==='string')accountEmail=result.email;if(result.signedIn===false||action==='logout')accountEmail='';return result}
 async function recordPlayerLogin(h){
  if(!validHero(h)||loginRecordedHeroes.has(h.id))return null;
  const result=await account('resume',{heroId:h.id});
@@ -443,7 +445,8 @@ function renderProfile(h){
  const note=document.createElement('p');note.className='profile-note';note.hidden=true;note.textContent='Your first treasure is waiting to be earned!';note.setAttribute('role','status');
  chest.onclick=()=>{note.hidden=!note.hidden;chest.setAttribute('aria-expanded',String(!note.hidden));};
  const level=document.createElement('div');level.className='profile-level';const label=document.createElement('span');label.textContent='Level';const value=document.createElement('strong');value.textContent='Street Challenge';level.append(label,value);
- book.append(name,level,portrait,points,chest,note);picker.replaceChildren(book);
+ const email=document.createElement('p');email.className='profile-email';email.textContent=accountEmail?'Account email: '+accountEmail:'';email.hidden=!accountEmail;
+ book.append(name,email,level,portrait,points,chest,note);picker.replaceChildren(book);
 }
 function renderAvatarPicker(h){
  title.textContent='Choose your look!';
