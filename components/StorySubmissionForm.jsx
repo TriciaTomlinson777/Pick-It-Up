@@ -23,8 +23,8 @@ export default function StorySubmissionForm() {
     setSuccessMessage('');
 
     try {
-      if (photos.length > 0 && !hasConfirmedPhotoGuidelines) {
-        throw new Error('Please confirm the Community Photo Guidelines checkbox before submitting photos.');
+      if (!hasConfirmedPhotoGuidelines) {
+        throw new Error('Please confirm the submission permission checkbox before submitting your story.');
       }
 
       const payload = new FormData();
@@ -162,20 +162,21 @@ export default function StorySubmissionForm() {
             </div>
           ) : null}
 
-          {photos.length > 0 ? (
-            <label className="flex items-start gap-2.5 rounded-xl border border-[#002b49]/12 bg-[#fffdf7] px-3 py-3 text-sm text-[#002b49]">
-              <input
-                type="checkbox"
-                checked={hasConfirmedPhotoGuidelines}
-                onChange={(event) => setHasConfirmedPhotoGuidelines(event.target.checked)}
-                required
-                className="mt-0.5 h-4 w-4 rounded border-[#002b49]/25"
-              />
-              <span>
-                I confirm that my photos follow the Community Photo Guidelines, that I have permission to submit them, and that I am the parent or legal guardian if a photo intentionally features a child.
-              </span>
-            </label>
-          ) : null}
+          <label className="flex items-start gap-2.5 rounded-xl border border-[#002b49]/12 bg-[#fffdf7] px-3 py-3 text-sm text-[#002b49]">
+            <input
+              type="checkbox"
+              checked={hasConfirmedPhotoGuidelines}
+              onChange={(event) => setHasConfirmedPhotoGuidelines(event.target.checked)}
+              required
+              className="mt-0.5 h-4 w-4 rounded border-[#002b49]/25"
+            />
+            <span>
+              I confirm that I own or have permission to submit my story and any photos.
+              Any photos follow the Community Photo Guidelines, and I am the parent or legal
+              guardian if a photo intentionally features a child. I give Pick It Up Seattle permission to display my approved submission on its website and to process it for privacy and display. I keep any ownership rights I hold.{' '}
+              See our <a href="/terms#submissions" target="_blank" rel="noreferrer" className="underline">submission permissions</a>.
+            </span>
+          </label>
 
           {successMessage ? (
             <p className="rounded-xl border border-[#1f8f3c]/20 bg-[#ecf9f0] px-4 py-2.5 text-sm font-semibold text-[#1f8f3c]">
