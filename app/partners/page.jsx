@@ -121,7 +121,7 @@ export default function Partners() {
           <h1 className="heading-xl mb-4">Become a Community Partner</h1>
           <p className="text-lg text-[#002244] max-w-4xl">
             Whether you are a business, school, nonprofit, neighborhood group, event organizer, or
-            community leader, there are many ways to help create a cleaner Seattle.
+            community leader, there are many ways to help create cleaner communities.
           </p>
         </div>
       </section>

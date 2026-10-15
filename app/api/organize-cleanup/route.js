@@ -21,7 +21,7 @@ Meeting Place: ${meetingPlace}
 
 Your email address and phone number will remain private and will not appear publicly.
 
-Thank you for helping make Seattle cleaner, one piece at a time!
+Thank you for helping make your community cleaner, one piece at a time!
 
 Pick It Up Seattle
 One Person. One Piece. One Cleaner City.`;

@@ -3233,7 +3233,7 @@ export default function Home() {
         <section className="border-y border-[#0f9aa1]/45 bg-[linear-gradient(122deg,_#1aa1ab_0%,_#58c92e_50%,_#f0ab2f_100%)] py-14 text-[#002244] sm:py-16">
           <div className="container-custom text-center">
             <h2 className={`${balooDisplay.className} text-3xl font-bold text-white sm:text-4xl lg:text-5xl`}>
-              Every small act helps build a brighter Seattle.
+              Every small act helps build a brighter community.
             </h2>
             <p className="mx-auto mt-4 max-w-3xl text-xl font-semibold leading-relaxed text-[#fef9ee] sm:text-2xl lg:text-2xl">
               Join the movement, share kindness, and help our city shine.
@@ -3314,7 +3314,7 @@ export default function Home() {
                 How It Works
               </p>
               <h2 className={`${balooDisplay.className} mt-3 text-3xl font-bold text-[#0f9aa1] sm:text-4xl lg:text-5xl`}>
-                Three simple steps to keep Seattle cleaner.
+                Three simple steps to keep your community cleaner.
               </h2>
               <p className="mx-auto mt-4 max-w-5xl text-lg text-slate-600 lg:text-xl">
                 Pick it up wherever you are, add the location, and share your before and after photos with the community.
@@ -3716,7 +3716,7 @@ export default function Home() {
                         Where did you clean up?
                       </h3>
                       <p className="mt-1 text-base leading-6 text-[#1f5f7a] sm:text-lg">
-                        After selecting an action button above, you may change the Seattle default map and move your marker. Pan or zoom to your cleanup location. Then click Submit.
+                        After selecting an action button above, you may move the map and your marker. Pan or zoom to your cleanup location. Then click Submit.
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
@@ -3805,7 +3805,7 @@ export default function Home() {
                   <div className="space-y-3.5">
                     <div className="rounded-2xl border border-[#002b49]/12 bg-white px-4 py-3 shadow-[0_10px_20px_rgba(0,43,73,0.06)]">
                       <p className="text-sm text-[#1f5f7a]">
-                        The map opens to a broader Seattle area by default. Pan anywhere, zoom in or out, and adjust the marker as needed.
+                        Pan to your community, zoom in or out, and adjust the marker to your cleanup location.
                       </p>
                       <div className="mt-3 h-60 overflow-hidden rounded-lg border border-[#002b49]/10 sm:h-72">
                         {resolvedTrackLatLng && (
@@ -4227,7 +4227,7 @@ export default function Home() {
 
                   {shareModalStage === 'success' ? (
                     <div className="rounded-2xl border border-[#0f9aa1]/24 bg-[#eef9fc] px-4 py-5 text-center shadow-[0_10px_20px_rgba(0,43,73,0.06)]">
-                      <p className="text-xl font-bold text-[#1f5f7a] sm:text-2xl">Thanks for sharing a little more kindness with Seattle! 💙</p>
+                      <p className="text-xl font-bold text-[#1f5f7a] sm:text-2xl">Thanks for sharing a little more kindness with your community! 💙</p>
                     </div>
                   ) : shareModalStage === 'choose' ? (
                     <div>

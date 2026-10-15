@@ -214,7 +214,7 @@ export default async function BlogPage() {
         <div className="container-custom mx-auto max-w-[1080px]">
           <h2 className="text-[2.05rem] font-bold text-[#002244] sm:text-[2.45rem]">Story Categories</h2>
           <p className="mt-2 max-w-4xl text-[1.08rem] text-[#1f5f7a]">
-            Discover the people, partnerships, and moments shaping a cleaner Seattle.
+            Discover the people, partnerships, and moments shaping cleaner communities.
           </p>
 
           <div className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">

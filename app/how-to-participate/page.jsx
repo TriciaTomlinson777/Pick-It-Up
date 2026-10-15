@@ -59,7 +59,7 @@ export default function HowToParticipate() {
         <>
           <p className="text-gray-700 leading-relaxed">
             Browse the Events page to find a community cleanup that works for you. You&apos;ll find
-            community cleanups throughout Seattle and surrounding cities, including parks,
+            community cleanups in local places, including parks,
             neighborhoods, beaches, and specific areas where others are coming together to make
             a difference.
             <br />
@@ -142,7 +142,7 @@ export default function HowToParticipate() {
           <br />
           <br />
           Every piece of litter picked up matters. Every volunteer makes a difference.
-          Together, we&apos;re building a cleaner, more beautiful Seattle-one piece at a time.
+          Together, we&apos;re building cleaner, more beautiful communities—one piece at a time.
         </p>
       ),
     },
@@ -167,7 +167,7 @@ export default function HowToParticipate() {
           movement.
           <br />
           <br />
-          Remember, every piece picked up makes Seattle a little cleaner-and together those
+          Remember, every piece picked up makes your community a little cleaner—and together those
           small actions create extraordinary change.
         </p>
       ),
@@ -182,7 +182,7 @@ export default function HowToParticipate() {
         <>
           <p className="text-gray-700 leading-relaxed">
             Businesses, organizations, and community partners can play an important role in
-            helping build a cleaner Seattle.
+            helping build a cleaner community.
             <br />
             <br />
             Imagine… if every person left every place better than they found it.
@@ -233,7 +233,7 @@ export default function HowToParticipate() {
 
           <p className="mt-6 text-gray-700 leading-relaxed">
             This is a practical, visible, and community-minded way for local businesses and
-            supporters to help make Seattle cleaner — not just for themselves, but for everyone
+            supporters to help make shared places cleaner — not just for themselves, but for everyone
             who lives, works, and walks in our city.
             <br />
             <br />

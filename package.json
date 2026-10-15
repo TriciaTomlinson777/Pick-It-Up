@@ -1,7 +1,7 @@
 {
   "name": "pick-it-up",
   "version": "1.0.0",
-  "description": "A community movement making it easy and fun to leave Seattle better than we found it.",
+  "description": "A community movement making it easy and fun to leave every place better than we found it.",
   "main": "index.js",
   "scripts": {
     "dev": "next dev -H 0.0.0.0 -p 3000",

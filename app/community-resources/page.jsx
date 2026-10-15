@@ -87,7 +87,7 @@ export default function CommunityResources() {
         <div className="container-custom">
           <h1 className="heading-xl mb-4 text-[#0f9aa1]">Community Resources</h1>
           <p className="text-lg text-green-100">
-            Trusted Seattle resources to help residents care for and improve our city.
+            Find resources to help care for your community. The organizations listed below currently serve the Seattle area.
           </p>
         </div>
       </section>

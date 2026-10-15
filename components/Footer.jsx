@@ -12,7 +12,7 @@ export default function Footer({ showHomeShareButton = false, alignWithPageConte
           <div>
             <h3 className="mb-4 text-base font-bold text-[#0f9aa1] sm:text-xl lg:text-2xl">Pick It Up Seattle<span className="font-semibold sm:hidden"> a 501(c)(3) nonprofit</span></h3>
             <p className="text-[#1a5570] lg:text-lg">
-              Making it easy to leave Seattle better than you found it.
+              Making it easy to leave every place better than you found it.
             </p>
           </div>
 

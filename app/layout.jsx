@@ -9,9 +9,9 @@ const balooDisplay = Baloo_2({
 export const metadata = {
   title: 'Pick It Up Seattle - Community Cleanup Movement',
   description:
-    'A community movement making it easy and fun to leave Seattle better than we found it.',
+    'A community movement making it easy and fun to leave every place better than we found it.',
   keywords:
-    'Seattle, cleanup, community, environmental, volunteer, sustainable',
+    'cleanup, community, environmental, volunteer, sustainable',
 };
 
 export default function RootLayout({ children }) {

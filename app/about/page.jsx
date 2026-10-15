@@ -24,7 +24,7 @@ export default function About() {
             <div className="max-w-none space-y-5 text-left text-[1.1rem] font-medium leading-[1.66] text-slate-800 sm:text-[1.18rem] lg:text-[1.28rem]">
               <p>
                 Imagine walking through your neighborhood, your city, a local park, or along
-                Seattle&apos;s beautiful waterfront and seeing a cleaner, more welcoming city because
+                a beautiful waterfront and seeing a cleaner, more welcoming place because
                 thousands of ordinary people decided to do one simple thing...
               </p>
               <p className="text-center text-[#ef7f2d] text-[1.72rem] font-extrabold sm:text-[1.92rem]">
@@ -93,9 +93,9 @@ export default function About() {
               <p>
                 Every person who joins proves that one small act really can inspire another.
               </p>
-              <h2 className="heading-lg mt-10 mb-2 text-center text-[#1f5f7a] sm:text-[2.9rem]">Seattle Is Just the Beginning</h2>
+              <h2 className="heading-lg mt-10 mb-2 text-center text-[#1f5f7a] sm:text-[2.9rem]">Every Community Is Part of the Story</h2>
               <p>
-                Seattle is where this movement begins&mdash;but we hope it doesn&apos;t end here.
+                This movement starts with people caring for the places they call home—and grows with every community that joins.
               </p>
               <p>
                 Our vision is to inspire communities across the country to create their own Pick It

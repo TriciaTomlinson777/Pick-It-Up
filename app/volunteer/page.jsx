@@ -109,7 +109,7 @@ export default function Volunteer() {
     {
       icon: '🧤',
       title: 'Join Cleanup Adventures',
-      description: 'Show up, pick up, and help make Seattle cleaner one piece at a time.',
+      description: 'Show up, pick up, and help make your community cleaner one piece at a time.',
       type: 'link',
       href: '/events?view=join#join-cleanup',
     },
@@ -305,7 +305,7 @@ export default function Volunteer() {
       return (
         <div className="rounded-2xl border border-[#0f9aa1]/18 bg-white p-6 shadow-[0_14px_30px_rgba(0,43,73,0.1)] sm:p-8">
           <h3 className="text-2xl font-bold text-[#002b49]">Community Ambassador</h3>
-          <p className="mt-2 text-lg font-semibold text-[#1f5f7a]">Help Inspire a Cleaner Seattle</p>
+          <p className="mt-2 text-lg font-semibold text-[#1f5f7a]">Help Inspire Cleaner Communities</p>
           <p className="mt-4 text-base leading-7 text-[#516b7d]">Powerful movements grow because people choose to share them.</p>
           <p className="mt-3 text-base leading-7 text-[#516b7d]">If you already inspire others through social media, podcasts, newsletters, videos, photography, writing, public speaking, community leadership, or other creative platforms, we’d love your help introducing more people to Pick It Up Seattle.</p>
           <p className="mt-3 text-base leading-7 text-[#516b7d]">Your voice, your creativity, and your community can help inspire thousands of people to make one small difference.</p>
@@ -658,7 +658,7 @@ export default function Volunteer() {
 
             <h2 className="heading-lg mb-4 text-center text-[#0f9aa1]">Ways to Make a Difference</h2>
             <p className="mx-auto mb-12 max-w-4xl text-center text-lg leading-relaxed text-[#1f5f7a]">
-              There are many ways to take part in the movement, and every one of them helps move Seattle forward.
+              There are many ways to take part in the movement, and every one of them helps move our communities forward.
             </p>
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
