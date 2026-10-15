@@ -82,7 +82,7 @@ export default function HowToParticipate() {
         </section>
 
         <section aria-labelledby="kids-purpose-title" className="px-4 py-12 sm:py-16">
-          <div className={`mx-auto max-w-4xl rounded-3xl border border-white/20 p-6 text-center shadow-sm sm:p-8 ${cardStyles[4].className}`}>
+          <div className={`mx-auto max-w-4xl rounded-3xl border border-white/20 p-6 text-center shadow-sm sm:p-8 ${cardStyles[0].className} ${cardStyles[0].descriptionClassName}`}>
             <h2 id="kids-purpose-title" className="inline-block rounded-2xl bg-[#fdf7e8] px-4 py-3 text-[1.62rem] font-extrabold">
               {'Kids Corner'.split('').map((letter, index) => letter === ' ' ? (
                 <wbr key={index} />
