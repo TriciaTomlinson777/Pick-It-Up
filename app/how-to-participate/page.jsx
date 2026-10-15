@@ -81,7 +81,7 @@ export default function HowToParticipate() {
                   <span aria-hidden="true" className={`text-3xl ${cardStyles[index].iconClassName}`}>{action.icon}</span>
                   <h3 className={`mt-4 text-2xl font-bold ${cardStyles[index].titleClassName}`}>{action.title}</h3>
                   <p className={`mb-6 mt-3 leading-7 ${cardStyles[index].descriptionClassName}`}>{action.text}</p>
-                  <Link href={action.href} className="mt-auto inline-flex min-h-12 justify-center rounded-full border border-white/70 bg-white px-5 py-3 text-center font-bold text-[#002244] shadow-sm transition hover:bg-[#fff4cc]">{action.label}</Link>
+                  <Link href={action.href} className="btn-green mt-auto inline-flex min-h-12 justify-center rounded-full px-5 py-3 text-center font-bold">{action.label}</Link>
                 </article>
               ))}
             </div>
