@@ -70,7 +70,7 @@ export default function HowToParticipate() {
       <main className="text-[#002244]">
         <section className="bg-gradient-to-r from-seattle-green to-green-700 pb-4 pt-12 sm:pb-6 sm:pt-16">
           <div className="container-custom mx-auto max-w-4xl text-center">
-            <h1 className="heading-xl mb-4 text-[#0f9aa1]"><span className="box-decoration-clone" style={{ backgroundImage: "radial-gradient(ellipse at center, rgba(253,247,232,0.7) 0%, rgba(253,247,232,0.45) 45%, rgba(253,247,232,0) 75%)" }}>How to Participate</span></h1>
+            <h1 className="heading-xl mb-4 text-[#0f9aa1]"><span className="box-decoration-clone" style={{ backgroundImage: "radial-gradient(ellipse at center, rgba(253,247,232,0.7) 0%, rgba(253,247,232,0.45) 55%, rgba(253,247,232,0) 95%)" }}>How to Participate</span></h1>
             <p className="mt-5 text-2xl font-bold sm:text-3xl">Small actions. Many ways to make a difference.</p>
             <p className="mx-auto mt-4 max-w-2xl text-lg font-bold leading-8 text-[#002244]">Start with one piece of litter, one kind word, or one shared discovery. Choose a way to care for your community today.</p>
           </div>
@@ -99,7 +99,7 @@ export default function HowToParticipate() {
             <h3 className="mt-4 text-[1.62rem] font-extrabold" style={{ color: kidsCornerColors[5] }}><span className="box-decoration-clone" style={{ backgroundImage: "radial-gradient(ellipse at center, rgba(253,247,232,0.7) 0%, rgba(253,247,232,0.45) 45%, rgba(253,247,232,0) 75%)" }}>Little actions. Lifelong habits.</span></h3>
             <p className="mt-6 text-left text-[1.44rem] font-medium leading-9">Children can make a difference right now. <KidsCornerName /> helps them discover the joy of contributing, taking responsibility, and showing kindness—all while having fun.</p>
             <p className="mt-4 text-left text-[1.44rem] font-medium leading-9">Through stories and simple activities, children can practice caring for their communities: picking up a piece of litter with a grown-up, thanking someone who helps, or leaving a place better than they found it.</p>
-            <Link href="/kids-corner" className={`mt-7 inline-flex h-[4.5rem] w-60 max-w-full items-center justify-center rounded-full px-3 py-1 text-center text-[1.3125rem] font-bold leading-[1.875rem] shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[3].className} ${cardStyles[3].titleClassName}`}><span>Explore <KidsCornerName /></span></Link>
+            <Link href="/kids-corner" className={`mt-7 inline-flex h-[4.5rem] w-60 max-w-full items-center justify-center rounded-full px-3 py-1 text-center text-[1.3125rem] font-bold leading-[1.875rem] shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[3].className} ${cardStyles[3].titleClassName}`}><span style={{ backgroundImage: "radial-gradient(ellipse at center, rgba(253,247,232,0.95) 0%, rgba(253,247,232,0.8) 55%, rgba(253,247,232,0) 95%)" }}>Explore <KidsCornerName /></span></Link>
           </div>
         </section>
 
