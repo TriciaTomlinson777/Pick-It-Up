@@ -57,7 +57,7 @@ export default function HowToParticipate() {
   return (
     <>
       <Header />
-      <main className="bg-[#fdf7e8] text-[#002244]">
+      <main className="text-[#002244]">
         <section className="bg-gradient-to-r from-seattle-green to-green-700 pb-4 pt-12 sm:pb-6 sm:pt-16">
           <div className="container-custom mx-auto max-w-4xl text-center">
             <h1 className="heading-xl mb-4 text-[#0f9aa1]">How to Participate</h1>
@@ -109,11 +109,11 @@ export default function HowToParticipate() {
           <div className="container-custom">
             <h2 id="more-ways-title" className="heading-lg mb-8 text-center text-[#0f9aa1]">More ways to help</h2>
             <div className="grid gap-5 md:grid-cols-3">
-              {moreWays.map((way) => (
-                <article key={way.href} className="flex flex-col rounded-3xl bg-white p-6 sm:p-8">
-                  <h3 className="text-[1.62rem] font-extrabold">{way.title}</h3>
-                  <p className="mb-6 mt-3 text-[1.44rem] font-medium leading-9">{way.text}</p>
-                  <Link href={way.href} className="mt-auto inline-flex h-[4.5rem] w-60 max-w-full self-center items-center justify-center rounded-full border-2 border-[#0b7485] px-3 py-1 text-center text-[1.3125rem] font-bold leading-[1.875rem] text-[#0f9aa1] hover:bg-[#e5f7f5]">{way.title}</Link>
+              {moreWays.map((way, index) => (
+                <article key={way.href} className={`flex flex-col rounded-3xl border border-white/20 p-6 shadow-sm sm:p-8 ${cardStyles[index].className}`}>
+                  <h3 className={`text-[1.62rem] font-extrabold ${cardStyles[index].titleClassName}`}>{way.title}</h3>
+                  <p className={`mb-6 mt-3 text-[1.44rem] font-medium leading-9 ${cardStyles[index].descriptionClassName}`}>{way.text}</p>
+                  <Link href={way.href} className={`mt-auto inline-flex h-[4.5rem] w-60 max-w-full self-center items-center justify-center rounded-full px-3 py-1 text-center text-[1.3125rem] font-bold leading-[1.875rem] shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[index + 3].className} ${cardStyles[index + 3].titleClassName}`}>{way.title}</Link>
                 </article>
               ))}
             </div>
