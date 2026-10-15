@@ -123,21 +123,52 @@ export default function Terms() {
               Submissions are reviewed and are not guaranteed to be published.
             </p>
 
-            <h2 className="text-2xl font-bold text-gray-900">9. Modifications</h2>
+            <h2 id="submissions" className="text-2xl font-bold text-gray-900">9. Permission to display your submissions</h2>
+            <p>
+              You keep any copyright or other ownership rights you hold in your photos, stories,
+              captions, and other submitted content. You must own the content or have authority
+              from its owner to grant the permissions described here, and obtain any permissions
+              needed from people shown in it.
+            </p>
+            <p>
+              When you submit content after being shown this permission notice, you give
+              Pick It Up Seattle a nonexclusive, royalty-free permission to receive, store,
+              reproduce, and display approved content on its website in connection with its
+              community mission. Nonexclusive means you can continue using and sharing your
+              content elsewhere. Royalty-free means we do not pay a fee for this permitted use.
+              Our service providers may process content as needed to operate these website features.
+            </p>
+            <p>
+              This permission includes resizing, compression, cropping for layout, removal of
+              embedded metadata, and face blurring for privacy and display. It does not transfer
+              ownership to us or grant permission to sell your content, put it on merchandise,
+              or use it in separate advertising or social media campaigns; those uses require
+              separate permission. Our privacy and child-photo safeguards still apply.
+            </p>
+            <p>
+              Submission does not guarantee publication. You may ask us to remove your content
+              from public display by contacting hello@pickitupseattle.org. We may need to verify
+              your authority to make the request. Retained records and backups are handled as
+              described in our Privacy Policy, and we cannot remove copies already saved or shared
+              by others. This notice does not create new permission for older submissions whose
+              contributors were not shown it.
+            </p>
+
+            <h2 className="text-2xl font-bold text-gray-900">10. Modifications</h2>
             <p>
               Pick It Up Seattle may revise these terms of service for its website at any time
               without notice. By using this website, you are agreeing to be bound by the then
               current version of these terms of service.
             </p>
 
-            <h2 className="text-2xl font-bold text-gray-900">10. Governing Law</h2>
+            <h2 className="text-2xl font-bold text-gray-900">11. Governing Law</h2>
             <p>
               These terms and conditions are governed by and construed in accordance with the laws
               of the State of Washington, and you irrevocably submit to the exclusive jurisdiction
               of the courts in that location.
             </p>
 
-            <h2 className="text-2xl font-bold text-gray-900">11. Contact Us</h2>
+            <h2 className="text-2xl font-bold text-gray-900">12. Contact Us</h2>
             <p>
               If you have questions about these Terms of Service, please contact us at:
               <br />
