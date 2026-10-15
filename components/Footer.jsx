@@ -10,7 +10,8 @@ export default function Footer({ showHomeShareButton = false, alignWithPageConte
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-10 xl:gap-12 mb-10 lg:mb-12">
           {/* Brand */}
           <div>
-            <h3 className="mb-4 text-base font-bold text-[#0f9aa1] sm:text-xl lg:text-2xl">Pick It Up Seattle<span className="font-semibold sm:hidden"> a 501(c)(3) nonprofit</span></h3>
+            <h3 className="mb-3 text-base font-bold text-[#0f9aa1] sm:text-xl lg:text-2xl">Pick It Up Seattle</h3>
+            <p className="mb-3 font-semibold text-[#1a5570] lg:text-lg">A 501(c)(3) nonprofit</p>
             <p className="text-[#1a5570] lg:text-lg">
               Making it easy to leave every place better than you found it.
             </p>
