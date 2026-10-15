@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Header from '@/components/Header';
+import CommunityPhotoPreview from '@/components/CommunityPhotoPreview';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import Logo from '@/components/Logo';
@@ -3106,6 +3107,8 @@ export default function Home() {
                   <div className="mt-5 flex flex-1 items-center justify-center rounded-[1.5rem] border border-[#f4c94c]/35 bg-[radial-gradient(circle_at_top,_rgba(248,201,72,0.24),_transparent_55%),linear-gradient(135deg,_rgba(255,255,255,0.92),_rgba(255,248,230,0.97))] text-center">
                     {dayOneFixedBeforeImage ? (
                       <img
+                        loading="lazy"
+                        decoding="async"
                         src={getStoredImageUrl(dayOneFixedBeforeImage)}
                         alt="Neighborhood cleanup before photo"
                         className="h-full w-full rounded-[1.2rem] object-cover"
@@ -3126,6 +3129,8 @@ export default function Home() {
                   <div className="mt-5 flex flex-1 items-center justify-center rounded-[1.5rem] border border-[#69BE28]/30 bg-[radial-gradient(circle_at_top,_rgba(46,196,199,0.16),_transparent_55%),linear-gradient(135deg,_rgba(255,255,255,0.92),_rgba(235,250,242,0.95))] text-center">
                     {dayOneFixedAfterImage ? (
                       <img
+                        loading="lazy"
+                        decoding="async"
                         src={getStoredImageUrl(dayOneFixedAfterImage)}
                         alt="Neighborhood cleanup after photo"
                         className="h-full w-full rounded-[1.2rem] object-cover"
@@ -3187,7 +3192,7 @@ export default function Home() {
                     return (
                       <div key={`community-in-action-featured-${photo.id}-${slotIndex}`} className="rounded-[1.4rem] border border-[#0f9aa1]/28 bg-white p-2 shadow-[0_12px_28px_rgba(0,43,73,0.1)]">
                         <div className="aspect-square overflow-hidden rounded-xl border border-[#0f9aa1]/20 bg-white">
-                          <img
+                          <CommunityPhotoPreview
                             src={getStoredImageUrl(photo)}
                             alt="Community in Action photo"
                             className="h-full w-full object-contain object-center"
@@ -3405,7 +3410,7 @@ export default function Home() {
                                 <div className="flex h-full min-w-0 max-w-full box-border flex-col">
                                   <div className="h-full overflow-hidden rounded-[0.8rem] border border-[#002b49]/35 bg-[#0b6d87]/30">
                                     {pair.beforeImage ? (
-                                      <img src={getStoredImageUrl(pair.beforeImage)} alt="Neighborhood cleanup before photo" className="h-full w-full max-w-full object-cover" style={{ objectPosition: getPhotoObjectPosition(pair.beforeImage) }} />
+                                      <CommunityPhotoPreview src={getStoredImageUrl(pair.beforeImage)} alt="Neighborhood cleanup before photo" className="h-full w-full max-w-full object-cover" style={{ objectPosition: getPhotoObjectPosition(pair.beforeImage) }} />
                                     ) : (
                                       <div className="flex h-full items-center justify-center text-xs font-semibold uppercase tracking-[0.14em] text-white/80">Before</div>
                                     )}
@@ -3415,7 +3420,7 @@ export default function Home() {
                                 <div className="flex h-full min-w-0 max-w-full box-border flex-col">
                                   <div className="h-full overflow-hidden rounded-[0.8rem] border border-[#002b49]/35 bg-[#2b7e22]/25">
                                     {pair.afterImage ? (
-                                      <img src={getStoredImageUrl(pair.afterImage)} alt="Neighborhood cleanup after photo" className="h-full w-full max-w-full object-cover" style={{ objectPosition: getPhotoObjectPosition(pair.afterImage) }} />
+                                      <CommunityPhotoPreview src={getStoredImageUrl(pair.afterImage)} alt="Neighborhood cleanup after photo" className="h-full w-full max-w-full object-cover" style={{ objectPosition: getPhotoObjectPosition(pair.afterImage) }} />
                                     ) : (
                                       <div className="flex h-full items-center justify-center text-xs font-semibold uppercase tracking-[0.14em] text-white/80">After</div>
                                     )}
@@ -4665,7 +4670,7 @@ export default function Home() {
                         {volunteerGroupPhotos.map((photo, photoIndex) => (
                           <div key={`volunteer-gallery-photo-${photo.id}-${photoIndex}`} className="flex flex-col rounded-[1.2rem] border border-[#0f9aa1]/24 bg-white p-3 shadow-[0_10px_22px_rgba(0,43,73,0.08)]">
                             <div className="overflow-hidden rounded-lg border border-[#0f9aa1]/22 bg-white">
-                              <img src={getStoredImageUrl(photo)} alt="Community in Action photo" className="h-52 w-full object-contain object-center" />
+                              <CommunityPhotoPreview src={getStoredImageUrl(photo)} alt="Community in Action photo" className="h-52 w-full object-contain object-center" />
                             </div>
                             <p className="pt-2 text-center text-xs font-medium leading-4 text-[#1f5f7a] sm:text-sm">
                               <InstagramShareButton
@@ -4704,7 +4709,7 @@ export default function Home() {
                             <div className="grid grid-cols-2 gap-2">
                               <div className="overflow-hidden rounded-lg border border-[#D9665B]/22 bg-[#fff7f4]">
                                 {beforeImage ? (
-                                  <img src={getStoredImageUrl(beforeImage)} alt="Cleanup before photo" className="h-36 w-full object-cover sm:h-40" style={{ objectPosition: getPhotoObjectPosition(beforeImage) }} />
+                                  <CommunityPhotoPreview src={getStoredImageUrl(beforeImage)} alt="Cleanup before photo" className="h-36 w-full object-cover sm:h-40" style={{ objectPosition: getPhotoObjectPosition(beforeImage) }} />
                                 ) : (
                                   <div className="flex h-36 items-center justify-center text-xs font-semibold uppercase tracking-[0.14em] text-[#8f5e56] sm:h-40">
                                     Before
@@ -4714,7 +4719,7 @@ export default function Home() {
 
                               <div className="overflow-hidden rounded-lg border border-[#69BE28]/22 bg-[#f4fbe9]">
                                 {afterImage ? (
-                                  <img src={getStoredImageUrl(afterImage)} alt="Cleanup after photo" className="h-36 w-full object-cover sm:h-40" style={{ objectPosition: getPhotoObjectPosition(afterImage) }} />
+                                  <CommunityPhotoPreview src={getStoredImageUrl(afterImage)} alt="Cleanup after photo" className="h-36 w-full object-cover sm:h-40" style={{ objectPosition: getPhotoObjectPosition(afterImage) }} />
                                 ) : (
                                   <div className="flex h-36 items-center justify-center text-xs font-semibold uppercase tracking-[0.14em] text-[#4b7430] sm:h-40">
                                     After
