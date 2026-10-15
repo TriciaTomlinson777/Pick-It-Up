@@ -81,7 +81,7 @@ export default function HowToParticipate() {
                   <span aria-hidden="true" className={`text-3xl ${cardStyles[index].iconClassName}`}>{action.icon}</span>
                   <h3 className={`mt-4 text-[1.08rem] font-extrabold ${cardStyles[index].titleClassName}`}>{action.title}</h3>
                   <p className={`mb-6 mt-3 text-[0.96rem] font-medium leading-6 ${cardStyles[index].descriptionClassName}`}>{action.text}</p>
-                  <Link href={action.href} className={`mt-auto inline-flex min-h-12 w-60 max-w-full self-center items-center justify-center rounded-full px-4 py-2 text-center font-bold shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[(index + 3) % cardStyles.length].className} ${cardStyles[(index + 3) % cardStyles.length].titleClassName}`}>{action.label}</Link>
+                  <Link href={action.href} className={`mt-auto inline-flex h-14 w-60 max-w-full self-center items-center justify-center rounded-full px-4 py-2 text-center text-sm font-bold leading-5 shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[(index + 3) % cardStyles.length].className} ${cardStyles[(index + 3) % cardStyles.length].titleClassName}`}>{action.label}</Link>
                 </article>
               ))}
             </div>
@@ -100,7 +100,7 @@ export default function HowToParticipate() {
             <h3 className="mt-4 text-3xl font-extrabold sm:text-4xl">Little actions. Lifelong habits.</h3>
             <p className="mt-6 text-lg leading-8">Children can make a difference right now. Kids Corner helps them discover the joy of contributing, taking responsibility, and showing kindness—all while having fun.</p>
             <p className="mt-4 text-lg leading-8">Through stories and simple activities, children can practice caring for their communities: picking up a piece of litter with a grown-up, thanking someone who helps, or leaving a place better than they found it.</p>
-            <Link href="/kids-corner" className={`mt-7 inline-flex min-h-12 w-60 max-w-full items-center justify-center rounded-full px-4 py-2 text-center font-bold shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[3].className} ${cardStyles[3].titleClassName}`}>Explore Kids Corner</Link>
+            <Link href="/kids-corner" className={`mt-7 inline-flex h-14 w-60 max-w-full items-center justify-center rounded-full px-4 py-2 text-center text-sm font-bold leading-5 shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[3].className} ${cardStyles[3].titleClassName}`}>Explore Kids Corner</Link>
           </div>
         </section>
 
