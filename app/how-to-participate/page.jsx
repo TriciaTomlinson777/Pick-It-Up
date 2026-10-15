@@ -83,16 +83,16 @@ export default function HowToParticipate() {
 
         <section aria-labelledby="kids-purpose-title" className="px-4 py-12 sm:py-16">
           <div className={`mx-auto max-w-4xl rounded-3xl border border-white/20 p-6 text-center shadow-sm sm:p-8 ${cardStyles[4].className}`}>
-            <h2 id="kids-purpose-title" className="inline-block rounded-2xl bg-[#fdf7e8] px-4 py-3 text-[4.5rem] font-extrabold leading-tight sm:text-[5.625rem] lg:text-[6.75rem]">
+            <h2 id="kids-purpose-title" className="inline-block rounded-2xl bg-[#fdf7e8] px-4 py-3 text-[1.62rem] font-extrabold">
               {'Kids Corner'.split('').map((letter, index) => letter === ' ' ? (
                 <wbr key={index} />
               ) : (
                 <span key={index} style={{ color: kidsCornerColors[index] }}>{letter}</span>
               ))}
             </h2>
-            <h3 className="mt-4 text-[2.8125rem] font-extrabold leading-tight sm:text-[3.375rem]">Little actions. Lifelong habits.</h3>
-            <p className="mt-6 text-[1.6875rem] leading-[3rem]">Children can make a difference right now. Kids Corner helps them discover the joy of contributing, taking responsibility, and showing kindness—all while having fun.</p>
-            <p className="mt-4 text-[1.6875rem] leading-[3rem]">Through stories and simple activities, children can practice caring for their communities: picking up a piece of litter with a grown-up, thanking someone who helps, or leaving a place better than they found it.</p>
+            <h3 className="mt-4 text-[1.62rem] font-extrabold">Little actions. Lifelong habits.</h3>
+            <p className="mt-6 text-[1.44rem] font-medium leading-9">Children can make a difference right now. Kids Corner helps them discover the joy of contributing, taking responsibility, and showing kindness—all while having fun.</p>
+            <p className="mt-4 text-[1.44rem] font-medium leading-9">Through stories and simple activities, children can practice caring for their communities: picking up a piece of litter with a grown-up, thanking someone who helps, or leaving a place better than they found it.</p>
             <Link href="/kids-corner" className={`mt-7 inline-flex h-24 w-60 max-w-full items-center justify-center rounded-full px-4 py-2 text-center text-[1.3125rem] font-bold leading-[1.875rem] shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[3].className} ${cardStyles[3].titleClassName}`}>Explore Kids Corner</Link>
           </div>
         </section>
@@ -111,9 +111,9 @@ export default function HowToParticipate() {
             <div className="grid gap-5 md:grid-cols-3">
               {moreWays.map((way) => (
                 <article key={way.href} className="flex flex-col rounded-3xl bg-white p-6 sm:p-8">
-                  <h3 className="text-3xl font-bold">{way.title}</h3>
-                  <p className="mb-6 mt-3 text-2xl leading-[2.625rem]">{way.text}</p>
-                  <Link href={way.href} className="mt-auto inline-flex min-h-12 items-center justify-center rounded-full border-2 border-[#0b7485] px-5 py-3 text-center text-2xl font-bold text-[#0f9aa1] hover:bg-[#e5f7f5]">{way.title}</Link>
+                  <h3 className="text-[1.62rem] font-extrabold">{way.title}</h3>
+                  <p className="mb-6 mt-3 text-[1.44rem] font-medium leading-9">{way.text}</p>
+                  <Link href={way.href} className="mt-auto inline-flex h-24 w-60 max-w-full self-center items-center justify-center rounded-full border-2 border-[#0b7485] px-4 py-2 text-center text-[1.3125rem] font-bold leading-[1.875rem] text-[#0f9aa1] hover:bg-[#e5f7f5]">{way.title}</Link>
                 </article>
               ))}
             </div>
