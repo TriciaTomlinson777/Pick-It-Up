@@ -106,7 +106,7 @@ export default function HowToParticipate() {
           <div className="container-custom mx-auto max-w-4xl text-center">
             <h2 id="share-movement-title" className="heading-lg text-2xl sm:text-4xl text-[#0f9aa1]">Share Pick It Up Together</h2>
             <p className="mx-auto mb-6 mt-4 max-w-2xl text-base leading-6 sm:text-lg sm:leading-8">Help educators, homeschooling families, and community organizations inspire children to care, contribute, and show kindness—one small action at a time.</p>
-            <ShareButton url="/how-to-participate" title="Pick It Up Together" text="Small actions. Many ways to make a difference. Discover ways to help children and communities care, contribute, and show kindness." label="Share Pick It Up Together" className="min-h-12 justify-center px-7 py-3 text-base font-bold max-sm:bg-none max-sm:shadow-none max-sm:border-transparent max-sm:rounded-none max-sm:underline max-sm:decoration-2 max-sm:underline-offset-4" />
+            <ShareButton url="/how-to-participate" title="Pick It Up Together" text="Small actions. Many ways to make a difference. Discover ways to help children and communities care, contribute, and show kindness." label="Share Pick It Up Together" className="min-h-12 justify-center px-7 py-3 text-base font-bold" />
           </div>
         </section>
 
