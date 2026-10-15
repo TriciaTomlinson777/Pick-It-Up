@@ -1682,6 +1682,10 @@ export default function Home() {
 
   useEffect(() => {
     const openParticipationAction = () => {
+      if (!window.location.hash.startsWith('#participate-')) return;
+      setIsTrackModalOpen(false);
+      setIsModalOpen(false);
+      setIsShareModalOpen(false);
       switch (window.location.hash) {
         case '#participate-track':
           setIsTrackModalOpen(true);
