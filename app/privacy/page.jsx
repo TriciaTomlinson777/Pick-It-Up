@@ -11,7 +11,7 @@ export default function Privacy() {
         <div className="container-custom">
           <h1 className="heading-xl mb-4">Privacy Policy</h1>
           <p className="text-lg text-green-100">
-            Last updated: July 2024
+            Last updated: October 15, 2026
           </p>
         </div>
       </section>
@@ -22,7 +22,7 @@ export default function Privacy() {
           <div className="prose prose-lg max-w-none text-gray-700 space-y-6">
             <h2 className="text-2xl font-bold text-gray-900">1. Introduction</h2>
             <p>
-              Pick It Up Seattle ("Company", "we", "our", or "us") operates the Pick It Up Seattle
+              Pick It Up Seattle ("we", "our", or "us") operates the Pick It Up Seattle
               website and services. This page informs you of our policies regarding the collection,
               use, and disclosure of personal data when you use our Service and the choices you
               have associated with that data.
@@ -66,9 +66,9 @@ export default function Privacy() {
             <p>
               If you have any questions about this Privacy Policy, please contact us at:
               <br />
-              Email: privacy@pickitupseattle.org
+              Email: <a href="mailto:hello@pickitupseattle.org">hello@pickitupseattle.org</a>
               <br />
-              Address: 123 Green Street, Seattle, WA 98101
+              Location: Seattle, Washington
             </p>
           </div>
         </div>
