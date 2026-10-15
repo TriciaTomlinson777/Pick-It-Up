@@ -66,7 +66,7 @@ export default function HowToParticipate() {
       <main className="bg-[#fdf7e8] text-[#002244]">
         <section className="bg-[#fdf7e8] py-12 sm:py-16">
           <div className="container-custom mx-auto max-w-4xl text-center">
-            <h1 className="text-4xl font-extrabold text-[#0f9aa1] sm:text-5xl">How to Participate</h1>
+            <h1 className="heading-xl mb-4 text-[#0f9aa1]">How to Participate</h1>
             <p className="mt-5 text-2xl font-bold sm:text-3xl">Small actions. Many ways to make a difference.</p>
             <p className="mx-auto mt-4 max-w-2xl text-lg leading-8">Start with one piece of litter, one kind word, or one shared discovery. Choose a way to care for your community today.</p>
           </div>
@@ -74,13 +74,13 @@ export default function HowToParticipate() {
 
         <section aria-labelledby="take-action-title" className="py-12 sm:py-16">
           <div className="container-custom">
-            <h2 id="take-action-title" className="mb-8 text-center text-3xl font-bold text-[#0f9aa1]">What will you do today?</h2>
+            <h2 id="take-action-title" className="heading-lg mb-8 text-center text-[#0f9aa1]">What will you do today?</h2>
             <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {actions.map((action, index) => (
                 <article key={action.href} className={`flex flex-col rounded-3xl border border-[#0f9aa1]/15 p-6 shadow-sm sm:p-8 ${cardStyles[index].className}`}>
                   <span aria-hidden="true" className={`text-3xl ${cardStyles[index].iconClassName}`}>{action.icon}</span>
-                  <h3 className={`mt-4 text-2xl font-bold ${cardStyles[index].titleClassName}`}>{action.title}</h3>
-                  <p className={`mb-6 mt-3 leading-7 ${cardStyles[index].descriptionClassName}`}>{action.text}</p>
+                  <h3 className={`mt-4 text-[1.08rem] font-extrabold ${cardStyles[index].titleClassName}`}>{action.title}</h3>
+                  <p className={`mb-6 mt-3 text-[0.96rem] font-medium leading-6 ${cardStyles[index].descriptionClassName}`}>{action.text}</p>
                   <Link href={action.href} className="btn-green mt-auto inline-flex min-h-12 justify-center rounded-full px-5 py-3 text-center font-bold">{action.label}</Link>
                 </article>
               ))}
@@ -106,7 +106,7 @@ export default function HowToParticipate() {
 
         <section aria-labelledby="share-movement-title" className="py-12 sm:py-16">
           <div className="container-custom mx-auto max-w-4xl text-center">
-            <h2 id="share-movement-title" className="text-3xl font-bold text-[#0f9aa1]">Share Pick It Up Together</h2>
+            <h2 id="share-movement-title" className="heading-lg text-[#0f9aa1]">Share Pick It Up Together</h2>
             <p className="mx-auto mb-6 mt-4 max-w-2xl text-lg leading-8">Help educators, homeschooling families, and community organizations inspire children to care, contribute, and show kindness—one small action at a time.</p>
             <ShareButton url="/how-to-participate" title="Pick It Up Together" text="Small actions. Many ways to make a difference. Discover ways to help children and communities care, contribute, and show kindness." label="Share Pick It Up Together" className="min-h-12 justify-center px-7 py-3 text-base font-bold" />
           </div>
@@ -114,7 +114,7 @@ export default function HowToParticipate() {
 
         <section aria-labelledby="more-ways-title" className="bg-gray-50 py-12 sm:py-16">
           <div className="container-custom">
-            <h2 id="more-ways-title" className="mb-8 text-center text-3xl font-bold text-[#0f9aa1]">More ways to help</h2>
+            <h2 id="more-ways-title" className="heading-lg mb-8 text-center text-[#0f9aa1]">More ways to help</h2>
             <div className="grid gap-5 md:grid-cols-3">
               {moreWays.map((way) => (
                 <article key={way.href} className="flex flex-col rounded-3xl bg-white p-6 sm:p-8">
