@@ -49,7 +49,7 @@ export async function GET(request) {
       if (result.error) return reply({ error: 'Your heroes couldn’t be loaded. Try again.' }, 503);
       heroes = result.data;
     }
-    return reply({ signedIn: true, heroes, hero: heroes[0] || null });
+    return reply({ signedIn: true, email: user.email || '', heroes, hero: heroes[0] || null });
   } catch { return reply({ signedIn: false, unavailable: true }); }
 }
 export async function POST(request) {
