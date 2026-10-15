@@ -68,58 +68,58 @@ export default function HowToParticipate() {
     <>
       <Header />
       <main className="text-[#002244]">
-        <section className="pb-4 pt-12 sm:pb-6 sm:pt-16" style={{ backgroundImage: "linear-gradient(145deg, #fdf7e8 0%, #e8efd5 28%, #a9d5a1 58%, #69be28 80%, #15803d 100%)" }}>
+        <section className="pb-4 pt-6 sm:pb-6 sm:pt-16" style={{ backgroundImage: "linear-gradient(145deg, #fdf7e8 0%, #e8efd5 28%, #a9d5a1 58%, #69be28 80%, #15803d 100%)" }}>
           <div className="container-custom mx-auto max-w-4xl text-center">
-            <h1 className="heading-xl mb-4 text-[#0f9aa1]">How to Participate</h1>
-            <p className="mt-5 text-2xl font-bold sm:text-3xl">Small actions. Many ways to make a difference.</p>
-            <p className="mx-auto mt-4 max-w-2xl text-lg font-bold leading-8 text-[#002244]">Start with one piece of litter, one kind word, or one shared discovery. Choose a way to care for your community today.</p>
+            <h1 className="heading-xl text-[1.75rem] sm:text-5xl mb-3 sm:mb-4 text-[#0f9aa1]">How to Participate</h1>
+            <p className="mt-3 text-xl font-bold sm:mt-5 sm:text-3xl">Small actions. Many ways to make a difference.</p>
+            <p className="mx-auto mt-4 max-w-2xl text-base font-bold leading-6 sm:text-lg sm:leading-8 text-[#002244]">Start with one piece of litter, one kind word, or one shared discovery. Choose a way to care for your community today.</p>
           </div>
         </section>
 
         <section aria-labelledby="take-action-title" className="pb-12 pt-4 sm:pb-16 sm:pt-6">
           <div className="container-custom">
-            <h2 id="take-action-title" className="heading-lg mb-8 text-center text-[#0f9aa1]">What Will You Do Today?</h2>
-            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            <h2 id="take-action-title" className="heading-lg text-2xl sm:text-4xl mb-5 sm:mb-8 text-center text-[#0f9aa1]">What Will You Do Today?</h2>
+            <div className="grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
               {actions.map((action, index) => (
-                <article key={action.href} className={`flex flex-col rounded-3xl border border-white/20 p-6 text-left shadow-sm sm:p-8 ${cardStyles[index].className}`}>
-                  <h3 className={`text-[1.62rem] font-extrabold ${cardStyles[index].titleClassName}`}>{action.title}</h3>
-                  <p className={`mb-6 mt-3 text-[1.44rem] font-medium leading-9 ${cardStyles[index].descriptionClassName}`}>{action.text}</p>
-                  <Link href={action.href} className={`mt-auto inline-flex min-h-12 max-w-full self-center items-center justify-center px-3 py-1 text-center text-[1.3125rem] font-bold leading-[1.875rem] underline decoration-2 underline-offset-4 transition hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 ${cardStyles[index].titleClassName}`}>{action.label}</Link>
+                <article key={action.href} className={`flex flex-col rounded-3xl border border-white/20 p-5 sm:p-6 text-left shadow-sm sm:p-8 ${cardStyles[index].className}`}>
+                  <h3 className={`text-[1.08rem] sm:text-[1.62rem] font-extrabold ${cardStyles[index].titleClassName}`}>{action.title}</h3>
+                  <p className={`mb-4 mt-2 text-[0.96rem] font-medium leading-6 sm:mb-6 sm:mt-3 sm:text-[1.44rem] sm:leading-9 ${cardStyles[index].descriptionClassName}`}>{action.text}</p>
+                  <Link href={action.href} className={`mt-auto inline-flex min-h-12 max-w-full self-center items-center justify-center px-3 py-1 text-center text-sm sm:text-[1.3125rem] font-bold leading-[1.875rem] underline decoration-2 underline-offset-4 transition hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 ${cardStyles[index].titleClassName}`}>{action.label}</Link>
                 </article>
               ))}
             </div>
           </div>
         </section>
 
-        <section aria-labelledby="kids-purpose-title" className="px-4 py-12 sm:py-16">
-          <div className={`mx-auto max-w-4xl rounded-3xl border border-white/20 p-6 text-center shadow-sm sm:p-8 text-[#002244]`} style={{ backgroundImage: "linear-gradient(155deg, #fdf7e8 0%, #f3f3df 25%, #bfe4d2 48%, #2ec4c7 74%, #69be28 100%)" }}>
-            <h2 id="kids-purpose-title" className="inline-block px-4 py-3 text-[1.62rem] font-extrabold">
+        <section aria-labelledby="kids-purpose-title" className="px-4 py-7 sm:py-16">
+          <div className={`mx-auto max-w-4xl rounded-3xl border border-white/20 p-5 sm:p-6 text-center shadow-sm sm:p-8 text-[#002244]`} style={{ backgroundImage: "linear-gradient(155deg, #fdf7e8 0%, #f3f3df 25%, #bfe4d2 48%, #2ec4c7 74%, #69be28 100%)" }}>
+            <h2 id="kids-purpose-title" className="inline-block px-4 py-3 text-[1.08rem] sm:text-[1.62rem] font-extrabold">
               <KidsCornerName />
             </h2>
-            <h3 className="mt-4 text-[1.62rem] font-extrabold" style={{ color: kidsCornerColors[5] }}>Little actions. Lifelong habits.</h3>
-            <p className="mt-6 text-left text-[1.44rem] font-medium leading-9">Children can make a difference right now. <KidsCornerName /> helps them discover the joy of contributing, taking responsibility, and showing kindness—all while having fun.</p>
-            <p className="mt-4 text-left text-[1.44rem] font-medium leading-9">Through stories and simple activities, children can practice caring for their communities: picking up a piece of litter with a grown-up, thanking someone who helps, or leaving a place better than they found it.</p>
-            <Link href="/kids-corner" className={`mt-7 inline-flex h-[4.5rem] w-60 max-w-full items-center justify-center rounded-full px-3 py-1 text-center text-[1.3125rem] font-bold leading-[1.875rem] shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white bg-[#fdf7e8] text-[#0f9aa1]`}><span>Explore <KidsCornerName /></span></Link>
+            <h3 className="mt-4 text-[1.08rem] sm:text-[1.62rem] font-extrabold" style={{ color: kidsCornerColors[5] }}>Little actions. Lifelong habits.</h3>
+            <p className="mt-4 sm:mt-6 text-left text-[0.96rem] sm:text-[1.44rem] font-medium leading-6 sm:leading-9">Children can make a difference right now. <KidsCornerName /> helps them discover the joy of contributing, taking responsibility, and showing kindness—all while having fun.</p>
+            <p className="mt-4 text-left text-[0.96rem] sm:text-[1.44rem] font-medium leading-6 sm:leading-9">Through stories and simple activities, children can practice caring for their communities: picking up a piece of litter with a grown-up, thanking someone who helps, or leaving a place better than they found it.</p>
+            <Link href="/kids-corner" className={`mt-7 inline-flex min-h-12 sm:h-[4.5rem] w-60 max-w-full items-center justify-center rounded-full px-3 py-1 text-center text-sm sm:text-[1.3125rem] font-bold leading-[1.875rem] shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white bg-[#fdf7e8] text-[#0f9aa1]`}><span>Explore <KidsCornerName /></span></Link>
           </div>
         </section>
 
-        <section aria-labelledby="share-movement-title" className="py-12 sm:py-16">
+        <section aria-labelledby="share-movement-title" className="py-7 sm:py-16">
           <div className="container-custom mx-auto max-w-4xl text-center">
-            <h2 id="share-movement-title" className="heading-lg text-[#0f9aa1]">Share Pick It Up Together</h2>
-            <p className="mx-auto mb-6 mt-4 max-w-2xl text-lg leading-8">Help educators, homeschooling families, and community organizations inspire children to care, contribute, and show kindness—one small action at a time.</p>
+            <h2 id="share-movement-title" className="heading-lg text-2xl sm:text-4xl text-[#0f9aa1]">Share Pick It Up Together</h2>
+            <p className="mx-auto mb-6 mt-4 max-w-2xl text-base leading-6 sm:text-lg sm:leading-8">Help educators, homeschooling families, and community organizations inspire children to care, contribute, and show kindness—one small action at a time.</p>
             <ShareButton url="/how-to-participate" title="Pick It Up Together" text="Small actions. Many ways to make a difference. Discover ways to help children and communities care, contribute, and show kindness." label="Share Pick It Up Together" className="min-h-12 justify-center px-7 py-3 text-base font-bold" />
           </div>
         </section>
 
-        <section aria-labelledby="more-ways-title" className="bg-gray-50 py-12 sm:py-16">
+        <section aria-labelledby="more-ways-title" className="bg-gray-50 py-7 sm:py-16">
           <div className="container-custom">
-            <h2 id="more-ways-title" className="heading-lg mb-8 text-center text-[#0f9aa1]">More ways to help</h2>
-            <div className="grid gap-5 md:grid-cols-3">
+            <h2 id="more-ways-title" className="heading-lg text-2xl sm:text-4xl mb-5 sm:mb-8 text-center text-[#0f9aa1]">More ways to help</h2>
+            <div className="grid gap-4 sm:gap-5 md:grid-cols-3">
               {moreWays.map((way, index) => (
                 <article key={way.href} className={`flex flex-col rounded-3xl border border-white/20 p-6 shadow-sm sm:p-8 ${cardStyles[index].className}`}>
-                  <h3 className={`text-[1.62rem] font-extrabold ${cardStyles[index].titleClassName}`}>{way.title}</h3>
-                  <p className={`mb-6 mt-3 text-[1.44rem] font-medium leading-9 ${cardStyles[index].descriptionClassName}`}>{way.text}</p>
-                  <Link href={way.href} className={`mt-auto inline-flex h-[4.5rem] w-60 max-w-full self-center items-center justify-center rounded-full px-3 py-1 text-center text-[1.3125rem] font-bold leading-[1.875rem] shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[index + 3].className} ${cardStyles[index + 3].titleClassName}`}>{way.title}</Link>
+                  <h3 className={`text-[1.08rem] sm:text-[1.62rem] font-extrabold ${cardStyles[index].titleClassName}`}>{way.title}</h3>
+                  <p className={`mb-4 mt-2 text-[0.96rem] font-medium leading-6 sm:mb-6 sm:mt-3 sm:text-[1.44rem] sm:leading-9 ${cardStyles[index].descriptionClassName}`}>{way.text}</p>
+                  <Link href={way.href} className={`mt-auto inline-flex min-h-12 sm:h-[4.5rem] w-60 max-w-full self-center items-center justify-center rounded-full px-3 py-1 text-center text-sm sm:text-[1.3125rem] font-bold leading-[1.875rem] shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[index + 3].className} ${cardStyles[index + 3].titleClassName}`}>{way.title}</Link>
                 </article>
               ))}
             </div>
