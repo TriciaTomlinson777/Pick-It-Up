@@ -23,7 +23,7 @@ const poppinsHero = Poppins({
   weight: ['400'],
 });
 
-const CommunityFootprintsMap = dynamic(() => import('@/components/CommunityFootprintsMap'), {
+const CommunityFootprintsMap = dynamic(() => import('@/components/DeferredCommunityMap'), {
   ssr: false,
 });
 
