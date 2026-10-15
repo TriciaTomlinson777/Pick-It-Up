@@ -72,7 +72,7 @@ export default function HowToParticipate() {
           <div className="container-custom mx-auto max-w-4xl text-center">
             <h1 className="heading-xl mb-4 text-[#ef7f2d]">How to Participate</h1>
             <p className="mt-5 text-2xl font-bold sm:text-3xl">Small actions. Many ways to make a difference.</p>
-            <p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-white">Start with one piece of litter, one kind word, or one shared discovery. Choose a way to care for your community today.</p>
+            <p className="mx-auto mt-4 max-w-2xl text-lg font-bold leading-8 text-[#002244]">Start with one piece of litter, one kind word, or one shared discovery. Choose a way to care for your community today.</p>
           </div>
         </section>
 
