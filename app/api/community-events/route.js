@@ -1,9 +1,13 @@
 import { NextResponse } from 'next/server';
 import { createCommunityEvent, getPublicCommunityEvents } from '@/lib/community-event-repository';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
-    return NextResponse.json({ events: await getPublicCommunityEvents() });
+    return NextResponse.json({ events: await getPublicCommunityEvents() }, {
+      headers: { 'Cache-Control': 'no-store' },
+    });
   } catch (error) {
     console.error('Unable to load approved community events.', error);
     return NextResponse.json({ error: 'Unable to load community events.', events: [] }, { status: 500 });
