@@ -111,7 +111,7 @@ form{width:100%;display:none;flex:1;flex-direction:column;justify-content:center
 
 
 /* Player's storybook profile. */
-.room.profile-open .panel{inset:var(--profile-top,125px) 6% 18px;background:#fff6d9;border:4px solid #13999c;border-radius:30px;box-shadow:0 7px 0 #74503155;padding:12px;overflow-y:auto}
+.room.profile-open .panel{inset:var(--profile-top,125px) 6% 18px;background:#fffaf0;border:4px solid #0f9aa1;border-radius:30px;box-shadow:0 7px 0 #74503155;padding:12px;overflow-y:auto}
 .room.profile-open h1{font-family:'Baloo 2',sans-serif;font-size:30px;margin:0 0 4px;line-height:1.1}
 .room.signing.hub.profile-open #signinHero,.room.signing.hub.profile-open #signinGreeting{display:none!important}
 .profile-email{margin:0;font-size:14px;line-height:1.35;color:#526e6c;overflow-wrap:anywhere}
@@ -119,21 +119,21 @@ form{width:100%;display:none;flex:1;flex-direction:column;justify-content:center
 .room.profile-open .hero-picker{max-height:none;overflow:visible;display:block}
 .profile-book{width:100%;display:grid;gap:12px}
 .profile-name{font-family:'Baloo 2',sans-serif;font-size:32px;line-height:1.1;margin:0;color:#087d83;overflow-wrap:anywhere}
-.profile-avatar{position:relative;display:grid;place-items:center;min-height:165px;background:radial-gradient(ellipse at center,#fffdf2 0 35%,#a8e3d6 36% 65%,transparent 66%);border:0;border-radius:28px;padding:12px;color:#075e64}
+.profile-avatar{position:relative;display:grid;place-items:center;min-height:165px;background:radial-gradient(ellipse at center,#fffaf0 0 35%,#2ec4c7 36% 65%,transparent 66%);border:0;border-radius:28px;padding:12px;color:#075e64}
 .profile-avatar img{height:155px!important;width:auto!important;max-width:100%;object-fit:contain;position:static!important;transform:none!important}
-.profile-avatar .edit-badge{position:absolute;bottom:8px;right:12px;background:#ffdc71;border:2px solid #fff;border-radius:50%;width:42px;height:42px;display:grid;place-items:center;font-size:23px}
-.profile-points{display:flex;justify-content:center;align-items:center;gap:12px;background:#ffe18a;border:2px solid #e9b946;border-radius:22px;padding:8px;color:#79501e;font-family:'Baloo 2',sans-serif;font-size:23px}
+.profile-avatar .edit-badge{position:absolute;bottom:8px;right:12px;background:#f4c94c;border:2px solid #fff;border-radius:50%;width:42px;height:42px;display:grid;place-items:center;font-size:23px}
+.profile-points{display:flex;justify-content:center;align-items:center;gap:12px;background:#f4c94c;border:2px solid #d5a818;border-radius:22px;padding:8px;color:#002244;font-family:'Baloo 2',sans-serif;font-size:23px}
 .profile-points strong{font-size:32px;line-height:1}
-.profile-chest{background:#d6c1ef;border:2px solid #ab88ca;border-radius:24px;padding:10px;color:#57376e;min-height:110px;display:grid;justify-items:center;gap:3px;font-family:'Baloo 2',sans-serif;font-size:22px}
+.profile-chest{background:#69be28;border:2px solid #4e991c;border-radius:24px;padding:10px;color:#002244;min-height:110px;display:grid;justify-items:center;gap:3px;font-family:'Baloo 2',sans-serif;font-size:22px}
 .profile-chest svg{width:105px;height:74px}
-.profile-note{margin:0;font-size:15px;color:#624777;line-height:1.3}
+.profile-note{margin:0;font-size:15px;color:#075e64;line-height:1.3}
 .profile-avatars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
-.profile-avatars button{min-width:0;min-height:105px;padding:7px;background:#f9efd0;border:3px solid #e2cba2;border-radius:18px}
-.profile-avatars button[aria-pressed=true]{background:#b9ece1;border-color:#087d83}
+.profile-avatars button{min-width:0;min-height:105px;padding:7px;background:#fffaf0;border:3px solid #2ec4c7;border-radius:18px}
+.profile-avatars button[aria-pressed=true]{background:#69be28;border-color:#075e64}
 .profile-avatars img{height:84px;width:auto;max-width:100%;object-fit:contain}
 @media(max-height:700px){.profile-avatar{min-height:125px}.profile-avatar img{height:115px!important}.profile-book{gap:8px}.profile-chest{min-height:95px}.profile-chest svg{height:60px}}
 
-.profile-level{display:grid;gap:2px;text-align:center;color:#087d83}.profile-level span{font-size:14px}.profile-level strong{font-family:'Baloo 2',sans-serif;font-size:22px;line-height:1.15}
+.profile-level{display:grid;gap:2px;text-align:center;color:#002244;background:#2ec4c7;border-radius:18px;padding:10px}.profile-level span{font-size:14px}.profile-level strong{font-family:'Baloo 2',sans-serif;font-size:22px;line-height:1.15}
 </style></head><body>
 <main class="room booting"><div class="boot-message" role="status">Opening Street Challenge…</div>
 <div class="toolbar"><button class="round signout" id="signout" type="button" aria-label="Exit game" title="Exit game"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M3 4.8a2 2 0 0 1 1.5-1.9l9-2.3A2 2 0 0 1 16 2.5v27a2 2 0 0 1-2.5 1.9l-9-2.3A2 2 0 0 1 3 27.2Zm9 11.2c0 1.1.4 2 1 2s1-.9 1-2-.4-2-1-2-1 .9-1 2Z"/><path d="M17.5 3H21a3 3 0 0 1 3 3v6h-2V6a1 1 0 0 0-1-1h-3.5Zm0 24H21a1 1 0 0 0 1-1v-6h2v6a3 3 0 0 1-3 3h-3.5Zm6.5-14v-2a1 1 0 0 1 1.6-.8l5.6 4.8a1.3 1.3 0 0 1 0 2l-5.6 4.8A1 1 0 0 1 24 21v-2h-5a1.5 1.5 0 0 1-1.5-1.5v-3A1.5 1.5 0 0 1 19 13Z"/></svg></button><button class="round" id="homeNav" aria-label="Game home">🏠</button><nav class="player-nav" id="playerNav" aria-label="Player navigation"><button id="singlePlayerNav" type="button" aria-label="My profile" title="My profile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7.5" r="4"/><path d="M4.5 21v-2.2c0-4.1 3.1-6.4 7.5-6.4s7.5 2.3 7.5 6.4V21"/></svg></button><button id="familyPlayersNav" type="button" aria-label="Add or switch players" title="Add or switch players"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.1"/><path d="M2.5 20v-1.5c0-3.6 2.4-5.6 6.5-5.6s6.5 2 6.5 5.6V20"/><path d="M16 5.2a3.1 3.1 0 0 1 0 6.1M17.4 13.2c2.8.5 4.1 2.3 4.1 5.3V20"/></svg></button></nav><button class="round" id="rewardsNav" aria-label="Rewards">🏆</button><button class="round hourglass-button" id="deadlineToggle" aria-label="Show challenge deadline" aria-controls="challengeClock" aria-expanded="false" disabled><svg viewBox="0 0 40 48" aria-hidden="true"><path d="M8 5h24v5c0 6-5 10-10 14 5 4 10 8 10 14v5H8v-5c0-6 5-10 10-14C13 20 8 16 8 10Z" fill="#fffdf1" stroke="#b47c25" stroke-width="2.5"/><path d="M11 11h18c-1 5-5 7-9 10-4-3-8-5-9-10Z" fill="#eab83f"/><path d="M20 24v12" class="sand-stream" stroke="#eab83f" stroke-width="2.5" stroke-dasharray="2 2"/><path d="m11 40 9-7 9 7Z" fill="#eab83f"/><path d="M6 4h28M6 44h28" stroke="#835429" stroke-width="4" stroke-linecap="round"/></svg></button><button class="round" id="sound" aria-label="Mute sound" aria-pressed="false"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M4 12h6l8-7v22l-8-7H4Z"/><path d="M22 13q3 3 0 6M25 9q7 7 0 14M28 5q11 11 0 22"/><path class="mute-slash" d="M3 3 29 29"/></svg></button></div>
