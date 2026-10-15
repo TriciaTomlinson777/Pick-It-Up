@@ -77,20 +77,20 @@ export default function HowToParticipate() {
             <h2 id="take-action-title" className="heading-lg mb-8 text-center text-[#0f9aa1]">What will you do today?</h2>
             <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {actions.map((action, index) => (
-                <Link key={action.href} href={action.href} className={`flex flex-col rounded-3xl border border-white/20 p-6 text-left shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,43,73,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0f9aa1] sm:p-8 ${cardStyles[index].className}`}>
+                <article key={action.href} className={`flex flex-col rounded-3xl border border-white/20 p-6 text-left shadow-sm sm:p-8 ${cardStyles[index].className}`}>
                   <span aria-hidden="true" className={`text-3xl ${cardStyles[index].iconClassName}`}>{action.icon}</span>
                   <h3 className={`mt-4 text-[1.08rem] font-extrabold ${cardStyles[index].titleClassName}`}>{action.title}</h3>
                   <p className={`mb-6 mt-3 text-[0.96rem] font-medium leading-6 ${cardStyles[index].descriptionClassName}`}>{action.text}</p>
-                  <span className={`mt-auto inline-flex min-h-12 items-center font-bold underline underline-offset-4 ${cardStyles[index].titleClassName}`}>{action.label} →</span>
-                </Link>
+                  <Link href={action.href} className={`mt-auto inline-flex min-h-12 items-center justify-center rounded-full border-2 border-white/80 px-5 py-3 text-center font-bold shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[(index + 3) % cardStyles.length].className} ${cardStyles[(index + 3) % cardStyles.length].titleClassName}`}>{action.label}</Link>
+                </article>
               ))}
             </div>
           </div>
         </section>
 
-        <section aria-labelledby="kids-purpose-title" className="hero-surface border-y border-[#0f9aa1]/20 py-12 sm:py-16">
-          <div className="container-custom mx-auto max-w-4xl text-center">
-            <h2 id="kids-purpose-title" className="text-5xl font-extrabold sm:text-6xl lg:text-7xl">
+        <section aria-labelledby="kids-purpose-title" className="px-4 py-12 sm:py-16">
+          <div className={`mx-auto max-w-4xl rounded-3xl border border-white/20 p-6 text-center shadow-sm sm:p-8 ${cardStyles[4].className}`}>
+            <h2 id="kids-purpose-title" className="inline-block rounded-2xl bg-[#fdf7e8] px-4 py-3 text-5xl font-extrabold sm:text-6xl lg:text-7xl">
               {'Kids Corner'.split('').map((letter, index) => letter === ' ' ? (
                 <span key={index}>&nbsp;</span>
               ) : (
@@ -100,7 +100,7 @@ export default function HowToParticipate() {
             <h3 className="mt-4 text-3xl font-extrabold sm:text-4xl">Little actions. Lifelong habits.</h3>
             <p className="mt-6 text-lg leading-8">Children can make a difference right now. Kids Corner helps them discover the joy of contributing, taking responsibility, and showing kindness—all while having fun.</p>
             <p className="mt-4 text-lg leading-8">Through stories and simple activities, children can practice caring for their communities: picking up a piece of litter with a grown-up, thanking someone who helps, or leaving a place better than they found it.</p>
-            <Link href="/kids-corner" className="btn-green mt-7 inline-flex min-h-12 justify-center rounded-full px-7 py-3 font-bold">Explore Kids Corner</Link>
+            <Link href="/kids-corner" className={`mt-7 inline-flex min-h-12 items-center justify-center rounded-full border-2 border-white/80 px-7 py-3 font-bold shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[3].className} ${cardStyles[3].titleClassName}`}>Explore Kids Corner</Link>
           </div>
         </section>
 
