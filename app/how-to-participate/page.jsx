@@ -92,7 +92,7 @@ export default function HowToParticipate() {
         </section>
 
         <section aria-labelledby="kids-purpose-title" className="px-4 py-12 sm:py-16">
-          <div className={`mx-auto max-w-4xl rounded-3xl border border-white/20 p-6 text-center shadow-sm sm:p-8 ${cardStyles[0].descriptionClassName}`} style={{ backgroundImage: "linear-gradient(155deg, #fdf7e8 0%, #f3f3df 25%, #bfe4d2 48%, #2ec4c7 74%, #69be28 100%)" }}>
+          <div className={`mx-auto max-w-4xl rounded-3xl border border-white/20 p-6 text-center shadow-sm sm:p-8 text-[#002244]`} style={{ backgroundImage: "linear-gradient(155deg, #fdf7e8 0%, #f3f3df 25%, #bfe4d2 48%, #2ec4c7 74%, #69be28 100%)" }}>
             <h2 id="kids-purpose-title" className="inline-block px-4 py-3 text-[1.62rem] font-extrabold">
               <KidsCornerName />
             </h2>
