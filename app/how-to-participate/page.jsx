@@ -42,6 +42,8 @@ const cardStyles = [
     },
   ];
 
+const kidsCornerColors = ['#0f9aa1', '#f59a2d', '#69be28', '#f4c94c', null, '#ef7f2d', '#2ec4c7', '#61b826', '#0fa5af', '#1fb8c2', '#d9665b'];
+
 const actions = [
   { icon: '📍', title: 'Every cleanup counts.', text: 'Pick up litter wherever you are, then add your cleanup to our community map. No photo required.', label: 'Log My Cleanup', href: '/#participate-track' },
   { icon: '📸', title: 'Show the difference.', text: 'Share before-and-after photos and let others see what a little care can accomplish.', label: 'Share My Before & After', href: '/#participate-before-after' },
@@ -86,10 +88,16 @@ export default function HowToParticipate() {
           </div>
         </section>
 
-        <section aria-labelledby="kids-purpose-title" className="bg-[#fff4cc] py-12 sm:py-16">
+        <section aria-labelledby="kids-purpose-title" className="hero-surface border-y border-[#0f9aa1]/20 py-12 sm:py-16">
           <div className="container-custom mx-auto max-w-4xl text-center">
-            <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#0f9aa1]">Kids Corner</p>
-            <h2 id="kids-purpose-title" className="mt-3 text-3xl font-extrabold sm:text-4xl">Little actions. Lifelong habits.</h2>
+            <h2 id="kids-purpose-title" className="text-5xl font-extrabold sm:text-6xl lg:text-7xl">
+              {'Kids Corner'.split('').map((letter, index) => letter === ' ' ? (
+                <span key={index}>&nbsp;</span>
+              ) : (
+                <span key={index} style={{ color: kidsCornerColors[index] }}>{letter}</span>
+              ))}
+            </h2>
+            <h3 className="mt-4 text-3xl font-extrabold sm:text-4xl">Little actions. Lifelong habits.</h3>
             <p className="mt-6 text-lg leading-8">Children can make a difference right now. Kids Corner helps them discover the joy of contributing, taking responsibility, and showing kindness—all while having fun.</p>
             <p className="mt-4 text-lg leading-8">Through stories and simple activities, children can practice caring for their communities: picking up a piece of litter with a grown-up, thanking someone who helps, or leaving a place better than they found it.</p>
             <Link href="/kids-corner" className="btn-green mt-7 inline-flex min-h-12 justify-center rounded-full px-7 py-3 font-bold">Explore Kids Corner</Link>
