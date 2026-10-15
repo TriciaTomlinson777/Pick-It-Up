@@ -1680,6 +1680,35 @@ export default function Home() {
     setOpenShareGuidelineIndex(null);
   };
 
+  useEffect(() => {
+    const openParticipationAction = () => {
+      switch (window.location.hash) {
+        case '#participate-track':
+          setIsTrackModalOpen(true);
+          break;
+        case '#participate-before-after':
+          openTrackPhotoModal();
+          break;
+        case '#participate-community-photo':
+          openCommunityActionPhotoModal();
+          break;
+        case '#participate-thank-you':
+          openShareModal();
+          handleShareTypeSelect(COMMUNITY_SHARE_TYPE_THANK_YOU);
+          break;
+        case '#participate-scenic':
+          openShareModal();
+          handleShareTypeSelect(COMMUNITY_SHARE_TYPE_SCENIC_DISCOVERY);
+          break;
+        default:
+          break;
+      }
+    };
+    openParticipationAction();
+    window.addEventListener('hashchange', openParticipationAction);
+    return () => window.removeEventListener('hashchange', openParticipationAction);
+  }, []);
+
   const handleShareMessageChange = (value) => {
     setShareThankYouMessage(value);
     setShareFormError('');
