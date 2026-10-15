@@ -46,10 +46,10 @@ const kidsCornerColors = ['#0f9aa1', '#f59a2d', '#69be28', '#f4c94c', null, '#ef
 
 const actions = [
   { icon: '📍', title: 'Every cleanup counts.', text: 'Pick up litter wherever you are, then add your cleanup to our community map. No photo required.', label: 'Log My Cleanup', href: '/#participate-track' },
-  { icon: '📸', title: 'Show the difference.', text: 'Share before-and-after photos and let others see what a little care can accomplish.', label: 'Share My Before & After', href: '/#participate-before-after' },
-  { icon: '💚', title: 'Celebrate community care.', text: 'Share a photo of people making a difference and help inspire someone else to join in.', label: 'Share a Community Photo', href: '/#participate-community-photo' },
+  { icon: '📸', title: 'Inspire Others', text: 'Share before-and-after photos and let others see what a little care can accomplish.', label: 'Share My Before & After', href: '/#participate-before-after' },
+  { icon: '💚', title: 'Celebrate Community!', text: 'Share a photo of people making a difference and help inspire someone else to join in.', label: 'Share a Community Photo', href: '/#participate-community-photo' },
   { icon: '💌', title: 'A little thanks goes a long way.', text: 'Recognize someone whose kindness made a difference with a thank-you note.', label: 'Send a Thank You', href: '/#participate-thank-you' },
-  { icon: '🌻', title: 'Notice the beauty.', text: 'Discover something beautiful along the way? Share a photo of the places worth caring for.', label: 'Share a Scenic Discovery', href: '/#participate-scenic' },
+  { icon: '🌻', title: 'See something cool?', text: 'Discover something beautiful along the way? Share a photo of the places worth caring for.', label: 'Share a Scenic Discovery', href: '/#participate-scenic' },
   { icon: '🧤', title: 'Find your people.', text: 'Explore community cleanup events and follow the host’s details to take part.', label: 'Find an Event', href: '/events' },
 ];
 
@@ -77,12 +77,12 @@ export default function HowToParticipate() {
             <h2 id="take-action-title" className="heading-lg mb-8 text-center text-[#0f9aa1]">What will you do today?</h2>
             <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {actions.map((action, index) => (
-                <article key={action.href} className={`flex flex-col rounded-3xl border border-[#0f9aa1]/15 p-6 shadow-sm sm:p-8 ${cardStyles[index].className}`}>
+                <Link key={action.href} href={action.href} className={`flex flex-col rounded-3xl border border-white/20 p-6 text-left shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,43,73,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0f9aa1] sm:p-8 ${cardStyles[index].className}`}>
                   <span aria-hidden="true" className={`text-3xl ${cardStyles[index].iconClassName}`}>{action.icon}</span>
                   <h3 className={`mt-4 text-[1.08rem] font-extrabold ${cardStyles[index].titleClassName}`}>{action.title}</h3>
                   <p className={`mb-6 mt-3 text-[0.96rem] font-medium leading-6 ${cardStyles[index].descriptionClassName}`}>{action.text}</p>
-                  <Link href={action.href} className="btn-green mt-auto inline-flex min-h-12 justify-center rounded-full px-5 py-3 text-center font-bold">{action.label}</Link>
-                </article>
+                  <span className={`mt-auto inline-flex min-h-12 items-center font-bold underline underline-offset-4 ${cardStyles[index].titleClassName}`}>{action.label} →</span>
+                </Link>
               ))}
             </div>
           </div>
