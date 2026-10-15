@@ -494,7 +494,7 @@ function renderGame(h){
  <g font-family="Trebuchet MS,sans-serif" font-weight="bold" text-anchor="middle" fill="#075e64"><text x="160" y="25" font-size="16">FINISH 🏁</text><text x="160" y="219" font-size="16">START</text></g>
  </svg>`;
  const legend=document.createElement('ul');legend.className='race-legend';legend.setAttribute('aria-label','Player colors');
- const examples=[{name:h.name,color:'#eb6477'},{name:h.name==='Tricia'?'Ann':'Tricia',color:'#8854d0'},{name:'Mess Master',color:'#ffd044'}];
+ const examples=[{name:h.name,color:'#eb6477'},{name:h.name==='Tricia'?'Ann':'Tricia',color:'#8854d0'},{name:'Mark',color:'#ffd044'}];
  for(const player of examples){const item=document.createElement('li');const swatch=document.createElement('span');swatch.className='race-swatch';swatch.style.background=player.color;swatch.setAttribute('aria-hidden','true');const label=document.createElement('span');label.textContent=player.name;item.append(swatch,label);legend.append(item)}
  const status=document.createElement('p');status.className='race-help';status.textContent='Pick up litter, earn points, and move toward the finish!';
  const preview=document.createElement('p');preview.className='race-preview';preview.textContent='Example player comparison · Live scoring coming next.';
