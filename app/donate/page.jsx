@@ -12,7 +12,7 @@ export default function Donate() {
 
       {/* Hero */}
       <section className="bg-gradient-to-r from-seattle-green to-green-700 text-white py-16">
-        <div className="container-custom">
+        <div className="container-custom text-center">
           <h1 className="heading-xl mb-4">Help communities care for the places they call home</h1>
           <p className="text-lg text-green-100">
             Your donation helps inspire cleaner communities
