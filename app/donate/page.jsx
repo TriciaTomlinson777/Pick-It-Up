@@ -8,23 +8,23 @@ export default function Donate() {
   const donationTiers = [
     {
       amount: '$10',
-      description: 'Supports volunteer T-shirts, outreach, and mission materials',
-      impact: 'One Volunteer Support',
+      description: 'Supports cleaner communities',
+      impact: 'Every Gift Matters',
     },
     {
       amount: '$25',
-      description: 'Supports promotional and educational materials',
-      impact: 'Small Team',
+      description: 'Supports environmental education',
+      impact: 'Inspire Learning',
     },
     {
       amount: '$50',
-      description: 'Supports the Sponsor a Can program',
-      impact: 'Full Event',
+      description: 'Supports litter cleanup and community participation',
+      impact: 'Encourage Action',
     },
     {
       amount: '$100',
       description: 'Supports community outreach and mission-focused activities',
-      impact: 'Monthly Series',
+      impact: 'Grow Our Impact',
     },
   ];
 
@@ -37,7 +37,7 @@ export default function Donate() {
         <div className="container-custom">
           <h1 className="heading-xl mb-4">Support Our Mission</h1>
           <p className="text-lg text-green-100">
-            Your donation helps inspire cleaner communities across Seattle
+            Your donation helps inspire cleaner communities
           </p>
         </div>
       </section>
@@ -48,25 +48,9 @@ export default function Donate() {
           <div className="max-w-3xl mx-auto mb-12">
             <h2 className="text-3xl font-bold mb-6 text-center">Why Donate?</h2>
             <p className="text-lg text-gray-700 mb-6">
-              Donations support the mission of making Seattle cleaner and more beautiful. Your
-              contribution helps Pick It Up Seattle:
+              Help keep communities clean and inspire children to care for the places they live.
+              Your donation supports litter cleanup, environmental education, and community participation.
             </p>
-            <ul className="space-y-4">
-              {[
-                'Create volunteer T-shirts, promotional materials, and educational materials',
-                'Support community outreach and the Sponsor a Can program',
-                'Encourage individual action and community participation',
-                'Expand our reach to new neighborhoods and communities',
-                'Create educational materials about sustainability',
-                'Partner with local organizations and parks',
-                'Pick It Up Seattle is a 501(c)(3) nonprofit. Your donations are tax-deductible to the extent allowed by law.',
-              ].map((item, idx) => (
-                <li key={idx} className="flex items-start">
-                  <span className="text-seattle-green text-2xl mr-3 mt-1">✓</span>
-                  <span className="text-gray-700">{item}</span>
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
       </section>
@@ -175,16 +159,16 @@ export default function Donate() {
             <details className="bg-gray-50 p-4 rounded-lg cursor-pointer hover:bg-gray-100 transition">
               <summary className="font-bold text-seattle-green">How are donations used?</summary>
               <p className="text-gray-700 mt-2">
-                Donations support volunteer T-shirts, promotional materials, educational
-                materials, community outreach, the Sponsor a Can program, and other activities
-                that advance Pick It Up Seattle’s mission.
+                Your donation supports litter cleanup, environmental education, and community
+                participation—helping keep communities clean and inspiring children to care
+                for the places they live.
               </p>
             </details>
             <details className="bg-gray-50 p-4 rounded-lg cursor-pointer hover:bg-gray-100 transition">
               <summary className="font-bold text-seattle-green">Can I donate items instead of money?</summary>
               <p className="text-gray-700 mt-2">
-                Yes! Contact us if you would like to support volunteer T-shirts, promotional
-                materials, educational materials, or the Sponsor a Can program.
+                Yes! Contact us to discuss supplies or other in-kind gifts that support
+                litter cleanup, environmental education, and community participation.
               </p>
             </details>
             <details className="bg-gray-50 p-4 rounded-lg cursor-pointer hover:bg-gray-100 transition">
