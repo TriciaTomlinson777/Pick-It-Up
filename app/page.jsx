@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import CommunityPhotoPreview from '@/components/CommunityPhotoPreview';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import Image from 'next/image';
 import Logo from '@/components/Logo';
 import ShareButton from '@/components/ShareButton';
 import InstagramShareButton from '@/components/InstagramShareButton';
@@ -172,6 +173,7 @@ export default function Home() {
   const [activeVolunteerHighlightKey, setActiveVolunteerHighlightKey] = useState('');
   const [activeBeforeAfterHighlightKey, setActiveBeforeAfterHighlightKey] = useState('');
   const [imagineSlideIndex, setImagineSlideIndex] = useState(0);
+  const [imagineHasRotated, setImagineHasRotated] = useState(false);
   const scrollLockStateRef = useRef({
     isLocked: false,
     bodyOverflow: '',
@@ -1045,6 +1047,7 @@ export default function Home() {
     }
 
     const slideTimer = window.setInterval(() => {
+      setImagineHasRotated(true);
       setImagineSlideIndex((currentSlideIndex) => (currentSlideIndex + 1) % IMAGINE_SLIDES.length);
     }, IMAGINE_SLIDE_INTERVAL_MS);
 
@@ -3035,12 +3038,15 @@ export default function Home() {
                     <div
                       key={`imagine-slide-${slideIndex}`}
                       className={`absolute inset-0 h-full w-full transition-opacity ease-in-out motion-reduce:transition-none ${isActiveSlide ? 'opacity-100' : 'opacity-0'}`}
-                      style={{ transitionDuration: `${IMAGINE_SLIDE_FADE_MS}ms` }}
+                      style={{ transitionDuration: imagineHasRotated ? `${IMAGINE_SLIDE_FADE_MS}ms` : '0ms' }}
                     >
                       {slide?.src ? (
-                        <img
+                        <Image
                           src={slide.src}
-                          fetchPriority={slideIndex === 0 ? 'high' : 'low'}
+                          fill
+                          sizes="100vw"
+                          preload={slideIndex === 0}
+                          loading={slideIndex === 0 ? undefined : 'lazy'}
                           decoding="async"
                           alt=""
                           aria-hidden="true"
@@ -3053,12 +3059,12 @@ export default function Home() {
               </div>
               <div
                 className={`absolute inset-0 bg-[linear-gradient(180deg,rgba(255,252,245,0.12)_0%,rgba(255,252,245,0.08)_38%,rgba(255,252,245,0.12)_100%)] transition-opacity ease-in-out motion-reduce:transition-none ${imagineSlideIndex === 1 ? 'opacity-0' : 'opacity-100'}`}
-                style={{ transitionDuration: `${IMAGINE_SLIDE_FADE_MS}ms` }}
+                style={{ transitionDuration: imagineHasRotated ? `${IMAGINE_SLIDE_FADE_MS}ms` : '0ms' }}
                 aria-hidden="true"
               />
               <div
                 className={`absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(244,201,76,0.1),transparent_36%),radial-gradient(circle_at_80%_15%,rgba(46,196,199,0.12),transparent_40%)] transition-opacity ease-in-out motion-reduce:transition-none ${imagineSlideIndex === 1 ? 'opacity-0' : 'opacity-100'}`}
-                style={{ transitionDuration: `${IMAGINE_SLIDE_FADE_MS}ms` }}
+                style={{ transitionDuration: imagineHasRotated ? `${IMAGINE_SLIDE_FADE_MS}ms` : '0ms' }}
                 aria-hidden="true"
               />
 
