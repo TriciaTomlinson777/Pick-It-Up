@@ -61,8 +61,8 @@ const DEFAULT_PHOTO_CROP_POSITION = { x: 50, y: 50 };
 const COMMUNITY_SHARE_TYPE_THANK_YOU = 'thank-you';
 const COMMUNITY_SHARE_TYPE_SCENIC_DISCOVERY = 'scenic-discovery';
 const IMAGINE_SLIDES = [
-  { src: '/SS!.jpg', objectPosition: '50% 68%' },
-  { src: '/Seattle2.jpeg', objectPosition: '50% 68%' },
+  { src: '/hero-waterfront.webp', objectPosition: '50% 68%' },
+  { src: '/hero-city.webp', objectPosition: '50% 68%' },
   { src: '/0.jpg', objectPosition: '50% 68%' },
 ];
 const IMAGINE_SLIDE_INTERVAL_MS = 6000;
@@ -3039,6 +3039,8 @@ export default function Home() {
                       {slide?.src ? (
                         <img
                           src={slide.src}
+                          fetchPriority={slideIndex === 0 ? 'high' : 'low'}
+                          decoding="async"
                           alt=""
                           aria-hidden="true"
                           className="h-full w-full object-cover object-center"
@@ -3525,7 +3527,7 @@ export default function Home() {
                   <div
                     className="min-w-0 flex-[1.15] rounded-[1.5rem] bg-no-repeat bg-contain bg-center"
                     style={{
-                      backgroundImage: "url('/Messes.png')",
+                      backgroundImage: "url('/impact-messes.webp')",
                     }}
                   />
                   <div className="min-w-0 flex-[0.85] flex flex-col items-center justify-center text-center">
@@ -3539,7 +3541,9 @@ export default function Home() {
                 >
                   <div className="min-w-0 flex-[1.15] overflow-hidden rounded-[1.5rem]">
                     <img
-                      src="/Correct Cleanup Adventures.png"
+                      src="/impact-cleanups.webp"
+                      loading="lazy"
+                      decoding="async"
                       alt="Cleanup Adventures"
                       className="h-full w-full object-cover object-center"
                     />
