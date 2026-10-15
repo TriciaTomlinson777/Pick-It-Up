@@ -84,7 +84,7 @@ export default function HowToParticipate() {
                 <article key={action.href} className={`flex flex-col rounded-3xl border border-white/20 p-6 text-left shadow-sm sm:p-8 ${cardStyles[index].className}`}>
                   <h3 className={`text-[1.62rem] font-extrabold ${cardStyles[index].titleClassName}`}>{action.title}</h3>
                   <p className={`mb-6 mt-3 text-[1.44rem] font-medium leading-9 ${cardStyles[index].descriptionClassName}`}>{action.text}</p>
-                  <Link href={action.href} className={`mt-auto inline-flex h-[4.5rem] w-60 max-w-full self-center items-center justify-center rounded-full px-3 py-1 text-center text-[1.3125rem] font-bold leading-[1.875rem] shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[(index + 3) % cardStyles.length].className} ${cardStyles[(index + 3) % cardStyles.length].titleClassName}`}>{action.label}</Link>
+                  <Link href={action.href} className={`mt-auto inline-flex min-h-12 max-w-full self-center items-center justify-center px-3 py-1 text-center text-[1.3125rem] font-bold leading-[1.875rem] underline decoration-2 underline-offset-4 transition hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 ${cardStyles[index].titleClassName}`}>{action.label}</Link>
                 </article>
               ))}
             </div>
