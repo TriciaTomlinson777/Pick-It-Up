@@ -2,6 +2,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 
+const donationUrl = 'https://donate.stripe.com/dRmcN65pl2TC7X76JggQE00';
+
 export default function Donate() {
   const donationTiers = [
     {
@@ -82,7 +84,7 @@ export default function Donate() {
                 <div className="text-4xl font-bold text-seattle-green mb-2">{tier.amount}</div>
                 <p className="text-sm text-seattle-accent font-semibold mb-3">{tier.impact}</p>
                 <p className="text-gray-600 text-sm mb-6">{tier.description}</p>
-                <button className="btn-primary w-full py-2">Donate</button>
+                <a href={donationUrl} className="btn-primary inline-block w-full py-2" aria-label={`Donate — suggested amount ${tier.amount}`}>Donate</a>
               </div>
             ))}
           </div>
@@ -90,14 +92,8 @@ export default function Donate() {
           {/* Custom Donation */}
           <div className="text-center">
             <p className="text-gray-600 mb-4">Or donate a custom amount:</p>
-            <div className="flex justify-center gap-4">
-              <input
-                type="number"
-                placeholder="Enter amount"
-                className="px-4 py-2 border border-gray-300 rounded-lg w-48 focus:outline-none focus:ring-2 focus:ring-seattle-green"
-              />
-              <button className="btn-primary">Donate Now</button>
-            </div>
+            <a href={donationUrl} className="btn-primary inline-block">Choose Your Donation Amount</a>
+            <p className="text-sm text-gray-600 mt-4">Enter your amount on our secure Stripe payment page.</p>
           </div>
         </div>
       </section>
@@ -113,16 +109,16 @@ export default function Donate() {
               <p className="text-gray-600 mb-4">
                 Make a single donation when it works best for you
               </p>
-              <button className="btn-primary text-sm">Donate Now</button>
+              <a href={donationUrl} className="btn-primary inline-block text-sm">Donate Now</a>
             </div>
 
             <div className="bg-white rounded-lg shadow-md p-8 text-center hover:shadow-lg transition">
               <div className="text-5xl mb-4">📅</div>
               <h3 className="text-xl font-bold mb-3 text-seattle-green">Monthly Giving</h3>
               <p className="text-gray-600 mb-4">
-                Become a sustaining supporter with a recurring monthly donation
+                Contact us to discuss ongoing support for cleaner communities
               </p>
-              <button className="btn-primary text-sm">Set Up Monthly</button>
+              <Link href="/contact?subject=Monthly%20Giving" className="btn-primary inline-block text-sm">Ask About Monthly Giving</Link>
             </div>
 
             <div className="bg-white rounded-lg shadow-md p-8 text-center hover:shadow-lg transition">
@@ -131,7 +127,7 @@ export default function Donate() {
               <p className="text-gray-600 mb-4">
                 Make a donation in honor of someone special
               </p>
-              <button className="btn-primary text-sm">Honor a Person</button>
+              <Link href="/contact?subject=Donation%20in%20Honor" className="btn-primary inline-block text-sm">Arrange an Honor Gift</Link>
             </div>
           </div>
         </div>
@@ -194,7 +190,7 @@ export default function Donate() {
             <details className="bg-gray-50 p-4 rounded-lg cursor-pointer hover:bg-gray-100 transition">
               <summary className="font-bold text-seattle-green">What payment methods do you accept?</summary>
               <p className="text-gray-700 mt-2">
-                We accept credit cards, PayPal, bank transfers, and checks. Contact us for details.
+                Use our secure Stripe payment page to donate by card. Available payment options are shown at checkout. Contact us about other ways to give.
               </p>
             </details>
           </div>
