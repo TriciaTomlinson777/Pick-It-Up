@@ -72,7 +72,7 @@ export async function POST(request) {
       if (body.heroId && !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(body.heroId)) return reply({ error: 'Choose one of your saved heroes.' }, 400);
       const hero = { id: body.heroId || randomUUID(), name, avatar };
       const query = body.heroId
-        ? client.from('game_player_profiles').update({ name, avatar }).eq('id', body.heroId).eq('user_id', user.id)
+        ? client.from('game_player_profiles').update({ avatar }).eq('id', body.heroId).eq('user_id', user.id)
         : client.from('game_player_profiles').insert({ ...hero, user_id: user.id });
       const { data: saved, error: saveError } = await query.select('id,name,avatar,hero_level,hero_title,total_items,cleanup_count').single();
       if (saveError || !saved) return reply({ error: 'Your hero couldn’t be saved. Try again.' }, 503);
