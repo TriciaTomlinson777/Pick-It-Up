@@ -3961,7 +3961,7 @@ export default function Home() {
                         className="mt-0.5 h-4 w-4 rounded border-[#002b49]/25"
                       />
                       <span>
-                        I confirm that my photos and comments follow the Community Photo Guidelines, that I have permission to submit them, and that I am the parent or legal guardian if a photo intentionally features a child.
+                        I confirm that my photos and comments follow the Community Photo Guidelines, that I have permission to submit them, and that I am the parent or legal guardian if a photo intentionally features a child. I give Pick It Up Seattle permission to display my approved submission on its website and to process it for privacy and display. I keep any ownership rights I hold. See our <a href="/terms#submissions" target="_blank" rel="noreferrer" className="underline">submission permissions</a>.
                       </span>
                     </label>
 
@@ -4418,7 +4418,7 @@ export default function Home() {
                               className="mt-0.5 h-4 w-4 rounded border-[#002b49]/25"
                             />
                             <span>
-                              I confirm that my photo and comments follow the Community Photo Guidelines, that I have permission to submit them, and that I am the parent or legal guardian if the photo intentionally features a child.
+                              I confirm that my photo and comments follow the Community Photo Guidelines, that I have permission to submit them, and that I am the parent or legal guardian if the photo intentionally features a child. I give Pick It Up Seattle permission to display my approved submission on its website and to process it for privacy and display. I keep any ownership rights I hold. See our <a href="/terms#submissions" target="_blank" rel="noreferrer" className="underline">submission permissions</a>.
                             </span>
                           </label>
                         ) : null}
@@ -4583,7 +4583,7 @@ export default function Home() {
                               className="mt-0.5 h-4 w-4 rounded border-[#002b49]/25"
                             />
                             <span>
-                              I confirm that my photo and comments follow the Community Photo Guidelines, that I have permission to submit them, and that I am the parent or legal guardian if the photo intentionally features a child.
+                              I confirm that my photo and comments follow the Community Photo Guidelines, that I have permission to submit them, and that I am the parent or legal guardian if the photo intentionally features a child. I give Pick It Up Seattle permission to display my approved submission on its website and to process it for privacy and display. I keep any ownership rights I hold. See our <a href="/terms#submissions" target="_blank" rel="noreferrer" className="underline">submission permissions</a>.
                             </span>
                           </label>
                         ) : null}
