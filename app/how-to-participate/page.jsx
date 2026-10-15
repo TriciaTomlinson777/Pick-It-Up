@@ -70,7 +70,7 @@ export default function HowToParticipate() {
       <main className="text-[#002244]">
         <section className="bg-gradient-to-r from-seattle-green to-green-700 pb-4 pt-12 sm:pb-6 sm:pt-16">
           <div className="container-custom mx-auto max-w-4xl text-center">
-            <h1 className="heading-xl mb-4 text-[#0f9aa1]"><span className="box-decoration-clone" style={{ backgroundImage: "radial-gradient(ellipse at center, rgba(253,247,232,0.7) 0%, rgba(253,247,232,0.56) 30%, rgba(253,247,232,0.3) 60%, rgba(253,247,232,0.08) 82%, rgba(253,247,232,0) 100%)" }}>How to Participate</span></h1>
+            <h1 className="heading-xl mb-4 text-[#0f9aa1]"><span className="relative isolate inline-block"><span aria-hidden="true" className="pointer-events-none absolute -inset-x-10 -inset-y-5 -z-10" style={{ backgroundImage: "radial-gradient(ellipse at center, rgba(253,247,232,0.72) 0%, rgba(253,247,232,0.5) 28%, rgba(253,247,232,0.2) 55%, rgba(253,247,232,0) 75%)", filter: "blur(14px)" }} />How to Participate</span></h1>
             <p className="mt-5 text-2xl font-bold sm:text-3xl">Small actions. Many ways to make a difference.</p>
             <p className="mx-auto mt-4 max-w-2xl text-lg font-bold leading-8 text-[#002244]">Start with one piece of litter, one kind word, or one shared discovery. Choose a way to care for your community today.</p>
           </div>
