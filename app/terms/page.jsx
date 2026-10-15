@@ -11,7 +11,7 @@ export default function Terms() {
         <div className="container-custom">
           <h1 className="heading-xl mb-4">Terms of Service</h1>
           <p className="text-lg text-green-100">
-            Last updated: July 2024
+            Last updated: October 15, 2026
           </p>
         </div>
       </section>
@@ -30,7 +30,7 @@ export default function Terms() {
             <h2 className="text-2xl font-bold text-gray-900">2. Use License</h2>
             <p>
               Permission is granted to temporarily download one copy of the materials (information
-              or software) on Pick It Up Seattle\' s website for personal, non-commercial
+              or software) on Pick It Up Seattle’s website for personal, non-commercial
               transitory viewing only. This is the grant of a license, not a transfer of title, and
               under this license you may not:
             </p>
@@ -48,6 +48,13 @@ export default function Terms() {
               </li>
             </ul>
 
+            <p>
+              Materials explicitly offered for download and printing may be used for personal,
+              family, classroom, and nonprofit educational activities, subject to any instructions
+              supplied with those materials. This permission does not authorize selling the
+              materials or claiming them as your own work.
+            </p>
+
             <h2 className="text-2xl font-bold text-gray-900">3. Volunteer Code of Conduct</h2>
             <p>All volunteers agree to:</p>
             <ul className="list-disc pl-6 space-y-2">
@@ -59,6 +66,14 @@ export default function Terms() {
               <li>Have fun and maintain a positive attitude</li>
             </ul>
 
+            <p>
+              Events linked from this site may be run by independent community organizations.
+              Confirm registration, schedules, safety requirements, and any event-specific terms
+              directly with the organizer. Listing an event does not mean Pick It Up Seattle
+              organizes or supervises it. Parents and guardians should supervise children during
+              cleanup activities.
+            </p>
+
             <h2 className="text-2xl font-bold text-gray-900">4. Assumption of Risk</h2>
             <p>
               Volunteering with Pick It Up Seattle involves physical activity outdoors. By
@@ -69,7 +84,7 @@ export default function Terms() {
 
             <h2 className="text-2xl font-bold text-gray-900">5. Liability Disclaimer</h2>
             <p>
-              The materials on Pick It Up Seattle\' s website are provided on an "as is" basis. Pick
+              The materials on Pick It Up Seattle’s website are provided on an "as is" basis. Pick
               It Up Seattle makes no warranties, expressed or implied, and hereby disclaims and
               negates all other warranties including, without limitation, implied warranties or
               conditions of merchantability, fitness for a particular purpose, or non-infringement
@@ -81,12 +96,12 @@ export default function Terms() {
               In no event shall Pick It Up Seattle or its suppliers be liable for any damages
               (including, without limitation, damages for loss of data or profit, or due to
               business interruption) arising out of the use or inability to use the materials on
-              Pick It Up Seattle\' s website.
+              Pick It Up Seattle’s website.
             </p>
 
             <h2 className="text-2xl font-bold text-gray-900">7. Accuracy of Materials</h2>
             <p>
-              The materials appearing on Pick It Up Seattle\' s website could include technical,
+              The materials appearing on Pick It Up Seattle’s website could include technical,
               typographical, or photographic errors. Pick It Up Seattle does not warrant that any
               of the materials on its website are accurate, complete, or current. Pick It Up Seattle
               may make changes to the materials contained on its website at any time without notice.
@@ -97,7 +112,15 @@ export default function Terms() {
               Pick It Up Seattle has not reviewed all of the sites linked to its website and is not
               responsible for the contents of any such linked site. The inclusion of any link does
               not imply endorsement by Pick It Up Seattle of the site. Use of any such linked
-              website is at the user\' s own risk.
+              website is at the user’s own risk.
+            </p>
+
+            <p>
+              Our <a href="/privacy">Privacy Policy</a> explains how we handle submitted
+              information, photos, public contributions, and privacy requests. Submit only content
+              you have permission to share, follow the photo guidelines shown on our forms, and
+              avoid including identifying information about children in public submissions.
+              Submissions are reviewed and are not guaranteed to be published.
             </p>
 
             <h2 className="text-2xl font-bold text-gray-900">9. Modifications</h2>
@@ -118,9 +141,9 @@ export default function Terms() {
             <p>
               If you have questions about these Terms of Service, please contact us at:
               <br />
-              Email: legal@pickitupseattle.org
+              Email: <a href="mailto:hello@pickitupseattle.org">hello@pickitupseattle.org</a>
               <br />
-              Address: 123 Green Street, Seattle, WA 98101
+              Location: Seattle, Washington
             </p>
           </div>
         </div>
