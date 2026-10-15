@@ -40,7 +40,7 @@ const kidsCornerColors = ['#0f9aa1', '#f59a2d', '#69be28', '#f4c94c', null, '#ef
 
 function KidsCornerName() {
   return (
-    <span style={{ fontFamily: "var(--font-baloo-2), 'Trebuchet MS', 'Segoe UI', sans-serif" }} className="font-extrabold">
+    <span style={{ fontFamily: "var(--font-baloo-2), 'Trebuchet MS', 'Segoe UI', sans-serif" }} className="rounded bg-[#fdf7e8]/55 box-decoration-clone font-extrabold">
       {'Kids Corner'.split('').map((letter, index) => (
         <span key={index} style={{ color: kidsCornerColors[index] }}>{letter === ' ' ? '\u00a0' : letter}</span>
       ))}
@@ -93,7 +93,7 @@ export default function HowToParticipate() {
 
         <section aria-labelledby="kids-purpose-title" className="px-4 py-12 sm:py-16">
           <div className={`mx-auto max-w-4xl rounded-3xl border border-white/20 p-6 text-center shadow-sm sm:p-8 ${cardStyles[0].className} ${cardStyles[0].descriptionClassName}`}>
-            <h2 id="kids-purpose-title" className="inline-block rounded-2xl bg-[#fdf7e8] px-4 py-3 text-[1.62rem] font-extrabold">
+            <h2 id="kids-purpose-title" className="inline-block px-4 py-3 text-[1.62rem] font-extrabold">
               <KidsCornerName />
             </h2>
             <h3 className="mt-4 text-[1.62rem] font-extrabold" style={{ color: kidsCornerColors[5] }}>Little actions. Lifelong habits.</h3>
