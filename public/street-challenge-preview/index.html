@@ -95,6 +95,20 @@ form{width:100%;display:none;flex:1;flex-direction:column;justify-content:center
 .toolbar .player-nav{position:static;transform:none;display:flex;flex:0 1 96px;width:96px;max-width:96px;min-width:0;gap:4px}
 .toolbar .player-nav button{flex:1 1 0;width:46px;min-width:0;max-width:46px;height:46px;padding:0}
 .toolbar .signout svg{width:20px;height:20px;fill:currentColor;stroke:none}
+
+/* Distinct navigation colors and comfortable phone tap spacing. */
+.toolbar,.toolbar:has(#deadlineToggle[hidden]){flex-wrap:wrap;gap:10px;justify-content:center}
+.toolbar .player-nav{display:contents}
+.toolbar .player-nav[hidden]{display:none}
+.toolbar>.round,.toolbar>.signout,.toolbar .player-nav button{flex:0 0 44px;width:44px;min-width:44px;max-width:44px;height:44px}
+#signout{background:#ffc4b5;color:#74372c}
+#homeNav{background:#ffe078}
+#singlePlayerNav{background:#9ee7df;color:#075c61}
+#familyPlayersNav{background:#d5bafa;color:#57357c}
+#rewardsNav{background:#bce88d}
+#deadlineToggle,#deadlineToggle[aria-expanded=true]{background:#ffc58b}
+#sound{background:#add9ff;color:#224d77}
+
 </style></head><body>
 <main class="room booting"><div class="boot-message" role="status">Opening Street Challenge…</div>
 <div class="toolbar"><button class="round signout" id="signout" type="button" aria-label="Exit game" title="Exit game"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M3 4.8a2 2 0 0 1 1.5-1.9l9-2.3A2 2 0 0 1 16 2.5v27a2 2 0 0 1-2.5 1.9l-9-2.3A2 2 0 0 1 3 27.2Zm9 11.2c0 1.1.4 2 1 2s1-.9 1-2-.4-2-1-2-1 .9-1 2Z"/><path d="M17.5 3H21a3 3 0 0 1 3 3v6h-2V6a1 1 0 0 0-1-1h-3.5Zm0 24H21a1 1 0 0 0 1-1v-6h2v6a3 3 0 0 1-3 3h-3.5Zm6.5-14v-2a1 1 0 0 1 1.6-.8l5.6 4.8a1.3 1.3 0 0 1 0 2l-5.6 4.8A1 1 0 0 1 24 21v-2h-5a1.5 1.5 0 0 1-1.5-1.5v-3A1.5 1.5 0 0 1 19 13Z"/></svg></button><button class="round" id="homeNav" aria-label="Game home">🏠</button><nav class="player-nav" id="playerNav" aria-label="Player navigation"><button id="singlePlayerNav" type="button" aria-label="My profile" title="My profile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7.5" r="4"/><path d="M4.5 21v-2.2c0-4.1 3.1-6.4 7.5-6.4s7.5 2.3 7.5 6.4V21"/></svg></button><button id="familyPlayersNav" type="button" aria-label="Add or switch players" title="Add or switch players"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.1"/><path d="M2.5 20v-1.5c0-3.6 2.4-5.6 6.5-5.6s6.5 2 6.5 5.6V20"/><path d="M16 5.2a3.1 3.1 0 0 1 0 6.1M17.4 13.2c2.8.5 4.1 2.3 4.1 5.3V20"/></svg></button></nav><button class="round" id="rewardsNav" aria-label="Rewards">🏆</button><button class="round hourglass-button" id="deadlineToggle" aria-label="Show challenge deadline" aria-controls="challengeClock" aria-expanded="false" disabled><svg viewBox="0 0 40 48" aria-hidden="true"><path d="M8 5h24v5c0 6-5 10-10 14 5 4 10 8 10 14v5H8v-5c0-6 5-10 10-14C13 20 8 16 8 10Z" fill="#fffdf1" stroke="#b47c25" stroke-width="2.5"/><path d="M11 11h18c-1 5-5 7-9 10-4-3-8-5-9-10Z" fill="#eab83f"/><path d="M20 24v12" class="sand-stream" stroke="#eab83f" stroke-width="2.5" stroke-dasharray="2 2"/><path d="m11 40 9-7 9 7Z" fill="#eab83f"/><path d="M6 4h28M6 44h28" stroke="#835429" stroke-width="4" stroke-linecap="round"/></svg></button><button class="round" id="sound" aria-label="Mute sound" aria-pressed="false">🔊</button></div>
