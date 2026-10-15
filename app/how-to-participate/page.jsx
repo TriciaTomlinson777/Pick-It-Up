@@ -74,7 +74,7 @@ export default function HowToParticipate() {
                 <article key={action.href} className={`flex flex-col rounded-3xl border border-white/20 p-6 text-left shadow-sm sm:p-8 ${cardStyles[index].className}`}>
                   <h3 className={`text-[1.62rem] font-extrabold ${cardStyles[index].titleClassName}`}>{action.title}</h3>
                   <p className={`mb-6 mt-3 text-[1.44rem] font-medium leading-9 ${cardStyles[index].descriptionClassName}`}>{action.text}</p>
-                  <Link href={action.href} className={`mt-auto inline-flex h-24 w-60 max-w-full self-center items-center justify-center rounded-full px-4 py-2 text-center text-[1.3125rem] font-bold leading-[1.875rem] shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[(index + 3) % cardStyles.length].className} ${cardStyles[(index + 3) % cardStyles.length].titleClassName}`}>{action.label}</Link>
+                  <Link href={action.href} className={`mt-auto inline-flex h-[4.5rem] w-60 max-w-full self-center items-center justify-center rounded-full px-3 py-1 text-center text-[1.3125rem] font-bold leading-[1.875rem] shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[(index + 3) % cardStyles.length].className} ${cardStyles[(index + 3) % cardStyles.length].titleClassName}`}>{action.label}</Link>
                 </article>
               ))}
             </div>
@@ -93,7 +93,7 @@ export default function HowToParticipate() {
             <h3 className="mt-4 text-[1.62rem] font-extrabold">Little actions. Lifelong habits.</h3>
             <p className="mt-6 text-[1.44rem] font-medium leading-9">Children can make a difference right now. Kids Corner helps them discover the joy of contributing, taking responsibility, and showing kindness—all while having fun.</p>
             <p className="mt-4 text-[1.44rem] font-medium leading-9">Through stories and simple activities, children can practice caring for their communities: picking up a piece of litter with a grown-up, thanking someone who helps, or leaving a place better than they found it.</p>
-            <Link href="/kids-corner" className={`mt-7 inline-flex h-24 w-60 max-w-full items-center justify-center rounded-full px-4 py-2 text-center text-[1.3125rem] font-bold leading-[1.875rem] shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[3].className} ${cardStyles[3].titleClassName}`}>Explore Kids Corner</Link>
+            <Link href="/kids-corner" className={`mt-7 inline-flex h-[4.5rem] w-60 max-w-full items-center justify-center rounded-full px-3 py-1 text-center text-[1.3125rem] font-bold leading-[1.875rem] shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[3].className} ${cardStyles[3].titleClassName}`}>Explore Kids Corner</Link>
           </div>
         </section>
 
@@ -113,7 +113,7 @@ export default function HowToParticipate() {
                 <article key={way.href} className="flex flex-col rounded-3xl bg-white p-6 sm:p-8">
                   <h3 className="text-[1.62rem] font-extrabold">{way.title}</h3>
                   <p className="mb-6 mt-3 text-[1.44rem] font-medium leading-9">{way.text}</p>
-                  <Link href={way.href} className="mt-auto inline-flex h-24 w-60 max-w-full self-center items-center justify-center rounded-full border-2 border-[#0b7485] px-4 py-2 text-center text-[1.3125rem] font-bold leading-[1.875rem] text-[#0f9aa1] hover:bg-[#e5f7f5]">{way.title}</Link>
+                  <Link href={way.href} className="mt-auto inline-flex h-[4.5rem] w-60 max-w-full self-center items-center justify-center rounded-full border-2 border-[#0b7485] px-3 py-1 text-center text-[1.3125rem] font-bold leading-[1.875rem] text-[#0f9aa1] hover:bg-[#e5f7f5]">{way.title}</Link>
                 </article>
               ))}
             </div>
