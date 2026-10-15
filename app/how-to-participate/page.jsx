@@ -96,7 +96,7 @@ export default function HowToParticipate() {
             <h2 id="kids-purpose-title" className="inline-block px-4 py-3 text-[1.62rem] font-extrabold">
               <KidsCornerName />
             </h2>
-            <h3 className="mt-4 text-[1.62rem] font-extrabold" style={{ color: kidsCornerColors[5] }}>Little actions. Lifelong habits.</h3>
+            <h3 className="mt-4 text-[1.62rem] font-extrabold" style={{ color: kidsCornerColors[5] }}><span className="rounded bg-[#fdf7e8]/55 box-decoration-clone">Little actions. Lifelong habits.</span></h3>
             <p className="mt-6 text-left text-[1.44rem] font-medium leading-9">Children can make a difference right now. <KidsCornerName /> helps them discover the joy of contributing, taking responsibility, and showing kindness—all while having fun.</p>
             <p className="mt-4 text-left text-[1.44rem] font-medium leading-9">Through stories and simple activities, children can practice caring for their communities: picking up a piece of litter with a grown-up, thanking someone who helps, or leaving a place better than they found it.</p>
             <Link href="/kids-corner" className={`mt-7 inline-flex h-[4.5rem] w-60 max-w-full items-center justify-center rounded-full px-3 py-1 text-center text-[1.3125rem] font-bold leading-[1.875rem] shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[3].className} ${cardStyles[3].titleClassName}`}><span>Explore <KidsCornerName /></span></Link>
