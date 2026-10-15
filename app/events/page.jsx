@@ -1,5 +1,6 @@
 "use client";
 
+import { isCurrentCommunityEvent } from '@/lib/community-event-dates';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import { useEffect, useState } from 'react';
@@ -187,10 +188,32 @@ export default function Events() {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    fetch('/api/community-events', { cache: 'no-store' })
-      .then((response) => response.ok ? response.json() : { events: [] })
-      .then((data) => setEvents(Array.isArray(data.events) ? data.events : []))
-      .catch(() => setEvents([]));
+    let active = true;
+    function refreshEvents() {
+      // Remove expired cards even if the next network request fails.
+      setEvents((current) => current.filter((event) => isCurrentCommunityEvent(event)));
+      fetch('/api/community-events', { cache: 'no-store' })
+        .then((response) => {
+          if (!response.ok) throw new Error('Unable to load events.');
+          return response.json();
+        })
+        .then((data) => {
+          if (active) setEvents(Array.isArray(data.events)
+            ? data.events.filter((event) => isCurrentCommunityEvent(event)) : []);
+        })
+        .catch(() => {});
+    }
+    refreshEvents();
+    const interval = window.setInterval(refreshEvents, 60_000);
+    function onVisibilityChange() {
+      if (document.visibilityState === 'visible') refreshEvents();
+    }
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    return () => {
+      active = false;
+      window.clearInterval(interval);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+    };
   }, []);
 
   return (
