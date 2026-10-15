@@ -61,7 +61,7 @@ function OrganizationCard({ organization, organize = false }) {
       <div className={`mb-5 h-2 w-16 rounded-full ${organization.accent === 'green' ? 'bg-[#69be28]' : 'bg-[#0f9aa1]'}`} />
       <h3 className="text-2xl font-bold text-[#002244]">{organization.name}</h3>
       <p className="mt-3 flex-1 leading-7 text-[#516b7d]">{organization.description}</p>
-      <a href={organization.href} target="_blank" rel="noreferrer" className={`${organize ? 'btn-secondary' : 'btn-green'} mt-6 w-full text-center`}>
+      <a href={organization.href} target={organization.href === 'https://seattle.gov/utilities/volunteer/adopt-a-street' ? undefined : '_blank'} rel="noreferrer" className={`${organize ? 'btn-secondary' : 'btn-green'} mt-6 w-full text-center`}>
         {organization.button || 'View Cleanup Opportunities'}
       </a>
     </article>
