@@ -11,7 +11,12 @@ export function holdScene(room,reduced=false){
   clone.style.setProperty('transition','none','important');
   if(node instanceof HTMLCanvasElement){
    clone.width=node.width;clone.height=node.height;
-   clone.getContext('2d')?.drawImage(node,0,0);
+   // Hidden scenes can leave a zero-size canvas. Safari rejects drawing it.
+   if(node.width>0&&node.height>0){
+    try{clone.getContext('2d')?.drawImage(node,0,0)}catch{
+     // A visual snapshot must never prevent loading a player's saved game.
+    }
+   }
   }
  });
  copy.setAttribute('aria-hidden','true');copy.inert=true;
