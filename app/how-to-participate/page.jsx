@@ -8,49 +8,43 @@ const cardStyles = [
       className: 'bg-[linear-gradient(145deg,_#0f9aa1_0%,_#2ec4c7_45%,_#69be28_100%)]',
       titleClassName: 'text-white [text-shadow:0_1px_2px_rgba(0,34,68,0.28)]',
       descriptionClassName: 'text-[#f7feff] [text-shadow:0_1px_2px_rgba(0,34,68,0.18)]',
-      iconClassName: 'text-white drop-shadow-[0_2px_3px_rgba(0,34,68,0.28)]',
     },
     {
       className: 'bg-[linear-gradient(145deg,_#0b7485_0%,_#0f9aa1_52%,_#2ec4c7_100%)]',
       titleClassName: 'text-white [text-shadow:0_1px_2px_rgba(0,34,68,0.28)]',
       descriptionClassName: 'text-[#f7feff] [text-shadow:0_1px_2px_rgba(0,34,68,0.18)]',
-      iconClassName: 'text-white drop-shadow-[0_2px_3px_rgba(0,34,68,0.28)]',
     },
     {
       className: 'bg-[linear-gradient(145deg,_#2ec4c7_0%,_#7cd157_62%,_#69be28_100%)]',
       titleClassName: 'text-[#002244] [text-shadow:0_1px_1px_rgba(255,255,255,0.14)]',
       descriptionClassName: 'text-[#062f21]',
-      iconClassName: 'text-[#002244] drop-shadow-[0_1px_1px_rgba(255,255,255,0.18)]',
     },
     {
       className: 'bg-[linear-gradient(145deg,_#002244_0%,_#1f5f7a_58%,_#2ec4c7_100%)]',
       titleClassName: 'text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.24)]',
       descriptionClassName: 'text-[#f0fcff] [text-shadow:0_1px_2px_rgba(0,0,0,0.14)]',
-      iconClassName: 'text-white drop-shadow-[0_2px_3px_rgba(0,0,0,0.24)]',
     },
     {
       className: 'bg-[linear-gradient(145deg,_#f4c94c_0%,_#f59a2d_55%,_#0f9aa1_100%)]',
       titleClassName: 'text-[#002244] [text-shadow:0_1px_1px_rgba(255,248,232,0.28)]',
       descriptionClassName: 'text-[#2f2400]',
-      iconClassName: 'text-[#002244] drop-shadow-[0_1px_1px_rgba(255,248,232,0.22)]',
     },
     {
       className: 'bg-[linear-gradient(145deg,_#69be28_0%,_#0f9aa1_50%,_#002244_100%)]',
       titleClassName: 'text-white [text-shadow:0_1px_2px_rgba(0,34,68,0.28)]',
       descriptionClassName: 'text-[#f7feff] [text-shadow:0_1px_2px_rgba(0,34,68,0.18)]',
-      iconClassName: 'text-white drop-shadow-[0_2px_3px_rgba(0,34,68,0.28)]',
     },
   ];
 
 const kidsCornerColors = ['#0f9aa1', '#f59a2d', '#69be28', '#f4c94c', null, '#ef7f2d', '#2ec4c7', '#61b826', '#0fa5af', '#1fb8c2', '#d9665b'];
 
 const actions = [
-  { icon: '📍', title: 'Every cleanup counts.', text: 'Pick up litter wherever you are, then add your cleanup to our community map. No photo required.', label: 'Log My Cleanup', href: '/#participate-track' },
-  { icon: '📸', title: 'Inspire Others', text: 'Share before-and-after photos and let others see what a little care can accomplish.', label: 'Share My Before & After', href: '/#participate-before-after' },
-  { icon: '💚', title: 'Celebrate Community!', text: 'Share a photo of people making a difference and help inspire someone else to join in.', label: 'Share a Community Photo', href: '/#participate-community-photo' },
-  { icon: '💌', title: 'A little thanks goes a long way.', text: 'Recognize someone whose kindness made a difference with a thank-you note.', label: 'Send a Thank You', href: '/#participate-thank-you' },
-  { icon: '🌻', title: 'See something cool?', text: 'Discover something beautiful along the way? Share a photo of the places worth caring for.', label: 'Share a Scenic Discovery', href: '/#participate-scenic' },
-  { icon: '🧤', title: 'Find your people.', text: 'Explore community cleanup events and follow the host’s details to take part.', label: 'Find an Event', href: '/events' },
+  { title: 'Every cleanup counts.', text: 'Pick up litter wherever you are, then add your cleanup to our community map. No photo required.', label: 'Log My Cleanup', href: '/#participate-track' },
+  { title: 'Inspire Others', text: 'Share before-and-after photos and let others see what a little care can accomplish.', label: 'Share My Before & After', href: '/#participate-before-after' },
+  { title: 'Celebrate Community!', text: 'Share a photo of people making a difference and help inspire someone else to join in.', label: 'Share a Community Photo', href: '/#participate-community-photo' },
+  { title: 'A little thanks goes a long way.', text: 'Recognize someone whose kindness made a difference with a thank-you note.', label: 'Send a Thank You', href: '/#participate-thank-you' },
+  { title: 'See something cool?', text: 'Discover something beautiful along the way? Share a photo of the places worth caring for.', label: 'Share a Scenic Discovery', href: '/#participate-scenic' },
+  { title: 'Find your people.', text: 'Explore community cleanup events and follow the host’s details to take part.', label: 'Find an Event', href: '/events' },
 ];
 
 const moreWays = [
@@ -64,7 +58,7 @@ export default function HowToParticipate() {
     <>
       <Header />
       <main className="bg-[#fdf7e8] text-[#002244]">
-        <section className="bg-[#fdf7e8] py-12 sm:py-16">
+        <section className="bg-[#fdf7e8] pb-4 pt-12 sm:pb-6 sm:pt-16">
           <div className="container-custom mx-auto max-w-4xl text-center">
             <h1 className="heading-xl mb-4 text-[#0f9aa1]">How to Participate</h1>
             <p className="mt-5 text-2xl font-bold sm:text-3xl">Small actions. Many ways to make a difference.</p>
@@ -72,16 +66,15 @@ export default function HowToParticipate() {
           </div>
         </section>
 
-        <section aria-labelledby="take-action-title" className="py-12 sm:py-16">
+        <section aria-labelledby="take-action-title" className="pb-12 pt-4 sm:pb-16 sm:pt-6">
           <div className="container-custom">
-            <h2 id="take-action-title" className="heading-lg mb-8 text-center text-[#0f9aa1]">What will you do today?</h2>
+            <h2 id="take-action-title" className="heading-lg mb-8 text-center text-[#0f9aa1]">What Will You Do Today?</h2>
             <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {actions.map((action, index) => (
                 <article key={action.href} className={`flex flex-col rounded-3xl border border-white/20 p-6 text-left shadow-sm sm:p-8 ${cardStyles[index].className}`}>
-                  <span aria-hidden="true" className={`text-3xl ${cardStyles[index].iconClassName}`}>{action.icon}</span>
-                  <h3 className={`mt-4 text-[1.08rem] font-extrabold ${cardStyles[index].titleClassName}`}>{action.title}</h3>
-                  <p className={`mb-6 mt-3 text-[0.96rem] font-medium leading-6 ${cardStyles[index].descriptionClassName}`}>{action.text}</p>
-                  <Link href={action.href} className={`mt-auto inline-flex h-14 w-60 max-w-full self-center items-center justify-center rounded-full px-4 py-2 text-center text-sm font-bold leading-5 shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[(index + 3) % cardStyles.length].className} ${cardStyles[(index + 3) % cardStyles.length].titleClassName}`}>{action.label}</Link>
+                  <h3 className={`text-[1.62rem] font-extrabold ${cardStyles[index].titleClassName}`}>{action.title}</h3>
+                  <p className={`mb-6 mt-3 text-[1.44rem] font-medium leading-9 ${cardStyles[index].descriptionClassName}`}>{action.text}</p>
+                  <Link href={action.href} className={`mt-auto inline-flex h-24 w-60 max-w-full self-center items-center justify-center rounded-full px-4 py-2 text-center text-[1.3125rem] font-bold leading-[1.875rem] shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[(index + 3) % cardStyles.length].className} ${cardStyles[(index + 3) % cardStyles.length].titleClassName}`}>{action.label}</Link>
                 </article>
               ))}
             </div>
@@ -90,17 +83,17 @@ export default function HowToParticipate() {
 
         <section aria-labelledby="kids-purpose-title" className="px-4 py-12 sm:py-16">
           <div className={`mx-auto max-w-4xl rounded-3xl border border-white/20 p-6 text-center shadow-sm sm:p-8 ${cardStyles[4].className}`}>
-            <h2 id="kids-purpose-title" className="inline-block rounded-2xl bg-[#fdf7e8] px-4 py-3 text-5xl font-extrabold sm:text-6xl lg:text-7xl">
+            <h2 id="kids-purpose-title" className="inline-block rounded-2xl bg-[#fdf7e8] px-4 py-3 text-[4.5rem] font-extrabold leading-tight sm:text-[5.625rem] lg:text-[6.75rem]">
               {'Kids Corner'.split('').map((letter, index) => letter === ' ' ? (
-                <span key={index}>&nbsp;</span>
+                <wbr key={index} />
               ) : (
                 <span key={index} style={{ color: kidsCornerColors[index] }}>{letter}</span>
               ))}
             </h2>
-            <h3 className="mt-4 text-3xl font-extrabold sm:text-4xl">Little actions. Lifelong habits.</h3>
-            <p className="mt-6 text-lg leading-8">Children can make a difference right now. Kids Corner helps them discover the joy of contributing, taking responsibility, and showing kindness—all while having fun.</p>
-            <p className="mt-4 text-lg leading-8">Through stories and simple activities, children can practice caring for their communities: picking up a piece of litter with a grown-up, thanking someone who helps, or leaving a place better than they found it.</p>
-            <Link href="/kids-corner" className={`mt-7 inline-flex h-14 w-60 max-w-full items-center justify-center rounded-full px-4 py-2 text-center text-sm font-bold leading-5 shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[3].className} ${cardStyles[3].titleClassName}`}>Explore Kids Corner</Link>
+            <h3 className="mt-4 text-[2.8125rem] font-extrabold leading-tight sm:text-[3.375rem]">Little actions. Lifelong habits.</h3>
+            <p className="mt-6 text-[1.6875rem] leading-[3rem]">Children can make a difference right now. Kids Corner helps them discover the joy of contributing, taking responsibility, and showing kindness—all while having fun.</p>
+            <p className="mt-4 text-[1.6875rem] leading-[3rem]">Through stories and simple activities, children can practice caring for their communities: picking up a piece of litter with a grown-up, thanking someone who helps, or leaving a place better than they found it.</p>
+            <Link href="/kids-corner" className={`mt-7 inline-flex h-24 w-60 max-w-full items-center justify-center rounded-full px-4 py-2 text-center text-[1.3125rem] font-bold leading-[1.875rem] shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[3].className} ${cardStyles[3].titleClassName}`}>Explore Kids Corner</Link>
           </div>
         </section>
 
@@ -118,9 +111,9 @@ export default function HowToParticipate() {
             <div className="grid gap-5 md:grid-cols-3">
               {moreWays.map((way) => (
                 <article key={way.href} className="flex flex-col rounded-3xl bg-white p-6 sm:p-8">
-                  <h3 className="text-xl font-bold">{way.title}</h3>
-                  <p className="mb-6 mt-3 leading-7">{way.text}</p>
-                  <Link href={way.href} className="mt-auto inline-flex min-h-12 items-center justify-center rounded-full border-2 border-[#0b7485] px-5 py-3 text-center font-bold text-[#0f9aa1] hover:bg-[#e5f7f5]">{way.title}</Link>
+                  <h3 className="text-3xl font-bold">{way.title}</h3>
+                  <p className="mb-6 mt-3 text-2xl leading-[2.625rem]">{way.text}</p>
+                  <Link href={way.href} className="mt-auto inline-flex min-h-12 items-center justify-center rounded-full border-2 border-[#0b7485] px-5 py-3 text-center text-2xl font-bold text-[#0f9aa1] hover:bg-[#e5f7f5]">{way.title}</Link>
                 </article>
               ))}
             </div>
