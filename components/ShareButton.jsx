@@ -92,7 +92,7 @@ export default function ShareButton({
   };
 
   return (
-    <div className="inline-flex items-center gap-2">
+    <div className="relative inline-flex max-w-full items-center">
       <button
         type="button"
         onClick={handleShare}
@@ -101,7 +101,7 @@ export default function ShareButton({
       >
         {label}
       </button>
-      <span className="min-w-[78px] text-xs font-semibold text-[#2c7a3f]" aria-live="polite">
+      <span className="absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap text-xs font-semibold text-[#2c7a3f]" aria-live="polite">
         {feedback}
       </span>
     </div>
