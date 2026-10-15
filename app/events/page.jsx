@@ -5,38 +5,24 @@ import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import { useEffect, useState } from 'react';
 
-const ORGANIZE_OPTIONS = [
+const CLEANUP_OPTIONS = [
   {
     name: 'Seattle Public Utilities - Adopt a Street',
-    description: 'Adopt a street and get the guidance and supplies you need to care for it.',
+    description: 'Join a neighborhood cleanup or get guidance and supplies to care for an adopted street.',
     href: 'https://seattle.gov/utilities/volunteer/adopt-a-street',
-    button: 'Visit Organizing Information',
     accent: 'teal',
   },
   {
-    name: 'Seattle Parks & Recreation / Green Seattle Partnership',
-    description: 'Find restoration projects and learn how to organize stewardship work in Seattle parks.',
+    name: 'Seattle Parks / Green Seattle Partnership',
+    description: 'Explore restoration events and learn how to organize stewardship work in Seattle parks.',
     href: 'https://greenseattle.org/get-involved/volunteer/',
-    button: 'Visit Organizing Information',
     accent: 'green',
-  },
-];
-
-const JOIN_OPTIONS = [
-  {
-    name: 'Seattle Public Utilities - Adopt a Street',
-    description: 'Join neighbors who care for adopted streets across Seattle.',
-    href: 'https://seattle.gov/utilities/volunteer/adopt-a-street',
   },
   {
     name: 'We Heart Seattle',
     description: 'Take part in volunteer cleanups that make Seattle parks and public spaces shine.',
     href: 'https://weheartseattle.org/community-involvement/',
-  },
-  {
-    name: 'Seattle Parks / Green Seattle Partnership',
-    description: 'Explore restoration and stewardship events in Seattle parks.',
-    href: 'https://greenseattle.org/get-involved/volunteer/',
+    accent: 'teal',
   },
 ];
 
@@ -55,14 +41,14 @@ function formatEventTime(startTime, endTime) {
   return times.join(' - ');
 }
 
-function OrganizationCard({ organization, organize = false }) {
+function OrganizationCard({ organization }) {
   return (
     <article className="paint-card flex h-full flex-col p-6 sm:p-7">
       <div className={`mb-5 h-2 w-16 rounded-full ${organization.accent === 'green' ? 'bg-[#69be28]' : 'bg-[#0f9aa1]'}`} />
       <h3 className="text-2xl font-bold text-[#002244]">{organization.name}</h3>
       <p className="mt-3 flex-1 leading-7 text-[#516b7d]">{organization.description}</p>
-      <a href={organization.href} target={organization.href === 'https://seattle.gov/utilities/volunteer/adopt-a-street' ? undefined : '_blank'} rel="noreferrer" className={`${organize ? 'btn-secondary' : 'btn-green'} mt-6 w-full text-center`}>
-        {organization.button || 'View Cleanup Opportunities'}
+      <a href={organization.href} target={organization.href === 'https://seattle.gov/utilities/volunteer/adopt-a-street' ? undefined : '_blank'} rel="noreferrer" className="btn-green mt-6 w-full text-center">
+        Explore Cleanup Opportunities
       </a>
     </article>
   );
@@ -228,24 +214,14 @@ export default function Events() {
           </div>
         </section>
 
-        <section className="py-16 sm:py-20" id="organize-cleanup">
-          <div className="container-custom">
-            <div className="mb-8 max-w-3xl">
-              <h2 className="heading-lg">Want to Organize a Cleanup?</h2>
-              <p className="mt-3 text-lg leading-8 text-[#516b7d]">These organizations can help you plan and lead a cleanup. They manage their own events, safety requirements, and volunteer coordination.</p>
-            </div>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">{ORGANIZE_OPTIONS.map((organization) => <OrganizationCard key={organization.name} organization={organization} organize />)}</div>
-          </div>
-        </section>
-
         <section className="bg-[#eaf7f4] py-16 sm:py-20" id="join-cleanup">
-          <div className="container-custom">
+          <div className="container-custom" id="organize-cleanup">
             <div className="mb-8 max-w-3xl">
-              <h2 className="heading-lg">Want to Join a Cleanup?</h2>
-              <p className="mt-3 text-lg leading-8 text-[#516b7d]">Find an existing opportunity and register directly with the organization hosting it.</p>
+              <h2 className="heading-lg">Want to Join or Organize a Cleanup?</h2>
+              <p className="mt-3 text-lg leading-8 text-[#516b7d]">Explore cleanup opportunities and resources from these local organizations. Visit their websites to join an event or learn how to organize a cleanup.</p>
             </div>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">{JOIN_OPTIONS.map((organization) => <OrganizationCard key={organization.name} organization={organization} />)}</div>
-            <p className="mt-8 rounded-2xl border border-[#0f9aa1]/20 bg-white/75 px-5 py-4 text-sm leading-6 text-[#1f5f7a]">Events listed here may be organized by independent community organizations. Please use the organizer&apos;s link for registration, event details, and participation requirements.</p>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">{CLEANUP_OPTIONS.map((organization) => <OrganizationCard key={organization.name} organization={organization} />)}</div>
+            <p className="mt-8 rounded-2xl border border-[#0f9aa1]/20 bg-white/75 px-5 py-4 text-sm leading-6 text-[#1f5f7a]">These organizations manage their own events, registration, safety requirements, and volunteer coordination.</p>
           </div>
         </section>
 
