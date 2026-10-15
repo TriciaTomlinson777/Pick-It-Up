@@ -106,7 +106,7 @@ export default function HowToParticipate() {
           <div className="container-custom mx-auto max-w-4xl text-center">
             <h2 id="share-movement-title" className="heading-lg text-2xl sm:text-4xl text-[#0f9aa1]">Share Pick It Up Together</h2>
             <p className="mx-auto mb-6 mt-4 max-w-2xl text-base leading-6 sm:text-lg sm:leading-8">Help educators, homeschooling families, and community organizations inspire children to care, contribute, and show kindness—one small action at a time.</p>
-            <ShareButton url="/how-to-participate" title="Pick It Up Together" text="Small actions. Many ways to make a difference. Discover ways to help children and communities care, contribute, and show kindness." label="Share Pick It Up Together" className="min-h-12 justify-center px-7 py-3 text-base font-bold" />
+            <ShareButton url="/how-to-participate" title="Pick It Up Together" text="Small actions. Many ways to make a difference. Discover ways to help children and communities care, contribute, and show kindness." label="Share Pick It Up Together" className="min-h-12 justify-center px-7 py-3 text-base font-bold max-sm:bg-none max-sm:shadow-none max-sm:border-transparent max-sm:rounded-none max-sm:underline max-sm:decoration-2 max-sm:underline-offset-4" />
           </div>
         </section>
 
@@ -118,7 +118,8 @@ export default function HowToParticipate() {
                 <article key={way.href} className={`flex flex-col rounded-3xl border border-white/20 p-6 shadow-sm sm:p-8 ${cardStyles[index].className}`}>
                   <h3 className={`text-[1.08rem] sm:text-[1.62rem] font-extrabold ${cardStyles[index].titleClassName}`}>{way.title}</h3>
                   <p className={`mb-4 mt-2 text-[0.96rem] font-medium leading-6 sm:mb-6 sm:mt-3 sm:text-[1.44rem] sm:leading-9 ${cardStyles[index].descriptionClassName}`}>{way.text}</p>
-                  <Link href={way.href} className={`mt-auto inline-flex min-h-12 sm:h-[4.5rem] w-60 max-w-full self-center items-center justify-center rounded-full px-3 py-1 text-center text-sm sm:text-[1.3125rem] font-bold leading-[1.875rem] shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[index + 3].className} ${cardStyles[index + 3].titleClassName}`}>{way.title}</Link>
+                  <Link href={way.href} className={`mt-auto inline-flex min-h-12 max-w-full self-center items-center justify-center px-3 py-1 text-center text-sm font-bold leading-[1.875rem] underline decoration-2 underline-offset-4 transition hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 sm:hidden ${cardStyles[index].titleClassName}`}>{way.title}</Link>
+                  <Link href={way.href} className={`mt-auto hidden sm:inline-flex min-h-12 sm:h-[4.5rem] w-60 max-w-full self-center items-center justify-center rounded-full px-3 py-1 text-center text-sm sm:text-[1.3125rem] font-bold leading-[1.875rem] shadow-md transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${cardStyles[index + 3].className} ${cardStyles[index + 3].titleClassName}`}>{way.title}</Link>
                 </article>
               ))}
             </div>
