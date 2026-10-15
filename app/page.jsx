@@ -174,6 +174,8 @@ export default function Home() {
   const [activeBeforeAfterHighlightKey, setActiveBeforeAfterHighlightKey] = useState('');
   const [imagineSlideIndex, setImagineSlideIndex] = useState(0);
   const [imagineHasRotated, setImagineHasRotated] = useState(false);
+  const [loadedImagineSlides, setLoadedImagineSlides] = useState([]);
+  const [loadExtraImagineSlides, setLoadExtraImagineSlides] = useState(false);
   const scrollLockStateRef = useRef({
     isLocked: false,
     bodyOverflow: '',
@@ -1041,20 +1043,25 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    if (!loadedImagineSlides.includes(0) || prefersReducedMotion) return;
+    const timer = window.setTimeout(() => setLoadExtraImagineSlides(true), 1500);
+    return () => window.clearTimeout(timer);
+  }, [loadedImagineSlides, prefersReducedMotion]);
+
+  useEffect(() => {
     if (prefersReducedMotion) {
       setImagineSlideIndex(0);
       return undefined;
     }
-
+    if (!loadExtraImagineSlides) return;
     const slideTimer = window.setInterval(() => {
+      const nextSlide = (imagineSlideIndex + 1) % IMAGINE_SLIDES.length;
+      if (!loadedImagineSlides.includes(nextSlide)) return;
       setImagineHasRotated(true);
-      setImagineSlideIndex((currentSlideIndex) => (currentSlideIndex + 1) % IMAGINE_SLIDES.length);
+      setImagineSlideIndex(nextSlide);
     }, IMAGINE_SLIDE_INTERVAL_MS);
-
-    return () => {
-      window.clearInterval(slideTimer);
-    };
-  }, [prefersReducedMotion]);
+    return () => window.clearInterval(slideTimer);
+  }, [prefersReducedMotion, loadExtraImagineSlides, loadedImagineSlides, imagineSlideIndex]);
 
   useEffect(() => {
     try {
@@ -3040,12 +3047,13 @@ export default function Home() {
                       className={`absolute inset-0 h-full w-full transition-opacity ease-in-out motion-reduce:transition-none ${isActiveSlide ? 'opacity-100' : 'opacity-0'}`}
                       style={{ transitionDuration: imagineHasRotated ? `${IMAGINE_SLIDE_FADE_MS}ms` : '0ms' }}
                     >
-                      {slide?.src ? (
+                      {slide?.src && (slideIndex === 0 || loadExtraImagineSlides) ? (
                         <Image
                           src={slide.src}
                           fill
                           sizes="100vw"
                           preload={slideIndex === 0}
+                          onLoad={() => setLoadedImagineSlides((loaded) => loaded.includes(slideIndex) ? loaded : [...loaded, slideIndex])}
                           loading={slideIndex === 0 ? undefined : 'lazy'}
                           decoding="async"
                           alt=""
