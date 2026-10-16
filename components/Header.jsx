@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Logo from './Logo';
 
-export default function Header() {
+export default function Header({ prefetchLinks = null }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinkClassName =
@@ -26,7 +26,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 border-b border-[#0f9aa1]/20 bg-[#fffaf0]/95 shadow-[0_10px_24px_rgba(0,34,68,0.1)] backdrop-blur-sm">
       <nav className="container-custom py-1 sm:py-5 lg:py-0 xl:py-0">
         <div className="relative flex min-h-24 items-center justify-between lg:min-h-0">
-          <Logo href="/" className="mobile-header-logo inline-flex sm:ml-6 lg:ml-8 xl:ml-10 lg:relative lg:h-[17.4rem] lg:w-[24.3rem] lg:overflow-hidden xl:h-[18.75rem] xl:w-[26.1rem]" imgClassName="h-12 w-[11.25rem] max-w-[43vw] object-contain sm:max-w-none sm:h-[7.5rem] sm:w-auto lg:absolute lg:left-[-1rem] lg:top-[-4.3rem] lg:h-[26.5rem] lg:w-[26.5rem] lg:max-w-none xl:left-[-1.2rem] xl:top-[-4.7rem] xl:h-[28.65rem] xl:w-[28.65rem]" />
+          <Logo prefetchLinks={prefetchLinks} href="/" className="mobile-header-logo inline-flex sm:ml-6 lg:ml-8 xl:ml-10 lg:relative lg:h-[17.4rem] lg:w-[24.3rem] lg:overflow-hidden xl:h-[18.75rem] xl:w-[26.1rem]" imgClassName="h-12 w-[11.25rem] max-w-[43vw] object-contain sm:max-w-none sm:h-[7.5rem] sm:w-auto lg:absolute lg:left-[-1rem] lg:top-[-4.3rem] lg:h-[26.5rem] lg:w-[26.5rem] lg:max-w-none xl:left-[-1.2rem] xl:top-[-4.7rem] xl:h-[28.65rem] xl:w-[28.65rem]" />
 
           <div className="absolute right-0 top-1 -bottom-1 flex flex-col items-end text-right text-[0.6875rem] leading-snug text-[#0f9aa1] sm:-bottom-5 sm:text-sm lg:text-base lg:right-3.5 lg:bottom-auto lg:block lg:top-[calc(2.39rem+10px)] xl:top-[calc(2.82rem+10px)]">
             <p className="font-semibold">Pick It Up Seattle</p>
@@ -67,16 +67,16 @@ export default function Header() {
 
           {/* Desktop menu */}
           <div className="hidden lg:flex items-center justify-end gap-1.5 lg:gap-2 xl:gap-2.5 flex-nowrap text-[#002244]">
-            <Link href="/events" className={`${navLinkClassName} text-[#0f9aa1] hover:text-[#0f9aa1] focus-visible:text-[#0f9aa1] active:text-[#0f9aa1]`}>
+            <Link prefetch={prefetchLinks} href="/events" className={`${navLinkClassName} text-[#0f9aa1] hover:text-[#0f9aa1] focus-visible:text-[#0f9aa1] active:text-[#0f9aa1]`}>
               Events
             </Link>
-            <Link href="/how-to-participate" className={`${navLinkClassName} text-[#61b826] hover:bg-[#e8f4e1] hover:text-[#61b826] focus-visible:text-[#61b826] active:text-[#61b826]`}>
+            <Link prefetch={prefetchLinks} href="/how-to-participate" className={`${navLinkClassName} text-[#61b826] hover:bg-[#e8f4e1] hover:text-[#61b826] focus-visible:text-[#61b826] active:text-[#61b826]`}>
               How to Participate
             </Link>
-            <Link href="/about" className={`${navLinkClassName} text-[#ef7f2d] hover:bg-[#fff2da] hover:text-[#ef7f2d] focus-visible:text-[#ef7f2d] active:text-[#ef7f2d]`}>
+            <Link prefetch={prefetchLinks} href="/about" className={`${navLinkClassName} text-[#ef7f2d] hover:bg-[#fff2da] hover:text-[#ef7f2d] focus-visible:text-[#ef7f2d] active:text-[#ef7f2d]`}>
               About
             </Link>
-            <Link href="/kids-corner" className={`${navLinkClassName} hover:bg-[#e7f7f8]`}>
+            <Link prefetch={prefetchLinks} href="/kids-corner" className={`${navLinkClassName} hover:bg-[#e7f7f8]`}>
               {kidsCornerLetters.map((char, index) =>
                 char === ' ' ? (
                   <span key={index}>&nbsp;</span>
@@ -87,18 +87,19 @@ export default function Header() {
                 )
               )}
             </Link>
-            <Link href="/blog" className={`${navLinkClassName} text-[#1fb8c2] hover:bg-[#e3f2fb] hover:text-[#1fb8c2] focus-visible:text-[#1fb8c2] active:text-[#1fb8c2]`}>
+            <Link prefetch={prefetchLinks} href="/blog" className={`${navLinkClassName} text-[#1fb8c2] hover:bg-[#e3f2fb] hover:text-[#1fb8c2] focus-visible:text-[#1fb8c2] active:text-[#1fb8c2]`}>
               Blog
             </Link>
-            <Link href="/shop" className={`${navLinkClassName} text-[#f59a2d] hover:bg-[#e8f4e1] hover:text-[#f59a2d] focus-visible:text-[#f59a2d] active:text-[#f59a2d]`}>
+            <Link prefetch={prefetchLinks} href="/shop" className={`${navLinkClassName} text-[#f59a2d] hover:bg-[#e8f4e1] hover:text-[#f59a2d] focus-visible:text-[#f59a2d] active:text-[#f59a2d]`}>
               Shop
             </Link>
-            <Link href="/contact" className={`${navLinkClassName} text-[#0fa5af] hover:text-[#0fa5af] focus-visible:text-[#0fa5af] active:text-[#0fa5af]`}>
+            <Link prefetch={prefetchLinks} href="/contact" className={`${navLinkClassName} text-[#0fa5af] hover:text-[#0fa5af] focus-visible:text-[#0fa5af] active:text-[#0fa5af]`}>
               Contact
             </Link>
           </div>
 
           <Link
+            prefetch={prefetchLinks}
             href="/street-challenge"
             className="btn-green absolute bottom-6 right-0 hidden min-h-12 whitespace-nowrap px-4.5 text-[1.04rem] font-bold lg:inline-flex lg:bottom-7 lg:px-6 lg:text-[1.26rem] xl:bottom-8 xl:text-[1.38rem]"
           >
@@ -110,6 +111,7 @@ export default function Header() {
         {isOpen && (
           <div className="mt-4 space-y-3 rounded-2xl border border-[#0f9aa1]/20 bg-white/85 p-4 shadow-[0_12px_28px_rgba(0,34,68,0.08)] lg:hidden">
             <Link
+            prefetch={prefetchLinks}
               href="/events"
               className="block rounded-xl px-3 py-2.5 text-[1.08rem] font-bold text-[#0f9aa1] transition hover:bg-[#e7f7f8] hover:text-[#0f9aa1] focus-visible:text-[#0f9aa1] active:text-[#0f9aa1]"
               onClick={() => setIsOpen(false)}
@@ -117,6 +119,7 @@ export default function Header() {
               Events
             </Link>
             <Link
+            prefetch={prefetchLinks}
               href="/how-to-participate"
               className="block rounded-xl px-3 py-2.5 text-[1.08rem] font-bold text-[#61b826] transition hover:bg-[#e8f4e1] hover:text-[#61b826] focus-visible:text-[#61b826] active:text-[#61b826]"
               onClick={() => setIsOpen(false)}
@@ -124,6 +127,7 @@ export default function Header() {
               How to Participate
             </Link>
             <Link
+            prefetch={prefetchLinks}
               href="/about"
               className="block rounded-xl px-3 py-2.5 text-[1.08rem] font-bold text-[#ef7f2d] transition hover:bg-[#fff2da] hover:text-[#ef7f2d] focus-visible:text-[#ef7f2d] active:text-[#ef7f2d]"
               onClick={() => setIsOpen(false)}
@@ -131,6 +135,7 @@ export default function Header() {
               About
             </Link>
             <Link
+            prefetch={prefetchLinks}
               href="/kids-corner"
               className="block rounded-xl px-3 py-2.5 text-[1.08rem] font-bold transition hover:bg-[#fdeceb]"
               onClick={() => setIsOpen(false)}
@@ -146,6 +151,7 @@ export default function Header() {
               )}
             </Link>
             <Link
+            prefetch={prefetchLinks}
               href="/blog"
               className="block rounded-xl px-3 py-2.5 text-[1.08rem] font-bold text-[#1fb8c2] transition hover:bg-[#e3f2fb] hover:text-[#1fb8c2] focus-visible:text-[#1fb8c2] active:text-[#1fb8c2]"
               onClick={() => setIsOpen(false)}
@@ -153,6 +159,7 @@ export default function Header() {
               Blog
             </Link>
             <Link
+            prefetch={prefetchLinks}
               href="/shop"
               className="block rounded-xl px-3 py-2.5 text-[1.08rem] font-bold text-[#f59a2d] transition hover:bg-[#e8f4e1] hover:text-[#f59a2d] focus-visible:text-[#f59a2d] active:text-[#f59a2d]"
               onClick={() => setIsOpen(false)}
@@ -160,6 +167,7 @@ export default function Header() {
               Shop
             </Link>
             <Link
+            prefetch={prefetchLinks}
               href="/contact"
               className="block rounded-xl px-3 py-2.5 text-[1.08rem] font-bold text-[#0fa5af] transition hover:bg-[#e7f7f8] hover:text-[#0fa5af] focus-visible:text-[#0fa5af] active:text-[#0fa5af]"
               onClick={() => setIsOpen(false)}
@@ -167,6 +175,7 @@ export default function Header() {
               Contact
             </Link>
             <Link
+            prefetch={prefetchLinks}
               href="/street-challenge"
               className="btn-green block w-full text-center"
               onClick={() => setIsOpen(false)}

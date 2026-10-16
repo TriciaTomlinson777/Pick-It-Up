@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import ShareButton from '@/components/ShareButton';
 
-export default function Footer({ showHomeShareButton = false, alignWithPageContent = false }) {
+export default function Footer({ showHomeShareButton = false, alignWithPageContent = false, prefetchLinks = null }) {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -22,22 +22,22 @@ export default function Footer({ showHomeShareButton = false, alignWithPageConte
             <h4 className="mb-4 font-semibold text-[#ef7f2d] lg:text-lg">Quick Links</h4>
             <ul className="space-y-2 text-[#1a5570]">
               <li>
-                <Link href="/events" className="transition hover:text-[#0f9aa1]">
+                <Link prefetch={prefetchLinks} href="/events" className="transition hover:text-[#0f9aa1]">
                   Events
                 </Link>
               </li>
               <li>
-                <Link href="/how-to-participate" className="transition hover:text-[#0f9aa1]">
+                <Link prefetch={prefetchLinks} href="/how-to-participate" className="transition hover:text-[#0f9aa1]">
                   How to Participate
                 </Link>
               </li>
               <li>
-                <Link href="/partners" className="transition hover:text-[#0f9aa1]">
+                <Link prefetch={prefetchLinks} href="/partners" className="transition hover:text-[#0f9aa1]">
                   Partners
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="transition hover:text-[#0f9aa1]">
+                <Link prefetch={prefetchLinks} href="/blog" className="transition hover:text-[#0f9aa1]">
                   Blog
                 </Link>
               </li>
@@ -49,22 +49,22 @@ export default function Footer({ showHomeShareButton = false, alignWithPageConte
             <h4 className="mb-4 font-semibold text-[#61b826] lg:text-lg">Resources</h4>
             <ul className="space-y-2 text-[#1a5570]">
               <li>
-                <Link href="/community-resources" className="transition hover:text-[#0f9aa1]">
+                <Link prefetch={prefetchLinks} href="/community-resources" className="transition hover:text-[#0f9aa1]">
                   Community Resources
                 </Link>
               </li>
               <li>
-                <Link href="/shop" className="transition hover:text-[#0f9aa1]">
+                <Link prefetch={prefetchLinks} href="/shop" className="transition hover:text-[#0f9aa1]">
                   Shop
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="transition hover:text-[#0f9aa1]">
+                <Link prefetch={prefetchLinks} href="/contact" className="transition hover:text-[#0f9aa1]">
                   Contact
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="transition hover:text-[#0f9aa1]">
+                <Link prefetch={prefetchLinks} href="/about" className="transition hover:text-[#0f9aa1]">
                   About Us
                 </Link>
               </li>
@@ -130,10 +130,10 @@ export default function Footer({ showHomeShareButton = false, alignWithPageConte
           <div className="flex flex-col items-center justify-between text-sm text-[#1a5570] md:flex-row lg:text-base">
             <p>&copy; {currentYear} Pick It Up Seattle. All rights reserved.</p>
             <div className="mt-4 flex space-x-6 md:mt-0 lg:space-x-8">
-              <Link href="/privacy" className="transition hover:text-[#0f9aa1]">
+              <Link prefetch={prefetchLinks} href="/privacy" className="transition hover:text-[#0f9aa1]">
                 Privacy Policy
               </Link>
-              <Link href="/terms" className="transition hover:text-[#0f9aa1]">
+              <Link prefetch={prefetchLinks} href="/terms" className="transition hover:text-[#0f9aa1]">
                 Terms of Service
               </Link>
             </div>

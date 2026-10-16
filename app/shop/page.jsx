@@ -195,7 +195,7 @@ One person. One piece. One better city.`,
 
   return (
     <>
-      <Header />
+      <Header prefetchLinks={false} />
 
       {/* Hero */}
       <section className="bg-[linear-gradient(115deg,_#002244_0%,_#0f9aa1_54%,_#69be28_100%)] py-16 text-white sm:py-20">
@@ -253,7 +253,7 @@ One person. One piece. One better city.`,
                               src={product.imageSrc}
                               width={product.imageWidth}
                               height={product.imageHeight}
-                              sizes="(min-width: 1280px) 280px, (min-width: 640px) 50vw, 100vw"
+                              sizes={product.imageWidth < product.imageHeight ? "240px" : "(min-width: 1280px) 280px, 360px"}
                               loading="lazy"
                               decoding="async"
                               alt={`${product.name} product image`}
@@ -303,7 +303,7 @@ One person. One piece. One better city.`,
         </div>
       </section>
 
-      <Footer />
+      <Footer prefetchLinks={false} />
     </>
   );
 }
