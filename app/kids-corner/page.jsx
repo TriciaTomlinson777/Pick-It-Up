@@ -23,7 +23,7 @@ const MATERIAL_CARD_GRADIENTS = [
 const BOOK_TITLE_COLORS = ['text-[#12536b]', 'text-[#883743]', 'text-[#923b0b]', 'text-[#075c65]', 'text-[#285619]'];
 
 const UPCOMING_BOOKS = [
-  { number: 2, title: 'Recycling, Reuse & Where Litter Goes', note: 'Learning adventure • Title to be announced', description: 'Explore recycling and reuse, and discover what happens when litter reaches our roads, drains, and waterways.' },
+  { number: 2, title: 'Mess Master and the Traveling Trash!', pdf: '/Mess-Master-and-the-Traveling-Trash.pdf', cover: '/mess-master-traveling-trash-cover.jpg', description: 'Join Mess Master, Belle, Beau, Oliver, and Olivia to explore recycling, reuse, and where litter goes. Small choices can make a big difference!' },
   { number: 3, title: 'Mia & The Street Challenge', description: 'Follow Mia as she takes on a cleanup challenge and discovers how small actions add up.' },
   { number: 4, title: 'Neighborhood Challenge', note: 'Working title', description: 'Meet new Litter Heroes, celebrate new winners, and discover what it means to be a great sport.' },
   { number: 5, title: 'City Challenge', note: 'Working title', description: 'The adventure grows as Litter Heroes help make their city shine.' },
@@ -145,11 +145,18 @@ export default function KidsCorner() {
                 <article key={book.number} className={`h-full rounded-2xl border border-[#0f9aa1]/20 ${BOOK_CARD_GRADIENTS[index]} p-4 shadow-sm lg:col-span-2 ${index === 3 ? "lg:col-start-2" : ""}`}>
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <p className="text-sm font-bold text-[#0f9aa1]">Book {book.number}</p>
-                    <span className="rounded-full bg-[#fff1cf] px-3 py-1 text-sm font-bold text-[#002244]">Coming Soon!</span>
+                    <span className="rounded-full bg-[#fff1cf] px-3 py-1 text-sm font-bold text-[#002244]">{book.pdf ? 'Read it now!' : 'Coming Soon!'}</span>
                   </div>
                   <h3 className={`mt-3 text-xl font-extrabold leading-tight ${BOOK_TITLE_COLORS[index]}`}>{book.title}</h3>
+                  {book.cover && <Image src={book.cover} alt={`${book.title} book cover`} width={600} height={600} className="mx-auto mt-4 h-auto w-full max-w-[320px] rounded-xl" />}
                   {book.note && <p className="mt-2 text-sm font-medium leading-relaxed text-[#002244]">{book.note}</p>}
                   <p className="mt-2 text-sm font-medium leading-relaxed text-[#002244]">{book.description}</p>
+                  {book.pdf && (
+                    <div className="mt-4 flex flex-col gap-3">
+                      <a href={book.pdf} target="_blank" rel="noopener noreferrer" className="btn-green text-center">Read This Book</a>
+                      <a href={book.pdf} download className="btn-orange text-center">Download &amp; Print</a>
+                    </div>
+                  )}
                 </article>
               ))}
             </div>
