@@ -28,7 +28,7 @@ export default function Header() {
         <div className="relative flex min-h-24 items-center justify-between lg:min-h-0">
           <Logo href="/" className="mobile-header-logo inline-flex sm:ml-6 lg:ml-8 xl:ml-10 lg:relative lg:h-[17.4rem] lg:w-[24.3rem] lg:overflow-hidden xl:h-[18.75rem] xl:w-[26.1rem]" imgClassName="h-12 w-[11.25rem] max-w-[43vw] object-contain sm:max-w-none sm:h-[7.5rem] sm:w-auto lg:absolute lg:left-[-1rem] lg:top-[-4.3rem] lg:h-[26.5rem] lg:w-[26.5rem] lg:max-w-none xl:left-[-1.2rem] xl:top-[-4.7rem] xl:h-[28.65rem] xl:w-[28.65rem]" />
 
-          <div className="absolute right-0 top-1 -bottom-1 flex flex-col items-end text-right text-[0.6875rem] leading-snug text-[#0f9aa1] sm:-bottom-5 sm:text-sm lg:text-base lg:bottom-auto lg:block lg:top-6 xl:top-7">
+          <div className="absolute right-0 top-1 -bottom-1 flex flex-col items-end text-right text-[0.6875rem] leading-snug text-[#0f9aa1] sm:-bottom-5 sm:text-sm lg:text-base lg:right-3.5 lg:bottom-auto lg:block lg:top-6 xl:top-7">
             <p className="font-semibold">Pick It Up Seattle</p>
             <p>A 501(c)(3) nonprofit</p>
 
