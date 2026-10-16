@@ -23,7 +23,7 @@ const MATERIAL_CARD_GRADIENTS = [
 const BOOK_TITLE_COLORS = ['text-[#12536b]', 'text-[#883743]', 'text-[#923b0b]', 'text-[#075c65]', 'text-[#285619]'];
 
 const UPCOMING_BOOKS = [
-  { number: 2, title: 'Mess Master and the Traveling Trash!', pdf: '/Mess-Master-and-the-Traveling-Trash.pdf', cover: '/mess-master-traveling-trash-cover.jpg', description: 'Join Mess Master, Belle, Beau, Oliver, and Olivia to explore recycling, reuse, and where litter goes. Small choices can make a big difference!' },
+  { number: 2, title: 'Mess Master and the Traveling Trash!', pdf: '/Mess-Master-and-the-Traveling-Trash.pdf', cover: '/mess-master-traveling-trash-cover.jpg', description: 'Join Mess Master, Bravo Belle, Brave Beau, Outwit Oliver, and Ocean Olivia to explore recycling, reuse, and where litter goes. Small choices can make a big difference!' },
   { number: 3, title: 'Mia & The Street Challenge', description: 'Follow Mia as she takes on a cleanup challenge and discovers how small actions add up.' },
   { number: 4, title: 'Neighborhood Challenge', note: 'Working title', description: 'Meet new Litter Heroes, celebrate new winners, and discover what it means to be a great sport.' },
   { number: 5, title: 'City Challenge', note: 'Working title', description: 'The adventure grows as Litter Heroes help make their city shine.' },
