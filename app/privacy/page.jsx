@@ -79,7 +79,7 @@ export default function Privacy() {
       <main>
         <section className="hero-surface py-16 sm:py-20">
           <div className="container-custom">
-            <h1 className="heading-xl mb-4">Privacy Policy</h1>
+            <h1 className="text-[#1f5f7a] heading-xl mb-4">Privacy Policy</h1>
             <p className="text-lg text-[#1f5f7a]">Last updated: October 15, 2026</p>
           </div>
         </section>

@@ -85,7 +85,7 @@ export default function CommunityResources() {
       {/* Hero */}
       <section className="bg-gradient-to-r from-seattle-green to-green-700 text-white py-16">
         <div className="container-custom">
-          <h1 className="heading-xl mb-4 text-[#0f9aa1]">Community Resources</h1>
+          <h1 className="heading-xl mb-4 text-[#1f5f7a]">Community Resources</h1>
           <p className="text-lg text-green-100">
             Find resources to help care for your community. The organizations listed below currently serve the Seattle area.
           </p>

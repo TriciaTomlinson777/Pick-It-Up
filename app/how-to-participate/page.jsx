@@ -70,7 +70,7 @@ export default function HowToParticipate() {
       <main className="text-[#002244]">
         <section className="pb-4 pt-6 sm:pb-6 sm:pt-16" style={{ backgroundImage: "linear-gradient(145deg, #fdf7e8 0%, #e8efd5 28%, #a9d5a1 58%, #69be28 80%, #15803d 100%)" }}>
           <div className="container-custom mx-auto max-w-4xl text-center">
-            <h1 className="heading-xl text-[1.75rem] sm:text-5xl mb-3 sm:mb-4 text-[#0f9aa1]">How to Participate</h1>
+            <h1 className="heading-xl text-[1.75rem] sm:text-5xl mb-3 sm:mb-4 text-[#1f5f7a]">How to Participate</h1>
             <p className="mt-3 text-xl font-bold sm:mt-5 sm:text-3xl">Small actions. Many ways to make a difference.</p>
           </div>
         </section>

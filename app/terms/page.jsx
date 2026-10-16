@@ -9,7 +9,7 @@ export default function Terms() {
       {/* Hero */}
       <section className="bg-gradient-to-r from-seattle-green to-green-700 text-white py-16">
         <div className="container-custom">
-          <h1 className="heading-xl mb-4">Terms of Service</h1>
+          <h1 className="text-[#1f5f7a] heading-xl mb-4">Terms of Service</h1>
           <p className="text-lg text-green-100">
             Last updated: October 15, 2026
           </p>

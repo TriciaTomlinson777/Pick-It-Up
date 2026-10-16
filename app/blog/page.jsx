@@ -89,7 +89,7 @@ export default async function BlogPage() {
 
       <section className="bg-gradient-to-r from-seattle-green to-green-700 py-16 text-white">
         <div className="container-custom mx-auto max-w-[1080px]">
-          <h1 className="heading-xl mb-4">Stories from Our Community</h1>
+          <h1 className="text-[#1f5f7a] heading-xl mb-4">Stories from Our Community</h1>
           <p className="max-w-3xl text-[1.3rem] text-green-100">
             Real people. Real experiences. Real impact.
           </p>

@@ -95,7 +95,7 @@ export default async function BlogPostPage({ params }) {
       <section className="py-12 sm:py-16">
         <div className="container-custom">
           <article className="mx-auto max-w-3xl rounded-2xl border border-[#0f9aa1]/18 bg-white px-6 py-8 shadow-sm sm:px-10 sm:py-10">
-            <h1 className="text-4xl font-bold leading-tight text-[#002244] sm:text-5xl">{post.title}</h1>
+            <h1 className="text-4xl font-bold leading-tight text-[#1f5f7a] sm:text-5xl">{post.title}</h1>
             <p className="mt-3 inline-flex rounded-full bg-[#eaf8f9] px-3 py-1 text-xs font-semibold text-[#0f9aa1]">
               {post.category}
             </p>

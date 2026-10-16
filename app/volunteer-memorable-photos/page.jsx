@@ -74,7 +74,7 @@ export default function VolunteerMemorablePhotosPage() {
       <section id="scenic-discoveries" className="scroll-mt-24 bg-[linear-gradient(126deg,_#f2fbff_0%,_#f5ffed_45%,_#fff1d8_100%)] py-14 sm:py-16">
         <div className="container-custom">
           <div className="mx-auto max-w-4xl text-center">
-            <h1 className="text-4xl font-bold text-[#002b49] sm:text-5xl">Scenic Discoveries</h1>
+            <h1 className="text-4xl font-bold text-[#1f5f7a] sm:text-5xl">Scenic Discoveries</h1>
           </div>
 
           <div className="mt-10 columns-1 gap-6 sm:columns-2 lg:columns-3">

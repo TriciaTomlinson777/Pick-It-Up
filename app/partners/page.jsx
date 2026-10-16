@@ -118,7 +118,7 @@ export default function Partners() {
       {/* Hero */}
       <section className="bg-gradient-to-r from-seattle-green to-green-700 text-white py-16">
         <div className="container-custom">
-          <h1 className="heading-xl mb-4">Become a Community Partner</h1>
+          <h1 className="text-[#1f5f7a] heading-xl mb-4">Become a Community Partner</h1>
           <p className="text-lg text-[#002244] max-w-4xl">
             Whether you are a business, school, nonprofit, neighborhood group, event organizer, or
             community leader, there are many ways to help create cleaner communities.

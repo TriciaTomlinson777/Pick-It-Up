@@ -80,7 +80,7 @@ export default function Contact() {
       {/* Hero */}
       <section className="bg-gradient-to-r from-seattle-green to-green-700 text-white py-16">
         <div className="container-custom">
-          <h1 className="heading-xl mb-4 font-bold text-[#0f9aa1]">We’d Love to Hear From You</h1>
+          <h1 className="heading-xl mb-4 font-bold text-[#1f5f7a]">We’d Love to Hear From You</h1>
           <p className="text-[1.18rem] font-semibold leading-relaxed text-[#002244]">
             Whether you have a question, an idea, would like resources for organizing a cleanup, become a community partner, or simply want to say hello, we’d love to hear from you.
           </p>

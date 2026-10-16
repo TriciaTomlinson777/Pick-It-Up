@@ -209,7 +209,7 @@ export default function Events() {
         <section className="hero-surface py-16 sm:py-24">
           <div className="container-custom">
             <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-[#0f9aa1]">Pick It Up Seattle</p>
-            <h1 className="heading-xl">Events</h1>
+            <h1 className="text-[#1f5f7a] heading-xl">Events</h1>
             <p className="mt-4 max-w-2xl text-lg font-semibold leading-8 text-[#1f5f7a]">Find ways to get involved, care for your community, and connect with local events.</p>
           </div>
         </section>
