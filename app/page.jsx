@@ -183,7 +183,7 @@ export default function Home() {
   });
 
   const quickLinks = [
-    { label: 'Our Partners', href: '/volunteer' },
+    { label: 'Our Partners', href: '/partners' },
     { label: 'Community Resources', href: '/community-resources' },
     { label: 'Shop Merch', href: '/shop' },
     { label: 'Donate', href: '/donate' },
