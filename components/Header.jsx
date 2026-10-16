@@ -25,10 +25,15 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-[#0f9aa1]/20 bg-[#fffaf0]/95 shadow-[0_10px_24px_rgba(0,34,68,0.1)] backdrop-blur-sm">
       <nav className="container-custom py-1 sm:py-5 lg:py-0 xl:py-0">
-        <div className="relative flex items-center justify-between">
+        <div className="relative flex min-h-24 items-center justify-between lg:min-h-0">
           <Logo href="/" className="mobile-header-logo inline-flex sm:ml-6 lg:ml-8 xl:ml-10 lg:relative lg:h-[17.4rem] lg:w-[24.3rem] lg:overflow-hidden xl:h-[18.75rem] xl:w-[26.1rem]" imgClassName="h-12 w-[11.25rem] max-w-[43vw] object-contain sm:max-w-none sm:h-[7.5rem] sm:w-auto lg:absolute lg:left-[-1rem] lg:top-[-4.3rem] lg:h-[26.5rem] lg:w-[26.5rem] lg:max-w-none xl:left-[-1.2rem] xl:top-[-4.7rem] xl:h-[28.65rem] xl:w-[28.65rem]" />
 
-          {/* Mobile menu button */}
+          <div className="absolute right-0 top-1 -bottom-1 flex flex-col items-end text-right text-[0.6875rem] leading-snug text-[#0f9aa1] sm:-bottom-5 sm:text-sm lg:text-base lg:right-3.5 lg:bottom-auto lg:block lg:top-[calc(2.39rem+10px)] xl:top-[calc(2.82rem+10px)]">
+            <p className="font-semibold">Pick It Up Seattle</p>
+            <p>A 501(c)(3) nonprofit</p>
+
+          {/* Center the mobile menu between the nonprofit text and header edge. */}
+          <div className="flex w-full flex-1 items-center justify-end lg:hidden">
           <button
             className="rounded-full border border-[#0f9aa1]/20 bg-white/80 p-2.5 text-[#002244] shadow-sm lg:hidden"
             onClick={toggleMenu}
@@ -57,6 +62,8 @@ export default function Header() {
               )}
             </svg>
           </button>
+          </div>
+          </div>
 
           {/* Desktop menu */}
           <div className="hidden lg:flex items-center justify-end gap-1.5 lg:gap-2 xl:gap-2.5 flex-nowrap text-[#002244]">
