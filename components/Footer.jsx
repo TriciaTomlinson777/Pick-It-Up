@@ -32,11 +32,6 @@ export default function Footer({ showHomeShareButton = false, alignWithPageConte
                 </Link>
               </li>
               <li>
-                <Link href="/volunteer" className="transition hover:text-[#0f9aa1]">
-                  Make a Difference
-                </Link>
-              </li>
-              <li>
                 <Link href="/partners" className="transition hover:text-[#0f9aa1]">
                   Partners
                 </Link>
