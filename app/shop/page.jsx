@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Baloo_2 } from 'next/font/google';
@@ -15,7 +16,9 @@ export default function Shop() {
       group: 'Signature Collection',
       name: 'Legacy Donor T-Shirt',
       description: 'Recognizes extraordinary generosity and a lasting commitment to cleaner, stronger communities.',
-      imageSrc: '/e449992a-5074-4a93-b6a2-4ba4d4660da6.png',
+      imageSrc: '/shop-optimized/product-01.webp',
+      imageWidth: 640,
+      imageHeight: 960,
       imageContainerClass: 'h-full w-full p-2',
       imageClass: 'scale-[1.1]',
       imagePlaceholder: 'ADD OFFICIAL LEGACY DONOR T-SHIRT IMAGE',
@@ -28,7 +31,9 @@ export default function Shop() {
       group: 'Signature Collection',
       name: 'Pick It Up Seattle Hat',
       description: 'The official flagship hat representing one simple action that improves every neighborhood.',
-      imageSrc: '/a38aa86c-5e88-4e34-8422-c29491c1bb30.png',
+      imageSrc: '/shop-optimized/product-02.webp',
+      imageWidth: 640,
+      imageHeight: 960,
       imageContainerClass: '!mx-0 h-full w-full p-0',
       imageClass: 'scale-[1.25]',
       imagePlaceholder: 'Add official-pick-it-up-seattle-hat image',
@@ -43,7 +48,9 @@ export default function Shop() {
       price: '$29.95',
       description: 'Bring a little humor to doing something good. The Don’t Be Trashy Tee puts a playful spin on the Pick It Up Seattle message while encouraging others to leave the city a little better than they found it.',
       descriptionSpacer: true,
-      imageSrc: "/Don't be Trashy Tee.png",
+      imageSrc: '/shop-optimized/product-03.webp',
+      imageWidth: 960,
+      imageHeight: 960,
       imageContainerClass: 'h-full w-full p-2',
       imageClass: 'scale-[1.1]',
       imagePlaceholder: 'Add dont-be-trashy-tee image',
@@ -56,7 +63,9 @@ export default function Shop() {
       group: 'Signature Collection',
       name: 'Mess Master Tee',
       description: 'Bring a little attitude to doing something good. The Mess Master Tee celebrates the people who aren’t afraid to tackle the mess and leave every place a little better than they found it. Playful, bold, and unmistakably Pick It Up Seattle.',
-      imageSrc: '/Mess Master tee.png',
+      imageSrc: '/shop-optimized/product-04.webp',
+      imageWidth: 640,
+      imageHeight: 960,
       imageContainerClass: 'h-full w-full p-2',
       imageClass: 'scale-x-[1.52] scale-y-[1.4]',
       imagePlaceholder: 'Add mess-master-tee image',
@@ -69,7 +78,9 @@ export default function Shop() {
       group: 'Signature Collection',
       name: 'One Better Seattle Youth Tee',
       description: 'Our core PIUS message in a simple tee for kids and small adults who want to be part of the movement.',
-      imageSrc: '/One person Youth Tee.png',
+      imageSrc: '/shop-optimized/product-05.webp',
+      imageWidth: 960,
+      imageHeight: 720,
       imageContainerClass: 'h-full w-full p-2',
       imageClass: 'scale-[1.1]',
       imagePlaceholder: 'Add one-person-one-piece-one-better-seattle-youth-tee image',
@@ -90,7 +101,9 @@ Perfect for young readers, neighborhood helpers, cleanup days, school activities
 One person. One piece. One better city.
 
 Every shirt helps support the Pick It Up Seattle mission of inspiring people of all ages to leave every place better than they found it.`,
-      imageSrc: '/Captain Can Tee.png',
+      imageSrc: '/shop-optimized/product-06.webp',
+      imageWidth: 960,
+      imageHeight: 720,
       imageContainerClass: 'h-full w-full p-2',
       imageClass: 'scale-[1.1]',
       imagePlaceholder: 'Add captain-can-litter-hero-tee image',
@@ -107,7 +120,9 @@ Every shirt helps support the Pick It Up Seattle mission of inspiring people of 
 All proceeds support Pick It Up Seattle’s work to make it easier—and more fun—for people to help make their communities cleaner and more beautiful.
 
 One person. One piece. One better city.`,
-      imageSrc: '/Toddler Captain Can.png',
+      imageSrc: '/shop-optimized/product-07.webp',
+      imageWidth: 960,
+      imageHeight: 960,
       imageContainerClass: 'h-full w-full p-2',
       imageClass: 'scale-[1.1]',
       imagePlaceholder: 'Add captain-can-little-hero-toddler-t-shirt image',
@@ -120,7 +135,9 @@ One person. One piece. One better city.`,
       group: 'Signature Collection',
       name: 'One Better Seattle Adult Tee',
       description: 'Wear the Pick It Up Seattle message wherever you go—and inspire someone else to do the same.',
-      imageSrc: '/One person Adult Tee.png',
+      imageSrc: '/shop-optimized/product-08.webp',
+      imageWidth: 960,
+      imageHeight: 720,
       imageContainerClass: 'h-full w-full p-2',
       imageClass: 'scale-[1.1]',
       imagePlaceholder: 'Add one-person-one-piece-one-better-seattle-adult-tee image',
@@ -133,7 +150,9 @@ One person. One piece. One better city.`,
       group: 'Signature Collection',
       name: 'One Person. One Piece. One Better Seattle. Unisex Hoodie',
       description: 'Stay warm while wearing the Pick It Up Seattle message. A comfortable, practical zip-up hoodie with the PIUS logo on the back and “One person. One piece. One Better Seattle.” on the sleeve.',
-      imageSrc: '/One person Unisex Hoodie.png',
+      imageSrc: '/shop-optimized/product-09.webp',
+      imageWidth: 960,
+      imageHeight: 720,
       imageContainerClass: 'h-full w-full p-2',
       imageClass: 'scale-[1.1]',
       imagePlaceholder: 'Add one-person-one-piece-one-better-seattle-unisex-hoodie image',
@@ -146,7 +165,9 @@ One person. One piece. One better city.`,
       group: 'Signature Collection',
       name: 'One Person. One Piece. One Better Seattle. Unisex Tee',
       description: 'A refined take on the Pick It Up Seattle message, this tee pairs everyday comfort with a more elevated feel. Perfect for neighborhood walks, volunteer days, community events, or simply carrying the message wherever you go.',
-      imageSrc: '/One person Unisex Tee.png',
+      imageSrc: '/shop-optimized/product-10.webp',
+      imageWidth: 960,
+      imageHeight: 720,
       imageContainerClass: 'h-full w-full p-2',
       imageClass: 'scale-[1.1]',
       imagePlaceholder: 'Add one-person-one-piece-one-better-seattle-unisex-tee image',
@@ -159,7 +180,9 @@ One person. One piece. One better city.`,
       group: 'Signature Collection',
       name: 'Mess Master Unisex Tee',
       description: 'Bring a little attitude to doing something good. The Mess Master Unisex Tee celebrates the people who aren’t afraid to tackle the mess and leave every place a little better than they found it. Playful, bold, and unmistakably Pick It Up Seattle.',
-      imageSrc: '/Mess Master Unisex Tee.png',
+      imageSrc: '/shop-optimized/product-11.webp',
+      imageWidth: 960,
+      imageHeight: 720,
       imageContainerClass: 'h-full w-full p-2',
       imageClass: 'scale-[1.1]',
       imagePlaceholder: 'Add mess-master-unisex-tee image',
@@ -226,8 +249,13 @@ One person. One piece. One better city.`,
                       <div className={`${product.imageStyle} relative flex h-56 items-center justify-center`}>
                         {product.imageSrc ? (
                           <div className={`mx-4 flex items-center justify-center ${product.imageContainerClass ?? 'h-[88%] w-[88%] p-3'}`}>
-                            <img
+                            <Image
                               src={product.imageSrc}
+                              width={product.imageWidth}
+                              height={product.imageHeight}
+                              sizes="(min-width: 1280px) 280px, (min-width: 640px) 50vw, 100vw"
+                              loading="lazy"
+                              decoding="async"
                               alt={`${product.name} product image`}
                               className={`h-full w-full object-contain object-center ${product.imageClass ?? ''}`}
                             />
