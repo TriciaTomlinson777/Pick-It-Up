@@ -190,7 +190,7 @@ One person. One piece. One better city.`,
       {/* Hero */}
       <section className="bg-[linear-gradient(115deg,_#002244_0%,_#0f9aa1_54%,_#69be28_100%)] py-16 text-white sm:py-20">
         <div className="container-custom">
-          <h1 className={`${balooDisplay.className} mb-2 text-center text-[2.8rem] font-extrabold leading-[0.92] tracking-[-0.015em] text-[#1f5f7a] sm:text-[3.9rem]`}>
+          <h1 className={`${balooDisplay.className} mb-2 text-center text-[2.8rem] font-extrabold leading-[0.92] tracking-[-0.015em] text-[#fffaf0] sm:text-[3.9rem]`}>
             Wear the Movement!
           </h1>
 
