@@ -10,19 +10,6 @@ const balooDisplay = Baloo_2({
 export default function Shop() {
   const products = [
     {
-      id: 'legacy-donor-hat',
-      category: 'Accessories',
-      group: 'Supporter Collection',
-      name: 'Legacy Donor Hat',
-      description: 'Honors ongoing donors building a lasting legacy of stewardship across communities.',
-      imageSrc: '/67b309ac-e1ed-48f6-9ebd-2d15c709ad9d.png',
-      imageContainerClass: '!mx-0 h-full w-full p-0',
-      imageClass: 'scale-[1.25]',
-      imagePlaceholder: 'Add legacy-donor-hat image',
-      imageStyle: 'bg-[linear-gradient(145deg,_#69be28_0%,_#0f9aa1_50%,_#002244_100%)]',
-      productUrl: 'https://pick-it-up-seattle-shop.fourthwall.com/products/official-pick-it-up-seattle-legacy-donor-embroidered-hat',
-    },
-    {
       id: 'signature-hat',
       category: 'Adult & Unisex',
       group: 'Signature Collection',
