@@ -205,7 +205,9 @@ One person. One piece. One better city.`,
           </div>
 
           <p className="mx-auto max-w-4xl text-center text-xl leading-[1.85] text-[#fff8e8] sm:text-2xl">
-            Every purchase helps spread a simple message: <span className="font-bold uppercase tracking-[0.02em]">ONE PERSON. ONE PIECE. ONE BETTER CITY.</span> Thank you for supporting Pick It Up Seattle.
+            <span className="block">Every purchase helps spread a simple message.</span>
+            <span className="block font-bold tracking-[0.02em] sm:whitespace-nowrap">One person. One piece. One better city.</span>
+            <span className="block">Thank you for supporting Pick It Up Seattle.</span>
           </p>
         </div>
       </section>
