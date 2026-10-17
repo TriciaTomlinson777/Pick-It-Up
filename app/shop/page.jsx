@@ -269,7 +269,7 @@ One person. One piece. One better city.`,
           </div>
 
           {productCategories.map((category) => (
-            <div key={category} id={category === 'Tools' ? 'tools' : undefined} className="mb-12 scroll-mt-24 last:mb-0">
+            <div key={category} id={category === 'Tools' ? 'tools' : category === 'Youth' ? 'kids' : undefined} className="mb-12 scroll-mt-24 last:mb-0">
               <h2 className={`${balooDisplay.className} mb-6 text-2xl font-extrabold text-[#002b49] sm:text-3xl`}>
                 {category}
               </h2>

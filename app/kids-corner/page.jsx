@@ -188,6 +188,13 @@ export default function KidsCorner() {
             </div>
           </div>
         </section>
+        <section className="px-6 pb-10 pt-6 md:hidden" aria-label="Kids shop">
+          <Link href="/shop#kids" prefetch={false} className="mx-auto flex max-w-sm items-center justify-center gap-3 overflow-hidden rounded-2xl border border-[#0f9aa1]/20 bg-white px-3 py-4 shadow-[0_14px_30px_rgba(0,43,73,0.12)] transition hover:bg-[#e7f7f8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0f9aa1]">
+            <Image src="/shop-optimized/product-06.webp" width={960} height={720} sizes="88px" alt="Captain Can T-shirt" className="h-24 w-[88px] shrink-0 object-contain" />
+            <span className="text-3xl font-extrabold text-[#0f9aa1]">Shop</span>
+            <Image src="/shop-optimized/product-04.webp" width={640} height={960} sizes="88px" alt="Mess Master T-shirt" className="h-24 w-[88px] shrink-0 object-contain" />
+          </Link>
+        </section>
       </main>
 
       <Footer alignWithPageContent />
