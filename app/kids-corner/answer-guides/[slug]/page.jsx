@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 const PAGES = {
+  'why-compost': { title: 'Why Compost?', image: '/answer-guides/why-compost-learning-guide.jpg', pdf: '/answer-guides/why-compost-learning-guide.pdf' },
   compost: { title: 'Compost Answer Guide', image: '/answer-guides/seattle-compost-answers-completed.jpg', pdf: '/answer-guides/seattle-compost-answers-completed.pdf' },
   recycling: { title: 'Recycling Answer Guide', image: '/answer-guides/seattle-recycling-answers-completed.jpg', pdf: '/answer-guides/seattle-recycling-answers-completed.pdf' },
   trash: { title: 'Trash Answer Guide', image: '/answer-guides/seattle-trash-answers-completed.jpg', pdf: '/answer-guides/seattle-trash-answers-completed.pdf' },

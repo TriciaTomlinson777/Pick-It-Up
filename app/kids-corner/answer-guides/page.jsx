@@ -9,6 +9,7 @@ export const metadata = {
 };
 
 const ANSWER_GUIDES = [
+  { id: 'why-compost', title: 'Why Compost?', description: 'Discover how compost helps plants, soil, water, and our planet.', image: '/answer-guides/why-compost-learning-guide.jpg', pdf: '/answer-guides/why-compost-learning-guide.pdf' },
   { id: 'compost', title: 'Compost Answer Guide', description: 'A colored green-bin example with arrows showing the correct compost items.', image: '/answer-guides/seattle-compost-answers-completed.jpg', pdf: '/answer-guides/seattle-compost-answers-completed.pdf' },
   { id: 'recycling', title: 'Recycling Answer Guide', description: 'A colored blue-bin example with answer arrows, sorting reminders, and a reuse tip.', image: '/answer-guides/seattle-recycling-answers-completed.jpg', pdf: '/answer-guides/seattle-recycling-answers-completed.pdf' },
   { id: 'trash', title: 'Trash Answer Guide', description: 'A colored gray-bin example with answer arrows, compost reminders, and a reuse tip.', image: '/answer-guides/seattle-trash-answers-completed.jpg', pdf: '/answer-guides/seattle-trash-answers-completed.pdf' },
