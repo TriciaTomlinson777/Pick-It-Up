@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 
-const bookPages = [
+const captainCanPages = [
   { label: 'Cover', src: '/captain-can-redesigned-pages/01_cover.jpg' },
   { label: 'Page 1', src: '/captain-can-redesigned-pages/02_page_01.jpg' },
   { label: 'Page 2', src: '/captain-can-redesigned-pages/03_page_02.jpg' },
@@ -33,7 +33,7 @@ function getSpreadStart(index) {
   return index % 2 === 1 ? index : index - 1;
 }
 
-export default function CaptainCanBookReader({ pages = bookPages, title = 'Captain Can and the Messy Block' }) {
+export default function CaptainCanBookReader({ pages = captainCanPages, title = 'Captain Can and the Messy Block' }) {
   const bookPages = pages;
   const [pageIndex, setPageIndex] = useState(0);
   const lastPageIndex = bookPages.length - 1;
