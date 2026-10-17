@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  experimental: { inlineCss: true },
   serverExternalPackages: [
     '@aws-sdk/client-comprehend',
     '@aws-sdk/client-rekognition',
