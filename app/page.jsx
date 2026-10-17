@@ -3154,9 +3154,12 @@ export default function Home() {
                   </div>
                   <div className="mt-5 flex flex-1 items-center justify-center rounded-[1.5rem] border border-[#f4c94c]/35 bg-[radial-gradient(circle_at_top,_rgba(248,201,72,0.24),_transparent_55%),linear-gradient(135deg,_rgba(255,255,255,0.92),_rgba(255,248,230,0.97))] text-center">
                     {dayOneFixedBeforeImage ? (
-                      <img
+                      <Image
                         loading="lazy"
                         decoding="async"
+                        width={639}
+                        height={923}
+                        sizes="(max-width: 639px) calc(100vw - 88px), (max-width: 1023px) 44vw, 640px"
                         src={getStoredImageUrl(dayOneFixedBeforeImage)}
                         alt="Neighborhood cleanup before photo"
                         className="h-full w-full rounded-[1.2rem] object-cover"
@@ -3176,9 +3179,12 @@ export default function Home() {
                   </div>
                   <div className="mt-5 flex flex-1 items-center justify-center rounded-[1.5rem] border border-[#69BE28]/30 bg-[radial-gradient(circle_at_top,_rgba(46,196,199,0.16),_transparent_55%),linear-gradient(135deg,_rgba(255,255,255,0.92),_rgba(235,250,242,0.95))] text-center">
                     {dayOneFixedAfterImage ? (
-                      <img
+                      <Image
                         loading="lazy"
                         decoding="async"
+                        width={652}
+                        height={923}
+                        sizes="(max-width: 639px) calc(100vw - 88px), (max-width: 1023px) 44vw, 640px"
                         src={getStoredImageUrl(dayOneFixedAfterImage)}
                         alt="Neighborhood cleanup after photo"
                         className="h-full w-full rounded-[1.2rem] object-cover"
