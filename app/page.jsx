@@ -3052,7 +3052,7 @@ export default function Home() {
         </div>
       )}
 
-      <main className="bg-[#fdf7e8] text-[#002244]">
+      <main className="home-page bg-[#fdf7e8] text-[#002244]">
         <section className="relative overflow-hidden border-b border-[#0f9aa1]/30 bg-[linear-gradient(135deg,_#fdf7e8_0%,_#d3f1f4_38%,_#d7f0c7_100%)] pb-0 pt-0 sm:pb-10 sm:pt-7">
           <div className="pointer-events-none absolute inset-x-0 top-0 h-12 bg-[radial-gradient(circle_at_15%_0%,rgba(183,225,237,0.34),transparent_42%),radial-gradient(circle_at_88%_0%,rgba(106,190,224,0.28),transparent_46%)] sm:h-28 sm:bg-[radial-gradient(circle_at_15%_0%,rgba(229,111,90,0.22),transparent_38%),radial-gradient(circle_at_88%_0%,rgba(15,154,161,0.2),transparent_42%)]" aria-hidden="true" />
 

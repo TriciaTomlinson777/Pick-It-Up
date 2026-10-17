@@ -198,3 +198,9 @@
     top: calc(50% - 40px);
   }
 }
+
+/* Keep offscreen homepage sections from delaying the first mobile paint. */
+.home-page > section:not(:first-child) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
