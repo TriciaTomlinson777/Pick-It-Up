@@ -3086,6 +3086,7 @@ export default function Home() {
                           fill
                           sizes="100vw"
                           preload={slideIndex === 0}
+                          fetchPriority={slideIndex === 0 ? 'high' : 'low'}
                           onLoad={() => setLoadedImagineSlides((loaded) => loaded.includes(slideIndex) ? loaded : [...loaded, slideIndex])}
                           loading={slideIndex === 0 ? undefined : 'lazy'}
                           decoding="async"
@@ -3242,6 +3243,7 @@ export default function Home() {
                           <CommunityPhotoPreview
                             src={getStoredImageUrl(photo)}
                             alt="Community in Action photo"
+                            sizes="(max-width: 639px) 42vw, (max-width: 1023px) 44vw, 23vw"
                             className="h-full w-full object-contain object-center"
                           />
                         </div>
