@@ -9,6 +9,7 @@ export const metadata = {
 };
 
 const COLORING_PAGES = [
+  { id: 'compost', title: 'What Goes in Compost?', description: 'Match food scraps and leaves to Seattle’s green compost bin, then color.', image: '/coloring/seattle-compost-coloring.jpg', pdf: '/coloring/seattle-compost-coloring.pdf' },
   { id: 'recycling', title: 'What Goes in Recycling?', description: 'Match everyday recyclables to Seattle’s blue recycling bin, then color.', image: '/coloring/seattle-recycling-coloring.jpg', pdf: '/coloring/seattle-recycling-coloring.pdf' },
   { id: 'trash', title: 'What Goes in the Trash?', description: 'Learn what belongs in the garbage bin with a matching and coloring activity.', image: '/coloring/seattle-trash-coloring.jpg', pdf: '/coloring/seattle-trash-coloring.pdf' },
 ];

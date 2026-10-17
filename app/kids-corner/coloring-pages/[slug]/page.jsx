@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 const PAGES = {
+  compost: { title: 'What Goes in Compost?', image: '/coloring/seattle-compost-coloring.jpg', pdf: '/coloring/seattle-compost-coloring.pdf' },
   recycling: { title: 'What Goes in Recycling?', image: '/coloring/seattle-recycling-coloring.jpg', pdf: '/coloring/seattle-recycling-coloring.pdf' },
   trash: { title: 'What Goes in the Trash?', image: '/coloring/seattle-trash-coloring.jpg', pdf: '/coloring/seattle-trash-coloring.pdf' },
 };
