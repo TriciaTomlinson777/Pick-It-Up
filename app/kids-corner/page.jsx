@@ -170,7 +170,7 @@ export default function KidsCorner() {
           <div className="container-custom px-6 text-center sm:px-12 lg:px-20 xl:px-[5.5rem]">
             <h2 id="take-home-materials" className="text-3xl font-extrabold text-[#0f9aa1] sm:text-4xl">Take-Home Materials</h2>
             <div className="mx-auto mt-8 grid max-w-5xl gap-4 sm:grid-cols-3">
-              {['Litter Hero Coloring Pages', 'Recycling & Reuse Guides', 'Learning & Cleanup Activities'].map((title, index) => (
+              {['Litter Hero Coloring Guides', 'Recycling & Reuse Guides', 'Learning & Cleanup Activities'].map((title, index) => (
                 <div key={title} className={`rounded-2xl ${MATERIAL_CARD_GRADIENTS[index]} p-6`}>
                   <h3 className="text-3xl font-extrabold leading-tight text-[#0f9aa1] sm:text-4xl">{title}</h3>
                   <p className="mt-3 text-lg font-medium leading-relaxed text-[#002244]">Coming Soon!</p>
