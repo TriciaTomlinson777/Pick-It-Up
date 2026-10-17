@@ -170,19 +170,19 @@ export default function KidsCorner() {
           <div className="container-custom px-6 text-center sm:px-12 lg:px-20 xl:px-[5.5rem]">
             <h2 id="take-home-materials" className="text-3xl font-extrabold text-[#0f9aa1] sm:text-4xl">Take-Home Materials</h2>
             <div className="mx-auto mt-8 grid max-w-5xl gap-4 sm:grid-cols-3">
-              {['Litter Hero Coloring Pages', 'Litter Hero Learning and Answer Guides', 'Learning & Cleanup Activities'].map((title, index) => (
+              {['Litter Hero Coloring Pages', 'Litter Hero Answer Guides', 'Learning & Cleanup Activities'].map((title, index) => (
                 <div key={title} className={`rounded-2xl ${MATERIAL_CARD_GRADIENTS[index]} p-6`}>
-                  <h3 className="text-3xl font-extrabold leading-tight text-[#0f9aa1] sm:text-4xl">{index === 0 ? <Link href="/kids-corner/coloring-pages" className="underline-offset-4 hover:underline focus-visible:underline">{title}</Link> : index === 1 ? <Link href="/kids-corner/answer-guides" className="underline-offset-4 hover:underline focus-visible:underline">{title}</Link> : title}</h3>
+                  <h3 className="text-3xl font-extrabold leading-tight text-[#0f9aa1] sm:text-4xl">{index === 0 ? <Link href="/kids-corner/coloring-pages" className="underline-offset-4 hover:underline focus-visible:underline">{title}</Link> : index === 1 ? <Link href="/kids-corner/answer-guides" className="underline-offset-4 hover:underline focus-visible:underline">{title}</Link> : <Link href="/kids-corner/learning-cleanup" className="underline-offset-4 hover:underline focus-visible:underline">{title}</Link>}</h3>
                   {index < 2 ? (
                     <>
-                      <p className="mt-3 text-lg font-medium leading-relaxed text-[#002244]">{index === 0 ? 'Color and learn what belongs in Seattle recycling and garbage bins.' : 'Explore learning resources, helpful tips, and activity answer guides.'}</p>
+                      <p className="mt-3 text-lg font-medium leading-relaxed text-[#002244]">{index === 0 ? 'Color and learn what belongs in Seattle recycling and garbage bins.' : 'Find the answers to our coloring and sorting activities.'}</p>
                       {index === 0 ? (
                         <Link href="/kids-corner/coloring-pages" className="btn-orange mt-5 inline-flex min-h-12 items-center justify-center">Choose a Coloring Page</Link>
                       ) : (
                         <Link href="/kids-corner/answer-guides" className="btn-orange mt-5 inline-flex min-h-12 items-center justify-center">Explore the Guides</Link>
                       )}
                     </>
-                  ) : <p className="mt-3 text-lg font-medium leading-relaxed text-[#002244]">Coming Soon!</p>}
+                  ) : <><p className="mt-3 text-lg font-medium leading-relaxed text-[#002244]">Discover why compost matters and explore ways to care for our world.</p><Link href="/kids-corner/learning-cleanup" className="btn-orange mt-5 inline-flex min-h-12 items-center justify-center">Explore Learning &amp; Cleanup</Link></>}
                 </div>
               ))}
             </div>
