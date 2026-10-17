@@ -173,7 +173,12 @@ export default function KidsCorner() {
               {['Litter Hero Coloring Pages', 'Recycling & Reuse Guides', 'Learning & Cleanup Activities'].map((title, index) => (
                 <div key={title} className={`rounded-2xl ${MATERIAL_CARD_GRADIENTS[index]} p-6`}>
                   <h3 className="text-3xl font-extrabold leading-tight text-[#0f9aa1] sm:text-4xl">{title}</h3>
-                  <p className="mt-3 text-lg font-medium leading-relaxed text-[#002244]">Coming Soon!</p>
+                  {index < 2 ? (
+                    <>
+                      <p className="mt-3 text-lg font-medium leading-relaxed text-[#002244]">{index === 0 ? 'Color and learn what belongs in Seattle recycling and garbage bins.' : 'Answers to our coloring pages, sorting reminders, and simple reuse tips.'}</p>
+                      <a href={index === 0 ? '/Seattle-Litter-Hero-Coloring-Pages.pdf' : '/Seattle-Recycling-and-Reuse-Answer-Guide.pdf'} download className="btn-orange mt-5 inline-flex min-h-12 items-center justify-center">{index === 0 ? 'Download Coloring Pages' : 'Download Answer Guides'}</a>
+                    </>
+                  ) : <p className="mt-3 text-lg font-medium leading-relaxed text-[#002244]">Coming Soon!</p>}
                 </div>
               ))}
             </div>
