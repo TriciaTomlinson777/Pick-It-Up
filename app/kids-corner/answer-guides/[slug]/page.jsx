@@ -5,8 +5,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 const PAGES = {
-  recycling: { title: 'Recycling Answer Guide', image: '/answer-guides/seattle-recycling-answers.jpg', pdf: '/answer-guides/seattle-recycling-answers.pdf' },
-  trash: { title: 'Trash Answer Guide', image: '/answer-guides/seattle-trash-answers.jpg', pdf: '/answer-guides/seattle-trash-answers.pdf' },
+  recycling: { title: 'Recycling Answer Guide', image: '/answer-guides/seattle-recycling-answers-completed.jpg', pdf: '/answer-guides/seattle-recycling-answers-completed.pdf' },
+  trash: { title: 'Trash Answer Guide', image: '/answer-guides/seattle-trash-answers-completed.jpg', pdf: '/answer-guides/seattle-trash-answers-completed.pdf' },
 };
 export function generateStaticParams() { return Object.keys(PAGES).map((slug) => ({ slug })); }
 export default async function AnswerGuide({ params }) {

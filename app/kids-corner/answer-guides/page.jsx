@@ -9,8 +9,8 @@ export const metadata = {
 };
 
 const ANSWER_GUIDES = [
-  { id: 'recycling', title: 'Recycling Answer Guide', description: 'Answers for the recycling coloring sheet, plus sorting reminders and a reuse tip.', image: '/answer-guides/seattle-recycling-answers.jpg', pdf: '/answer-guides/seattle-recycling-answers.pdf' },
-  { id: 'trash', title: 'Trash Answer Guide', description: 'Answers for the trash coloring sheet, plus compost reminders and a reuse tip.', image: '/answer-guides/seattle-trash-answers.jpg', pdf: '/answer-guides/seattle-trash-answers.pdf' },
+  { id: 'recycling', title: 'Recycling Answer Guide', description: 'A colored blue-bin example with answer arrows, sorting reminders, and a reuse tip.', image: '/answer-guides/seattle-recycling-answers-completed.jpg', pdf: '/answer-guides/seattle-recycling-answers-completed.pdf' },
+  { id: 'trash', title: 'Trash Answer Guide', description: 'A colored gray-bin example with answer arrows, compost reminders, and a reuse tip.', image: '/answer-guides/seattle-trash-answers-completed.jpg', pdf: '/answer-guides/seattle-trash-answers-completed.pdf' },
 ];
 
 export default function AnswerGuides() {
