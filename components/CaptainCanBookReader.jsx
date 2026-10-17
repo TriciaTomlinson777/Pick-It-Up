@@ -33,7 +33,8 @@ function getSpreadStart(index) {
   return index % 2 === 1 ? index : index - 1;
 }
 
-export default function CaptainCanBookReader() {
+export default function CaptainCanBookReader({ pages = bookPages, title = 'Captain Can and the Messy Block' }) {
+  const bookPages = pages;
   const [pageIndex, setPageIndex] = useState(0);
   const lastPageIndex = bookPages.length - 1;
   const currentPage = bookPages[pageIndex];
@@ -73,7 +74,7 @@ export default function CaptainCanBookReader() {
         <div className="w-full rounded-[1.35rem] border border-[#2b271d]/12 bg-[#fffaf0] p-5 text-[#1f211b] shadow-[0_24px_70px_rgba(0,0,0,0.38)]">
           <Image
             src={currentPage.src}
-            alt={isCover ? 'Captain Can and the Messy Block cover' : `Captain Can and the Messy Block ${currentPage.label}`}
+            alt={isCover ? `${title} cover` : `${title} ${currentPage.label}`}
             width={1200}
             height={900}
             className="h-auto w-full rounded-[0.9rem] border border-[#2a2a23]/12 shadow-inner"
@@ -116,7 +117,7 @@ export default function CaptainCanBookReader() {
             <div className="w-full max-w-[34rem] rounded-[1.35rem] border border-[#f4c94c]/25 bg-[#f8efd7] p-5 text-[#1f211b] shadow-[0_28px_80px_rgba(0,0,0,0.48)] sm:p-7">
               <Image
                 src={bookPages[0].src}
-                alt="Captain Can and the Messy Block cover"
+                alt={`${title} cover`}
                 width={1200}
                 height={900}
                 className="h-auto w-full rounded-[0.9rem] border border-[#2a2a23]/12 shadow-inner"
@@ -136,7 +137,7 @@ export default function CaptainCanBookReader() {
                 >
                   <Image
                     src={page.src}
-                    alt={`Captain Can and the Messy Block ${page.label}`}
+                    alt={`${title} ${page.label}`}
                     width={1200}
                     height={900}
                     className="h-auto w-full rounded-[0.9rem] border border-[#2a2a23]/12 shadow-inner"
