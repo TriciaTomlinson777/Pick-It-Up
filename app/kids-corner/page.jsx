@@ -24,7 +24,7 @@ const BOOK_TITLE_COLORS = ['text-[#12536b]', 'text-[#883743]', 'text-[#923b0b]',
 
 const UPCOMING_BOOKS = [
   { number: 2, title: 'Mess Master and the Traveling Trash!', pdf: '/Mess-Master-and-the-Traveling-Trash.pdf', reader: '/kids-corner/read?book=mess-master', cover: '/mess-master-traveling-trash-cover.jpg', description: 'Join Mess Master, Bravo Belle, Brave Beau, Outwit Oliver, and Ocean Olivia to explore recycling, reuse, and where litter goes. Small choices can make a big difference!' },
-  { number: 3, title: 'Mia & The Street Challenge', description: 'Follow Mia as she takes on a cleanup challenge and discovers how small actions add up.' },
+  { number: 3, title: 'Mia & Olivia: The Ding-Ding Street Challenge', pdf: '/Mia-Olivia-The-Ding-Ding-Street-Challenge.pdf', reader: '/kids-corner/read?book=ding-ding-street', cover: '/ding-ding-street-page-01.jpg', description: 'Join Mia, Olivia, and Captain Can for a lively cleanup competition filled with runaway wrappers, a curious pigeon, and friendship. Who will win the Street Challenge?' },
   { number: 4, title: 'Neighborhood Challenge', note: 'Working title', description: 'Meet new Litter Heroes, celebrate new winners, and discover what it means to be a great sport.' },
   { number: 5, title: 'City Challenge', note: 'Working title', description: 'The adventure grows as Litter Heroes help make their city shine.' },
   { number: 6, title: 'State Challenge', note: 'Working title', description: 'Bring community pride to a bigger stage while cheering each other on.' },
