@@ -172,14 +172,14 @@ export default function KidsCorner() {
             <div className="mx-auto mt-8 grid max-w-5xl gap-4 sm:grid-cols-3">
               {['Litter Hero Coloring Pages', 'Recycling & Reuse Guides', 'Learning & Cleanup Activities'].map((title, index) => (
                 <div key={title} className={`rounded-2xl ${MATERIAL_CARD_GRADIENTS[index]} p-6`}>
-                  <h3 className="text-3xl font-extrabold leading-tight text-[#0f9aa1] sm:text-4xl">{index === 0 ? <Link href="/kids-corner/coloring-pages" className="underline-offset-4 hover:underline focus-visible:underline">{title}</Link> : title}</h3>
+                  <h3 className="text-3xl font-extrabold leading-tight text-[#0f9aa1] sm:text-4xl">{index === 0 ? <Link href="/kids-corner/coloring-pages" className="underline-offset-4 hover:underline focus-visible:underline">{title}</Link> : index === 1 ? <Link href="/kids-corner/answer-guides" className="underline-offset-4 hover:underline focus-visible:underline">{title}</Link> : title}</h3>
                   {index < 2 ? (
                     <>
                       <p className="mt-3 text-lg font-medium leading-relaxed text-[#002244]">{index === 0 ? 'Color and learn what belongs in Seattle recycling and garbage bins.' : 'Answers to our coloring pages, sorting reminders, and simple reuse tips.'}</p>
                       {index === 0 ? (
                         <Link href="/kids-corner/coloring-pages" className="btn-orange mt-5 inline-flex min-h-12 items-center justify-center">Choose a Coloring Page</Link>
                       ) : (
-                        <a href="/Seattle-Recycling-and-Reuse-Answer-Guide.pdf" download className="btn-orange mt-5 inline-flex min-h-12 items-center justify-center">Download Answer Guides</a>
+                        <Link href="/kids-corner/answer-guides" className="btn-orange mt-5 inline-flex min-h-12 items-center justify-center">Choose an Answer Guide</Link>
                       )}
                     </>
                   ) : <p className="mt-3 text-lg font-medium leading-relaxed text-[#002244]">Coming Soon!</p>}

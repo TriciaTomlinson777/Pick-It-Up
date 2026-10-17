@@ -39,7 +39,7 @@ export default function ColoringPages() {
             ))}
           </div>
           <div className="mx-auto mt-9 max-w-3xl text-center">
-            <p>Looking for the answers? Find sorting reminders and reuse tips in our <Link href="/kids-corner#take-home-materials" className="font-bold text-[#075c65] underline underline-offset-4">Recycling &amp; Reuse Guides</Link>.</p>
+            <p>Looking for the answers? Find sorting reminders and reuse tips in our <Link href="/kids-corner/answer-guides" className="font-bold text-[#075c65] underline underline-offset-4">Recycling &amp; Reuse Guides</Link>.</p>
           </div>
         </section>
       </main>
