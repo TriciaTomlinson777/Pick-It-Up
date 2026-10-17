@@ -175,11 +175,11 @@ export default function KidsCorner() {
                   <h3 className="text-3xl font-extrabold leading-tight text-[#0f9aa1] sm:text-4xl">{index === 0 ? <Link href="/kids-corner/coloring-pages" className="underline-offset-4 hover:underline focus-visible:underline">{title}</Link> : index === 1 ? <Link href="/kids-corner/answer-guides" className="underline-offset-4 hover:underline focus-visible:underline">{title}</Link> : title}</h3>
                   {index < 2 ? (
                     <>
-                      <p className="mt-3 text-lg font-medium leading-relaxed text-[#002244]">{index === 0 ? 'Color and learn what belongs in Seattle recycling and garbage bins.' : 'Answers to our coloring pages, sorting reminders, and simple reuse tips.'}</p>
+                      <p className="mt-3 text-lg font-medium leading-relaxed text-[#002244]">{index === 0 ? 'Color and learn what belongs in Seattle recycling and garbage bins.' : 'Explore recycling and reuse resources, including sorting tips and activity answer guides.'}</p>
                       {index === 0 ? (
                         <Link href="/kids-corner/coloring-pages" className="btn-orange mt-5 inline-flex min-h-12 items-center justify-center">Choose a Coloring Page</Link>
                       ) : (
-                        <Link href="/kids-corner/answer-guides" className="btn-orange mt-5 inline-flex min-h-12 items-center justify-center">Choose an Answer Guide</Link>
+                        <Link href="/kids-corner/answer-guides" className="btn-orange mt-5 inline-flex min-h-12 items-center justify-center">Explore the Guides</Link>
                       )}
                     </>
                   ) : <p className="mt-3 text-lg font-medium leading-relaxed text-[#002244]">Coming Soon!</p>}
