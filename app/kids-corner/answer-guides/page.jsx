@@ -4,8 +4,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 export const metadata = {
-  title: 'Recycling & Reuse Guides | Pick It Up Seattle',
-  description: 'Explore printable recycling and reuse guides for families and educators.',
+  title: 'Litter Hero Learning and Answer Guides | Pick It Up Seattle',
+  description: 'Explore printable Litter Hero learning resources and answer guides for families and educators.',
 };
 
 const ANSWER_GUIDES = [
@@ -21,9 +21,9 @@ export default function AnswerGuides() {
         <section className="container-custom py-10 sm:py-14">
           <Link href="/kids-corner#take-home-materials" className="inline-flex min-h-11 items-center font-bold text-[#075c65] underline underline-offset-4">Back to Kids Corner</Link>
           <div className="mx-auto mt-5 max-w-3xl text-center">
-            <h1 className="text-3xl font-extrabold text-[#0f7f86] sm:text-4xl">Recycling & Reuse Guides</h1>
-            <p className="mt-4 text-lg">Explore our collection of recycling and reuse resources. Choose a guide to preview or print.</p>
-            <p className="mt-2 font-medium">Sorting tips, reuse ideas, activity answers, and more for families and educators.</p>
+            <h1 className="text-3xl font-extrabold text-[#0f7f86] sm:text-4xl">Litter Hero Learning and Answer Guides</h1>
+            <p className="mt-4 text-lg">Explore our collection of learning resources and answer guides. Choose a guide to preview or print.</p>
+            <p className="mt-2 font-medium">Helpful learning tools and activity answers for families and educators.</p>
           </div>
           <div className="mx-auto mt-9 grid max-w-5xl grid-cols-1 gap-6 sm:grid-cols-2">
             {ANSWER_GUIDES.map((page) => (
