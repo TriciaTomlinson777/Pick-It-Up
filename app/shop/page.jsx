@@ -193,37 +193,37 @@ One person. One piece. One better city.`,
       id: 'single-litter-grabber', category: 'Tools', group: 'Adult & Family Tools',
       name: 'Single Litter Grabber',
       description: 'A folding 32-inch grabber for everyday litter pickup. The listing describes a precision grip for small items, including coins. Check the reach and grip before choosing for a child.',
-      toolIcon: 'grabber', productUrl: 'https://amzn.to/4yqreD2',
+      affiliate: true, productImageUrl: 'https://m.media-amazon.com/images/I/61hb+1YlFpL._SL1500_.jpg', productUrl: 'https://amzn.to/4yqreD2',
     },
     {
       id: 'two-pack-litter-grabbers', category: 'Tools', group: 'Adult & Family Tools',
       name: 'Litter Grabbers — 2-Pack',
       description: 'Two grabbers for a pair of helpers or a family cleanup. Review the product dimensions to choose a comfortable fit for each person.',
-      toolIcon: 'grabber', productUrl: 'https://amzn.to/3VQStt2',
+      affiliate: true, productImageUrl: 'https://m.media-amazon.com/images/I/51Xnz9wcM9L._SL1500_.jpg', productUrl: 'https://amzn.to/3VQStt2',
     },
     {
       id: 'eight-pack-litter-grabbers', category: 'Tools', group: 'Adult & Family Tools',
       name: 'Group Cleanup Grabbers — 8-Pack',
       description: 'An eight-pack for organizing a group cleanup, with a grabber for each helper. Check the listing for sizes and what is included.',
-      toolIcon: 'grabber', productUrl: 'https://amzn.to/4i58wL8',
+      affiliate: true, productImageUrl: 'https://m.media-amazon.com/images/I/712c0oaM7RL._AC_SL1500_.jpg', productUrl: 'https://amzn.to/4i58wL8',
     },
     {
       id: 'adult-cleanup-gloves', category: 'Tools', group: 'Adult Tools',
       name: 'Adult Cleanup Gloves',
       description: 'Gloves for adult cleanup helpers. Review the available sizes, materials, and care instructions on Amazon before choosing your pair.',
-      toolIcon: 'gloves', productUrl: 'https://amzn.to/4BdK3Mi',
+      affiliate: true, productImageUrl: 'https://m.media-amazon.com/images/I/91knZI4THCL._AC_SL1500_.jpg', productUrl: 'https://amzn.to/4BdK3Mi',
     },
     {
       id: 'kids-cleanup-gloves-single', category: 'Tools', group: 'Kids Tools',
       name: 'Kids Cleanup Gloves — Single Pair',
       description: 'For parents and caregivers choosing gloves for a young helper. Check the size chart and product details for a comfortable fit. Adult supervision is required during cleanup.',
-      toolIcon: 'gloves', productUrl: 'https://amzn.to/4jW5ify',
+      affiliate: true, productImageUrl: 'https://m.media-amazon.com/images/I/81eqY1n-9EL._AC_SL1500_.jpg', productUrl: 'https://amzn.to/4jW5ify',
     },
     {
       id: 'kids-cleanup-gloves-four-pack', category: 'Tools', group: 'Kids Tools',
       name: 'Kids Cleanup Gloves — 4-Pack',
       description: 'A four-pack of children’s gloves, with size options available in the listing. Parents and caregivers should check sizing. Cut-resistant does not mean cut-proof; children should never handle sharp or hazardous litter.',
-      toolIcon: 'gloves', productUrl: 'https://amzn.to/4i3AlTY',
+      affiliate: true, productImageUrl: 'https://m.media-amazon.com/images/I/91Imb9rIy2S._AC_SL1500_.jpg', productUrl: 'https://amzn.to/4i3AlTY',
     },
   ];
 
@@ -290,10 +290,11 @@ One person. One piece. One better city.`,
                       className="flex h-full flex-col overflow-hidden rounded-2xl border border-[#0f9aa1]/20 bg-white shadow-[0_14px_30px_rgba(0,43,73,0.12)] transition hover:shadow-[0_18px_40px_rgba(0,43,73,0.16)]"
                     >
                       <div className={`${product.imageStyle ?? 'bg-[linear-gradient(145deg,_#0f9aa1_0%,_#2ec4c7_45%,_#69be28_100%)]'} relative flex h-56 items-center justify-center`}>
-                        {product.toolIcon ? (
-                          <svg viewBox="0 0 120 120" className="h-36 w-36 text-white" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" role="img" aria-label={product.toolIcon === 'grabber' ? 'Litter grabber illustration' : 'Cleanup gloves illustration'}>
-                            {product.toolIcon === 'grabber' ? <><path d="M36 86 80 34M71 24l20 16M80 34l13-15 12 5M80 34l4-20-10-6M36 86l-13 4-8 14M36 86l-1 15 13 5M48 73l9 8 7-8" /></> : <><path d="M34 100 18 71l-5-17q0-7 6-3l10 12-6-37q0-9 6-6l9 32-1-38q3-9 7-2l5 38 5-33q4-7 8-1l-2 39 6-18q6-7 9 0l-8 41-8 22Z" /><path d="m73 100 17-17 14-27q0-7-6-4l-8 10 7-28q-1-8-6-3l-9 24" /></>}
-                          </svg>
+                        {product.productImageUrl ? (
+                          <a href={product.productUrl} target="_blank" rel="sponsored noopener noreferrer" aria-label={`View ${product.name} on Amazon`} className="flex h-full w-full items-center justify-center bg-white p-4">
+                            {/* Use the original remote product photo without cropping or caching it. */}
+                            <img src={product.productImageUrl} alt={product.name} width={280} height={192} loading="lazy" decoding="async" referrerPolicy="no-referrer" className="h-full w-full object-contain" />
+                          </a>
                         ) : product.imageSrc ? (
                           <div className={`mx-4 flex items-center justify-center ${product.imageContainerClass ?? 'h-[88%] w-[88%] p-3'}`}>
                             <Image
@@ -322,7 +323,7 @@ One person. One piece. One better city.`,
                         </p>
                         <div className="mt-2 min-h-[12rem]">
                           <p className={`${balooDisplay.className} text-center text-[0.82rem] font-bold uppercase tracking-[0.14em] text-[#1f5f7a]`}>
-                            {product.toolIcon ? 'Available on Amazon' : 'Official'}
+                            {product.affiliate ? 'Available on Amazon' : 'Official'}
                           </p>
                           <h2 className={`${balooDisplay.className} text-center text-[1.45rem] font-bold leading-tight text-[#002b49]`}>
                             {product.name}
@@ -336,11 +337,11 @@ One person. One piece. One better city.`,
                         <div className="mt-auto pt-2">
                           <a
                             href={product.productUrl}
-                            rel={product.toolIcon ? 'sponsored noopener noreferrer' : undefined}
-                            target={product.toolIcon ? '_blank' : undefined}
+                            rel={product.affiliate ? 'sponsored noopener noreferrer' : undefined}
+                            target={product.affiliate ? '_blank' : undefined}
                             className="btn-primary w-full rounded-xl px-5 py-3 text-center text-sm font-extrabold sm:text-base"
                           >
-                            {product.toolIcon ? 'View on Amazon' : 'Shop Now'}
+                            {product.affiliate ? 'View on Amazon' : 'Shop Now'}
                           </a>
                         </div>
                       </div>
