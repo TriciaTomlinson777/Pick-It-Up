@@ -86,7 +86,15 @@ export function createOutdoor({room,avatar,motionAsset,playerId,challengeId,name
   finally{busy=false;use.disabled=false}
  };
  async function collect(){
-  if(busy||!alive)return;busy=true;section.classList.remove('camera-ready');button.disabled=true;step='walking';
+  if(busy||!alive)return;
+  // The drawn scene already contains the player and Captain Can. Never
+  // reveal the legacy sprite underneath it after accepting a photo.
+  if(useAnnFrames){
+   step='saved';button.hidden=true;
+   say('Before photo saved on this device. We’ll build the cleanup and after-photo step next.');
+   return;
+  }
+  busy=true;section.classList.remove('camera-ready');button.disabled=true;step='walking';
   drawnMotion?.hide();actor.style.visibility='';captain.style.visibility='';
   find('.street-world').classList.add('walking');
   say(name+' is walking along the sidewalk and picking up litter.');
@@ -109,6 +117,12 @@ export function createOutdoor({room,avatar,motionAsset,playerId,challengeId,name
  pose.ready.then(ok=>{if(alive&&ok)pose.restoreGloves()});
  photoStore('readonly',store=>store.get(key)).then(async record=>{
   if(!alive)return;if(!record){demonstrate();return;}
+  if(useAnnFrames){
+   await demonstrate();if(!alive)return;
+   step='saved';section.classList.remove('camera-ready');button.hidden=true;
+   say('Your before photo is saved on this device. We’ll build the cleanup and after-photo step next.');
+   return;
+  }
   await backgroundReady;await reveal();if(!alive)return;
   button.hidden=false;step=record.stage==='collected'?'collected':'saved';
   if(step==='collected'){section.querySelectorAll('.street-litter').forEach(n=>n.hidden=true);actor.style.left='74%';button.hidden=true;say('Great work, '+name+'! Your before photo is saved on this device.');}
