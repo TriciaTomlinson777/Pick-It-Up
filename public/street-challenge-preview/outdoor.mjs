@@ -90,8 +90,9 @@ export function createOutdoor({room,avatar,motionAsset,playerId,challengeId,name
   // The drawn scene already contains the player and Captain Can. Never
   // reveal the legacy sprite underneath it after accepting a photo.
   if(useAnnFrames){
-   step='saved';button.hidden=true;
-   say('Before photo saved on this device. We’ll build the cleanup and after-photo step next.');
+   step='before';section.classList.add('camera-ready');button.hidden=false;button.disabled=false;
+   button.textContent='📷';button.setAttribute('aria-label','Retake before photo');
+   say('Before photo saved on this device. You can retake it with the camera button.');
    return;
   }
   busy=true;section.classList.remove('camera-ready');button.disabled=true;step='walking';
@@ -119,8 +120,9 @@ export function createOutdoor({room,avatar,motionAsset,playerId,challengeId,name
   if(!alive)return;if(!record){demonstrate();return;}
   if(useAnnFrames){
    await demonstrate();if(!alive)return;
-   step='saved';section.classList.remove('camera-ready');button.hidden=true;
-   say('Your before photo is saved on this device. We’ll build the cleanup and after-photo step next.');
+   step='before';section.classList.add('camera-ready');button.hidden=false;button.disabled=false;
+   button.textContent='📷';button.setAttribute('aria-label','Retake before photo');
+   say('Your before photo is saved on this device. You can retake it with the camera button.');
    return;
   }
   await backgroundReady;await reveal();if(!alive)return;
