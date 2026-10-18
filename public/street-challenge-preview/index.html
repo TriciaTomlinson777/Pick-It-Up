@@ -141,7 +141,8 @@ form{width:100%;display:none;flex:1;flex-direction:column;justify-content:center
 
 /* Keep navigation above the story and utility controls in their own bottom row. */
 .toolbar:not(.bottom-toolbar),.toolbar:not(.bottom-toolbar):has(#deadlineToggle[hidden]){flex-wrap:nowrap;gap:clamp(4px,2.2vw,10px)}
-.toolbar.bottom-toolbar{top:auto;bottom:28px;left:14px;right:14px;flex-wrap:nowrap;gap:12px;z-index:40}
+.toolbar.bottom-toolbar{top:auto;bottom:28px;left:14px;right:14px;flex-wrap:nowrap;justify-content:space-between;gap:12px;z-index:40;pointer-events:none}
+.toolbar.bottom-toolbar .round{flex:0 0 auto;pointer-events:auto}
 .welcome-back{bottom:max(8%,88px)}
 .room.equipping .gear-actions{bottom:60px}
 .race-map{aspect-ratio:320/230}.race-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 14px;list-style:none;padding:0;margin:0;font-size:14px;font-weight:bold}.race-legend li{display:flex;align-items:center;gap:6px;max-width:100%;overflow-wrap:anywhere}.race-swatch{display:inline-block;flex:0 0 20px;width:20px;height:7px;border-radius:6px}
