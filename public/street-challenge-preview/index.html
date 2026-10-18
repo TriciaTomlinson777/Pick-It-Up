@@ -179,7 +179,7 @@ form{width:100%;display:none;flex:1;flex-direction:column;justify-content:center
 import {holdScene} from './scene-transition.mjs';
 import {createGameAudio} from './audio.mjs';
 import {createPosePlayer} from './pose-player.mjs';
-import {createOutdoor} from './outdoor.mjs?v=smooth-scenes-20261013';
+import {createOutdoor} from './outdoor.mjs?v=no-duplicate-ann-20261017';
 let outdoorScene=null;
 function closeOutdoor(){const reveal=outdoorScene?holdScene(room,reduce):null;outdoorScene?.dispose();outdoorScene=null;reveal?.()}
 const audio=createGameAudio(), $=id=>document.getElementById(id), avatars=[...document.querySelectorAll('.avatar')];
