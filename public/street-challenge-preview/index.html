@@ -179,6 +179,9 @@ form{width:100%;display:none;flex:1;flex-direction:column;justify-content:center
 import {holdScene} from './scene-transition.mjs';
 import {createGameAudio} from './audio.mjs';
 import {createPosePlayer} from './pose-player.mjs';
+import {createGuestSession} from './guest.mjs';
+const guestMode=new URLSearchParams(location.search).get('guest')==='1';
+const guestSession=guestMode?createGuestSession(localStorage):null;
 import {createOutdoor} from './outdoor.mjs?v=keep-camera-20261017';
 let outdoorScene=null;
 function closeOutdoor(){const reveal=outdoorScene?holdScene(room,reduce):null;outdoorScene?.dispose();outdoorScene=null;reveal?.()}
@@ -284,14 +287,15 @@ let signedIn=false, savedHero=null, savedHeroes=[], activeHeroId=null;
 const loginRecordedHeroes=new Set();
 const picker=document.createElement('div');picker.className='hero-picker';picker.hidden=true;$('signinCard').prepend(picker);
 
-const progressKey='street-challenge-progress-v1';
-const selectedPlayerKey='street-challenge-selected-player-v1';
+const progressKey=guestMode?'street-challenge-guest-progress-v1':'street-challenge-progress-v1';
+const selectedPlayerKey=guestMode?'street-challenge-guest-selected-player-v1':'street-challenge-selected-player-v1';
 function rememberPlayer(id){try{localStorage.setItem(selectedPlayerKey,id)}catch{}}
 function lastSelectedPlayer(){try{return localStorage.getItem(selectedPlayerKey)}catch{return null}}
 function forgetPlayer(){try{localStorage.removeItem(selectedPlayerKey)}catch{}}
 function clearProgress(){/* Keep saved progress during navigation. */}
 let challengeState=null,restoringProgress=false,progressQueue=Promise.resolve(),hubRequest=0,clockAnchor=0,clockStarted=0;
 async function challengeRequest(heroId,action,data={}){
+ if(guestSession)return guestSession.challenge(heroId,action,data);
  const response=await fetch('/api/street-challenge/challenge'+(action?'':'?heroId='+encodeURIComponent(heroId)),{method:action?'POST':'GET',credentials:'same-origin',cache:'no-store',keepalive:Boolean(action),headers:action?{'Content-Type':'application/json'}:undefined,body:action?JSON.stringify({heroId,action,...data}):undefined});
  const state=await response.json();if(!response.ok){const e=Error(state.error||'Please try again.');e.ended=state.ended;throw e}return state;
 }
@@ -421,7 +425,7 @@ function showAccountRetry(text){
 }
 
 let accountEmail='';
-async function account(action,data={}){const response=await fetch('/api/street-challenge/account',{method:action?'POST':'GET',credentials:'same-origin',headers:action?{'Content-Type':'application/json'}:undefined,body:action?JSON.stringify({action,...data}):undefined,cache:'no-store'});const result=await response.json();if(!response.ok||result.unavailable)throw Error(result.error||'Your saved game couldn’t be loaded. Tap I’m back to try again.');if(typeof result.email==='string')accountEmail=result.email;if(result.signedIn===false||action==='logout')accountEmail='';return result}
+async function account(action,data={}){if(guestSession)return guestSession.account(action,data);const response=await fetch('/api/street-challenge/account',{method:action?'POST':'GET',credentials:'same-origin',headers:action?{'Content-Type':'application/json'}:undefined,body:action?JSON.stringify({action,...data}):undefined,cache:'no-store'});const result=await response.json();if(!response.ok||result.unavailable)throw Error(result.error||'Your saved game couldn’t be loaded. Tap I’m back to try again.');if(typeof result.email==='string')accountEmail=result.email;if(result.signedIn===false||action==='logout')accountEmail='';return result}
 async function recordPlayerLogin(h){
  if(!validHero(h)||loginRecordedHeroes.has(h.id))return null;
  const result=await account('resume',{heroId:h.id});
@@ -595,10 +599,14 @@ $('signout').onclick=async()=>{
  }
 };
 
-async function restoreAccount(){try{const state=await account();signedIn=state.signedIn;$('signout').hidden=false;savedHero=state.hero;savedHeroes=state.heroes||[];const params=new URLSearchParams(location.search);let returnedHero=null;const returned=new URLSearchParams(location.hash.slice(1)).get('hero');if(signedIn&&params.get('signin')==='success'&&returned){try{const h=JSON.parse(returned);if(validHero(h)){returnedHero=h;try{localStorage.setItem(draftKey,JSON.stringify(h))}catch{}}}catch{}}if(params.has('signin'))history.replaceState(null,'',location.pathname);if(signedIn&&params.get('signin')==='success'){const draft=returnedHero||loadDraft();if(savedHeroes.length){const p=loadProgress();const match=savedHeroes.find(hero=>hero.id===lastSelectedPlayer())||savedHeroes.find(hero=>hero.id===p?.heroId)||savedHeroes.find(hero=>draft&&hero.name===draft.name&&hero.avatar===draft.avatar);if(match||savedHeroes.length===1)await showHub(match||savedHeroes[0],'home',true);else showPlayers();return}const h=draft||savedHero;if(validHero(h)){const existing=savedHeroes.find(player=>player.id===loadProgress()?.heroId&&player.name===h.name&&player.avatar===h.avatar)||savedHeroes.find(player=>player.name===h.name&&player.avatar===h.avatar);if(existing){await showHub(existing,'home',true);return}select(h.avatar);$('firstName').value=h.name;showSignin();await saveAndContinue()}else{reset();$('welcomeBack').hidden=true}}else if(signedIn){const p=loadProgress();const h=savedHeroes.find(h=>h.id===lastSelectedPlayer())||(p&&savedHeroes.find(h=>h.id===p.heroId));if(validHero(h)){await showHub(h,'home',true)}else if(savedHeroes.length===1&&validHero(savedHeroes[0])){await showHub(savedHeroes[0],'home',true)}else if(savedHeroes.length){showPlayers()}else{showSignin();title.textContent='Welcome back!';message('Signed in, but no saved player was found for this email. Please do not create another avatar.')}}else if(params.get('signin')==='expired'){const h=loadDraft();if(validHero(h)){select(h.avatar);$('firstName').value=h.name}showSignin();message('That link expired. Send a fresh one.')}}catch(e){showAccountRetry(e.message)}finally{room.classList.remove('booting');$('signout').hidden=false;$('playerNav').hidden=false;for(const id of ['homeNav','rewardsNav'])$(id).hidden=false;tickClock()}}
+async function restoreAccount(){try{if(guestSession&&!(await guestSession.account()).heroes.length){signedIn=true;reset();return}const state=await account();signedIn=state.signedIn;$('signout').hidden=false;savedHero=state.hero;savedHeroes=state.heroes||[];const params=new URLSearchParams(location.search);let returnedHero=null;const returned=new URLSearchParams(location.hash.slice(1)).get('hero');if(signedIn&&params.get('signin')==='success'&&returned){try{const h=JSON.parse(returned);if(validHero(h)){returnedHero=h;try{localStorage.setItem(draftKey,JSON.stringify(h))}catch{}}}catch{}}if(params.has('signin'))history.replaceState(null,'',location.pathname);if(signedIn&&params.get('signin')==='success'){const draft=returnedHero||loadDraft();if(savedHeroes.length){const p=loadProgress();const match=savedHeroes.find(hero=>hero.id===lastSelectedPlayer())||savedHeroes.find(hero=>hero.id===p?.heroId)||savedHeroes.find(hero=>draft&&hero.name===draft.name&&hero.avatar===draft.avatar);if(match||savedHeroes.length===1)await showHub(match||savedHeroes[0],'home',true);else showPlayers();return}const h=draft||savedHero;if(validHero(h)){const existing=savedHeroes.find(player=>player.id===loadProgress()?.heroId&&player.name===h.name&&player.avatar===h.avatar)||savedHeroes.find(player=>player.name===h.name&&player.avatar===h.avatar);if(existing){await showHub(existing,'home',true);return}select(h.avatar);$('firstName').value=h.name;showSignin();await saveAndContinue()}else{reset();$('welcomeBack').hidden=true}}else if(signedIn){const p=loadProgress();const h=savedHeroes.find(h=>h.id===lastSelectedPlayer())||(p&&savedHeroes.find(h=>h.id===p.heroId));if(validHero(h)){await showHub(h,'home',true)}else if(savedHeroes.length===1&&validHero(savedHeroes[0])){await showHub(savedHeroes[0],'home',true)}else if(savedHeroes.length){showPlayers()}else{showSignin();title.textContent='Welcome back!';message('Signed in, but no saved player was found for this email. Please do not create another avatar.')}}else if(params.get('signin')==='expired'){const h=loadDraft();if(validHero(h)){select(h.avatar);$('firstName').value=h.name}showSignin();message('That link expired. Send a fresh one.')}}catch(e){showAccountRetry(e.message)}finally{room.classList.remove('booting');$('signout').hidden=false;$('playerNav').hidden=false;for(const id of ['homeNav','rewardsNav'])$(id).hidden=false;tickClock()}}
 const toolbar=document.querySelector('.toolbar'),clock=$('challengeClock');
 function layoutHeader(){room.style.setProperty('--profile-top',(toolbar.offsetTop+toolbar.offsetHeight+14)+'px');room.style.setProperty('--clock-top',(toolbar.offsetTop+toolbar.offsetHeight+10)+'px');room.style.setProperty('--header-bottom',(clock.offsetTop+clock.offsetHeight+16)+'px')}
 const headerObserver=new ResizeObserver(layoutHeader);headerObserver.observe(toolbar);headerObserver.observe(clock);layoutHeader();
+const guestButton=document.createElement('button');guestButton.className='text-button';guestButton.textContent=guestMode?'Guest test · Choose a new avatar':'Play as guest · Testing';
+guestButton.style.cssText='position:absolute;bottom:2%;left:20%;right:20%;z-index:12;background:#fff6dc;border-radius:14px';
+guestButton.onclick=()=>{if(guestMode)reset();else location.assign(location.pathname+'?guest=1')};room.append(guestButton);
+if(guestMode){document.querySelector('.preview').textContent='Guest test · Device only · Nothing posts to the site';}
 restoreAccount();
 window.addEventListener('pageshow',event=>{if(event.persisted&&!room.classList.contains('equipping'))restoreAccount()});
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&!$('emailSent').hidden)restoreAccount()});
