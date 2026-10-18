@@ -54,8 +54,10 @@ export function createPosePlayer(hero, reduced=false, asset="blonde-motion-v1.pn
  }
  async function restoreGloves(){if(!await ready||disposed)return;draw(11)}
  async function restoreReadyPose(){if(!await ready||disposed)return;legPhase=null;draw(11)}
+ // Slow equipment poses for visual inspection of glove and picker artifacts.
+ const equipmentSlowdown=4;
  async function gloves(){if(!await ready||disposed)return;if(reduced){draw(11);return}
-  await play([[5,650],[6,480],[7,650],[8,550],[9,650],[10,550],[11,250]]);
+  await play([[5,650],[6,480],[7,650],[8,550],[9,650],[10,550],[11,250]].map(([pose,ms])=>[pose,ms*equipmentSlowdown]));
  }
  async function walkToTable(){
   if(!await ready||disposed)return;
@@ -89,10 +91,10 @@ export function createPosePlayer(hero, reduced=false, asset="blonde-motion-v1.pn
   const held=[...hero.querySelectorAll('.attached')].filter(n=>n.style.visibility!=='hidden');
   held.forEach(n=>n.style.visibility='hidden');
   try{
-   await transitionTo(5,140);await pause(510);if(disposed)return;
+   await transitionTo(5,140*equipmentSlowdown);await pause(510*equipmentSlowdown);if(disposed)return;
    // The same standing grasp pose used immediately after the glove bend.
-   await transitionTo(6,140);onHeld();await pause(340);if(disposed)return;
-   await transitionTo(11,160);await pause(160);
+   await transitionTo(6,140*equipmentSlowdown);onHeld();await pause(340*equipmentSlowdown);if(disposed)return;
+   await transitionTo(11,160*equipmentSlowdown);await pause(160*equipmentSlowdown);
   }finally{
    if(!disposed)held.forEach(n=>n.style.visibility='visible');
   }
