@@ -24,18 +24,33 @@ export function createPosePlayer(hero, reduced=false, asset="blonde-motion-v1.pn
   sheet.onerror=()=>resolve(false);sheet.src=asset;
  })).catch(()=>false);
  function pause(ms){return new Promise(resolve=>setTimeout(resolve,ms))}
- async function play(sequence){for(const [index,ms] of sequence){if(disposed)return;draw(index);await pause(ms)}}
- async function jump(){if(!await ready||disposed)return;if(reduced){draw(4);return}
+ async function transitionTo(index,duration=110){
+  if(disposed)return;
+  if(reduced||index===frame||!canvas.width||!canvas.height){draw(index);return}
+  const previous=document.createElement('canvas');previous.width=canvas.width;previous.height=canvas.height;
+  previous.getContext('2d').drawImage(canvas,0,0);
+  const start=performance.now();
+  while(!disposed){
+   const progress=Math.min(1,(performance.now()-start)/duration),ease=progress*progress*(3-2*progress);
+   draw(index);ctx.globalAlpha=1-ease;ctx.drawImage(previous,0,0,hero.clientWidth,hero.clientHeight);ctx.globalAlpha=1;
+   if(progress===1)break;await new Promise(resolve=>requestAnimationFrame(resolve));
+  }
+ }
+ async function play(sequence){for(const [index,ms] of sequence){if(disposed)return;const blend=reduced?0:Math.min(110,ms);await transitionTo(index,blend);await pause(Math.max(0,ms-blend))}}
+ async function jump(startTransform=''){if(!await ready||disposed)return;if(reduced){draw(4);return}
   const roomRect=hero.closest('.room').getBoundingClientRect(),rect=hero.getBoundingClientRect();
-  const wallY=Math.min(-55,roomRect.top+roomRect.height*.65-rect.bottom);
+  const startY=/translateY\((-?[\d.]+)px\)/.exec(startTransform);
+  const wallY=startY?Number(startY[1]):Math.min(-55,roomRect.top+roomRect.height*.65-rect.bottom);
   const animation=actor.animate([
    {transform:'translateY('+wallY+'px) scale(.73)',offset:0},
-   {transform:'translateY('+wallY+'px) scale(.73)',offset:.2},
-   {transform:'translateY('+(wallY-45)+'px) scale(.85)',offset:.42},
-   {transform:'translateY(0) scale(1)',offset:.72},
+   {transform:'translateY('+wallY+'px) scale(.71)',offset:.16,easing:'cubic-bezier(.2,.65,.3,1)'},
+   {transform:'translateY('+(wallY-45)+'px) scale(.85)',offset:.40,easing:'cubic-bezier(.45,0,.8,.45)'},
+   {transform:'translateY(0) scale(1.03,.96)',offset:.78,easing:'ease-out'},
+   {transform:'translateY(-4px) scale(.99,1.01)',offset:.9,easing:'ease-in-out'},
    {transform:'translateY(0) scale(1)',offset:1}
-  ],{duration:1500,easing:'linear'});activeAnimations.add(animation);
-  await play([[0,200],[1,170],[2,620],[3,330],[4,180]]);activeAnimations.delete(animation);
+  ],{duration:1500,easing:'linear',fill:'both'});activeAnimations.add(animation);
+  await Promise.all([play([[0,200],[1,170],[2,620],[3,330],[4,180]]),animation.finished.catch(()=>{})]);
+  if(!disposed)actor.style.transform='';animation.cancel();activeAnimations.delete(animation);
  }
  async function restoreGloves(){if(!await ready||disposed)return;draw(11)}
  async function restoreReadyPose(){if(!await ready||disposed)return;legPhase=null;draw(11)}
@@ -74,10 +89,10 @@ export function createPosePlayer(hero, reduced=false, asset="blonde-motion-v1.pn
   const held=[...hero.querySelectorAll('.attached')].filter(n=>n.style.visibility!=='hidden');
   held.forEach(n=>n.style.visibility='hidden');
   try{
-   draw(5);await pause(650);if(disposed)return;
+   await transitionTo(5,140);await pause(510);if(disposed)return;
    // The same standing grasp pose used immediately after the glove bend.
-   draw(6);onHeld();await pause(480);if(disposed)return;
-   draw(11);await pause(250);
+   await transitionTo(6,140);onHeld();await pause(340);if(disposed)return;
+   await transitionTo(11,160);await pause(160);
   }finally{
    if(!disposed)held.forEach(n=>n.style.visibility='visible');
   }
