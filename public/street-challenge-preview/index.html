@@ -233,7 +233,7 @@ $('sound').onclick=()=>{muted=!muted;if(muted&&'speechSynthesis' in window)windo
 $('choose').onclick=()=>{if(selected===null)return;audio.play('equip');$('carousel').style.display='none';$('controls').style.display='none';$('hand').style.display='none';$('nameForm').style.display='flex';$('firstName').focus()};
 $('back').onclick=()=>{$('nameForm').style.display='none';$('carousel').style.display='flex';$('controls').style.display='flex'};
 async function enterEquipment(restoring=false,reveal=async()=>{}){const name=$('firstName').value.trim();if(!name){$('firstName').value='';$('firstName').reportValidity();return}if(!restoring)audio.play('celebrate');$('hello').textContent='Hi, '+name+'!';$('hero').replaceChildren(avatars[selected].querySelector('.sprite img').cloneNode(true));$('nameForm').style.display='none';$('final').style.display='flex';$('hero').style.animation='none';room.classList.add('equipping','entering');title.textContent='Let’s Get Ready!';title.style.animation=reduce?'none':'happy .5s ease';scene++;positionTable();const current=scene;$('actor').style.visibility='hidden';busy=true;refreshGear();{posePlayer=createPosePlayer($('hero'),reduce,motionAssets[selected]);if(!await posePlayer.ready){posePlayer.dispose();posePlayer=null;}if(scene!==current)return;$('actor').style.visibility='visible';if(!restoring)await reveal();if(posePlayer&&!restoring)await posePlayer.jump();else if(!posePlayer&&!reduce&&!restoring){const a=$('actor').animate([{transform:'translateY(-180px) scale(.73)'},{transform:'translateY(-220px) scale(.85)',offset:.4},{transform:'translateY(0) scale(1)'}],{duration:1500,easing:'ease-in-out'});try{await a.finished}catch{}}}if(scene!==current)return;room.classList.remove('entering');positionTable();busy=false;refreshGear();storeProgress()};
-function reset(){closeOutdoor();storeProgress();hubRequest++;clearProgress();$('signinCard').style.display='none';room.classList.remove('signing');$('welcomeBack').hidden=false;$('actor').style.visibility='visible';posePlayer?.dispose();posePlayer=null;busy=false;if('speechSynthesis' in window)window.speechSynthesis.cancel();title.style.animation='none';scene++;equipped.clear();room.classList.remove('equipping','entering');title.innerHTML='Street<br>Challenge';document.querySelectorAll('.attached').forEach(a=>a.remove());document.querySelectorAll('.flying,.floor-item,.gear-pointer').forEach(a=>a.remove());gearButtons.forEach(b=>{b.disabled=false;b.setAttribute('aria-pressed','false');b.querySelector('.gear-check').textContent=''});$('gearDone').disabled=true;$('gearDone').hidden=false;$('gearRow').hidden=false;$('gearStatus').textContent='';$('nameForm').style.display='none';$('final').style.display='none';$('carousel').style.display='flex';$('controls').style.display='flex';$('hand').style.display='block';$('hand').style.visibility='visible';$('firstName').value='';selected=null;avatars.forEach(a=>{a.setAttribute('aria-pressed','false');a.classList.remove('chosen')});$('choose').disabled=true;browsing=0;$('carousel').scrollLeft=0}
+function reset(){wallReady=false;closeOutdoor();$('actor').style.transform='';storeProgress();hubRequest++;clearProgress();$('signinCard').style.display='none';room.classList.remove('signing');$('welcomeBack').hidden=false;$('actor').style.visibility='visible';posePlayer?.dispose();posePlayer=null;busy=false;if('speechSynthesis' in window)window.speechSynthesis.cancel();title.style.animation='none';scene++;equipped.clear();room.classList.remove('equipping','entering');title.innerHTML='Street<br>Challenge';document.querySelectorAll('.attached').forEach(a=>a.remove());document.querySelectorAll('.flying,.floor-item,.gear-pointer').forEach(a=>a.remove());gearButtons.forEach(b=>{b.disabled=false;b.setAttribute('aria-pressed','false');b.querySelector('.gear-check').textContent=''});$('gearDone').disabled=true;$('gearDone').hidden=false;$('gearRow').hidden=false;$('gearStatus').textContent='';$('nameForm').style.display='none';$('final').style.display='none';$('carousel').style.display='flex';$('controls').style.display='flex';$('hand').style.display='block';$('hand').style.visibility='visible';$('firstName').value='';selected=null;avatars.forEach(a=>{a.setAttribute('aria-pressed','false');a.classList.remove('chosen')});$('choose').disabled=true;browsing=0;$('carousel').scrollLeft=0}
 
 function refreshGear(){document.querySelectorAll('.gear-pointer').forEach(p=>p.remove());gearButtons.forEach(b=>b.disabled=busy||(b.dataset.gear!=='gloves'&&!equipped.has('gloves')));const next=gearButtons.find(b=>!equipped.has(b.dataset.gear));if(next){const p=document.createElement('span');p.className='gear-pointer';p.textContent='👆';p.setAttribute('aria-hidden','true');next.append(p)}$('gearDone').disabled=busy||equipped.size!==4;$('gearDone').hidden=equipped.size!==4||$('gearRow').hidden;$('gearStatus').textContent=equipped.size===4?'':equipped.size?equipped.size+' / 4':''}
 const hands=[[[.22,.26],[.57,.54]],[[.30,.64],[.75,.36]],[[.24,.22],[.72,.62]],[[.26,.30],[.73,.64]],[[.22,.26],[.76,.62]],[[.27,.35],[.66,.60]],[[.22,.29],[.70,.64]],[[.22,.29],[.72,.66]],[[.22,.66],[.77,.24]]];
@@ -281,7 +281,14 @@ function openOutdoor(){
  closeOutdoor();
  outdoorScene=createOutdoor({room,avatar:avatars[selected].querySelector('.sprite img'),motionAsset:motionAssets[selected],playerId:activeHeroId,challengeId:challengeState.challenge.id,name:$('firstName').value.trim(),gear:[...document.querySelectorAll('.attached')],audio,reduced:reduce,onExit:()=>{closeOutdoor();$('gearRow').hidden=false;refreshGear()}});
 }
-$('gearDone').onclick=()=>{if(busy||equipped.size!==4||$('gearDone').hidden)return;storeProgress();audio.play('celebrate');openOutdoor()};
+$('gearDone').onclick=async()=>{
+ if(wallReady&&!busy){
+  wallReady=false;busy=true;$('gearDone').hidden=true;
+  $('actor').style.transform='';title.textContent='Let’s Get Ready!';
+  if(posePlayer)await posePlayer.jump();
+  $('gearRow').hidden=false;busy=false;refreshGear();storeProgress();return;
+ }
+ if(busy||equipped.size!==4||$('gearDone').hidden)return;storeProgress();audio.play('celebrate');openOutdoor()};
 
 let signedIn=false, savedHero=null, savedHeroes=[], activeHeroId=null;
 const loginRecordedHeroes=new Set();
@@ -325,7 +332,7 @@ function tickClock(){
 }
 setInterval(tickClock,1000);
 function storeProgress(){
- if(restoringProgress||!signedIn||!activeHeroId||!room.classList.contains('equipping')||!challengeState?.entry)return;
+ if(wallReady||restoringProgress||!signedIn||!activeHeroId||!room.classList.contains('equipping')||!challengeState?.entry)return;
  const heroId=activeHeroId,challengeId=challengeState.challenge?.id;if(!challengeId)return;
  const snapshot={heroId,challengeId,gear:[...equipped],done:$('gearRow').hidden,screen:$('gearRow').hidden?'ready':'equipment'};
  try{localStorage.setItem(progressKey,JSON.stringify(snapshot))}catch{}
@@ -335,31 +342,28 @@ function storeProgress(){
  });return progressQueue;
 }
 function loadProgress(){try{return JSON.parse(localStorage.getItem(progressKey))}catch{return null}}
+let wallReady=false;
 async function resumeHero(h,p){
  const reveal=holdScene(room,reduce);
- restoringProgress=true;equipped.clear();document.querySelectorAll('.attached').forEach(n=>n.remove());
+ restoringProgress=true;wallReady=false;equipped.clear();document.querySelectorAll('.attached').forEach(n=>n.remove());
  gearButtons.forEach(b=>{b.disabled=false;b.setAttribute('aria-pressed','false');b.querySelector('.gear-check').textContent=''});
- $('gearDone').hidden=false;$('gearRow').hidden=false;posePlayer?.dispose();posePlayer=null;activeHeroId=h.id;rememberPlayer(h.id);select(h.avatar,true);$('firstName').value=h.name;
+ $('gearDone').hidden=true;$('gearRow').hidden=false;posePlayer?.dispose();posePlayer=null;
+ activeHeroId=h.id;rememberPlayer(h.id);select(h.avatar,true);$('firstName').value=h.name;
  $('carousel').style.display='none';$('controls').style.display='none';$('hand').style.display='none';$('welcomeBack').hidden=true;
  $('signinCard').style.display='none';room.classList.remove('signing');
  try{
- await enterEquipment(Boolean(p),p?undefined:reveal);
- if(p&&Array.isArray(p.gear)){
- // Restore the equipment directly, without replaying pickups or overwriting the save.
- for(const key of ['gloves','grabber','bottle','bag']){
- if(!p.gear.includes(key))continue;
- // Use the glove-wearing character pose; separate glove sprites float over equipment.
- if(key==='gloves'&&posePlayer)await posePlayer.restoreGloves();else attachGear(key);
- equipped.add(key);const btn=gearButtons.find(b=>b.dataset.gear===key);btn.setAttribute('aria-pressed','true');btn.querySelector('.gear-check').textContent='✓';
- }
- refreshGear();if(p.done&&equipped.size===4){
- // Reapply the completed standing pose after gear is attached, without replaying motion.
- await posePlayer?.restoreReadyPose();
- $('gearRow').hidden=false;refreshGear();
- }
- }
- }finally{restoringProgress=false;await reveal()}tickClock();storeProgress();
+  // Returning to a player starts the visual story on the wall. Saved
+  // Challenge results and photos remain separate from this equipment scene.
+  await enterEquipment(true);
+  const actor=$('actor'),rect=$('hero').getBoundingClientRect(),bounds=room.getBoundingClientRect();
+  const wallY=Math.min(-55,bounds.top+bounds.height*.65-rect.bottom);
+  actor.style.transform='translateY('+wallY+'px) scale(.73)';
+  $('gearRow').hidden=true;wallReady=true;
+  title.textContent='Ready to make a difference?';
+  $('gearDone').textContent='Let’s Go!';$('gearDone').hidden=false;$('gearDone').disabled=false;
+ }finally{restoringProgress=false;await reveal()}tickClock();
 }
+
 
 
 const draftKey=guestMode?'street-challenge-guest-hero-draft':'street-challenge-hero-draft';
