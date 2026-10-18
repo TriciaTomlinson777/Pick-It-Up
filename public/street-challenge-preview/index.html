@@ -176,9 +176,9 @@ form{width:100%;display:none;flex:1;flex-direction:column;justify-content:center
 <button class="game-button gear-go" id="gearDone" type="button" disabled>Let’s Go!</button></div>
 </section><button class="game-button welcome-back" id="welcomeBack">I’m back! 🌟</button><div class="preview">Street Challenge · Game preview</div></main>
 <script type="module">
-import {holdScene} from './scene-transition.mjs';
+import {holdScene} from './scene-transition.mjs?v=smooth-20261017';
 import {createGameAudio} from './audio.mjs';
-import {createPosePlayer} from './pose-player.mjs';
+import {createPosePlayer} from './pose-player.mjs?v=smooth-20261017';
 import {createGuestSession} from './guest.mjs';
 const guestMode=new URLSearchParams(location.search).get('guest')==='1';
 const guestSession=guestMode?createGuestSession(localStorage):null;
@@ -284,8 +284,8 @@ function openOutdoor(){
 $('gearDone').onclick=async()=>{
  if(wallReady&&!busy){
   wallReady=false;busy=true;$('gearDone').hidden=true;
-  $('actor').style.transform='';title.textContent='Let’s Get Ready!';
-  if(posePlayer)await posePlayer.jump();
+  const startTransform=$('actor').style.transform;title.textContent='Let’s Get Ready!';
+  if(posePlayer)await posePlayer.jump(startTransform);else $('actor').style.transform='';
   $('gearRow').hidden=false;busy=false;refreshGear();storeProgress();return;
  }
  if(busy||equipped.size!==4||$('gearDone').hidden)return;storeProgress();audio.play('celebrate');openOutdoor()};
