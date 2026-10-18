@@ -362,7 +362,7 @@ async function resumeHero(h,p){
 }
 
 
-const draftKey='street-challenge-hero-draft';
+const draftKey=guestMode?'street-challenge-guest-hero-draft':'street-challenge-hero-draft';
 function storeDraft(){try{localStorage.setItem(draftKey,JSON.stringify({name:$('firstName').value.trim(),avatar:selected}))}catch{}}
 function loadDraft(){try{return JSON.parse(localStorage.getItem(draftKey))}catch{return null}}
 function validHero(h){return h&&typeof h.name==='string'&&h.name.trim()&&h.name.length<=30&&Number.isInteger(h.avatar)&&h.avatar>=0&&h.avatar<avatars.length}
