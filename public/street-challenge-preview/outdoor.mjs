@@ -1,5 +1,5 @@
-import {holdScene} from './scene-transition.mjs';
-import {createPosePlayer} from './pose-player.mjs';
+import {holdScene} from './scene-transition.mjs?v=smooth-20261017';
+import {createPosePlayer} from './pose-player.mjs?v=smooth-20261017';
 import {createStreetMotion} from './street-motion.mjs?v=smooth-scenes-20261013';
 
 // Photos remain private to this browser during development.
