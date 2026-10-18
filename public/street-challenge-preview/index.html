@@ -178,7 +178,7 @@ form{width:100%;display:none;flex:1;flex-direction:column;justify-content:center
 <script type="module">
 import {holdScene} from './scene-transition.mjs?v=smooth-20261017';
 import {createGameAudio} from './audio.mjs';
-import {createPosePlayer} from './pose-player.mjs?v=smooth-20261017';
+import {createPosePlayer} from './pose-player.mjs?v=slow-equipment-20261017';
 import {createGuestSession} from './guest.mjs';
 const guestMode=new URLSearchParams(location.search).get('guest')==='1';
 const guestSession=guestMode?createGuestSession(localStorage):null;
