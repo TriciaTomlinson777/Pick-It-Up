@@ -27,7 +27,7 @@ export function holdScene(room,reduced=false){
   if(released)return;released=true;
   try{
    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
-   await copy.animate([{opacity:1},{opacity:0}],{duration:340,easing:'ease-in-out',fill:'forwards'}).finished;
+   await copy.animate([{opacity:1},{opacity:0}],{duration:560,easing:'cubic-bezier(.22,.61,.36,1)',fill:'forwards'}).finished;
   }finally{copy.remove()}
  };
 }
